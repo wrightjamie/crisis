@@ -200,3 +200,12 @@ A playable system where:
 * Roles receive different info
 * Decisions can be made
 * Scores update live
+
+---
+
+## Agent Git Workflow Rules
+
+When making changes to this codebase, the AI Agent must follow this Git workflow:
+1. **Use Branches:** Always create a new branch to segregate changes for any new feature, fix, or task (e.g., `feature/description` or `fix/description`). Do not work directly on the main branch.
+2. **Commit Frequently:** Commit changes immediately after completing a logical step, file modification, or minor task. Provide clear, descriptive commit messages.
+3. **Merge Upon Completion:** Once a feature or task has been fully implemented, verified, and completed, merge the feature branch back into the main branch.
