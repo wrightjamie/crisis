@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Briefing Generator — Narrative Test</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            overflow-y: auto;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+        }
+
+        .test-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .test-container h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .test-container p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .status-bar {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .status-dot.offline {
+            background: var(--status-4);
+        }
+
+        /* yellow/loading */
+        .status-dot.online {
+            background: var(--status-1);
+        }
+
+        /* green/ready */
+        .status-dot.error {
+            background: var(--accent-red);
+        }
+
+        .progress-bar-container {
+            flex-grow: 1;
+            margin: 0 1.5rem;
+            height: 6px;
+            background: var(--bg-primary);
+            border-radius: 3px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-blue);
+            width: 0%;
+            transition: width 0.2s;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Controls */
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .role-select {
+            width: 100%;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .slider-row span {
+            width: 140px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .slider-row input[type=range] {
+            flex-grow: 1;
+            margin: 0 1rem;
+            cursor: pointer;
+        }
+
+        .slider-row .val-display {
+            width: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .btn-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Result Panel */
+        .result-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .result-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            flex-grow: 1;
+        }
+
+        .result-text.loading {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .prompt-preview {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>AI Score-to-Narrative Generator</h1>
+        <p class="subtitle">Testing WebLLM inference to convert numeric scores into role-specific narratives.</p>
+
+        <div class="status-bar">
+            <div style="display: flex; align-items: center; white-space: nowrap;">
+                <span class="status-dot offline" id="status-dot"></span>
+                <span id="status-text" style="font-weight: bold;">Loading Engine...</span>
+            </div>
+            <div class="progress-bar-container" id="progress-container">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <span id="status-detail" style="color: var(--text-muted);">Initializing...</span>
+        </div>
+
+        <div class="layout-grid">
+            <!-- Left: Inputs -->
+            <div>
+                <div class="section-title">Situation Controls</div>
+
+                <div class="control-group">
+                    <label>Player Role</label>
+                    <select id="role-select" class="role-select">
+                        <option value="Home Secretary">Home Secretary</option>
+                        <option value="Secretary of State for Defence">Secretary of State for Defence</option>
+                        <option value="Foreign Secretary">Foreign Secretary</option>
+                        <option value="Director of Cyber Security">Director of Cyber Security</option>
+                        <option value="Director of Communications">Director of Communications</option>
+                    </select>
+                </div>
+
+                <div class="control-group" id="sliders-container">
+                    <!-- Injected by JS -->
+                </div>
+
+                <div class="action-buttons">
+                    <button id="btn-initial" class="btn btn-primary btn-action" onclick="generateBrief('initial')"
+                        disabled>Generate Baseline Brief</button>
+                    <button id="btn-update" class="btn btn-primary btn-action" onclick="generateBrief('update')"
+                        disabled style="background-color: var(--accent-orange);">Apply Changes & Update</button>
+                </div>
+            </div>
+
+            <!-- Right: Output -->
+            <div class="result-panel">
+                <div class="section-title">Generated Briefing</div>
+                <div id="result-text" class="result-text">Waiting for generation...</div>
+
+                <div id="prompt-preview" class="prompt-preview">
+                    [Prompt preview will appear here]
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
+
+        // Model Options:
+        const MODEL_ID = "Llama-3.2-1B-Instruct-q4f16_1-MLC"; // 1B: Fast, but struggles with complex constraints
+        // const MODEL_ID = "Llama-3.2-3B-Instruct-q4f16_1-MLC"; // 3B: Good balance of speed and intelligence (~2GB download)
+        // const MODEL_ID = "Llama-3.1-8B-Instruct-q4f32_1-MLC"; // 8B: Highly capable, but requires ~6GB VRAM and longer download
+
+        let engine = null;
+
+        const SCORES = {
+            uk_russia: { label: "UK-Russia Relations", desc: "Diplomatic relations and tension with Russia", val: 3 },
+            global_security: { label: "Global Security", desc: "Global military threat level (higher is safer)", val: 2 },
+            civilian_stability: { label: "Civilian Stability", desc: "Domestic public order and morale", val: 3 },
+            uk_us: { label: "UK-US Alliance", desc: "Strength of the special relationship with the USA", val: 2 },
+            uk_europe: { label: "European Cohesion", desc: "Cohesion and relationship with European allies", val: 2 },
+            military_readiness: { label: "Mil. Readiness", desc: "Combat capability and deployment status of armed forces", val: 2 }
+        };
+
+        const SCORE_LABELS = {
+            1: "Critical",
+            2: "Poor",
+            3: "Adequate",
+            4: "Strong",
+            5: "Secure"
+        };
+
+        const ROLE_CONTEXTS = {
+            "Home Secretary": "Your primary focus is domestic public order, police readiness, civilian morale, and internal security.",
+            "Secretary of State for Defence": "Your primary focus is military readiness, troop deployments, and global kinetic threats.",
+            "Foreign Secretary": "Your primary focus is diplomatic relations, international alliances, and geopolitical maneuvering.",
+            "Director of Cyber Security": "Your primary focus is critical infrastructure defense, cyber threats, and intelligence.",
+            "Director of Communications": "Your primary focus is public perception, media narrative, and managing civilian panic."
+        };
+
+        let baselineScores = null;
+
+        // DOM Elements
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        const detail = document.getElementById('status-detail');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const slidersContainer = document.getElementById('sliders-container');
+        const btnInitial = document.getElementById('btn-initial');
+        const btnUpdate = document.getElementById('btn-update');
+        const resultText = document.getElementById('result-text');
+        const promptPreview = document.getElementById('prompt-preview');
+
+        // Render sliders
+        function renderSliders() {
+            let html = '<label>Metric Scores (1-5)</label>';
+            for (const [key, data] of Object.entries(SCORES)) {
+                html += `
+                    <div class="slider-row">
+                        <span>${data.label}</span>
+                        <input type="range" min="1" max="5" value="${data.val}" id="slider-${key}" oninput="document.getElementById('val-${key}').textContent = this.value; document.getElementById('val-${key}').className = 'val-display val-' + this.value;">
+                        <div id="val-${key}" class="val-display val-${data.val}">${data.val}</div>
+                    </div>
+                `;
+            }
+            slidersContainer.innerHTML = html;
+        }
+
+        function getCurrentScores() {
+            const current = {};
+            for (const key of Object.keys(SCORES)) {
+                current[key] = parseInt(document.getElementById(`slider-${key}`).value, 10);
+            }
+            return current;
+        }
+
+        // Initialize WebLLM
+        async function initEngine() {
+            try {
+                progressContainer.style.display = 'block';
+                engine = await CreateMLCEngine(MODEL_ID, {
+                    initProgressCallback: (report) => {
+                        text.textContent = 'Loading Model';
+                        detail.textContent = report.text;
+                        progressFill.style.width = `${Math.round(report.progress * 100)}%`;
+                    }
+                });
+
+                dot.className = 'status-dot online';
+                text.textContent = 'Engine Ready';
+                detail.textContent = 'Model loaded and ready for inference.';
+                progressFill.style.width = '100%';
+                progressFill.style.background = 'var(--status-1)';
+
+                btnInitial.disabled = false;
+                btnUpdate.disabled = false;
+
+            } catch (err) {
+                dot.className = 'status-dot error';
+                text.textContent = 'Initialization Error';
+                detail.textContent = err.message || 'WebGPU might not be supported.';
+                progressFill.style.width = '100%';
+                progressFill.style.background = 'var(--accent-red)';
+                console.error(err);
+            }
+        }
+
+        window.generateBrief = async function (mode) {
+            if (!engine) return;
+
+            const roleName = document.getElementById('role-select').value;
+            const currentScores = getCurrentScores();
+
+            if (mode === 'update' && !baselineScores) {
+                alert("Please generate a baseline brief first to establish previous scores.");
+                return;
+            }
+
+            const roleContext = ROLE_CONTEXTS[roleName] || "";
+            const systemPrompt = `You are an intelligence reporting system.
+${roleContext}
+
+CRITICAL RULES:
+- Describe the objective situation.
+- Do NOT refer to the player, "you", "your", or the "${roleName}".
+- Start directly with the operational impact. Do not repeat the metric name or score. Do not use greetings.
+- Do not use markdown formatting.
+- Stick to the provided facts.
+- Keep the language suitable for your people`;
+
+            // UI Feedback
+            resultText.innerHTML = 'Generating narrative (0/6)...';
+            resultText.className = 'result-text loading';
+            promptPreview.textContent = 'Preparing individual prompts...';
+
+            btnInitial.disabled = true;
+            btnUpdate.disabled = true;
+
+            const startTime = performance.now();
+
+            try {
+                let sentences = [];
+                let previewText = `SYSTEM:\n${systemPrompt}\n\n`;
+
+                let count = 0;
+                const total = Object.keys(currentScores).length;
+
+                for (const [key, currentVal] of Object.entries(currentScores)) {
+                    count++;
+                    resultText.innerHTML = `Generating narrative (${count}/${total}): ${SCORES[key].label}...`;
+
+                    let userPrompt = '';
+
+                    if (mode === 'initial') {
+                        userPrompt = `Context: ${SCORES[key].label} (${SCORES[key].desc}) is currently ${SCORE_LABELS[currentVal]}.
+Task: In one sentence, describe the objective situation on the ground based on this metric, focusing on the perspective of the ${roleName}. Do not mention the role itself.`;
+                    } else if (mode === 'update') {
+                        const prevVal = baselineScores[key];
+                        if (currentVal === prevVal) {
+                            userPrompt = `Context: ${SCORES[key].label} (${SCORES[key].desc}) remains unchanged at ${SCORE_LABELS[currentVal]}.
+Task: In one short sentence, state objectively that this situation remains stable.`;
+                        } else {
+                            const direction = currentVal > prevVal ? "IMPROVED" : "DETERIORATED";
+                            userPrompt = `Context: ${SCORES[key].label} (${SCORES[key].desc}) has ${direction} from ${SCORE_LABELS[prevVal]} to ${SCORE_LABELS[currentVal]}.
+Task: In one sentence, describe the objective shift in the situation based on this change, focusing on the perspective of the ${roleName}. Do not mention the role itself.`;
+                        }
+                    }
+
+                    previewText += `USER (${SCORES[key].label}):\n${userPrompt}\n\n`;
+
+                    const reply = await engine.chat.completions.create({
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: userPrompt }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 100
+                    });
+
+                    const rawText = reply.choices[0].message.content.trim();
+                    // Force strict single-sentence limit programmatically
+                    const firstSentenceMatch = rawText.match(/[^.!?]+[.!?]/);
+                    const responseText = firstSentenceMatch ? firstSentenceMatch[0].trim() : rawText;
+
+                    sentences.push(`<li><strong>${SCORES[key].label}:</strong> ${responseText}</li>`);
+                }
+
+                baselineScores = currentScores;
+
+                const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+
+                resultText.innerHTML = `<strong>${roleName} Briefing:</strong><br><ul style="margin-top: 10px; margin-bottom: 10px;">${sentences.join('')}</ul><br><span style="font-size: 0.75rem; color: var(--text-muted);">Generated in ${elapsed}s</span>`;
+                resultText.className = 'result-text';
+                promptPreview.textContent = previewText;
+
+            } catch (e) {
+                resultText.textContent = `Request failed: ${e.message}`;
+                resultText.className = 'result-text';
+            }
+
+            btnInitial.disabled = false;
+            btnUpdate.disabled = false;
+        };
+
+        // Run
+        renderSliders();
+        initEngine();
+    </script>
+</body>
+
+</html>

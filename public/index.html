@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Crisis Wargame</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="view-map"> <!-- Default to map view on mobile -->
+    <div id="holding-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem;">
+        <h1 style="color: var(--text-primary); margin-bottom: 1rem;">Waiting for Game to Start</h1>
+        <p style="color: var(--text-secondary);">The facilitator is selecting a scenario...</p>
+    </div>
+
+    <div id="role-selection-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); z-index: 2500; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;">
+        <h1 style="color: var(--text-primary); margin-bottom: 2rem;">Select Your Station</h1>
+        <div id="role-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; width: 100%; max-width: 800px;">
+            <!-- Buttons injected by JS -->
+        </div>
+    </div>
+
+    <div id="briefing-screen" class="briefing-screen">
+        <div class="briefing-content">
+            <h1 id="briefing-title" style="color: var(--text-primary); margin-bottom: 0.5rem; text-align: center;">SITUATION BRIEFING</h1>
+            <p id="briefing-subtitle" style="color: var(--text-muted); text-align: center; margin-bottom: 2rem; font-size: 0.9rem; text-transform: uppercase;"></p>
+            <div id="briefing-body">
+                <!-- Sections injected by JS -->
+            </div>
+            <button id="btn-continue-briefing" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">CONTINUE TO MAP</button>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div id="role-display" class="role-badge">Loading...</div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button id="btn-ai-briefing" class="btn" style="background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: bold; position: relative;">
+                    Briefing
+                    <span id="ai-briefing-badge" style="display: none; position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; background-color: var(--status-1); border-radius: 50%; box-shadow: 0 0 8px var(--status-1);"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Area -->
+        <main class="main-content" id="main-content">
+            <!-- Map Container -->
+            <div id="map"></div>
+
+            <!-- Info Panel -->
+            <aside class="info-panel" id="info-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                    <h2 id="info-panel-title" style="margin: 0; font-size: 1.1rem; color: var(--text-secondary); text-transform: uppercase;">Information</h2>
+                    <button id="btn-close-info" class="btn" style="padding: 0.2rem 0.6rem; font-weight: bold; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; line-height: 1; cursor: pointer;">&times;</button>
+                </div>
+                <div id="info-content">
+                    <!-- Dynamic content injected by JS -->
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Client Logic -->
+    <script src="js/acronyms.js"></script>
+    <script src="js/client.js"></script>
+</body>
+</html>

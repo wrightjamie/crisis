@@ -1,0 +1,32 @@
+:root {
+  /* Moody Dark Color Palette */
+  --bg-primary: #0f1115;
+  --bg-secondary: #1a1d24;
+  --bg-tertiary: #2a2e37;
+  
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #3b82f6;
+  --accent-red: #ef4444;
+  --accent-green: #10b981;
+  --accent-orange: #f59e0b;
+  
+  /* Status Colors (1-5 scale) */
+  --status-1: #10b981; /* Stable */
+  --status-2: #3b82f6; /* Managed */
+  --status-3: #f59e0b; /* Strained */
+  --status-4: #f97316; /* Crisis */
+  --status-5: #ef4444; /* Critical */
+
+  /* Borders & Shadows */
+  --border-color: #334155;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  
+  /* Layout */
+  --top-bar-height: 60px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+}

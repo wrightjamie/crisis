@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wargame Facilitator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Facilitator Specific Overrides */
+        body { overflow-y: auto; }
+        #app { display: block; height: auto; }
+        .facilitator-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .admin-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+        .admin-card h2 { margin-bottom: 1rem; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .action-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        
+        .score-controls {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        @keyframes ai-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+            70% { transform: scale(1.2); box-shadow: 0 0 0 6px rgba(52, 152, 219, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+        .ai-active-dot {
+            animation: ai-pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="role-badge" style="display: flex; gap: 1rem; align-items: center;">
+            FACILITATOR (ADMIN)
+            <div id="ai-status" title="AI Briefing Engine Status" style="font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); border-left: 1px solid var(--border-color); padding-left: 1rem; margin-left: 0.5rem;">
+                <span id="ai-status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: var(--status-4); display: inline-block;"></span>
+                <span id="ai-status-text">AI Initializing...</span>
+            </div>
+            <div id="active-roles-display" style="display: flex; gap: 0.5rem; align-items: center;">
+                <!-- Roles injected via JS -->
+            </div>
+        </div>
+        <div class="hamburger-menu">
+            <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
+            <div id="dropdown-menu" class="dropdown-content">
+                <button class="dropdown-item text-danger" onclick="resetGame()">Reset Scenario</button>
+                <button class="dropdown-item text-danger" onclick="endScenario()" style="border-top: 1px solid var(--border-color);">End Scenario</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="facilitator-holding-screen" style="display: none; padding: 2rem; max-width: 800px; margin: 0 auto; text-align: center;">
+        <h1 style="color: var(--text-primary); margin-bottom: 2rem;">Select Scenario</h1>
+        <div id="scenarios-list" style="display: grid; gap: 1.5rem; grid-template-columns: 1fr;">
+            <!-- Scenarios injected via JS -->
+        </div>
+    </div>
+
+    <div class="facilitator-container" id="facilitator-dashboard">
+        <div class="grid">
+            
+            <!-- Controls -->
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Available Events</h2></summary>
+                    <div id="available-events" class="action-list">
+                        <!-- Injected via JS -->
+                    </div>
+                    
+                    <h2 style="margin-top: 2rem; color: var(--text-muted);">Used / Disabled Events</h2>
+                    <div id="used-events" class="action-list" style="margin-bottom: 2rem; opacity: 0.6;">
+                        <!-- Injected via JS -->
+                    </div>
+                </details>
+            </div>
+
+            <!-- New Panels -->
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Pending Conditions</h2></summary>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Events unlocked but awaiting score criteria.</p>
+                    <div id="pending-conditions-events" class="action-list">
+                        <!-- Injected via JS -->
+                    </div>
+                </details>
+            </div>
+
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Scheduled Events</h2></summary>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">Events automatically triggering from player decisions.</p>
+                    <div id="scheduled-events-list" class="action-list">
+                        <!-- Injected via JS -->
+                    </div>
+                </details>
+            </div>
+
+            <!-- Score Override -->
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Adjust Scores (1-5)</h2></summary>
+                    <div id="score-adjust-container">
+                        <!-- Injected via JS -->
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="submitScores()">Update Scores</button>
+                </details>
+            </div>
+
+            <!-- State View -->
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Active Events List</h2></summary>
+                    <div id="facilitator-events-list"></div>
+                </details>
+            </div>
+
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Decisions Overview</h2></summary>
+                    <div id="facilitator-tasks-list"></div>
+                </details>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Facilitator Info Panel -->
+    <div class="info-panel" id="fac-info-panel" style="z-index: 2000;">
+        <div class="panel-header">
+            <h2 id="fac-info-title">Event Info</h2>
+            <button class="btn btn-primary" onclick="closeFacilitatorPanel()">X</button>
+        </div>
+        <div class="panel-content" id="fac-info-content" style="padding-bottom: 80px;">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/ai-core.js"></script>
+    <script src="js/acronyms.js"></script>
+    <script src="js/facilitator.js"></script>
+</body>
+</html>
