@@ -24,7 +24,9 @@ The top-level object representing a fully playable module.
             name: "string",
             location: [lat, lng],
             state: "string",  // e.g., 'operational', 'destroyed'
-            tags: ["string"]  // UI badges (e.g., 'military', 'cyber')
+            tags: ["string"], // UI badges (e.g., 'military', 'cyber')
+            image: "string",  // (Optional) URL path to asset image
+            briefing: "string"// (Optional) Intelligence brief for the asset
         }
     ],
     briefings: {              // Opening briefing text shown when a player selects their role
@@ -74,6 +76,7 @@ Events define map incidents and generate decision tasks for players.
     id: "string",             // Unique identifier referenced by triggers/unlocks
     name: "string",           // Display title
     description: "string",    // General description visible to everyone
+    image: "string",          // (Optional) URL path to a dramatic, tactical image of the crisis
     location: [lat, lng],     // Where the marker drops on the map
     possibleLocations: [      // (Optional) Array of possible locations. If provided, server picks one randomly.
         [lat, lng], [lat, lng]

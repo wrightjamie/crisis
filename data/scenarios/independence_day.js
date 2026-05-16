@@ -53,6 +53,7 @@ CRITICAL RULES:
                 name: 'Mothership Enters Orbit',
                 repeatable: false,
                 location: [0, 0], // Equator
+                image: '/images/events/ev_mothership.png',
                 description: 'A massive alien vessel, approximately 550km in diameter, has taken geosynchronous orbit above the Earth.',
                 facilitatorNotes: 'This is the opening event. It introduces the main threat and forces UN/USA to posture. The USA decision to scramble fighters will automatically schedule the "Alien Reinforcements" event in 10 seconds.',
                 roleDescriptions: {
@@ -94,6 +95,7 @@ CRITICAL RULES:
                 repeatable: false,
                 requiresUnlock: true, // Only unlocked via triggerEvents from Scramble fighters
                 location: [38.89, -77.03],
+                image: '/images/events/ev_alien_reinforcement.png',
                 description: 'Several massive landing craft have descended over major military installations, neutralizing human defenses.',
                 facilitatorNotes: 'This is automatically triggered 10 seconds after the USA scrambles fighters. It has no decisions attached, it is purely narrative escalation.',
                 roleDescriptions: {
@@ -105,6 +107,8 @@ CRITICAL RULES:
                 id: 'ev_city_destruction',
                 name: 'Major City Annihilated',
                 repeatable: true,
+                location: [0, 0],
+                image: '/images/events/ev_city_destruction.png',
                 conditions: {
                     minScores: { alien_threat: 5 }
                 },
@@ -139,6 +143,7 @@ CRITICAL RULES:
                 repeatable: false,
                 requiresUnlock: true,
                 location: [37.23, -115.81],
+                image: '/images/events/ev_secret_weapon.png',
                 description: 'A computer virus, reverse-engineered from the 1947 crash, is ready to be uploaded to the mothership.',
                 facilitatorNotes: 'This is the winning move. It is only unlocked if the UN declares DEFCON 1 early on. Triggers the final mission choice for the USA.',
                 roleDescriptions: {

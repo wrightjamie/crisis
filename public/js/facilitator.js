@@ -244,11 +244,22 @@ function renderHoldingScreen() {
         }
 
         const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+        let validationHtml = '';
+        if (s.isValid === false) {
+            validationHtml = `<div style="margin-bottom: 1rem; padding: 0.5rem; border: 1px solid var(--accent-red); background: rgba(231,76,60,0.1); color: var(--accent-red); font-size: 0.85rem; border-radius: var(--radius-sm);">
+                <strong>⚠️ Scenario configuration invalid:</strong>
+                <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+                    ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
+                </ul>
+            </div>`;
+        }
+        
         div.innerHTML = `
             <h2>${p(s.name)}</h2>
             <p style="color: var(--text-secondary); margin-bottom: 1rem;">${p(s.description)}</p>
+            ${validationHtml}
             ${axesHtml}
-            <button class="btn btn-primary" onclick="startScenario('${s.id}')" style="width: 100%; margin-top: 0.5rem;">Start Scenario</button>
+            <button class="btn btn-primary" onclick="startScenario('${s.id}')" style="width: 100%; margin-top: 0.5rem;" ${s.isValid === false ? 'disabled' : ''}>Start Scenario</button>
         `;
         scenariosListEl.appendChild(div);
     });
@@ -528,6 +539,13 @@ function refreshFacilitatorInfoPanel() {
     
     let html = `
         <div class="card" style="margin-bottom: 1rem;">
+    `;
+    
+    if (template.image) {
+        html += `<img src="${template.image}" alt="${template.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+    }
+
+    html += `
             <div class="card-title">${p(template.name)}</div>
             <div class="card-desc">${p(template.description)}</div>
         </div>

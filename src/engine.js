@@ -1,5 +1,7 @@
 const scenarios = require('../data/scenarios');
 
+const { validateScenario } = require('./validate-scenarios');
+
 class GameEngine {
     constructor() {
         this.roleFallbacks = {
@@ -31,16 +33,21 @@ class GameEngine {
     getHoldingState() {
         return {
             status: 'holding',
-            availableScenarios: scenarios.map(s => ({
-                id: s.id,
-                name: s.name,
-                description: s.description,
-                variantAxes: (s.variantAxes || []).map(axis => ({
-                    id: axis.id,
-                    name: axis.name,
-                    options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
-                }))
-            }))
+            availableScenarios: scenarios.map(s => {
+                const validation = validateScenario(s);
+                return {
+                    id: s.id,
+                    name: s.name,
+                    description: s.description,
+                    isValid: validation.isValid,
+                    validationErrors: validation.errors,
+                    variantAxes: (s.variantAxes || []).map(axis => ({
+                        id: axis.id,
+                        name: axis.name,
+                        options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
+                    }))
+                };
+            })
         };
     }
 

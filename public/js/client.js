@@ -409,6 +409,13 @@ function refreshInfoPanel() {
 
         let html = `
             <div class="card">
+        `;
+        
+        if (evt.image) {
+            html += `<img src="${evt.image}" alt="${evt.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+        }
+
+        html += `
                 <div class="card-title">${evt.name}</div>
                 <div class="card-desc">${p(evt.description)}</div>
         `;
@@ -456,12 +463,30 @@ function refreshInfoPanel() {
 
         let html = `
             <div class="card" style="border-color: var(--accent-blue);">
+        `;
+        
+        if (asset.image) {
+            html += `<img src="${asset.image}" alt="${asset.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+        }
+
+        html += `
                 <div class="card-title" style="color: var(--accent-blue);">${asset.name}</div>
                 <div class="card-desc">
                     <strong>Status:</strong> <span style="text-transform: uppercase;">${asset.state}</span>
                 </div>
-                <div class="card-meta" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
         `;
+
+        if (asset.briefing) {
+            html += `
+                <div class="card-role-desc" style="margin-top: 1rem; border-left: 2px solid var(--accent-blue);">
+                    <strong>Intelligence Brief:</strong><br>
+                    ${p(asset.briefing)}
+                </div>
+            `;
+        }
+
+        html += `<div class="card-meta" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">`;
+        
         asset.tags.forEach(tag => {
             html += `<span style="background: var(--bg-primary); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.75rem; text-transform: uppercase;">${tag}</span>`;
         });
