@@ -339,7 +339,9 @@ function renderEventButtons() {
     let currentAvailableEventIds = new Set();
 
     allTemplates.forEach(template => {
-        const isUnlocked = !template.requiresUnlock || currentState.unlockedEvents.includes(template.id);
+        const requiresUnlockMet = !template.requiresUnlock || currentState.unlockedEvents.includes(template.id);
+        const prerequisitesMet = !template.prerequisites || template.prerequisites.every(p => triggeredTemplateIds.has(p));
+        const isUnlocked = requiresUnlockMet && prerequisitesMet;
         if (!isUnlocked) return; // Hidden
 
         const btn = document.createElement('button');
@@ -402,11 +404,7 @@ function formatName(str) {
 function renderGlobalView() {
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
 
-    // Top bar scores
-    scoresDisplay.innerHTML = '';
-    for (const [key, value] of Object.entries(currentState.scores)) {
-        scoresDisplay.innerHTML += `<div class="score-item"><span>${formatName(key)}</span><span class="score-value val-${value}">${value}</span></div>`;
-    }
+    // Top bar scores were removed in a previous refactor
 
     // Events List
     const recentEvents = currentState.events.slice().reverse().slice(0, 5);

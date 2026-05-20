@@ -132,6 +132,7 @@ CRITICAL RULES:
             {
                 id: 'ev_cyber_london',
                 name: 'Major Cyber Attack on London Financial District',
+                prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
                 location: [51.51, -0.09],
                 image: '/images/events/ev_cyber_london.png',
@@ -226,6 +227,7 @@ CRITICAL RULES:
             {
                 id: 'ev_cyber_exposure',
                 name: 'Allied Intelligence Leak: Cyber Operations Exposed',
+                prerequisites: ['ev_cyber_london'],
                 repeatable: false,
                 location: [51.5, -0.1], // General UK
                 image: '/images/events/ev_cyber_exposure.png',
@@ -258,6 +260,7 @@ CRITICAL RULES:
             {
                 id: 'ev_airspace_intercept',
                 name: 'Airspace Intercept Incident',
+                prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
                 location: [60.0, -10.0], // North Atlantic
                 image: '/images/events/ev_airspace_intercept.png',
@@ -289,6 +292,7 @@ CRITICAL RULES:
             {
                 id: 'ev_maritime_shadowing',
                 name: 'Maritime Shadowing & Infrastructure Tension',
+                prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
                 location: [57.0, -15.0], // Atlantic near GIUK gap
                 image: '/images/events/ev_maritime_shadowing.png',
@@ -320,6 +324,8 @@ CRITICAL RULES:
             {
                 id: 'ev_russia_hub_explosion',
                 name: 'Russian Logistics Hub Explosion',
+                prerequisites: ['ev_cyber_exposure'],
+                conditions: { minScores: { military_escalation: 2 } },
                 repeatable: false,
                 location: [55.75, 37.61], // Moscow area / Western Russia
                 image: '/images/events/ev_russia_hub_explosion.png',
@@ -353,6 +359,8 @@ CRITICAL RULES:
             {
                 id: 'ev_kinetic_strike',
                 name: 'Kinetic Incident Against UK Military Asset',
+                prerequisites: ['ev_maritime_shadowing'],
+                conditions: { minScores: { military_escalation: 3 } },
                 repeatable: false,
                 location: [34.5, 33.0], // Cyprus / Akrotiri overseas base approx
                 image: '/images/events/ev_kinetic_strike.png',

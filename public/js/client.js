@@ -131,8 +131,8 @@ function showBriefing() {
 
     html += `
         <div class="briefing-section briefing-ai" style="border-left: 3px solid var(--status-1);">
-            <div class="briefing-section-label">AI Executive Summary</div>
-            <div id="briefing-ai-summary-text" style="white-space: pre-wrap;"><em>Generating AI summary... Please wait.</em></div>
+            <div class="briefing-section-label">Executive Summary</div>
+            <div id="briefing-ai-summary-text" style="white-space: pre-wrap;"><em>Writing your brief... Please wait.</em></div>
         </div>
     `;
     
@@ -263,7 +263,7 @@ function updateUI() {
 
     if (localState.aiScenarioSummaries && localState.aiScenarioSummaries[role]) {
         const aiSummaryText = document.getElementById('briefing-ai-summary-text');
-        if (aiSummaryText && aiSummaryText.innerHTML.includes('Generating')) {
+        if (aiSummaryText && aiSummaryText.innerHTML.includes('Writing')) {
             const summaryData = localState.aiScenarioSummaries[role];
             let html = p(summaryData.text);
             if (summaryData.prompt) {
@@ -372,7 +372,7 @@ function refreshInfoPanel() {
         
         let html = `
             <div style="margin-bottom: 1.5rem;">
-                ${aiBriefing && aiBriefing.text ? `<p style="line-height: 1.6; font-size: 0.95rem;">${p(aiBriefing.text)}</p>` : '<p style="color:var(--text-muted);">No AI briefing available yet.</p>'}
+                ${aiBriefing && aiBriefing.text ? `<p style="line-height: 1.6; font-size: 0.95rem;">${p(aiBriefing.text)}</p>` : '<p style="color:var(--text-muted);">Briefing is currently unavailable.</p>'}
             </div>
         `;
 
