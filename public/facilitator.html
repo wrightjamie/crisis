@@ -14,10 +14,29 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        /* Native Grid Lanes for supporting browsers */
+        @supports (display: grid-lanes) {
+            .grid {
+                display: grid;
+                display: grid-lanes;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                align-items: start;
+                gap: 2rem;
+            }
+        }
+        
+        /* Fallback for browsers without Grid Lanes (Polyfill styles) */
+        @supports not (display: grid-lanes) {
+            .grid {
+                display: block;
+            }
+            .grid-sizer, .admin-card {
+                width: calc(33.333% - 1.333rem);
+                margin-bottom: 2rem;
+            }
+            .admin-card.span-2 {
+                width: calc(66.666% - 0.666rem);
+            }
         }
         .admin-card {
             background-color: var(--bg-secondary);
@@ -78,16 +97,19 @@
         <div class="grid">
             
             <!-- Controls -->
+            <!-- Interactive Scenario Explorer (Replacing Available Events) -->
+            <div class="admin-card span-2" style="grid-column: span 2; display: flex; flex-direction: column;">
+                <h2>Scenario Explorer</h2>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; flex-shrink: 0;">Click nodes to view details and trigger events.</p>
+                <div id="scenario-explorer-container" style="overflow-y: auto; overflow-x: auto; max-height: max(75vh, 400px); padding-right: 0.5rem;">
+                    <!-- Tree injected via JS -->
+                </div>
+            </div>
+            
             <div class="admin-card">
                 <details open>
-                    <summary><h2>Available Events</h2></summary>
-                    <button class="btn btn-secondary" style="margin-bottom: 1rem; width: 100%; border: 1px solid var(--border-color); background: transparent; color: var(--text-primary);" onclick="openExplorer()">Open Scenario Explorer</button>
-                    <div id="available-events" class="action-list">
-                        <!-- Injected via JS -->
-                    </div>
-                    
-                    <h2 style="margin-top: 2rem; color: var(--text-muted);">Used / Disabled Events</h2>
-                    <div id="used-events" class="action-list" style="margin-bottom: 2rem; opacity: 0.6;">
+                    <summary><h2>Used / Disabled Events</h2></summary>
+                    <div id="used-events" class="action-list" style="opacity: 0.6;">
                         <!-- Injected via JS -->
                     </div>
                 </details>
@@ -143,16 +165,16 @@
         </div>
     </div>
 
-    <!-- Facilitator Info Panel -->
-    <div class="info-panel" id="fac-info-panel" style="z-index: 2000;">
-        <div class="panel-header">
-            <h2 id="fac-info-title">Event Info</h2>
-            <button class="btn btn-primary" onclick="closeFacilitatorPanel()">X</button>
+    <!-- Facilitator Info Dialog -->
+    <dialog class="info-dialog" id="fac-info-panel">
+        <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color);">
+            <h2 id="fac-info-title" style="margin: 0;">Event Info</h2>
+            <button class="btn" style="background: transparent; color: var(--text-muted); border: none; font-size: 1.5rem; cursor: pointer; padding: 0 0.5rem;" onclick="closeFacilitatorPanel()">&times;</button>
         </div>
-        <div class="panel-content" id="fac-info-content" style="padding-bottom: 80px;">
+        <div class="panel-content" id="fac-info-content" style="padding: 1rem; overflow-y: auto; max-height: calc(90vh - 60px);">
             <!-- Content injected via JS -->
         </div>
-    </div>
+    </dialog>
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
@@ -160,5 +182,31 @@
     <script src="js/acronyms.js"></script>
     <script src="js/scenario-explorer.js"></script>
     <script src="js/facilitator.js"></script>
+
+    <!-- Grid Lanes Polyfill -->
+    <script>
+        if (!CSS.supports('display', 'grid-lanes')) {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js';
+            script.onload = function() {
+                // Add grid-sizer element for percentage widths
+                const grid = document.querySelector('.grid');
+                const sizer = document.createElement('div');
+                sizer.className = 'grid-sizer';
+                grid.insertBefore(sizer, grid.firstChild);
+                
+                window.msnry = new Masonry('.grid', {
+                    itemSelector: '.admin-card',
+                    columnWidth: '.grid-sizer',
+                    gutter: 32, // roughly 2rem
+                    percentPosition: true
+                });
+
+                // Periodically relayout to handle dynamically injected content heights
+                setInterval(() => window.msnry.layout(), 1000);
+            };
+            document.head.appendChild(script);
+        }
+    </script>
 </body>
 </html>

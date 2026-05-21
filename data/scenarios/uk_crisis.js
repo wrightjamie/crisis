@@ -389,6 +389,394 @@ CRITICAL RULES:
                         ]
                     }
                 ]
+            },
+            {
+                id: 'ev_sub_surfaces',
+                name: 'Russian Submarine Surfaces in the Channel',
+                prerequisites: [],
+                conditions: { maxScores: { civilian_stability: 4 } },
+                repeatable: false,
+                location: [51.0, 1.5],
+                description: 'A Russian ballistic missile submarine has intentionally surfaced in the English Channel near Dover, in plain view of civilian ferries. Massive public panic is unfolding on social media.',
+                roleDescriptions: {
+                    home: 'Emergency services are inundated with panicked calls. Social media is spreading rumors of an imminent nuclear strike.',
+                    defence: 'The submarine is currently stationary on the surface. It is a clear demonstration of capability and intent, not an immediate attack vector.',
+                    media: 'Images of the submarine are broadcasting globally. We need to control the narrative before panic causes widespread disruption.'
+                },
+                decisions: [
+                    {
+                        role: 'media',
+                        text: 'How do we address the public panic?',
+                        options: [
+                            { id: 'opt_sub_1', text: 'Issue Immediate Assurances of Safety', effects: { scores: { civilian_stability: +1 } } },
+                            { id: 'opt_sub_2', text: 'Condemn the Provocation Aggressively', effects: { scores: { uk_russia: +1, military_escalation: +1, civilian_stability: -1 } } }
+                        ]
+                    },
+                    {
+                        role: 'defence',
+                        text: 'Military response in the Channel?',
+                        options: [
+                            { id: 'opt_sub_3', text: 'Deploy Naval Escorts to Shadow', effects: { scores: { military_escalation: +1 } } },
+                            { id: 'opt_sub_4', text: 'Scramble Armed Jets (Aggressive Posture)', effects: { scores: { military_escalation: +2, uk_russia: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_undersea_cables',
+                name: 'Severing of Undersea Internet Cables',
+                prerequisites: [],
+                conditions: { minScores: { uk_russia: 3 } },
+                repeatable: false,
+                location: [50.0, -10.0],
+                description: 'Critical transatlantic internet and communication cables have been simultaneously severed. UK financial markets have paused trading, and widespread communication blackouts are reported.',
+                roleDescriptions: {
+                    cyber: 'Telemetry suggests coordinated physical tampering at multiple deep-sea nodes. Highly sophisticated, deniable operation.',
+                    foreign: 'No state has claimed responsibility. Allies are scrambling to reroute secure communications.',
+                    home: 'Public confusion is high. Retail payment systems are failing intermittently.'
+                },
+                decisions: [
+                    {
+                        role: 'cyber',
+                        text: 'How should NCSC respond?',
+                        options: [
+                            { id: 'opt_cables_1', text: 'Reroute to Backup Military Satellites', effects: { scores: { military_readiness: -1, civilian_stability: +1 } } },
+                            { id: 'opt_cables_2', text: 'Publicly Blame Russian Sabotage', effects: { scores: { uk_russia: +2, military_escalation: +1, civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_uk_casualty_leak',
+                name: 'UK Forces Casualty Leaks to Press',
+                prerequisites: [],
+                repeatable: false,
+                location: [51.5, -0.1],
+                description: 'The upset parents of a UK soldier killed in a covert training operation in Ukraine have spoken to the press. Russia has seized the narrative, loudly condemning the UK: "Why are UK forces operating there?"',
+                roleDescriptions: {
+                    media: 'The story is front-page news. The parents are demanding answers on live television.',
+                    foreign: 'Russian diplomats at the UN are weaponizing this to paint the UK as the aggressor.',
+                    defence: 'The operational security of our remaining training teams in Ukraine is now compromised. We need to brace for domestic impact.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'Diplomatic response to Russian condemnation?',
+                        options: [
+                            { id: 'opt_cas_1', text: 'Defend Support for Ukraine Unapologetically', effects: { scores: { uk_russia: +1, uk_europe: +1, uk_us: +1 } } },
+                            { id: 'opt_cas_2', text: 'Refuse to Comment on Covert Operations', effects: { scores: { civilian_stability: -1, uk_europe: -1 } } }
+                        ]
+                    },
+                    {
+                        role: 'home',
+                        text: 'Domestic handling of the family?',
+                        options: [
+                            { id: 'opt_cas_3', text: 'Private PM Meeting and Condolences', effects: { scores: { civilian_stability: +1 } } },
+                            { id: 'opt_cas_4', text: 'Issue D-Notice to Suppress Further Coverage', effects: { scores: { civilian_stability: -2 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_chemical_attempt',
+                name: 'Attempted Chemical Attack on UK Soil',
+                prerequisites: [],
+                conditions: { minScores: { uk_russia: 3, military_escalation: 2 } },
+                repeatable: false,
+                location: [51.53, -0.12],
+                description: 'A thwarted nerve agent release attempt occurred at King\'s Cross station. Two suspects are dead. Unclear attribution initially, but GRU involvement is heavily suspected.',
+                roleDescriptions: {
+                    home: 'Counter-terror police intercepted the device just in time. The station is locked down, but the public is terrified of further attacks.',
+                    cyber: 'Intercepted communications strongly link the suspects to Russian intelligence.',
+                    foreign: 'If we attribute this to Russia, it crosses a massive red line for state-sponsored terrorism on UK soil.'
+                },
+                decisions: [
+                    {
+                        role: 'home',
+                        text: 'Public security response?',
+                        options: [
+                            { id: 'opt_chem_1', text: 'Raise National Terror Threat to CRITICAL', effects: { scores: { civilian_stability: -2, military_readiness: -1 } } },
+                            { id: 'opt_chem_2', text: 'Maintain Current Threat Level, Increase Armed Patrols', effects: { scores: { civilian_stability: -1 } } }
+                        ]
+                    },
+                    {
+                        role: 'foreign',
+                        text: 'Do we formally accuse Russia?',
+                        options: [
+                            { id: 'opt_chem_3', text: 'Formal Accusation and Expel Diplomats', effects: { scores: { uk_russia: +2, military_escalation: +1, uk_europe: +1 } } },
+                            { id: 'opt_chem_4', text: 'Wait for Conclusive Allied Intelligence', effects: { scores: { uk_russia: 0, civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_us_neutrality',
+                name: 'US Declares European Neutrality',
+                prerequisites: [],
+                conditions: { maxScores: { uk_us: 2 } },
+                repeatable: false,
+                location: [38.89, -77.03],
+                description: 'A shocking shift in US policy: The White House has announced it will not intervene militarily in "European territorial disputes", effectively fracturing NATO and leaving the UK isolated.',
+                roleDescriptions: {
+                    foreign: 'This is a diplomatic disaster. The US is pulling back its umbrella. Eastern European allies are panicking.',
+                    defence: 'Without US logistical and intelligence support, our ability to sustain prolonged high-intensity operations is severely degraded.',
+                    home: 'The public realizes we are essentially alone. Morale is plummeting.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'How do we pivot our diplomatic strategy?',
+                        options: [
+                            { id: 'opt_us_1', text: 'Double Down on European Leadership (JEF/NATO)', effects: { scores: { uk_europe: +2, uk_us: -1 } } },
+                            { id: 'opt_us_2', text: 'Attempt Emergency Bilateral Negotiations with US', effects: { scores: { uk_us: +1, uk_europe: -1 } } }
+                        ]
+                    },
+                    {
+                        role: 'defence',
+                        text: 'Military posture adjustment?',
+                        options: [
+                            { id: 'opt_us_3', text: 'Assume Maximum Defensive Posture', effects: { scores: { military_escalation: +1, military_readiness: +1 } } },
+                            { id: 'opt_us_4', text: 'Conserve Assets / Recall Forward Deployments', effects: { scores: { military_readiness: +1, uk_europe: -2 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_akrotiri_strike',
+                name: 'Hypersonic Strike on RAF Akrotiri',
+                prerequisites: ['ev_uk_casualty_leak'],
+                conditions: { minScores: { military_escalation: 3 } },
+                repeatable: false,
+                location: [34.58, 32.94],
+                description: 'Russia has struck the UK sovereign base in Cyprus with hypersonic missiles, claiming it is "justified retaliation" for UK actions in Ukraine. Significant damage to the runway and aircraft.',
+                roleDescriptions: {
+                    defence: 'We have taken casualties. Our primary staging post for the Eastern Mediterranean is offline.',
+                    foreign: 'Spain and other Mediterranean EU nations are furious that the conflict has been brought to their doorstep.',
+                    media: 'Russia is broadcasting that this was a "precision warning" and they do not wish to strike the UK mainland.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'How do we manage the EU fallout?',
+                        options: [
+                            { id: 'opt_ak_1', text: 'Demand EU Solidarity', effects: { scores: { uk_europe: -1, uk_russia: +1 } } },
+                            { id: 'opt_ak_2', text: 'Apologize for Regional Disruption, Focus on Russian Aggression', effects: { scores: { uk_europe: +1, civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_article5_ambiguity',
+                name: 'NATO Article 5 Ambiguity',
+                prerequisites: ['ev_akrotiri_strike'],
+                repeatable: false,
+                location: [50.84, 4.39],
+                description: 'Following the strike on Akrotiri, the UK attempted to invoke Article 5. However, several European nations have hesitated to commit forces, fearing wider war.',
+                roleDescriptions: {
+                    foreign: 'The alliance is fracturing. Germany and France are urging "de-escalation" rather than a unified military response.',
+                    defence: 'We cannot rely on NATO reinforcements. We are effectively fighting a bilateral conflict with Russia.',
+                    home: 'The realization that NATO won\'t save us is causing widespread panic.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'What is our stance on the NATO hesitation?',
+                        options: [
+                            { id: 'opt_a5_1', text: 'Publicly Shame Hesitant Allies', effects: { scores: { uk_europe: -2, civilian_stability: -1 } } },
+                            { id: 'opt_a5_2', text: 'Forge Ahead with willing Coalition of the Willing (JEF)', effects: { scores: { uk_europe: -1, military_readiness: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_raf_bases_strike',
+                name: 'Coordinated Strikes on RAF Bases',
+                prerequisites: ['ev_akrotiri_strike'],
+                conditions: { minScores: { military_escalation: 4 } },
+                repeatable: false,
+                location: [53.09, -0.16],
+                description: 'Simultaneous cruise missile strikes have hit RAF Coningsby, Marham, and Lossiemouth. Russia claims retaliation and is attempting to cripple UK air defence capabilities.',
+                roleDescriptions: {
+                    defence: 'Multiple Typhoons and F-35s destroyed on the ground. QRA capabilities are severely degraded.',
+                    home: 'Missiles impacting the UK mainland has shattered any remaining sense of security.',
+                    cyber: 'Early warning systems were partially blinded by localized jamming prior to impact.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'How do we protect remaining air assets?',
+                        options: [
+                            { id: 'opt_raf_1', text: 'Disperse Aircraft to Civilian Airports', effects: { scores: { civilian_stability: -2, military_readiness: +1 } } },
+                            { id: 'opt_raf_2', text: 'Launch Immediate Retaliatory Sorties', effects: { scores: { military_escalation: +2, uk_russia: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_portsmouth_strike',
+                name: 'Strike on HMNB Portsmouth',
+                prerequisites: ['ev_raf_bases_strike'],
+                repeatable: false,
+                location: [50.81, -1.10],
+                description: 'A heavy missile strike has targeted naval assets docked at HMNB Portsmouth. Substantial damage to infrastructure and significant military casualties.',
+                roleDescriptions: {
+                    defence: 'The naval base is ablaze. We risk losing surface fleet readiness if we don\'t move vessels out immediately.',
+                    home: 'Portsmouth city is experiencing collateral damage. Civilian casualties reported.',
+                    media: 'The visual of Portsmouth burning is catastrophic for national morale.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'Order for the remaining fleet?',
+                        options: [
+                            { id: 'opt_ports_1', text: 'Emergency Sortie All Available Vessels', effects: { scores: { military_readiness: +1, civilian_stability: +1 } } },
+                            { id: 'opt_ports_2', text: 'Prioritize Base Firefighting and Rescue', effects: { scores: { military_readiness: -1, civilian_stability: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_faslane_strike_1',
+                name: 'First Strike on HMNB Clyde (Faslane)',
+                prerequisites: ['ev_raf_bases_strike'],
+                repeatable: false,
+                location: [56.06, -4.81],
+                description: 'A conventional cruise missile strike has hit the outer perimeter of HMNB Clyde (Faslane), the home of the UK\'s nuclear deterrent. Russia claims this is retaliation for UK involvement in Ukraine.',
+                roleDescriptions: {
+                    defence: 'The nuclear submarines are safe, but the base is locked down. Russia is demonstrating they can hit our ultimate deterrent.',
+                    home: 'Anti-nuclear protestors and panicked locals are fleeing the area, clogging supply routes.',
+                    foreign: 'This is nuclear brinkmanship. Russia is daring us to escalate.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'Do we issue a nuclear ultimatum?',
+                        options: [
+                            { id: 'opt_fas1_1', text: 'Declare any further strikes on Faslane will cross the nuclear threshold', effects: { scores: { military_escalation: +2, uk_russia: +1 } } },
+                            { id: 'opt_fas1_2', text: 'Condemn attack, maintain strategic ambiguity', effects: { scores: { uk_russia: +1, civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_faslane_strike_2',
+                name: 'Second Strike on HMNB Clyde',
+                prerequisites: ['ev_faslane_strike_1'],
+                conditions: { minScores: { military_escalation: 4 } },
+                repeatable: false,
+                location: [56.06, -4.81],
+                description: 'A severe escalation: A targeted missile strike has penetrated the defences at Faslane and damaged a moored nuclear submarine. Radiation leak fears are unconfirmed but widespread.',
+                roleDescriptions: {
+                    defence: 'A Vanguard-class sub has taken damage. The Continuous At-Sea Deterrence (CASD) is relying entirely on the single boat currently at sea.',
+                    home: 'Total panic in Scotland. Widespread demands for immediate surrender to prevent a nuclear holocaust.',
+                    cyber: 'Communications with the base are intermittent due to secondary explosions.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'Orders for the Vanguard submarine currently on patrol?',
+                        options: [
+                            { id: 'opt_fas2_1', text: 'Move to Firing Depth (Maximum Readiness)', effects: { scores: { military_escalation: +2, civilian_stability: -2 } } },
+                            { id: 'opt_fas2_2', text: 'Maintain Deep Patrol (Preserve Asset)', effects: { scores: { military_readiness: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_power_grid_strike',
+                name: 'Targeted Strike on UK Power Grid',
+                prerequisites: ['ev_raf_bases_strike'],
+                conditions: { minScores: { military_escalation: 4 } },
+                repeatable: false,
+                location: [53.79, -0.98],
+                description: 'A massive escalation beyond military targets. A coordinated cyber-physical attack, culminating in a cruise missile strike on a major UK power plant, has plunged millions into darkness.',
+                roleDescriptions: {
+                    home: 'Without power, law and order is rapidly breaking down. Hospitals are running on backup generators.',
+                    cyber: 'The cyber component prevented the grid from load-balancing, maximizing the physical damage of the strike.',
+                    media: 'The nation is going dark. We can only broadcast via emergency radio frequencies in affected regions.'
+                },
+                decisions: [
+                    {
+                        role: 'home',
+                        text: 'Domestic security response?',
+                        options: [
+                            { id: 'opt_grid_1', text: 'Declare Martial Law in Affected Regions', effects: { scores: { civilian_stability: -3, military_readiness: -1 } } },
+                            { id: 'opt_grid_2', text: 'Rely on Local Police and Community Support', effects: { scores: { civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_airspace_incursion',
+                name: 'Total Airspace Incursion',
+                prerequisites: [],
+                conditions: { minScores: { military_escalation: 5 }, maxScores: { uk_us: 2, uk_europe: 3 } },
+                repeatable: false,
+                location: [55.0, 0.0],
+                description: 'Dozens of Russian strategic bombers have entered UK airspace from multiple vectors. They are not dropping bombs, but are actively probing and establishing air superiority over a depleted RAF.',
+                roleDescriptions: {
+                    defence: 'We do not have the airframes to intercept them all. They have functional air superiority over the UK mainland.',
+                    home: 'Air raid sirens are sounding continuously across the country. The population is paralyzed.',
+                    foreign: 'This is a demonstration of absolute dominance. They are waiting for our surrender.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'Do we authorize SAM batteries to fire freely?',
+                        options: [
+                            { id: 'opt_air2_1', text: 'Weapons Free (Engage all targets)', effects: { scores: { military_escalation: +1, civilian_stability: +1 } } },
+                            { id: 'opt_air2_2', text: 'Hold Fire (Do not provoke kinetic bombardment)', effects: { scores: { civilian_stability: -2, military_readiness: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_nuclear_readiness',
+                name: 'Imminent Nuclear Readiness Detected',
+                prerequisites: ['ev_airspace_incursion'],
+                conditions: { minScores: { military_escalation: 5 } },
+                repeatable: false,
+                location: [54.7, 20.5],
+                description: 'Intelligence confirms that Russian tactical nuclear weapons in Kaliningrad and Belarus have been mated to delivery systems and are actively fueling for launch.',
+                roleDescriptions: {
+                    cyber: 'Signals intelligence intercepts confirm authorization codes have been distributed to Russian frontline commanders.',
+                    defence: 'We are minutes away from a potential decapitation strike on London and remaining military bases.',
+                    foreign: 'All diplomatic channels with Moscow have gone dark.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'Final diplomatic plea?',
+                        options: [
+                            { id: 'opt_nuke_1', text: 'Broadcast Unconditional Offer for Ceasefire', effects: { scores: { uk_russia: -2, civilian_stability: -2 } } },
+                            { id: 'opt_nuke_2', text: 'Stand Firm', effects: { scores: { military_escalation: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_final_authorization',
+                name: 'The Final Authorization (Trident Decision)',
+                prerequisites: ['ev_nuclear_readiness'],
+                conditions: { minScores: { military_escalation: 5 } },
+                repeatable: false,
+                location: [51.5, -0.12],
+                description: 'Brought directly to the cabinet by the Chief of the Defence Staff (CDS). With conventional forces depleted, allies absent, and strategic strikes imminent, the UK government is forced to open the final options.',
+                roleDescriptions: {
+                    defence: 'Prime Minister, the Vanguard submarine is at firing depth. Target packages are loaded. We require your authorization.',
+                    home: 'This is the end. We either burn, or we burn them with us.',
+                    media: 'History ends here.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'Prime Minister, what is your order?',
+                        options: [
+                            { id: 'opt_final_1', text: 'AUTHORIZE TRIDENT LAUNCH', effects: { scores: { military_escalation: +5, civilian_stability: -5 } } },
+                            { id: 'opt_final_2', text: 'STAND DOWN AND SURRENDER', effects: { scores: { military_escalation: -5, civilian_stability: -5, uk_russia: -5 } } }
+                        ]
+                    }
+                ]
             }
         ]
 };

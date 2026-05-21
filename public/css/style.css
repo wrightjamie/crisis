@@ -100,6 +100,7 @@ body {
   padding: 1rem;
   margin-bottom: 1rem;
   border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 .card-title {
@@ -319,6 +320,44 @@ body.fac-panel-open .info-panel {
   }
 }
 
+/* Dialog Animation */
+.info-dialog {
+  margin: 0;
+  margin-left: auto;
+  height: 100vh;
+  max-height: 100vh;
+  width: 400px;
+  max-width: 90vw;
+  border: none;
+  border-left: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  padding: 0;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+  transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete, transform 0.3s ease-out;
+  transform: translateX(100%);
+}
+.info-dialog[open] {
+  transform: translateX(0);
+}
+@starting-style {
+  .info-dialog[open] {
+    transform: translateX(100%);
+  }
+}
+.info-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  transition: display 0.3s allow-discrete, overlay 0.3s allow-discrete, opacity 0.3s ease-out;
+  opacity: 0;
+}
+.info-dialog[open]::backdrop {
+  opacity: 1;
+}
+@starting-style {
+  .info-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
 /* Hamburger Menu & Dropdown */
 .hamburger-menu {
   position: relative;
@@ -390,4 +429,20 @@ body.fac-panel-open .info-panel {
     cursor: help;
     color: var(--accent-blue);
     font-weight: 500;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted);
 }

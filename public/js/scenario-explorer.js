@@ -1,26 +1,13 @@
-function openExplorer() {
-    const panelTitle = document.getElementById('fac-info-title');
-    const panelContent = document.getElementById('fac-info-content');
-    const panel = document.getElementById('fac-info-panel');
+function renderScenarioExplorer() {
+    const container = document.getElementById('scenario-explorer-container');
+    if (!container) return;
     
     if (typeof allTemplates === 'undefined' || typeof currentState === 'undefined') return;
-    
-    panelTitle.textContent = 'Scenario Explorer';
-    
-    // Temporarily expand the panel for the tree view
-    panel.style.width = '600px';
-    
-    let html = `
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem; background: var(--bg-primary); border-radius: 8px;">
-            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">
-                Tree visualization of scenario events. Root events are on the left. Indentation implies prerequisites.
-            </p>
-    `;
     
     const renderedNodes = new Set();
     const triggeredIds = new Set(currentState.events.map(e => e.templateId));
     
-    function renderNode(templateId, depth = 0) {
+    function renderNode(templateId, isRoot = false) {
         if (renderedNodes.has(templateId)) return '';
         renderedNodes.add(templateId);
         
@@ -31,11 +18,14 @@ function openExplorer() {
         let statusColor = 'var(--text-muted)';
         let statusText = 'LOCKED';
         let borderColor = 'var(--border-color)';
+        let interactivity = 'cursor: not-allowed; opacity: 0.7;';
+        let clickHandler = '';
         
         if (triggeredIds.has(templateId)) {
-            statusColor = 'var(--status-1)';
+            statusColor = 'var(--status-1)'; 
             statusText = 'TRIGGERED';
             borderColor = 'var(--status-1)';
+            interactivity = 'cursor: not-allowed; opacity: 0.85;';
         } else {
             const prereqsMet = !template.prerequisites || template.prerequisites.every(p => triggeredIds.has(p));
             const conditionsMet = checkConditions(template, currentState.scores, currentState.assets);
@@ -44,19 +34,23 @@ function openExplorer() {
                 statusColor = 'var(--accent-blue)';
                 statusText = 'AVAILABLE';
                 borderColor = 'var(--accent-blue)';
+                interactivity = 'cursor: pointer; transition: transform 0.1s, border-color 0.2s;';
+                clickHandler = `onclick="openEventDetails('${templateId}')"`;
             } else if (prereqsMet && !conditionsMet) {
                 statusColor = 'var(--accent-orange)';
                 statusText = 'PENDING CONDITIONS';
                 borderColor = 'var(--accent-orange)';
+                interactivity = 'cursor: pointer; transition: transform 0.1s, border-color 0.2s;';
+                clickHandler = `onclick="openEventDetails('${templateId}')"`;
             }
         }
         
+        // Semantic list item structure with CSS variables for dynamic branch coloring
         let nodeHtml = `
-            <div style="margin-left: ${depth * 25}px; border-left: 2px solid ${borderColor}; padding-left: 15px; padding-bottom: 15px; position: relative;">
-                <div style="position: absolute; left: 0; top: 12px; width: 10px; height: 2px; background-color: ${borderColor};"></div>
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: var(--radius-sm);">
-                    <div style="color: var(--text-primary); font-weight: bold; margin-bottom: 0.2rem;">${template.name}</div>
-                    <div style="font-size: 0.8rem; color: ${statusColor}; font-weight: bold;">${statusText}</div>
+            <li style="--branch-color: ${borderColor};">
+                <div ${clickHandler} style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid ${borderColor}; padding: 0.8rem; border-radius: var(--radius-sm); width: 300px; ${interactivity}" class="explorer-node">
+                    <div style="color: var(--text-primary); font-weight: bold; margin-bottom: 0.2rem; font-size: 0.95rem; line-height: 1.2;">${template.name}</div>
+                    <div style="font-size: 0.8rem; color: ${statusColor}; font-weight: bold; letter-spacing: 0.5px;">${statusText}</div>
         `;
         
         if (template.conditions) {
@@ -65,49 +59,118 @@ function openExplorer() {
                 for (const [k, v] of Object.entries(template.conditions.minScores)) condStrs.push(`Min ${formatName(k)}: ${v}`);
             }
             if (condStrs.length > 0) {
-                nodeHtml += `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Conditions: ${condStrs.join(', ')}</div>`;
+                nodeHtml += `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.3rem;">Cond: ${condStrs.join(', ')}</div>`;
             }
         }
         
-        nodeHtml += `</div></div>`;
+        nodeHtml += `</div>`;
         
         // Find children
         const children = allTemplates.filter(t => t.prerequisites && t.prerequisites.includes(templateId));
-        children.forEach(child => {
-            nodeHtml += renderNode(child.id, depth + 1);
-        });
+        if (children.length > 0) {
+            // Nested ul
+            nodeHtml += `<ul>`;
+            children.forEach(child => {
+                nodeHtml += renderNode(child.id, false);
+            });
+            nodeHtml += `</ul>`;
+        }
         
+        nodeHtml += `</li>`;
         return nodeHtml;
     }
+    
+    let html = `
+        <div style="padding: 1rem; background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto;">
+            <ul class="scenario-tree">
+    `;
     
     // Find roots
     const roots = allTemplates.filter(t => !t.prerequisites || t.prerequisites.length === 0);
     roots.forEach(root => {
-        html += renderNode(root.id, 0);
+        html += renderNode(root.id, true);
     });
     
     // Render any unconnected nodes
     allTemplates.forEach(t => {
         if (!renderedNodes.has(t.id)) {
-            html += renderNode(t.id, 0);
+            html += renderNode(t.id, true);
         }
     });
     
-    html += `</div>`;
+    html += `
+            </ul>
+        </div>
+    `;
     
-    panelContent.innerHTML = html;
-    panel.classList.add('open');
-    
-    // Ensure we reset width when closed
-    const closeBtn = panel.querySelector('button');
-    if (closeBtn) {
-        const originalOnclick = closeBtn.onclick;
-        closeBtn.onclick = function(e) {
-            panel.style.width = '400px'; // Revert to standard width
-            if (originalOnclick) originalOnclick.call(this, e);
-        };
-    }
+    container.innerHTML = html;
 }
 
-// Attach to window so HTML onClick works
-window.openExplorer = openExplorer;
+// Ensure style element is only injected once
+if (!document.getElementById('explorer-node-styles')) {
+    const styleEl = document.createElement('style');
+    styleEl.id = 'explorer-node-styles';
+    styleEl.textContent = `
+        .explorer-node:hover {
+            border-color: var(--text-muted) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        /* Semantic Tree CSS */
+        .scenario-tree, .scenario-tree ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .scenario-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .scenario-tree ul {
+            margin-left: 1.5rem; /* Indentation for children */
+            padding-top: 1rem;
+        }
+        .scenario-tree li {
+            margin: 0;
+            padding: 0 0 1rem 1.5rem;
+            position: relative;
+        }
+        /* Vertical line connecting children */
+        .scenario-tree li::before {
+            content: "";
+            position: absolute;
+            top: -1rem; /* Reach up to the parent */
+            left: 0;
+            bottom: 0;
+            border-left: 2px solid var(--branch-color, var(--border-color));
+        }
+        /* Horizontal branch pointing to the child */
+        .scenario-tree li::after {
+            content: "";
+            position: absolute;
+            top: 2rem; /* Align with the vertical center of the node */
+            left: 0;
+            width: 1.5rem;
+            border-top: 2px solid var(--branch-color, var(--border-color));
+        }
+        /* Stop the vertical line at the last child */
+        .scenario-tree li:last-child::before {
+            bottom: auto;
+            height: 3rem; /* Reaches exactly down to the ::after horizontal line */
+        }
+        /* Root nodes don't get branch lines */
+        .scenario-tree > li::before,
+        .scenario-tree > li::after {
+            display: none;
+        }
+        .scenario-tree > li {
+            padding: 0;
+            margin-bottom: 0;
+        }
+    `;
+    document.head.appendChild(styleEl);
+}
+
+window.renderScenarioExplorer = renderScenarioExplorer;

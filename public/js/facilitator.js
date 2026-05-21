@@ -3,7 +3,6 @@ const socket = io();
 const scoreAdjustContainer = document.getElementById('score-adjust-container');
 const eventsList = document.getElementById('facilitator-events-list');
 const tasksList = document.getElementById('facilitator-tasks-list');
-const availableEventsContainer = document.getElementById('available-events');
 const usedEventsContainer = document.getElementById('used-events');
 
 let currentState = null;
@@ -327,11 +326,9 @@ function checkConditions(template, scores, assets) {
 }
 
 function renderEventButtons() {
-    const availableEventsContainer = document.getElementById('available-events');
     const usedEventsContainer = document.getElementById('used-events');
     const pendingConditionsContainer = document.getElementById('pending-conditions-events');
     
-    availableEventsContainer.innerHTML = '';
     usedEventsContainer.innerHTML = '';
     if (pendingConditionsContainer) pendingConditionsContainer.innerHTML = '';
 
@@ -339,16 +336,9 @@ function renderEventButtons() {
     let currentAvailableEventIds = new Set();
 
     allTemplates.forEach(template => {
-        const requiresUnlockMet = !template.requiresUnlock || currentState.unlockedEvents.includes(template.id);
-        const prerequisitesMet = !template.prerequisites || template.prerequisites.every(p => triggeredTemplateIds.has(p));
-        const isUnlocked = requiresUnlockMet && prerequisitesMet;
-        if (!isUnlocked) return; // Hidden
-
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-primary';
-        
         if (!template.repeatable && triggeredTemplateIds.has(template.id)) {
-            // Disabled and moved to used
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-primary';
             btn.disabled = true;
             btn.style.cursor = 'not-allowed';
             btn.style.backgroundColor = 'var(--bg-tertiary)';
@@ -356,24 +346,12 @@ function renderEventButtons() {
             btn.textContent = `Used: ${template.name}`;
             usedEventsContainer.appendChild(btn);
         } else {
-            // Available (either repeatable or not yet triggered)
             const meetsConditions = checkConditions(template, currentState.scores, currentState.assets);
-            
-            if (meetsConditions) {
-                btn.textContent = template.name;
-                btn.onclick = () => openEventDetails(template.id);
-                
-                // Add glow if newly available
-                if (!previousAvailableEventIds.has(template.id)) {
-                    btn.classList.add('btn-new-event');
-                    // Remove class after animation
-                    setTimeout(() => btn.classList.remove('btn-new-event'), 3000);
-                }
-                currentAvailableEventIds.add(template.id);
-                
-                availableEventsContainer.appendChild(btn);
-            } else {
-                // Unlocked but pending score criteria
+            const isUnlocked = (!template.requiresUnlock || currentState.unlockedEvents.includes(template.id)) && (!template.prerequisites || template.prerequisites.every(p => triggeredTemplateIds.has(p)));
+
+            if (isUnlocked && !meetsConditions) {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-primary';
                 btn.textContent = template.name;
                 btn.style.backgroundColor = 'var(--bg-tertiary)';
                 btn.style.color = 'var(--text-muted)';
@@ -383,17 +361,17 @@ function renderEventButtons() {
             }
         }
     });
-    
-    previousAvailableEventIds = currentAvailableEventIds;
 
     if (usedEventsContainer.children.length === 0) {
         usedEventsContainer.innerHTML = '<small>No used events.</small>';
     }
-    if (availableEventsContainer.children.length === 0) {
-        availableEventsContainer.innerHTML = '<small>No available events.</small>';
-    }
     if (pendingConditionsContainer && pendingConditionsContainer.children.length === 0) {
         pendingConditionsContainer.innerHTML = '<small>No events pending conditions.</small>';
+    }
+    
+    // Render the interactive tree which replaces the old Available Events list
+    if (window.renderScenarioExplorer) {
+        window.renderScenarioExplorer();
     }
 }
 
@@ -507,12 +485,14 @@ let currentEventDetailsId = null;
 
 window.openEventDetails = function(templateId) {
     currentEventDetailsId = templateId;
-    document.body.classList.add('fac-panel-open');
     refreshFacilitatorInfoPanel();
+    const dialog = document.getElementById('fac-info-panel');
+    if (!dialog.open) dialog.showModal();
 };
 
 window.closeFacilitatorPanel = function() {
-    document.body.classList.remove('fac-panel-open');
+    const dialog = document.getElementById('fac-info-panel');
+    if (dialog.open) dialog.close();
     currentEventDetailsId = null;
 };
 

@@ -2,6 +2,10 @@
 
 - [ ] Explore use of fallow
 - [ ] Generate remaining 4 generic crisis images (Press Conference, UN Meeting, Cyber Command, Riot Police) once API rate limit resets
-- [ ] Refactor scenario event structure into a branching tree with prerequisites
-- [ ] Implement score-based gating for event unlocking
-- [ ] Create a "Scenario Explorer" tree view for the Facilitator interface
+- [x] Refactor scenario event structure into a branching tree with prerequisites
+- [x] Implement score-based gating for event unlocking
+- [x] Create a "Scenario Explorer" tree view for the Facilitator interface
+- [ ] Remove Masonry.js polyfill from facilitator.html once CSS grid-lanes is widely supported
+- [ ] Create a knowledge wiki covering game assets and terminology
+- [ ] Add a mechanism for users to take manual actions outside of a structured scenario (which might trigger otherwise disabled scenarios)
+- [ ] Add pre-game options to set initial variables (e.g. baseline US support) to introduce variety

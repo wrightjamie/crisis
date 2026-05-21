@@ -13,7 +13,9 @@ const ACRONYMS = {
     "UK": "United Kingdom",
     "US": "United States",
     "USA": "United States of America",
-    "UN": "United Nations"
+    "UN": "United Nations",
+    "Article 5": "NATO Article 5 - The principle of collective defence: an attack against one Ally is considered an attack against all",
+    "CDS": "Chief of the Defence Staff - The professional head of the British Armed Forces"
 };
 
 function parseAcronyms(text) {
