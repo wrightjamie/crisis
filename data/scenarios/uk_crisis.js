@@ -68,7 +68,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: -1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'] }
+                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The second of the Royal Navy\'s Queen Elizabeth-class aircraft carriers, currently deployed to the Indo-Pacific for exercises.' }
                         ]
                     },
                     {
@@ -80,7 +80,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: +1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'] }
+                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The second of the Royal Navy\'s Queen Elizabeth-class aircraft carriers, currently operating in home waters.' }
                         ]
                     }
                 ]
@@ -158,9 +158,9 @@ CRITICAL RULES:
             }
         ],
         assets: [
-            { id: 'a1', name: 'GCHQ Bude', location: [50.88, -4.55], state: 'operational', tags: ['intel', 'cyber'] },
-            { id: 'a2', name: 'HMNB Clyde', location: [56.06, -4.81], state: 'operational', tags: ['military', 'naval'] },
-            { id: 'a3', name: 'National Grid Control', location: [51.41, -0.99], state: 'operational', tags: ['civilian', 'infrastructure'] },
+            { id: 'a1', name: 'GCHQ Bude', location: [50.88, -4.55], state: 'operational', tags: ['intel', 'cyber'], image: '/images/assets/gchq_bude.png', briefing: 'GCHQ Bude is a satellite ground station and eavesdropping centre located on the north coast of Cornwall, England.' },
+            { id: 'a2', name: 'HMNB Clyde', location: [56.06, -4.81], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/hmnb_clyde.png', briefing: 'Her Majesty\'s Naval Base Clyde is one of three operating bases in the United Kingdom for the Royal Navy and is the base for the UK\'s continuous at-sea nuclear deterrent.' },
+            { id: 'a3', name: 'National Grid Control', location: [51.41, -0.99], state: 'operational', tags: ['civilian', 'infrastructure'], image: '/images/assets/national_grid.png', briefing: 'The National Grid Control Centre oversees the electricity and gas transmission system in Great Britain, balancing supply and demand.' },
             { id: 'a_typhoon', name: 'Eurofighter Typhoon', location: [53.09, -0.16], state: 'operational', tags: ['military', 'air'], image: '/images/assets/typhoon_aircraft.png', briefing: 'The Eurofighter Typhoon is the RAF\'s primary multi-role combat aircraft. Coningsby squadrons are on Quick Reaction Alert (QRA), fully armed and fueled for interception of hostile incursions.' },
             { id: 'a_f35', name: 'F-35B Lightning II', location: [52.64, 0.54], state: 'operational', tags: ['military', 'air'], image: '/images/assets/f35_aircraft.png', briefing: 'The F-35B Lightning II provides advanced stealth strike capabilities. Currently exercising with US assets to ensure NATO interoperability in contested airspace.' },
             { id: 'a_voyager', name: 'Voyager Tanker', location: [51.75, -1.58], state: 'operational', tags: ['military', 'air', 'support'], image: '/images/assets/voyager_refueler.png', briefing: 'The Voyager fleet is crucial for extending the combat radius of RAF fighters. One aircraft is permanently on standby to support QRA operations.' },
