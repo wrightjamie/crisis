@@ -45,9 +45,22 @@ function renderScenarioExplorer() {
             }
         }
         
+        const children = allTemplates.filter(t => t.prerequisites && t.prerequisites.includes(templateId));
+        const hasChildren = children.length > 0;
+        
+        // Determine if node is triggered to set default expansion
+        const isTriggered = triggeredIds.has(templateId);
+        
+        let toggleHtml = '';
+        if (hasChildren) {
+            const btnText = isTriggered ? '[-]' : '[+]';
+            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.style.display==='none'){ul.style.display='block';this.textContent='[-]'}else{ul.style.display='none';this.textContent='[+]'};" style="position: absolute; left: -30px; top: 15px; width: 22px; height: 22px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-family: monospace; font-size: 0.9rem; font-weight: bold; line-height: 1;" title="Toggle branch">${btnText}</button>`;
+        }
+
         // Semantic list item structure with CSS variables for dynamic branch coloring
         let nodeHtml = `
-            <li style="--branch-color: ${borderColor};">
+            <li style="--branch-color: ${borderColor}; position: relative;">
+                ${toggleHtml}
                 <div ${clickHandler} style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid ${borderColor}; padding: 0.8rem; border-radius: var(--radius-sm); width: 300px; ${interactivity}" class="explorer-node">
                     <div style="color: var(--text-primary); font-weight: bold; margin-bottom: 0.2rem; font-size: 0.95rem; line-height: 1.2;">${template.name}</div>
                     <div style="font-size: 0.8rem; color: ${statusColor}; font-weight: bold; letter-spacing: 0.5px;">${statusText}</div>
@@ -65,11 +78,11 @@ function renderScenarioExplorer() {
         
         nodeHtml += `</div>`;
         
-        // Find children
-        const children = allTemplates.filter(t => t.prerequisites && t.prerequisites.includes(templateId));
-        if (children.length > 0) {
+        // Render children
+        if (hasChildren) {
+            const displayStyle = isTriggered ? 'block' : 'none';
             // Nested ul
-            nodeHtml += `<ul>`;
+            nodeHtml += `<ul style="display: ${displayStyle};">`;
             children.forEach(child => {
                 nodeHtml += renderNode(child.id, false);
             });
@@ -82,7 +95,7 @@ function renderScenarioExplorer() {
     
     let html = `
         <div style="padding: 1rem; background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto;">
-            <ul class="scenario-tree">
+            <ul class="scenario-tree" style="padding-left: 2.5rem;">
     `;
     
     // Find roots

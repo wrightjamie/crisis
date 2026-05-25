@@ -145,7 +145,7 @@ socket.on('connect', () => {
 socket.on('active_roles', (roles) => {
     const container = document.getElementById('active-roles-display');
     if (!container) return;
-    container.innerHTML = '<span style="font-size:0.75rem; color:var(--text-muted);">STATIONS:</span>';
+    container.innerHTML = '<span class="text-xs text-muted">STATIONS:</span>';
     
     // Fallback to default if scenarioRoles is empty
     const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
@@ -156,15 +156,11 @@ socket.on('active_roles', (roles) => {
         badge.className = 'role-badge';
         
         if (isOnline) {
-            badge.style.backgroundColor = 'var(--status-1)';
-            badge.style.color = '#fff';
+            badge.classList.add("fac-status-online");
         } else {
-            badge.style.backgroundColor = 'var(--bg-tertiary)';
-            badge.style.color = 'var(--text-muted)';
+            badge.classList.add("fac-status-offline");
         }
-        
-        badge.style.fontSize = '0.7rem';
-        badge.style.padding = '0.1rem 0.4rem';
+
         badge.textContent = r;
         container.appendChild(badge);
     });
@@ -223,31 +219,31 @@ function renderHoldingScreen() {
 
         let axesHtml = '';
         if (s.variantAxes && s.variantAxes.length > 0) {
-            axesHtml += '<div style="margin: 1rem 0; border-top: 1px solid var(--border-color); padding-top: 1rem;">';
-            axesHtml += '<h3 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 1rem;">Opening Conditions</h3>';
+            axesHtml += '<div class="mt-2 pt-1 border-top">';
+            axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
             
             s.variantAxes.forEach(axis => {
-                axesHtml += `<div style="margin-bottom: 1rem;">`;
-                axesHtml += `<label style="display: block; font-size: 0.9rem; font-weight: bold; color: var(--text-secondary); margin-bottom: 0.5rem;">${axis.name}</label>`;
-                axesHtml += `<div style="display: flex; flex-wrap: wrap; gap: 0.5rem;" id="axis-${s.id}-${axis.id}">`;
+                axesHtml += `<div class="btn wiki-back-btn">`;
+                axesHtml += `<label class="text-base text-bold text-secondary mb-1 d-block">${axis.name}</label>`;
+                axesHtml += `<div class="flex-center gap-1 flex-wrap" id="axis-${s.id}-${axis.id}">`;
                 axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'variant-selected' : ''}" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)" style="font-size: 0.85rem; padding: 0.4rem 0.8rem;">${opt.name}</button>`;
+                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'variant-selected' : ''} text-sm p-1" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
                 });
                 axesHtml += '</div></div>';
                 // Default to first option
                 variantSelections[s.id][axis.id] = axis.options[0].id;
             });
 
-            axesHtml += `<button class="btn" onclick="randomiseVariants('${s.id}')" style="font-size: 0.8rem; padding: 0.3rem 0.8rem; background: none; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 0.5rem;">🎲 Randomise All</button>`;
+            axesHtml += `<button class="btn text-sm p-1 text-muted border-muted mt-1 bg-none" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
             axesHtml += '</div>';
         }
 
         const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
         let validationHtml = '';
         if (s.isValid === false) {
-            validationHtml = `<div style="margin-bottom: 1rem; padding: 0.5rem; border: 1px solid var(--accent-red); background: rgba(231,76,60,0.1); color: var(--accent-red); font-size: 0.85rem; border-radius: var(--radius-sm);">
+            validationHtml = `<div class="mb-1 p-1 border-red bg-red-faded text-red text-sm radius-sm">
                 <strong>⚠️ Scenario configuration invalid:</strong>
-                <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+                <ul class="mt-1 ml-2 p-0">
                     ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
                 </ul>
             </div>`;
@@ -255,10 +251,10 @@ function renderHoldingScreen() {
         
         div.innerHTML = `
             <h2>${p(s.name)}</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">${p(s.description)}</p>
+            <p class="text-secondary mb-1">${p(s.description)}</p>
             ${validationHtml}
             ${axesHtml}
-            <button class="btn btn-primary" onclick="startScenario('${s.id}')" style="width: 100%; margin-top: 0.5rem;" ${s.isValid === false ? 'disabled' : ''}>Start Scenario</button>
+            <button class="btn btn-primary w-100 mt-1" onclick="startScenario('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Start Scenario</button>
         `;
         scenariosListEl.appendChild(div);
     });
@@ -341,8 +337,7 @@ function renderEventButtons() {
             btn.className = 'btn btn-primary';
             btn.disabled = true;
             btn.style.cursor = 'not-allowed';
-            btn.style.backgroundColor = 'var(--bg-tertiary)';
-            btn.style.color = 'var(--text-muted)';
+            btn.classList.add("fac-status-offline");
             btn.textContent = `Used: ${template.name}`;
             usedEventsContainer.appendChild(btn);
         } else {
@@ -353,8 +348,7 @@ function renderEventButtons() {
                 const btn = document.createElement('button');
                 btn.className = 'btn btn-primary';
                 btn.textContent = template.name;
-                btn.style.backgroundColor = 'var(--bg-tertiary)';
-                btn.style.color = 'var(--text-muted)';
+                btn.classList.add("fac-status-offline");
                 btn.style.border = '1px solid var(--border-color)';
                 btn.onclick = () => openEventDetails(template.id);
                 if (pendingConditionsContainer) pendingConditionsContainer.appendChild(btn);
@@ -375,9 +369,7 @@ function renderEventButtons() {
     }
 }
 
-function formatName(str) {
-    return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
+
 
 function renderGlobalView() {
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
@@ -389,7 +381,7 @@ function renderGlobalView() {
     eventsList.innerHTML = recentEvents.length === 0 ? '<p>No active events.</p>' : '';
     recentEvents.forEach(evt => {
         eventsList.innerHTML += `
-            <div class="card" style="margin-bottom: 0.5rem; padding: 0.5rem;">
+            <div class="card mb-1 p-1">
                 <strong>${p(evt.name)}</strong><br>
                 <small>${new Date(evt.timestamp).toLocaleTimeString()}</small>
             </div>
@@ -404,23 +396,23 @@ function renderGlobalView() {
     tasksList.innerHTML = displayTasks.length === 0 ? '<p>No decisions generated.</p>' : '';
     displayTasks.forEach(task => {
         const statusStr = task.status === 'resolved' 
-            ? `<span style="color:var(--status-1)">Resolved (${task.selectedOption})</span>` 
-            : `<span style="color:var(--accent-orange)">Pending</span>`;
+            ? `<span class="text-status-1">Resolved (${task.selectedOption})</span>` 
+            : `<span class="text-status-4">Pending</span>`;
             
         const dismissBtn = task.status === 'pending' 
-            ? `<button onclick="dismissDecision('${task.id}')" class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; background: var(--bg-tertiary);">Dismiss</button>` 
+            ? `<button onclick="dismissDecision('${task.id}')" class="btn text-sm p-1 fac-status-offline">Dismiss</button>` 
             : '';
 
         tasksList.innerHTML += `
-            <div class="card" style="margin-bottom: 0.5rem; padding: 0.5rem;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card mb-1 p-1">
+                <div class="flex-between">
                     <strong>[${task.role.toUpperCase()}]</strong>
-                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <div class="flex-center gap-1">
                         ${statusStr}
                         ${dismissBtn}
                     </div>
                 </div>
-                <small style="display:block; margin-top:0.5rem;">${p(task.text)}</small>
+                <small class="mt-1 d-block">${p(task.text)}</small>
             </div>
         `;
     });
@@ -441,7 +433,7 @@ function renderScoreAdjust() {
         
         if (prevFacilitatorScores && prevFacilitatorScores[key] !== value) {
             row.style.animation = 'score-changed 2.5s ease-out';
-            row.style.backgroundColor = 'var(--bg-tertiary)';
+            row.classList.add("fac-status-offline");
             row.style.borderRadius = 'var(--radius-sm)';
             row.style.padding = '0.2rem';
         }
@@ -516,11 +508,11 @@ function refreshFacilitatorInfoPanel() {
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
     
     let html = `
-        <div class="card" style="margin-bottom: 1rem;">
+        <div class="card btn wiki-back-btn">
     `;
     
     if (template.image) {
-        html += `<img src="${template.image}" alt="${template.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+        html += `<img src="${template.image}" alt="${template.name}" class="wiki-img">`;
     }
 
     html += `
@@ -531,9 +523,9 @@ function refreshFacilitatorInfoPanel() {
 
     if (template.facilitatorNotes) {
         html += `
-            <div class="card" style="margin-bottom: 1rem; border-color: var(--accent-orange); background-color: rgba(230, 126, 34, 0.1);">
-                <div class="card-title" style="color: var(--accent-orange); font-size: 0.9rem; margin-bottom: 0.5rem;">Facilitator Notes</div>
-                <div class="card-desc" style="font-size: 0.9rem;">${p(template.facilitatorNotes)}</div>
+            <div class="card mb-2 border-orange bg-orange-faded">
+                <div class="card-title text-orange text-base mb-1">Facilitator Notes</div>
+                <div class="card-desc text-base">${p(template.facilitatorNotes)}</div>
             </div>
         `;
     }
@@ -564,21 +556,21 @@ function refreshFacilitatorInfoPanel() {
             }
         }
         html += `
-            <div class="card" style="margin-bottom: 1rem; border-color: var(--accent-red); background-color: rgba(231, 76, 60, 0.1);">
-                <div class="card-title" style="color: var(--accent-red); font-size: 0.9rem; margin-bottom: 0.5rem;">Warning: Conditions Not Met</div>
-                <div class="card-desc" style="font-size: 0.9rem;">${reasonHtml || 'This event requires conditions that have not been reached.'} You may still force trigger it.</div>
+            <div class="card mb-2 border-red bg-red-faded">
+                <div class="card-title text-red text-base mb-1">Warning: Conditions Not Met</div>
+                <div class="card-desc text-base">${reasonHtml || 'This event requires conditions that have not been reached.'} You may still force trigger it.</div>
             </div>
         `;
     }
 
     if (template.decisions && template.decisions.length > 0) {
         html += `
-            <h3 style="margin: 1.5rem 0 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Generated Tasks</h3>
-            <div class="action-list" style="margin-bottom: 1rem;">
+            <h3 class="my-3 text-muted text-base uppercase">Generated Tasks</h3>
+            <div class="action-list btn wiki-back-btn">
         `;
         template.decisions.forEach(dec => {
             html += `
-                <div class="card" style="padding: 0.5rem;">
+                <div class="card p-1">
                     <strong>[${dec.role.toUpperCase()}]</strong> ${p(dec.text)}
                 </div>
             `;
@@ -587,8 +579,8 @@ function refreshFacilitatorInfoPanel() {
     }
 
     html += `
-        <div style="margin-top: 2rem;">
-            <button class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; ${meetsConditions ? '' : 'background-color: var(--accent-red); border-color: var(--accent-red);'}" onclick="triggerEventFromPanel('${template.id}')">
+        <div class="mt-2">
+            <button class="btn btn-primary w-100 p-2 text-md ${meetsConditions ? '' : 'btn-danger'}" onclick="triggerEventFromPanel('${template.id}')">
                 ${triggerBtnText}
             </button>
         </div>
@@ -653,10 +645,10 @@ function renderScheduledEvents() {
         let timeRemaining = se.paused ? se.timeRemainingMs : (se.triggerTimeMs - Date.now());
         if (timeRemaining < 0) timeRemaining = 0;
         
-        const statusHtml = se.paused ? '<span style="color:var(--accent-orange)">PAUSED</span>' : `<span class="countdown-timer" style="color:var(--status-1)" data-trigger-time="${se.triggerTimeMs}">${Math.ceil(timeRemaining/1000)}s</span>`;
+        const statusHtml = se.paused ? '<span class="text-status-4">PAUSED</span>' : `<span class="countdown-timer text-status-1" data-trigger-time="${se.triggerTimeMs}">${Math.ceil(timeRemaining/1000)}s</span>`;
         
         card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="flex-between">
                 <strong>${name}</strong>
                 ${statusHtml}
             </div>
@@ -681,3 +673,14 @@ setInterval(() => {
         el.textContent = Math.ceil(remaining/1000) + 's';
     });
 }, 500);
+
+window.showWikiPanel = function(category = null, itemId = null) {
+    const titleEl = document.getElementById('fac-info-title');
+    const contentEl = document.getElementById('fac-info-content');
+    titleEl.textContent = 'Knowledge Wiki';
+    
+    contentEl.innerHTML = window.generateWikiHtml(currentState, category, itemId);
+    
+    const dialog = document.getElementById('fac-info-panel');
+    if (!dialog.open) dialog.showModal();
+};

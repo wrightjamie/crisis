@@ -22,6 +22,7 @@ const infoPanelTitle = document.getElementById('info-panel-title');
 const infoContent = document.getElementById('info-content');
 const btnCloseInfo = document.getElementById('btn-close-info');
 const btnAiBriefing = document.getElementById('btn-ai-briefing');
+const btnWiki = document.getElementById('btn-wiki');
 
 // Socket events for roles
 socket.on('active_roles', (roles) => {
@@ -56,6 +57,18 @@ socket.on('role_registered', (registeredRole) => {
 socket.on('role_error', (msg) => {
     alert(msg);
 });
+
+if (btnWiki) {
+    btnWiki.addEventListener('click', () => {
+        if (window.showWikiPanel) window.showWikiPanel();
+    });
+}
+
+window.showWikiPanel = function(category = null, itemId = null) {
+    currentInfoView = { type: 'wiki', category, itemId };
+    openPanel('Knowledge Wiki');
+    refreshInfoPanel();
+};
 
 if (btnAiBriefing) {
     btnAiBriefing.addEventListener('click', () => {
@@ -132,7 +145,7 @@ function showBriefing() {
     html += `
         <div class="briefing-section briefing-ai" style="border-left: 3px solid var(--status-1);">
             <div class="briefing-section-label">Executive Summary</div>
-            <div id="briefing-ai-summary-text" style="white-space: pre-wrap;"><em>Writing your brief... Please wait.</em></div>
+            <div id="briefing-ai-summary-text" class="pre-wrap"><em>Writing your brief... Please wait.</em></div>
         </div>
     `;
     
@@ -267,9 +280,9 @@ function updateUI() {
             const summaryData = localState.aiScenarioSummaries[role];
             let html = p(summaryData.text);
             if (summaryData.prompt) {
-                html += `\n\n<details style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
-                    <summary style="cursor: pointer; color: var(--text-muted); font-size: 0.8rem; outline: none;">View Prompt Context</summary>
-                    <pre style="font-size: 0.75rem; color: var(--text-muted); white-space: pre-wrap; margin-top: 0.5rem; background: var(--bg-primary); padding: 0.5rem; border-radius: 4px; font-family: inherit;">${p(summaryData.prompt)}</pre>
+                html += `\n\n<details class="mt-2 border-top pt-1">
+                    <summary class="cursor-pointer text-muted text-sm outline-none">View Prompt Context</summary>
+                    <pre class="text-xs text-muted mt-1 bg-primary p-1 radius-sm pre-wrap font-inherit">${p(summaryData.prompt)}</pre>
                 </details>`;
             }
             aiSummaryText.innerHTML = html;
@@ -309,7 +322,7 @@ function renderMap(events, assets) {
 
     // Add assets
     assets.forEach(asset => {
-        const iconHtml = `<div style="background-color: var(--accent-blue); width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`;
+        const iconHtml = `<div class="bg-blue w-12 h-12 radius-full border-white"></div>`;
         const icon = L.divIcon({ html: iconHtml, className: '' });
         const marker = L.marker(asset.location, { icon });
 
@@ -357,10 +370,7 @@ function renderMap(events, assets) {
     });
 }
 
-// Format score names
-function formatName(str) {
-    return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
+
 
 function refreshInfoPanel() {
     if (!currentInfoView || !localState) return;
@@ -371,22 +381,22 @@ function refreshInfoPanel() {
         const aiBriefing = localState.aiBriefings && localState.aiBriefings[role];
         
         let html = `
-            <div style="margin-bottom: 1.5rem;">
-                ${aiBriefing && aiBriefing.text ? `<p style="line-height: 1.6; font-size: 0.95rem;">${p(aiBriefing.text)}</p>` : '<p style="color:var(--text-muted);">Briefing is currently unavailable.</p>'}
+            <div class="mb-3">
+                ${aiBriefing && aiBriefing.text ? `<p class="text-base lh-16">${p(aiBriefing.text)}</p>` : '<p class="text-muted">Briefing is currently unavailable.</p>'}
             </div>
         `;
 
         if (aiBriefing && aiBriefing.seeds && aiBriefing.seeds.length > 0) {
             html += `<h4 style="margin-bottom: 0.5rem; color: var(--text-secondary);">Score Changes</h4>
-                     <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-muted);">`;
+                     <ul class="list-none p-0 m-0 text-sm text-muted">`;
             aiBriefing.seeds.forEach(seed => {
-                html += `<li style="margin-bottom: 0.3rem;">• ${p(seed.text)}</li>`;
+                html += `<li class="mb-05">• ${p(seed.text)}</li>`;
             });
             html += `</ul>`;
         }
         
         html += `
-            <div style="margin-top: 2rem;">
+            <div class="mt-2">
                 <button id="btn-request-ai-briefing" class="btn" style="width: 100%; border: 1px solid var(--accent-blue); background: none; color: var(--accent-blue);">Request Full Refresh</button>
             </div>
         `;
@@ -412,7 +422,7 @@ function refreshInfoPanel() {
         `;
         
         if (evt.image) {
-            html += `<img src="${evt.image}" alt="${evt.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+            html += `<img src="${evt.image}" alt="${evt.name}" class="wiki-img">`;
         }
 
         html += `
@@ -421,20 +431,20 @@ function refreshInfoPanel() {
         `;
 
         if (evt.roleDescriptions && evt.roleDescriptions[role]) {
-            html += `<div class="card-role-desc" style="margin-top: 1rem;"><b>Intel (${role.toUpperCase()}):</b> ${p(evt.roleDescriptions[role])}</div>`;
+            html += `<div class="card-role-desc mt-2"><b>Intel (${role.toUpperCase()}):</b> ${p(evt.roleDescriptions[role])}</div>`;
         }
-        html += `<div class="card-meta" style="margin-top: 1rem;">Time: ${new Date(evt.timestamp).toLocaleTimeString()}</div></div>`;
+        html += `<div class="card-meta mt-2">Time: ${new Date(evt.timestamp).toLocaleTimeString()}</div></div>`;
 
         // Tasks for this event
         const roleTasks = localState.decisionTasks.filter(t => t.eventId === evt.id && (t.role === role || role === 'display'));
 
         if (roleTasks.length > 0) {
-            html += `<h3 style="margin: 1.5rem 0 1rem; font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Decision Tasks</h3>`;
+            html += `<h3 class="my-3 text-base text-secondary uppercase border-bottom pb-1">Decision Tasks</h3>`;
             roleTasks.forEach(task => {
                 const isResolved = task.status === 'resolved';
                 const statusBadge = isResolved
-                    ? `<span style="color: var(--status-1); font-size: 0.8rem; float: right;">RESOLVED</span>`
-                    : `<span style="color: var(--accent-orange); font-size: 0.8rem; float: right;">PENDING</span>`;
+                    ? `<span class="text-status-1 text-sm float-right">RESOLVED</span>`
+                    : `<span class="text-status-4 text-sm float-right">PENDING</span>`;
 
                 html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
 
@@ -462,44 +472,43 @@ function refreshInfoPanel() {
         }
 
         let html = `
-            <div class="card" style="border-color: var(--accent-blue);">
+            <div class="card wiki-card-blue">
         `;
         
         if (asset.image) {
-            html += `<img src="${asset.image}" alt="${asset.name}" style="width: 100%; border-radius: var(--radius-sm) var(--radius-sm) 0 0; margin: -1.5rem -1.5rem 1rem -1.5rem; width: calc(100% + 3rem); display: block; border-bottom: 1px solid var(--border-color);">`;
+            html += `<img src="${asset.image}" alt="${asset.name}" class="wiki-img">`;
         }
 
         html += `
-                <div class="card-title" style="color: var(--accent-blue);">${asset.name}</div>
+                <div class="card-title wiki-title-blue">${asset.name}</div>
                 <div class="card-desc">
-                    <strong>Status:</strong> <span style="text-transform: uppercase;">${asset.state}</span>
+                    <strong>Status:</strong> <span class="uppercase">${asset.state}</span>
                 </div>
         `;
 
         if (asset.briefing) {
             html += `
-                <div class="card-role-desc" style="margin-top: 1rem; border-left: 2px solid var(--accent-blue);">
+                <div class="card-role-desc mt-2 border-left-blue">
                     <strong>Intelligence Brief:</strong><br>
                     ${p(asset.briefing)}
                 </div>
             `;
         }
 
-        html += `<div class="card-meta" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">`;
+        html += `<div class="card-meta mt-2 flex-center gap-1 flex-wrap">`;
         
         asset.tags.forEach(tag => {
-            html += `<span style="background: var(--bg-primary); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.75rem; text-transform: uppercase;">${tag}</span>`;
+            html += `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase">${tag}</span>`;
         });
         html += `</div></div>`;
 
         infoContent.innerHTML = html;
+    } else if (currentInfoView.type === 'wiki') {
+        infoContent.innerHTML = window.generateWikiHtml(localState, currentInfoView.category, currentInfoView.itemId);
     }
 }
 
-// Global function to be called from inline onclick handlers
-window.submitDecision = function (taskId, optionId) {
-    socket.emit('submit_decision', { taskId, optionId });
-};
+
 
 // Add pulse animation for map events dynamically
 const style = document.createElement('style');

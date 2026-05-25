@@ -111,6 +111,50 @@ CRITICAL RULES:
                         scoreModifiers: { civilian_stability: +1 }
                     }
                 ]
+            },
+            {
+                id: 'us_administration',
+                name: 'US Administration Stance',
+                options: [
+                    {
+                        id: 'us_staunch',
+                        name: 'Staunch Ally',
+                        briefingText: 'The current US administration is firmly committed to NATO and the special relationship.',
+                        scoreModifiers: { uk_us: +1 }
+                    },
+                    {
+                        id: 'us_isolationist',
+                        name: 'Isolationist Shift',
+                        briefingText: 'The US administration is facing domestic pressure to pull back from European conflicts, focusing heavily on the Indo-Pacific instead.',
+                        roleBriefings: {
+                            foreign: 'Washington is reluctant to commit resources. You will need to rely more heavily on European partners.',
+                            defence: 'US logistical support is not guaranteed. Conserve your assets.'
+                        },
+                        scoreModifiers: { uk_us: -2, uk_europe: +1 }
+                    }
+                ]
+            },
+            {
+                id: 'domestic_climate',
+                name: 'Domestic Climate',
+                options: [
+                    {
+                        id: 'dom_stable',
+                        name: 'Stable Economy',
+                        briefingText: 'The UK economy is relatively stable and public trust in institutions is holding.',
+                        scoreModifiers: { civilian_stability: +1 }
+                    },
+                    {
+                        id: 'dom_winter',
+                        name: 'Winter of Discontent',
+                        briefingText: 'The crisis hits during a period of intense domestic strife, with ongoing strikes in public sectors and high inflation.',
+                        roleBriefings: {
+                            home: 'Public order is already fragile. Any disruption to supply chains will lead to immediate panic buying and unrest.',
+                            media: 'The press is highly critical of government competence. Selling a war narrative will be extremely difficult.'
+                        },
+                        scoreModifiers: { civilian_stability: -2 }
+                    }
+                ]
             }
         ],
         assets: [

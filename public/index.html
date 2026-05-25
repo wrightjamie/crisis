@@ -12,26 +12,26 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="view-map"> <!-- Default to map view on mobile -->
-    <div id="holding-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem;">
-        <h1 style="color: var(--text-primary); margin-bottom: 1rem;">Waiting for Game to Start</h1>
-        <p style="color: var(--text-secondary);">The facilitator is selecting a scenario...</p>
+    <div id="holding-screen" class="client-holding-overlay">
+        <h1 class="mb-1">Waiting for Game to Start</h1>
+        <p class="text-secondary">The facilitator is selecting a scenario...</p>
     </div>
 
-    <div id="role-selection-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-primary); z-index: 2500; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;">
-        <h1 style="color: var(--text-primary); margin-bottom: 2rem;">Select Your Station</h1>
-        <div id="role-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; width: 100%; max-width: 800px;">
+    <div id="role-selection-screen" class="client-holding-hidden">
+        <h1 class="mb-2 text-center text-primary">Select Your Station</h1>
+        <div id="role-buttons" class="client-role-grid">
             <!-- Buttons injected by JS -->
         </div>
     </div>
 
     <div id="briefing-screen" class="briefing-screen">
         <div class="briefing-content">
-            <h1 id="briefing-title" style="color: var(--text-primary); margin-bottom: 0.5rem; text-align: center;">SITUATION BRIEFING</h1>
-            <p id="briefing-subtitle" style="color: var(--text-muted); text-align: center; margin-bottom: 2rem; font-size: 0.9rem; text-transform: uppercase;"></p>
+            <h1 id="briefing-title" class="text-center mb-1">SITUATION BRIEFING</h1>
+            <p id="briefing-subtitle" class="text-center text-muted text-sm mb-2 uppercase"></p>
             <div id="briefing-body">
                 <!-- Sections injected by JS -->
             </div>
-            <button id="btn-continue-briefing" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">CONTINUE TO MAP</button>
+            <button id="btn-continue-briefing" class="btn btn-primary w-100 mt-1 text-md">CONTINUE TO MAP</button>
         </div>
     </div>
 
@@ -40,6 +40,7 @@
         <header class="top-bar">
             <div id="role-display" class="role-badge">Loading...</div>
             <div style="display: flex; gap: 0.5rem;">
+                <button id="btn-wiki" class="btn client-btn-taken">Wiki</button>
                 <button id="btn-ai-briefing" class="btn" style="background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: bold; position: relative;">
                     Briefing
                     <span id="ai-briefing-badge" style="display: none; position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; background-color: var(--status-1); border-radius: 50%; box-shadow: 0 0 8px var(--status-1);"></span>
@@ -72,6 +73,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- Client Logic -->
+    <script src="js/utils.js"></script>
     <script src="js/acronyms.js"></script>
     <script src="js/client.js"></script>
 </body>
