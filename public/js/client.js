@@ -23,6 +23,7 @@ const infoContent = document.getElementById('info-content');
 const btnCloseInfo = document.getElementById('btn-close-info');
 const btnAiBriefing = document.getElementById('btn-ai-briefing');
 const btnWiki = document.getElementById('btn-wiki');
+const btnActions = document.getElementById('btn-actions');
 
 // Socket events for roles
 socket.on('active_roles', (roles) => {
@@ -64,9 +65,21 @@ if (btnWiki) {
     });
 }
 
+if (btnActions) {
+    btnActions.addEventListener('click', () => {
+        if (window.showActionsPanel) window.showActionsPanel();
+    });
+}
+
 window.showWikiPanel = function(category = null, itemId = null) {
     currentInfoView = { type: 'wiki', category, itemId };
     openPanel('Knowledge Wiki');
+    refreshInfoPanel();
+};
+
+window.showActionsPanel = function() {
+    currentInfoView = { type: 'actions' };
+    openPanel('Manual Actions');
     refreshInfoPanel();
 };
 
@@ -174,6 +187,11 @@ function closePanel() {
 // Global function to be called from inline onclick handlers
 window.submitDecision = function (taskId, optionId) {
     socket.emit('submit_decision', { taskId, optionId });
+};
+
+window.triggerManualAction = function(actionId) {
+    socket.emit('trigger_manual_action', actionId);
+    closePanel();
 };
 
 // Initialize Map
@@ -505,6 +523,55 @@ function refreshInfoPanel() {
         infoContent.innerHTML = html;
     } else if (currentInfoView.type === 'wiki') {
         infoContent.innerHTML = window.generateWikiHtml(localState, currentInfoView.category, currentInfoView.itemId);
+    } else if (currentInfoView.type === 'actions') {
+        if (!localState.scenarioConfig || !localState.scenarioConfig.manualActions) {
+            infoContent.innerHTML = '<p class="text-muted">No manual actions available.</p>';
+            return;
+        }
+
+        let html = '<div class="actions-list">';
+        let actionsShown = 0;
+        
+        localState.scenarioConfig.manualActions.forEach(action => {
+            if (!action.initiator.includes(role)) return;
+
+            const isMet = window.checkConditions(action, localState.scores, localState.assets);
+            
+            if (!isMet) return; // Hide if conditions aren't met
+
+            actionsShown++;
+            html += `<div class="card wiki-card-blue mb-2">`;
+            if (action.image) {
+                html += `<img src="${action.image}" alt="${action.name}" class="wiki-img" style="margin-bottom: 0.5rem;">`;
+            }
+            html += `<div class="card-title wiki-title-blue">${action.name}</div>
+                     <div class="card-desc">${p(action.description)}</div>`;
+            
+            let approvers = null;
+            if (action.requiresApprovalFrom) {
+                if (Array.isArray(action.requiresApprovalFrom)) {
+                    approvers = action.requiresApprovalFrom.filter(r => r !== role).join(' or ');
+                } else if (action.requiresApprovalFrom !== role) {
+                    approvers = action.requiresApprovalFrom;
+                }
+            }
+
+            if (approvers) {
+                html += `<div class="card-meta mt-1 text-status-4" style="font-weight:bold;">Requires approval from: ${approvers.toUpperCase()}</div>`;
+            } else {
+                html += `<div class="card-meta mt-1 text-status-1" style="font-weight:bold;">Immediate Execution</div>`;
+            }
+
+            html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+            html += `</div>`;
+        });
+        
+        if (actionsShown === 0) {
+            html += '<p class="text-muted">No actions currently available. (Requirements not met)</p>';
+        }
+        html += '</div>';
+        
+        infoContent.innerHTML = html;
     }
 }
 

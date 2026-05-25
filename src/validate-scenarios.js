@@ -65,6 +65,22 @@ function validateScenario(scenario) {
         }
     }
 
+    // Check manualActions (optional)
+    if (scenario.manualActions) {
+        if (!Array.isArray(scenario.manualActions)) {
+            errors.push("'manualActions' must be an array");
+        } else {
+            scenario.manualActions.forEach((action, index) => {
+                const actionPath = `manualAction[${index}]`;
+                if (!action.id) errors.push(`${actionPath} missing 'id'`);
+                if (!action.name) errors.push(`${actionPath} missing 'name'`);
+                if (!action.initiator || !Array.isArray(action.initiator)) {
+                    errors.push(`${actionPath} (${action.id || 'unknown'}) missing or invalid 'initiator' array`);
+                }
+            });
+        }
+    }
+
     return {
         isValid: errors.length === 0,
         errors

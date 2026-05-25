@@ -254,39 +254,63 @@ class GameEngine {
 
         const option = task.options.find(o => o.id === optionId);
         if (option && option.effects) {
-            if (option.effects.scores) {
-                for (const [scoreName, change] of Object.entries(option.effects.scores)) {
-                    if (this.gameState.scores[scoreName] !== undefined) {
-                        this.gameState.scores[scoreName] += change;
-                        this.gameState.scores[scoreName] = Math.max(1, Math.min(5, this.gameState.scores[scoreName]));
-                    }
-                }
-            }
-
-            if (option.effects.unlockEvents) {
-                option.effects.unlockEvents.forEach(evtId => {
-                    if (!this.gameState.unlockedEvents.includes(evtId)) {
-                        this.gameState.unlockedEvents.push(evtId);
-                    }
-                });
-            }
-
-            if (option.effects.triggerEvents) {
-                option.effects.triggerEvents.forEach(te => {
-                    const roll = Math.random();
-                    if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
-                        this.gameState.scheduledEvents.push({
-                            uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                            templateId: te.id,
-                            triggerTimeMs: Date.now() + (te.delayMs || 0),
-                            paused: false,
-                            timeRemainingMs: null
-                        });
-                    }
-                });
-            }
+            this.applyEffects(option.effects);
         }
         return option;
+    }
+
+    applyEffects(effects) {
+        if (!effects) return;
+        
+        if (effects.scores) {
+            for (const [scoreName, change] of Object.entries(effects.scores)) {
+                if (this.gameState.scores[scoreName] !== undefined) {
+                    this.gameState.scores[scoreName] += change;
+                    this.gameState.scores[scoreName] = Math.max(1, Math.min(5, this.gameState.scores[scoreName]));
+                }
+            }
+        }
+
+        if (effects.unlockEvents) {
+            effects.unlockEvents.forEach(evtId => {
+                if (!this.gameState.unlockedEvents.includes(evtId)) {
+                    this.gameState.unlockedEvents.push(evtId);
+                }
+            });
+        }
+
+        if (effects.triggerEvents) {
+            effects.triggerEvents.forEach(te => {
+                const roll = Math.random();
+                if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
+                    this.gameState.scheduledEvents.push({
+                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                        templateId: te.id,
+                        triggerTimeMs: Date.now() + (te.delayMs || 0),
+                        paused: false,
+                        timeRemainingMs: null
+                    });
+                }
+            });
+        }
+
+        if (effects.randomEvents) {
+            const totalWeight = effects.randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
+            let roll = Math.random() * totalWeight;
+            for (const re of effects.randomEvents) {
+                if (roll < (re.weight || 1)) {
+                    this.gameState.scheduledEvents.push({
+                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                        templateId: re.id,
+                        triggerTimeMs: Date.now() + (re.delayMs || 0),
+                        paused: false,
+                        timeRemainingMs: null
+                    });
+                    break;
+                }
+                roll -= (re.weight || 1);
+            }
+        }
     }
 
     dismissTask(taskId) {
@@ -297,6 +321,72 @@ class GameEngine {
             return true;
         }
         return false;
+    }
+
+    triggerManualAction(actionId, initiatorRole) {
+        if (this.gameState.status !== 'active') return false;
+        
+        const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+        if (!scenario || !scenario.manualActions) return false;
+
+        const action = scenario.manualActions.find(a => a.id === actionId);
+        if (!action) return false;
+
+        // Verify initiator has permission
+        if (!action.initiator.includes(initiatorRole)) return false;
+
+        // Verify conditions
+        if (!this.checkConditions(action, this.gameState.scores, this.gameState.assets)) return false;
+
+        console.log(`Manual Action triggered: ${action.name} by ${initiatorRole}`);
+
+        // Check for required approval (if required, and it's not the initiator themselves)
+        let approver = null;
+        if (action.requiresApprovalFrom) {
+            if (Array.isArray(action.requiresApprovalFrom)) {
+                approver = action.requiresApprovalFrom.find(r => r !== initiatorRole);
+            } else if (action.requiresApprovalFrom !== initiatorRole) {
+                approver = action.requiresApprovalFrom;
+            }
+        }
+
+        if (approver) {
+            const actionEvent = {
+                id: `evt_action_${Date.now()}`,
+                templateId: action.id,
+                name: `Action Pending: ${action.name}`,
+                location: null,
+                description: `The ${initiatorRole} role has initiated: ${action.name}. Awaiting approval from ${approver}.`,
+                timestamp: Date.now()
+            };
+            this.gameState.events.push(actionEvent);
+
+            this.gameState.decisionTasks.push({
+                id: `task_action_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                eventId: actionEvent.id,
+                role: approver,
+                text: `The ${initiatorRole} role requests authorization to execute: ${action.name}. Do you approve?`,
+                options: [
+                    { id: 'approve', text: 'Approve', effects: action.effects },
+                    { id: 'veto', text: 'Veto', effects: {} }
+                ],
+                status: 'pending'
+            });
+        } else {
+            // Immediate execution
+            const actionEvent = {
+                id: `evt_action_${Date.now()}`,
+                templateId: action.id,
+                name: `Action Executed: ${action.name}`,
+                location: null,
+                description: `The ${initiatorRole} role has executed: ${action.name}.`,
+                timestamp: Date.now()
+            };
+            this.gameState.events.push(actionEvent);
+            this.applyEffects(action.effects);
+        }
+
+        return true;
     }
 
     getScenarioTemplates() {

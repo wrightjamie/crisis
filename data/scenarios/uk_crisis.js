@@ -821,6 +821,177 @@ CRITICAL RULES:
                         ]
                     }
                 ]
+            },
+            {
+                id: 'ev_us_support_success',
+                name: 'US Authorizes Logistics Support',
+                description: 'The US administration has approved the immediate redirection of heavy airlift and logistics support to the UK.',
+                location: [51.5, -0.1],
+                roleDescriptions: {
+                    defence: 'Additional C-17s are arriving. Our logistics constraints are easing.',
+                    foreign: 'A diplomatic victory that reassures our European partners of US commitment.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_us_support_fail',
+                name: 'US Declines Immediate Logistics Support',
+                description: 'The US administration has politely declined to redirect strategic airlift to the UK at this time, citing other global commitments.',
+                location: [38.89, -77.03],
+                roleDescriptions: {
+                    foreign: 'This is a diplomatic snub. We look desperate to our European allies.',
+                    defence: 'We will have to make do with our organic airlift capacity.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_russia_deescalate',
+                name: 'Backchannel Success: Russia Agrees to Pause',
+                description: 'Following a tense emergency backchannel communication, Russian leadership has agreed to a temporary tactical pause, conditional on a reduction in UK military posture.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    foreign: 'A breakthrough. We bought some time.',
+                    defence: 'We are ordered to stand down some forward elements to meet their conditions.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_russia_leak',
+                name: 'Backchannel Failure: Russia Leaks Call',
+                description: 'Russia has leaked edited transcripts of our emergency backchannel communication, portraying the UK as begging for a ceasefire.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    foreign: 'Our allies are furious we attempted to negotiate bilaterally without consulting them.',
+                    media: 'The press is having a field day with the "begging" narrative. Public confidence is shaken.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_cyber_success',
+                name: 'Covert Cyber Offensive Successful',
+                description: 'A major covert cyber offensive against Russian logistics networks has been highly successful, degrading their command and control without immediate attribution.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    cyber: 'Payload delivered successfully. Significant degradation of target networks confirmed.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_cyber_fail',
+                name: 'Covert Cyber Offensive Thwarted',
+                description: 'Our covert cyber offensive was detected and neutralized by Russian defenses. They are now publicly attributing the attack to the UK.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    cyber: 'They were waiting for us. We lost several zero-day capabilities.',
+                    foreign: 'We are now completely isolated on the international stage regarding this escalation.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_sf_success',
+                name: 'Special Forces Operation Success',
+                description: 'A highly classified Special Forces operation has successfully secured critical intelligence on Russian deployments without detection.',
+                location: [50.0, 30.0],
+                roleDescriptions: {
+                    defence: 'The operators are safely back. The intelligence gathered is game-changing.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_sf_fail',
+                name: 'Special Forces Operation Compromised',
+                description: 'A classified Special Forces operation has been compromised. Several operators have been captured and are being paraded on Russian state media.',
+                location: [50.0, 30.0],
+                roleDescriptions: {
+                    defence: 'Total operational failure. We have operators in hostile custody.',
+                    media: 'The images are devastating to public morale.'
+                },
+                decisions: []
+            }
+        ],
+        manualActions: [
+            {
+                id: 'act_nuke',
+                name: 'Authorise Nuclear Strike',
+                description: 'Order the launch of Trident D5 missiles from the Vanguard-class submarine against Russian targets. Massive escalation.',
+                initiator: ['home', 'defence'],
+                requiresApprovalFrom: ['home', 'defence'],
+                conditions: { assets: { 'a_vanguard': 'operational' } },
+                effects: {
+                    scores: { military_escalation: +5, civilian_stability: -5 }
+                },
+                image: '/images/events/ev_nuclear_alert.png'
+            },
+            {
+                id: 'act_backchannel_russia',
+                name: 'Emergency Backchannel with Russia',
+                description: 'Attempt to de-escalate the crisis directly with Russian leadership. High risk of political fallout if leaked.',
+                initiator: ['foreign'],
+                conditions: { minScores: { military_escalation: 3 } },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_russia_deescalate', weight: 50 },
+                        { id: 'ev_russia_leak', weight: 50 }
+                    ],
+                    scores: { uk_russia: -1 }
+                },
+                image: '/images/events/act_backchannel_russia.png'
+            },
+            {
+                id: 'act_us_support',
+                name: 'Request US Logistics Support',
+                description: 'Formally request the US to redirect strategic airlift to support UK operations.',
+                initiator: ['foreign', 'defence'],
+                conditions: { minScores: { uk_us: 2 } },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_us_support_success', weight: 60, effects: { scores: { military_readiness: +1 } } },
+                        { id: 'ev_us_support_fail', weight: 40, effects: { scores: { uk_europe: -1 } } }
+                    ]
+                },
+                image: '/images/events/act_us_support.png'
+            },
+            {
+                id: 'act_cyber_offensive',
+                name: 'Launch Covert Cyber Offensive',
+                description: 'Authorize an unacknowledged cyber strike against Russian command and control networks.',
+                initiator: ['cyber'],
+                requiresApprovalFrom: 'home',
+                conditions: { minScores: { military_readiness: 2 } },
+                effects: {
+                    scores: { military_escalation: +1 },
+                    randomEvents: [
+                        { id: 'ev_cyber_success', weight: 50, effects: { scores: { military_readiness: +1 } } },
+                        { id: 'ev_cyber_fail', weight: 50, effects: { scores: { uk_europe: -1, civilian_stability: -1 } } }
+                    ]
+                },
+                image: '/images/events/act_cyber_offensive.png'
+            },
+            {
+                id: 'act_national_address',
+                name: 'National Address to the Public',
+                description: 'Broadcast a formal address to the nation to reassure the public and restore confidence.',
+                initiator: ['media'],
+                requiresApprovalFrom: 'home',
+                conditions: { maxScores: { civilian_stability: 3 } },
+                effects: {
+                    scores: { civilian_stability: +1, uk_europe: -1 }
+                },
+                image: '/images/events/act_national_address.png'
+            },
+            {
+                id: 'act_special_forces',
+                name: 'Deploy Special Forces (Covert)',
+                description: 'Deploy elite units to gather critical intelligence behind enemy lines.',
+                initiator: ['defence'],
+                conditions: { minScores: { military_readiness: 2 } },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_sf_success', weight: 50, effects: { scores: { military_readiness: +1, uk_us: +1 } } },
+                        { id: 'ev_sf_fail', weight: 50, effects: { scores: { civilian_stability: -1, military_escalation: +1 } } }
+                    ]
+                },
+                image: '/images/events/act_special_forces.png'
             }
         ]
 };

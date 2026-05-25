@@ -78,3 +78,25 @@ window.generateWikiHtml = function(currentState, category, itemId) {
     }
     return html;
 };
+
+// Check conditions for events and actions
+window.checkConditions = function(obj, scores, assets) {
+    if (!obj.conditions) return true;
+    if (obj.conditions.minScores) {
+        for (const [key, val] of Object.entries(obj.conditions.minScores)) {
+            if ((scores[key] || 0) < val) return false;
+        }
+    }
+    if (obj.conditions.maxScores) {
+        for (const [key, val] of Object.entries(obj.conditions.maxScores)) {
+            if ((scores[key] || 0) > val) return false;
+        }
+    }
+    if (obj.conditions.assets) {
+        for (const [assetId, requiredState] of Object.entries(obj.conditions.assets)) {
+            const asset = (assets || []).find(a => a.id === assetId);
+            if (!asset || asset.state !== requiredState) return false;
+        }
+    }
+    return true;
+};

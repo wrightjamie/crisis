@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node test-ai-logic.js && node src/validate-scenarios.test.js",
-    "test:socket": "node test-socket.js"
+    "test": "node src/engine-actions.test.js && node src/validate-scenarios.test.js",
+    "audit": "node scripts/token-audit.js"
   },
   "keywords": [],
   "author": "",

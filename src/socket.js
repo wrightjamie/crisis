@@ -59,6 +59,16 @@ module.exports = function setupSockets(io, engine) {
             }
         });
 
+        // Client triggers a manual action
+        socket.on('trigger_manual_action', (actionId) => {
+            const role = engine.connectedClients[socket.id];
+            if (role) {
+                if (engine.triggerManualAction(actionId, role)) {
+                    io.emit('state_update', engine.gameState);
+                }
+            }
+        });
+
         // Facilitator Scheduled Event Controls
         socket.on('delete_scheduled_event', (uuid) => {
             engine.gameState.scheduledEvents = engine.gameState.scheduledEvents.filter(se => se.uuid !== uuid);
