@@ -180,6 +180,11 @@ class GameEngine {
 
         this.gameState.events.push(newEvent);
 
+        if (template.isEndGame) {
+            this.gameState.status = 'ended';
+            this.gameState.endGameEventId = template.id;
+        }
+
         if (template.decisions) {
             template.decisions.forEach(dec => {
                 const availableOptions = (dec.options || []).filter(opt =>
@@ -192,11 +197,16 @@ class GameEngine {
 
                     if (assignedRole !== 'all' && !activeRoles.includes(assignedRole)) {
                         const fallbacks = this.roleFallbacks[assignedRole] || [];
+                        let fallbackFound = false;
                         for (let fb of fallbacks) {
                             if (activeRoles.includes(fb)) {
                                 assignedRole = fb;
+                                fallbackFound = true;
                                 break;
                             }
+                        }
+                        if (!fallbackFound && activeRoles.includes('PM')) {
+                            assignedRole = 'PM';
                         }
                     }
 
@@ -343,10 +353,23 @@ class GameEngine {
         // Check for required approval (if required, and it's not the initiator themselves)
         let approver = null;
         if (action.requiresApprovalFrom) {
-            if (Array.isArray(action.requiresApprovalFrom)) {
-                approver = action.requiresApprovalFrom.find(r => r !== initiatorRole);
-            } else if (action.requiresApprovalFrom !== initiatorRole) {
-                approver = action.requiresApprovalFrom;
+            let possibleApprovers = Array.isArray(action.requiresApprovalFrom) ? action.requiresApprovalFrom : [action.requiresApprovalFrom];
+            possibleApprovers = possibleApprovers.filter(r => r !== initiatorRole);
+            
+            const activeRoles = Object.values(this.connectedClients);
+            for (let pa of possibleApprovers) {
+                if (activeRoles.includes(pa)) {
+                    approver = pa;
+                    break;
+                }
+            }
+            if (!approver && activeRoles.includes('PM')) {
+                approver = 'PM';
+            }
+            
+            // Maintain original behavior if no clients are connected (e.g., unit tests)
+            if (!approver && possibleApprovers.length > 0) {
+                approver = possibleApprovers[0];
             }
         }
 

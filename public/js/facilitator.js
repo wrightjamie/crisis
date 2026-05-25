@@ -142,6 +142,10 @@ socket.on('connect', () => {
     socket.emit('register_role', 'facilitator');
 });
 
+socket.on('scenario_error', (msg) => {
+    alert(msg);
+});
+
 socket.on('active_roles', (roles) => {
     const container = document.getElementById('active-roles-display');
     if (!container) return;
@@ -324,9 +328,11 @@ function checkConditions(template, scores, assets) {
 function renderEventButtons() {
     const usedEventsContainer = document.getElementById('used-events');
     const pendingConditionsContainer = document.getElementById('pending-conditions-events');
+    const terminalContainer = document.getElementById('terminal-scenarios-list');
     
     usedEventsContainer.innerHTML = '';
     if (pendingConditionsContainer) pendingConditionsContainer.innerHTML = '';
+    if (terminalContainer) terminalContainer.innerHTML = '';
 
     const triggeredTemplateIds = new Set(currentState.events.map(e => e.templateId));
     let currentAvailableEventIds = new Set();
@@ -344,11 +350,26 @@ function renderEventButtons() {
             const meetsConditions = checkConditions(template, currentState.scores, currentState.assets);
             const isUnlocked = (!template.requiresUnlock || currentState.unlockedEvents.includes(template.id)) && (!template.prerequisites || template.prerequisites.every(p => triggeredTemplateIds.has(p)));
 
-            if (isUnlocked && !meetsConditions) {
+            if (template.isEndGame) {
+                if (terminalContainer) {
+                    const btn = document.createElement('button');
+                    btn.className = meetsConditions ? 'btn text-red w-100 mb-1' : 'btn btn-primary w-100 mb-1 fac-status-offline';
+                    if (meetsConditions) {
+                        btn.style.backgroundColor = 'var(--bg-tertiary)';
+                        btn.style.border = '2px solid var(--accent-red)';
+                        btn.style.fontWeight = 'bold';
+                        btn.textContent = `🚨 AVAILABLE: ${template.name}`;
+                    } else {
+                        btn.textContent = `LOCKED: ${template.name}`;
+                        btn.style.border = '1px solid var(--border-color)';
+                    }
+                    btn.onclick = () => openEventDetails(template.id);
+                    terminalContainer.appendChild(btn);
+                }
+            } else if (isUnlocked && !meetsConditions) {
                 const btn = document.createElement('button');
-                btn.className = 'btn btn-primary';
+                btn.className = 'btn btn-primary w-100 mb-1 fac-status-offline';
                 btn.textContent = template.name;
-                btn.classList.add("fac-status-offline");
                 btn.style.border = '1px solid var(--border-color)';
                 btn.onclick = () => openEventDetails(template.id);
                 if (pendingConditionsContainer) pendingConditionsContainer.appendChild(btn);
@@ -361,6 +382,9 @@ function renderEventButtons() {
     }
     if (pendingConditionsContainer && pendingConditionsContainer.children.length === 0) {
         pendingConditionsContainer.innerHTML = '<small>No events pending conditions.</small>';
+    }
+    if (terminalContainer && terminalContainer.children.length === 0) {
+        terminalContainer.innerHTML = '<small>No terminal scenarios defined.</small>';
     }
     
     // Render the interactive tree which replaces the old Available Events list

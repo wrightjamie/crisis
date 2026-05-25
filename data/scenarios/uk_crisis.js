@@ -3,7 +3,7 @@ module.exports = {
         name: 'UK Crisis: Russian Tensions',
         description: 'Manage domestic and international fallout during escalating tensions in Europe.',
         mapConfig: { center: [54.5, -2.5], zoom: 6 },
-        roles: ['home', 'defence', 'foreign', 'media', 'cyber', 'display'],
+        roles: ['PM', 'home', 'defence', 'foreign', 'media', 'cyber', 'display'],
         initialScores: {
             uk_russia: 3,
             military_escalation: 2,
@@ -804,20 +804,23 @@ CRITICAL RULES:
                 prerequisites: ['ev_nuclear_readiness'],
                 conditions: { minScores: { military_escalation: 5 } },
                 repeatable: false,
-                location: [51.5, -0.12],
-                description: 'Brought directly to the cabinet by the Chief of the Defence Staff (CDS). With conventional forces depleted, allies absent, and strategic strikes imminent, the UK government is forced to open the final options.',
+                name: 'CABINET DECISION: Final Authorization',
+                description: 'The Prime Minister has convened COBRA. With existential threats imminent, the cabinet must decide whether to authorize the final, unthinkable option.',
+                location: [51.5033, -0.1276], // Downing Street
+                isEndGame: true,
+                conditions: { minScores: { military_escalation: 5 } },
+                prerequisites: ['ev_airspace_incursion', 'ev_nuclear_readiness'],
                 roleDescriptions: {
-                    defence: 'Prime Minister, the Vanguard submarine is at firing depth. Target packages are loaded. We require your authorization.',
-                    home: 'This is the end. We either burn, or we burn them with us.',
-                    media: 'History ends here.'
+                    home: 'This is the end of everything. Are we truly prepared to give the order?',
+                    defence: 'The chain of command is intact. The Vanguard is awaiting the flash message.'
                 },
                 decisions: [
                     {
-                        role: 'defence',
-                        text: 'Prime Minister, what is your order?',
+                        role: 'home',
+                        text: 'Prime Minister, we await your final authorization.',
                         options: [
-                            { id: 'opt_final_1', text: 'AUTHORIZE TRIDENT LAUNCH', effects: { scores: { military_escalation: +5, civilian_stability: -5 } } },
-                            { id: 'opt_final_2', text: 'STAND DOWN AND SURRENDER', effects: { scores: { military_escalation: -5, civilian_stability: -5, uk_russia: -5 } } }
+                            { id: 'authorize', text: 'AUTHORIZE TRIDENT LAUNCH', effects: { scores: { military_escalation: 5 } } },
+                            { id: 'stand_down', text: 'Stand Down and Surrender', effects: { scores: { military_escalation: -5, uk_russia: -5 } } }
                         ]
                     }
                 ]
@@ -907,6 +910,87 @@ CRITICAL RULES:
                     media: 'The images are devastating to public morale.'
                 },
                 decisions: []
+            },
+            {
+                id: 'ev_f35_success',
+                name: 'Deep Strike Success',
+                description: 'Our F-35s successfully bypassed Russian air defenses and destroyed a key strategic asset without losses. Russian leadership appears stunned and is signaling a desire to de-escalate.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    defence: 'A flawless execution of the strike package. The enemy is reeling.',
+                    foreign: 'They are calling on the diplomatic backchannel. The shock-and-awe worked.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_f35_fail',
+                name: 'Deep Strike Failure',
+                description: 'Our F-35 strike package was intercepted. We have lost multiple advanced airframes and pilots. Russia considers this an act of total war.',
+                location: [55.75, 37.61],
+                roleDescriptions: {
+                    defence: 'Catastrophic losses. The airframes are gone.',
+                    media: 'Downed British pilots are being broadcast live from Moscow.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_eu_success',
+                name: 'European Coalition Formed',
+                description: 'A historic European Defense Coalition has been cemented, uniting the continent behind the UK. Russia realizes it cannot divide and conquer.',
+                location: [50.8503, 4.3517], // Brussels
+                roleDescriptions: {
+                    foreign: 'A triumph of diplomacy. We are no longer standing alone.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_eu_fail',
+                name: 'European Coalition Fails',
+                description: 'Our attempts to forge a unified European defense bloc have failed spectacularly amid internal bickering. We look weak and divided.',
+                location: [50.8503, 4.3517],
+                roleDescriptions: {
+                    foreign: 'We overplayed our hand. Key allies have balked at the commitment.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_endgame_diplomatic',
+                name: 'END GAME: Diplomatic Breakthrough',
+                description: 'A neutral third party has successfully brokered a ceasefire. Russian forces hold in place. The immediate existential threat to the UK is lifted, though a new Cold War begins.',
+                location: [46.2044, 6.1432], // Geneva
+                isEndGame: true,
+                conditions: { maxScores: { military_escalation: 2 }, minScores: { uk_russia: 4 } },
+                roleDescriptions: {
+                    PM: 'We have brought our nation back from the brink of the abyss. But the world will never be the same.',
+                    foreign: 'The treaty holds. We bought peace, for now.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_endgame_domestic',
+                name: 'END GAME: Domestic Collapse',
+                description: 'Before nuclear war can even begin, the UK government collapses due to riots, power grid failures, and complete loss of public confidence. The military is forced to step in to maintain order, withdrawing from the international conflict entirely.',
+                location: [51.5072, -0.1276],
+                isEndGame: true,
+                conditions: { maxScores: { civilian_stability: 1 } },
+                roleDescriptions: {
+                    PM: 'We have lost the country. The military is taking over Westminster.',
+                    media: 'Total blackout. The nation has fallen into anarchy.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_endgame_eu_defense',
+                name: 'END GAME: European Defence Pact',
+                description: 'European allies and the UK launch a massive, coordinated conventional defense. Faced with an unwinnable correlation of forces, Russia withdraws. A costly but decisive conventional victory.',
+                location: [50.8503, 4.3517],
+                isEndGame: true,
+                conditions: { minScores: { uk_europe: 5, military_escalation: 4 } },
+                roleDescriptions: {
+                    PM: 'We stood together and broke their advance. Europe is secure.',
+                    defence: 'The combined forces achieved total air supremacy.'
+                },
+                decisions: []
             }
         ],
         manualActions: [
@@ -992,6 +1076,33 @@ CRITICAL RULES:
                     ]
                 },
                 image: '/images/events/act_special_forces.png'
+            },
+            {
+                id: 'act_f35_strike',
+                name: 'Deep F-35 Strike',
+                description: 'Launch a high-risk, deep penetration strike using F-35s to destroy a critical Russian strategic asset to force de-escalation.',
+                initiator: ['PM', 'defence'],
+                requiresApprovalFrom: ['PM', 'home'],
+                conditions: { minScores: { military_readiness: 3 } },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_f35_success', weight: 40, effects: { scores: { military_escalation: -2, uk_russia: +1 } } },
+                        { id: 'ev_f35_fail', weight: 60, effects: { scores: { military_escalation: +2, civilian_stability: -1 } } }
+                    ]
+                }
+            },
+            {
+                id: 'act_eu_coalition',
+                name: 'European Coalition Building',
+                description: 'Push aggressively for a unified European Defense Coalition to stand against Russian aggression.',
+                initiator: ['PM', 'foreign'],
+                conditions: { minScores: { civilian_stability: 2 } },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_eu_success', weight: 70, effects: { scores: { uk_europe: +2, military_escalation: -1 } } },
+                        { id: 'ev_eu_fail', weight: 30, effects: { scores: { uk_europe: -1 } } }
+                    ]
+                }
             }
         ]
 };

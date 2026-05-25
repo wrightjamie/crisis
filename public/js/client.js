@@ -252,6 +252,35 @@ function handleStateUpdate(state) {
             appEl.style.display = 'block';
             updateUI();
         }
+    } else if (state.status === 'ended') {
+        appEl.style.display = 'none';
+        holdingScreen.style.display = 'none';
+        roleSelectionScreen.style.display = 'none';
+        
+        const endgameScreen = document.getElementById('endgame-screen');
+        const titleEl = document.getElementById('endgame-title');
+        const descEl = document.getElementById('endgame-desc');
+        const roleDescEl = document.getElementById('endgame-role-desc');
+        
+        if (endgameScreen) {
+            endgameScreen.style.display = 'flex';
+            
+            // Find the endgame event in the state
+            const endgameEvent = state.events.find(e => e.templateId === state.endGameEventId);
+            if (endgameEvent) {
+                if (titleEl) titleEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.name) : endgameEvent.name;
+                if (descEl) descEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.description) : endgameEvent.description;
+                
+                if (role && endgameEvent.roleDescriptions && endgameEvent.roleDescriptions[role]) {
+                    if (roleDescEl) {
+                        roleDescEl.style.display = 'block';
+                        roleDescEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.roleDescriptions[role]) : endgameEvent.roleDescriptions[role];
+                    }
+                } else if (roleDescEl) {
+                    roleDescEl.style.display = 'none';
+                }
+            }
+        }
     }
 }
 

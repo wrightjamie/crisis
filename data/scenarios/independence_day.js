@@ -3,7 +3,7 @@ module.exports = {
         name: 'Independence Day: Global Invasion',
         description: 'Earth faces an unprecedented extraterrestrial threat. Coordinate global defense and survival.',
         mapConfig: { center: [20, 0], zoom: 2 },
-        roles: ['usa', 'uk', 'china', 'russia', 'un_command', 'display'],
+        roles: ['PM', 'usa', 'uk', 'china', 'russia', 'un_command', 'display'],
         initialScores: {
             global_panic: 4,
             alien_threat: 5,
