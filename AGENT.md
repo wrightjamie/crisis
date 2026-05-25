@@ -205,8 +205,8 @@ A playable system where:
 
 ## Agent Git Workflow Rules
 
-When making changes to this codebase, the AI Agent must follow this Git workflow:
-1. **Use Branches:** Always create a new branch to segregate changes for any new feature, fix, or task (e.g., `feature/description` or `fix/description`). Do not work directly on the main branch.
-2. **Commit Frequently:** Commit changes immediately after completing a logical step, file modification, or minor task. Provide clear, descriptive commit messages.
-3. **Merge Upon Completion:** Once a feature or task has been fully implemented, verified, and completed, merge the feature branch back into the main branch.
-4. **Maintain TODO.md:** Always review and update `TODO.md` when tasks are completed, reprioritized, or skipped to ensure the project roadmap is accurate.
+When making changes to this codebase, the AI Agent must follow this Git workflow strictly:
+1. **Pre-Planning Commits:** Before starting any new Implementation Plan or research phase, check `git status` and commit any outstanding changes on the current branch.
+2. **Use Branches:** Always create and switch to a new branch (`git checkout -b feature/description`) *before* writing any code for a new feature or task. Do not work directly on `main`.
+3. **Post-Execution Commits:** Immediately upon completing the Verification phase of an implementation plan, commit all modified files and merge the feature branch back into `main`.
+4. **Maintain TODO.md:** Always review and update `TODO.md` when tasks are completed, reprioritized, or skipped. Include the `TODO.md` updates in the feature commit.
