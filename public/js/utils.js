@@ -80,7 +80,7 @@ window.generateWikiHtml = function(currentState, category, itemId) {
 };
 
 // Check conditions for events and actions
-window.checkConditions = function(obj, scores, assets) {
+window.checkConditions = function(obj, scores, assets, unlockedEvents = [], triggeredEvents = []) {
     if (!obj.conditions) return true;
     if (obj.conditions.minScores) {
         for (const [key, val] of Object.entries(obj.conditions.minScores)) {
@@ -96,6 +96,16 @@ window.checkConditions = function(obj, scores, assets) {
         for (const [assetId, requiredState] of Object.entries(obj.conditions.assets)) {
             const asset = (assets || []).find(a => a.id === assetId);
             if (!asset || asset.state !== requiredState) return false;
+        }
+    }
+    if (obj.conditions.unlockedEvents) {
+        for (const evtId of obj.conditions.unlockedEvents) {
+            if (!unlockedEvents.includes(evtId)) return false;
+        }
+    }
+    if (obj.conditions.triggeredEvents) {
+        for (const evtId of obj.conditions.triggeredEvents) {
+            if (!triggeredEvents.includes(evtId)) return false;
         }
     }
     return true;

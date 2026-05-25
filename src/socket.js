@@ -17,13 +17,9 @@ module.exports = function setupSockets(io, engine) {
             const scenarioId = typeof data === 'string' ? data : data.scenarioId;
             const selectedVariants = typeof data === 'object' ? data.selectedVariants : null;
 
-            const activeRoles = engine.getActiveRoles().filter(r => r !== 'display' && r !== 'facilitator');
-            if (activeRoles.length < 2) {
-                socket.emit('scenario_error', 'Cannot start scenario: At least 2 active players are required.');
-                return;
-            }
-            if (!activeRoles.includes('PM')) {
-                socket.emit('scenario_error', 'Cannot start scenario: The PM role is mandatory.');
+            const validation = engine.validateScenarioStart(scenarioId);
+            if (!validation.valid) {
+                socket.emit('scenario_error', validation.error);
                 return;
             }
 

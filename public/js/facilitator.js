@@ -304,7 +304,7 @@ function endScenario() {
     }
 }
 
-function checkConditions(template, scores, assets) {
+function checkConditions(template, scores, assets, unlockedEvents = [], triggeredEvents = []) {
     if (!template.conditions) return true;
     if (template.conditions.minScores) {
         for (const [key, val] of Object.entries(template.conditions.minScores)) {
@@ -320,6 +320,16 @@ function checkConditions(template, scores, assets) {
         for (const [assetId, requiredState] of Object.entries(template.conditions.assets)) {
             const asset = (assets || []).find(a => a.id === assetId);
             if (!asset || asset.state !== requiredState) return false;
+        }
+    }
+    if (template.conditions.unlockedEvents) {
+        for (const evtId of template.conditions.unlockedEvents) {
+            if (!unlockedEvents.includes(evtId)) return false;
+        }
+    }
+    if (template.conditions.triggeredEvents) {
+        for (const evtId of template.conditions.triggeredEvents) {
+            if (!triggeredEvents.includes(evtId)) return false;
         }
     }
     return true;
@@ -347,7 +357,7 @@ function renderEventButtons() {
             btn.textContent = `Used: ${template.name}`;
             usedEventsContainer.appendChild(btn);
         } else {
-            const meetsConditions = checkConditions(template, currentState.scores, currentState.assets);
+            const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId));
             const isUnlocked = (!template.requiresUnlock || currentState.unlockedEvents.includes(template.id)) && (!template.prerequisites || template.prerequisites.every(p => triggeredTemplateIds.has(p)));
 
             if (template.isEndGame) {
@@ -527,7 +537,7 @@ function refreshFacilitatorInfoPanel() {
 
     titleEl.textContent = 'Event Details';
 
-    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets);
+    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId));
     const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
     

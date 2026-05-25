@@ -4,14 +4,6 @@ const { validateScenario } = require('./validate-scenarios');
 
 class GameEngine {
     constructor() {
-        this.roleFallbacks = {
-            cyber: ['home', 'defence'],
-            media: ['foreign', 'home'],
-            home: ['defence', 'foreign'],
-            defence: ['foreign', 'home'],
-            foreign: ['defence', 'home']
-        };
-
         this.scheduleLoopInterval = null;
         this.connectedClients = {}; // socket.id -> role
 
@@ -53,6 +45,27 @@ class GameEngine {
 
     getActiveRoles() {
         return [...new Set(Object.values(this.connectedClients))];
+    }
+
+    validateScenarioStart(scenarioId) {
+        const scenario = scenarios.find(s => s.id === scenarioId);
+        if (!scenario) return { valid: false, error: 'Scenario not found.' };
+
+        const activeRoles = this.getActiveRoles().filter(r => r !== 'display' && r !== 'facilitator');
+        
+        const minUsers = scenario.minUsers !== undefined ? scenario.minUsers : 0;
+        if (activeRoles.length < minUsers) {
+            return { valid: false, error: `Cannot start scenario: At least ${minUsers} active player(s) required.` };
+        }
+
+        const mandatoryRoles = scenario.mandatoryRoles || [];
+        for (const role of mandatoryRoles) {
+            if (!activeRoles.includes(role)) {
+                return { valid: false, error: `Cannot start scenario: The '${role}' role is mandatory.` };
+            }
+        }
+
+        return { valid: true };
     }
 
     loadScenario(scenarioId, selectedVariants) {
@@ -131,7 +144,7 @@ class GameEngine {
         return this.gameState;
     }
 
-    checkConditions(obj, scores, assets) {
+    checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEvents = []) {
         if (!obj.conditions) return true;
         if (obj.conditions.minScores) {
             for (const [key, val] of Object.entries(obj.conditions.minScores)) {
@@ -147,6 +160,16 @@ class GameEngine {
             for (const [assetId, requiredState] of Object.entries(obj.conditions.assets)) {
                 const asset = (assets || []).find(a => a.id === assetId);
                 if (!asset || asset.state !== requiredState) return false;
+            }
+        }
+        if (obj.conditions.unlockedEvents) {
+            for (const evtId of obj.conditions.unlockedEvents) {
+                if (!unlockedEvents.includes(evtId)) return false;
+            }
+        }
+        if (obj.conditions.triggeredEvents) {
+            for (const evtId of obj.conditions.triggeredEvents) {
+                if (!triggeredEvents.includes(evtId)) return false;
             }
         }
         return true;
@@ -188,7 +211,7 @@ class GameEngine {
         if (template.decisions) {
             template.decisions.forEach(dec => {
                 const availableOptions = (dec.options || []).filter(opt =>
-                    this.checkConditions(opt, this.gameState.scores, this.gameState.assets)
+                    this.checkConditions(opt, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))
                 );
 
                 if (availableOptions.length > 0) {
@@ -196,17 +219,12 @@ class GameEngine {
                     const activeRoles = Object.values(this.connectedClients);
 
                     if (assignedRole !== 'all' && !activeRoles.includes(assignedRole)) {
-                        const fallbacks = this.roleFallbacks[assignedRole] || [];
-                        let fallbackFound = false;
+                        const fallbacks = (scenario.roleFallbacks && scenario.roleFallbacks[assignedRole]) ? scenario.roleFallbacks[assignedRole] : [];
                         for (let fb of fallbacks) {
                             if (activeRoles.includes(fb)) {
                                 assignedRole = fb;
-                                fallbackFound = true;
                                 break;
                             }
-                        }
-                        if (!fallbackFound && activeRoles.includes('PM')) {
-                            assignedRole = 'PM';
                         }
                     }
 
@@ -346,7 +364,7 @@ class GameEngine {
         if (!action.initiator.includes(initiatorRole)) return false;
 
         // Verify conditions
-        if (!this.checkConditions(action, this.gameState.scores, this.gameState.assets)) return false;
+        if (!this.checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))) return false;
 
         console.log(`Manual Action triggered: ${action.name} by ${initiatorRole}`);
 
@@ -357,17 +375,30 @@ class GameEngine {
             possibleApprovers = possibleApprovers.filter(r => r !== initiatorRole);
             
             const activeRoles = Object.values(this.connectedClients);
+            
+            // 1. Try finding a directly specified active approver
             for (let pa of possibleApprovers) {
                 if (activeRoles.includes(pa)) {
                     approver = pa;
                     break;
                 }
             }
-            if (!approver && activeRoles.includes('PM')) {
-                approver = 'PM';
+            
+            // 2. Fallback using scenario.roleFallbacks
+            if (!approver) {
+                for (let pa of possibleApprovers) {
+                    const fallbacks = (scenario.roleFallbacks && scenario.roleFallbacks[pa]) ? scenario.roleFallbacks[pa] : [];
+                    for (let fb of fallbacks) {
+                        if (activeRoles.includes(fb)) {
+                            approver = fb;
+                            break;
+                        }
+                    }
+                    if (approver) break;
+                }
             }
             
-            // Maintain original behavior if no clients are connected (e.g., unit tests)
+            // 3. Maintain original behavior if no clients are connected (e.g., unit tests)
             if (!approver && possibleApprovers.length > 0) {
                 approver = possibleApprovers[0];
             }

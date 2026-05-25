@@ -4,6 +4,15 @@ module.exports = {
         description: 'Earth faces an unprecedented extraterrestrial threat. Coordinate global defense and survival.',
         mapConfig: { center: [20, 0], zoom: 2 },
         roles: ['PM', 'usa', 'uk', 'china', 'russia', 'un_command', 'display'],
+        minUsers: 2,
+        mandatoryRoles: ['PM'],
+        roleFallbacks: {
+            usa: ['uk', 'un_command', 'PM'],
+            uk: ['usa', 'un_command', 'PM'],
+            china: ['russia', 'un_command', 'PM'],
+            russia: ['china', 'un_command', 'PM'],
+            un_command: ['usa', 'uk', 'PM']
+        },
         initialScores: {
             global_panic: 4,
             alien_threat: 5,

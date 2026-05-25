@@ -4,6 +4,15 @@ module.exports = {
         description: 'Manage domestic and international fallout during escalating tensions in Europe.',
         mapConfig: { center: [54.5, -2.5], zoom: 6 },
         roles: ['PM', 'home', 'defence', 'foreign', 'media', 'cyber', 'display'],
+        minUsers: 2,
+        mandatoryRoles: ['PM'],
+        roleFallbacks: {
+            cyber: ['home', 'defence', 'PM'],
+            media: ['foreign', 'home', 'PM'],
+            home: ['defence', 'foreign', 'PM'],
+            defence: ['foreign', 'home', 'PM'],
+            foreign: ['defence', 'home', 'PM']
+        },
         initialScores: {
             uk_russia: 3,
             military_escalation: 2,
@@ -991,6 +1000,38 @@ CRITICAL RULES:
                     defence: 'The combined forces achieved total air supremacy.'
                 },
                 decisions: []
+            },
+            {
+                id: 'ev_strike_options_leak',
+                name: 'Strike Planning Leaked',
+                description: 'Intelligence regarding our requests for deep strike target packages has leaked. Russia is infuriated, and some European allies are questioning our escalation control.',
+                location: [51.5033, -0.1276],
+                roleDescriptions: {
+                    media: 'The press is running with stories about an imminent British preemptive strike.',
+                    foreign: 'Diplomatic channels are lighting up. This makes us look like the aggressors.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_strike_options_secured',
+                name: 'Strike Planning Secured',
+                description: 'The CDS has successfully compartmentalized the target package requests. No intelligence has leaked.',
+                location: [51.5033, -0.1276],
+                roleDescriptions: {
+                    defence: 'Operational security maintained. The packages are being formulated.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_strike_options_ready',
+                name: 'Strike Options Ready',
+                description: 'The Chief of Defence Staff has finalized the deep strike target packages. We have viable options against a forward Russian airbase or a critical Command & Control node.',
+                location: [51.5033, -0.1276],
+                roleDescriptions: {
+                    PM: 'The options are ready for your review.',
+                    defence: 'Target packages finalized and loaded. Awaiting orders.'
+                },
+                decisions: []
             }
         ],
         manualActions: [
@@ -1078,16 +1119,46 @@ CRITICAL RULES:
                 image: '/images/events/act_special_forces.png'
             },
             {
-                id: 'act_f35_strike',
-                name: 'Deep F-35 Strike',
-                description: 'Launch a high-risk, deep penetration strike using F-35s to destroy a critical Russian strategic asset to force de-escalation.',
+                id: 'act_request_strike_options',
+                name: 'Request Deep Strike Options',
+                description: 'Request target packages for a deep strike inside Russia from the Chief of Defence Staff (CDS). Options will become available shortly. Small risk of intelligence leak causing diplomatic damage.',
                 initiator: ['PM', 'defence'],
-                requiresApprovalFrom: ['PM', 'home'],
                 conditions: { minScores: { military_readiness: 3 } },
                 effects: {
                     randomEvents: [
-                        { id: 'ev_f35_success', weight: 40, effects: { scores: { military_escalation: -2, uk_russia: +1 } } },
-                        { id: 'ev_f35_fail', weight: 60, effects: { scores: { military_escalation: +2, civilian_stability: -1 } } }
+                        { id: 'ev_strike_options_leak', weight: 20, effects: { scores: { military_escalation: +1, uk_europe: -1 } } },
+                        { id: 'ev_strike_options_secured', weight: 80 }
+                    ],
+                    triggerEvents: [
+                        { id: 'ev_strike_options_ready', delayMs: 60000 }
+                    ]
+                }
+            },
+            {
+                id: 'act_strike_airbase',
+                name: 'Strike Russian Airbase (F-35)',
+                description: 'Launch a deep penetration strike using F-35s against a forward Russian airbase. High chance of tactical success to force de-escalation.',
+                initiator: ['PM', 'defence'],
+                requiresApprovalFrom: ['PM', 'home'],
+                conditions: { minScores: { military_readiness: 3 }, triggeredEvents: ['ev_strike_options_ready'] },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_f35_success', weight: 60, effects: { scores: { military_escalation: -2, uk_russia: +1 } } },
+                        { id: 'ev_f35_fail', weight: 40, effects: { scores: { military_escalation: +2, civilian_stability: -1 } } }
+                    ]
+                }
+            },
+            {
+                id: 'act_strike_c2',
+                name: 'Strike Russian C2 Node (F-35)',
+                description: 'Launch a high-risk strike against a critical Russian Command & Control node. Lower chance of success, but massive de-escalation impact if successful.',
+                initiator: ['PM', 'defence'],
+                requiresApprovalFrom: ['PM', 'home'],
+                conditions: { minScores: { military_readiness: 3 }, triggeredEvents: ['ev_strike_options_ready'] },
+                effects: {
+                    randomEvents: [
+                        { id: 'ev_f35_success', weight: 30, effects: { scores: { military_escalation: -3, uk_russia: +2 } } },
+                        { id: 'ev_f35_fail', weight: 70, effects: { scores: { military_escalation: +3, civilian_stability: -2 } } }
                     ]
                 }
             },

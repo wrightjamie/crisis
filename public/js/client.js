@@ -564,7 +564,7 @@ function refreshInfoPanel() {
         localState.scenarioConfig.manualActions.forEach(action => {
             if (!action.initiator.includes(role)) return;
 
-            const isMet = window.checkConditions(action, localState.scores, localState.assets);
+            const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId));
             
             if (!isMet) return; // Hide if conditions aren't met
 
