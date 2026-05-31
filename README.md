@@ -16,58 +16,48 @@ A Node.js real-time game engine server built with Express and Socket.IO.
 
 ## Docker Deployment (Synology NAS)
 
-This project includes a `Dockerfile` and `docker-compose.yml` optimized for easy deployment on a Synology NAS or any Docker-enabled environment.
+This project automatically builds and publishes a pre-configured Docker image to the GitHub Container Registry. This means you do **not** need to download the source code files to run it!
 
 ### Prerequisites on Synology NAS
 - Ensure **Container Manager** (DSM 7.2+) or **Docker** is installed via Package Center.
-- Get the project files onto your NAS (e.g., clone the repo, or download the ZIP and extract it to a shared folder like `/volume1/docker/crisis`).
 
-### Method 1: Container Manager GUI (Recommended for DSM 7.2+)
+### Method 1: The "Zero-Download" GUI Method (Recommended)
+
+You can run the server directly from the Synology interface without touching a single file:
 
 1. Open **Container Manager** on your Synology NAS.
-2. Go to the **Project** tab and click **Create**.
-3. **Project Name**: `crisis`
-4. **Path**: Select the folder where you placed the project files (e.g., `/docker/crisis`).
-5. **Source**: Choose `Use existing docker-compose.yml`.
-6. Click **Next**, skip the web portal setup (unless you want to configure a reverse proxy), and click **Done**.
-7. Container Manager will automatically build the image and start the container.
+2. Go to the **Registry** tab.
+3. In the search bar at the top right, search for: `ghcr.io/wrightjamie/crisis`
+4. Select the image and click **Download** (choose the `latest` tag).
+5. Once downloaded, go to the **Image** tab, select the image, and click **Run**.
+6. **Network Settings**: Map local port `3000` to container port `3000`.
+7. Click **Next** until done. The server will start automatically!
 
-### Method 2: Command Line (SSH / Git)
+*(Note: The registry search requires that this GitHub repository is public or your NAS is authenticated to GHCR).*
 
-If you prefer using the terminal or want to manage updates via Git directly on the NAS:
+### Method 2: Docker Compose (If you prefer compose files)
 
-1. **SSH into your NAS:**
-   ```bash
-   ssh your_username@your_nas_ip
-   ```
+If you still want to use a `docker-compose.yml` file, you only need this snippet—no source code required:
 
-2. **Navigate to your Docker folder:**
-   ```bash
-   cd /volume1/docker
-   ```
-
-3. **Clone the repository:**
-   ```bash
-   git clone <your-git-repo-url> crisis
-   cd crisis
-   ```
-
-4. **Build and start the container:**
-   Note that on Synology, you usually need to use `sudo` for docker commands:
-   ```bash
-   sudo docker-compose up -d --build
-   ```
+```yaml
+version: '3.8'
+services:
+  crisis:
+    image: ghcr.io/wrightjamie/crisis:latest
+    container_name: crisis_app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+```
+Save that as `docker-compose.yml` on your NAS, and create a Project in Container Manager pointing to it.
 
 ### Updating the Application
 
-If you used the **GUI Method**, simply overwrite the files in your NAS folder with the new versions, go to Container Manager > Projects, select the `crisis` project, and click **Action > Build**.
+If you used **Method 1**, go to the **Registry**, search for the image again, and download `latest`. Then go to the **Container** tab, right-click the container, and select **Action > Reset** to apply the new image.
 
-If you used the **Command Line Method**, run the following commands over SSH in your project directory:
-
-```bash
-git pull
-sudo docker-compose up -d --build
-```
+If you used **Method 2**, go to the **Project** tab, select the project, and click **Action > Build**.
 
 ### Accessing the App
 Once deployed, the server will be available on your local network at:

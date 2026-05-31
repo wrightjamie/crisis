@@ -29,9 +29,40 @@ const btnActions = document.getElementById('btn-actions');
 socket.on('active_roles', (roles) => {
     activeRolesList = roles;
     if (localState && (localState.status === 'active' || localState.status === 'lobby') && !role) {
-        renderRoleSelection();
+        switchView('role_selection');
     }
 });
+
+function switchView(viewName) {
+    // Hide all
+    roleSelectionScreen.style.display = 'none';
+    holdingScreen.style.display = 'none';
+    briefingScreen.style.display = 'none';
+    appEl.style.display = 'none';
+
+    // Show requested
+    switch (viewName) {
+        case 'role_selection':
+            roleSelectionScreen.style.display = 'flex';
+            break;
+        case 'lobby':
+            holdingScreen.style.display = 'flex';
+            const h1 = holdingScreen.querySelector('h1');
+            const p = holdingScreen.querySelector('p');
+            const roleNames = localState.scenarioConfig ? (localState.scenarioConfig.roleNames || {}) : {};
+            const displayName = roleNames[role] || role.toUpperCase();
+            if (h1) h1.textContent = `Welcome ${displayName}`;
+            if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
+            break;
+        case 'briefing':
+            briefingScreen.style.display = 'flex';
+            break;
+        case 'map':
+            appEl.style.display = 'grid';
+            if (map) setTimeout(() => map.invalidateSize(), 200);
+            break;
+    }
+}
 
 socket.on('role_registered', (registeredRole) => {
     role = registeredRole;
@@ -40,27 +71,18 @@ socket.on('role_registered', (registeredRole) => {
         document.body.classList.add('role-display');
     }
 
-    roleSelectionScreen.style.display = 'none';
-
     // Update map view using scenario config
     if (localState.scenarioConfig && localState.scenarioConfig.mapConfig) {
         map.setView(localState.scenarioConfig.mapConfig.center, localState.scenarioConfig.mapConfig.zoom);
     }
 
     if (localState.status === 'lobby') {
-        holdingScreen.style.display = 'flex';
-        const h1 = holdingScreen.querySelector('h1');
-        const p = holdingScreen.querySelector('p');
-        const roleNames = localState.scenarioConfig ? (localState.scenarioConfig.roleNames || {}) : {};
-        const displayName = roleNames[role] || role.toUpperCase();
-        if (h1) h1.textContent = `Welcome ${displayName}`;
-        if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
+        switchView('lobby');
     } else {
-        // Show briefing if available, otherwise go straight to map
         if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
             showBriefing();
         } else {
-            enterMap();
+            switchView('map');
         }
     }
 });
@@ -175,16 +197,12 @@ function showBriefing() {
     `;
     
     document.getElementById('briefing-body').innerHTML = html;
-    briefingScreen.style.display = 'flex';
+    switchView('briefing');
 }
 
 function enterMap() {
-    briefingScreen.style.display = 'none';
-    appEl.style.display = 'block';
-    setTimeout(() => {
-        map.invalidateSize();
-    }, 10);
-    updateUI();
+    switchView('map');
+    refreshEventFeed();
 }
 
 function openPanel(title) {
@@ -261,36 +279,25 @@ function handleStateUpdate(state) {
         appEl.style.display = 'none';
         
         if (!role) {
-            holdingScreen.style.display = 'none';
-            roleSelectionScreen.style.display = 'flex';
+            switchView('role_selection');
             renderRoleSelection();
         } else {
-            roleSelectionScreen.style.display = 'none';
-            holdingScreen.style.display = 'flex';
-            const h1 = holdingScreen.querySelector('h1');
-            const p = holdingScreen.querySelector('p');
-            const roleNames = state.scenarioConfig ? (state.scenarioConfig.roleNames || {}) : {};
-            const displayName = roleNames[role] || role.toUpperCase();
-            if (h1) h1.textContent = `Welcome ${displayName}`;
-            if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
+            switchView('lobby');
         }
     } else if (state.status === 'active') {
         holdingScreen.style.display = 'none';
 
         if (!role) {
-            roleSelectionScreen.style.display = 'flex';
-            appEl.style.display = 'none';
+            switchView('role_selection');
             renderRoleSelection();
         } else {
-            roleSelectionScreen.style.display = 'none';
             if (appEl.style.display === 'none') {
                 if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
                     showBriefing();
                 } else {
-                    enterMap();
+                    switchView('map');
                 }
             } else {
-                appEl.style.display = 'block';
                 updateUI();
             }
         }
@@ -338,12 +345,7 @@ function renderRoleSelection() {
 
         const isTaken = activeRolesList.includes(r);
         const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.style.padding = '1.5rem';
-        btn.style.fontSize = '1.1rem';
-        btn.style.backgroundColor = isTaken ? 'var(--bg-tertiary)' : 'var(--bg-secondary)';
-        btn.style.color = isTaken ? 'var(--text-muted)' : 'var(--text-primary)';
-        btn.style.border = `1px solid ${isTaken ? 'var(--border-color)' : 'var(--accent-blue)'}`;
+        btn.className = `btn ${isTaken ? 'client-btn-taken' : 'client-btn-free'}`;
         
         const displayName = roleNames[r] || r.toUpperCase();
         btn.textContent = displayName;
@@ -351,10 +353,8 @@ function renderRoleSelection() {
         if (isTaken) {
             btn.textContent += ' (Taken)';
             btn.disabled = true;
-            btn.style.cursor = 'not-allowed';
         } else {
             btn.onclick = () => socket.emit('register_role', r);
-            btn.style.cursor = 'pointer';
         }
 
         roleButtonsContainer.appendChild(btn);
