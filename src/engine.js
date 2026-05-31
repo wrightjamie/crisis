@@ -125,6 +125,8 @@ class GameEngine {
                 mapConfig: scenario.mapConfig,
                 roles: scenario.roles,
                 roleNames: scenario.roleNames || {},
+                mandatoryRoles: scenario.mandatoryRoles || [],
+                minUsers: scenario.minUsers || 1,
                 briefings: scenario.briefings || {},
                 variantBriefings: variantBriefings,
                 selectedVariantNames: selectedVariantNames,
@@ -161,33 +163,13 @@ class GameEngine {
     }
 
     checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEvents = []) {
-        if (!obj.conditions) return true;
-        if (obj.conditions.minScores) {
-            for (const [key, val] of Object.entries(obj.conditions.minScores)) {
-                if ((scores[key] || 0) < val) return false;
-            }
-        }
-        if (obj.conditions.maxScores) {
-            for (const [key, val] of Object.entries(obj.conditions.maxScores)) {
-                if ((scores[key] || 0) > val) return false;
-            }
-        }
-        if (obj.conditions.assets) {
-            for (const [assetId, requiredState] of Object.entries(obj.conditions.assets)) {
-                const asset = (assets || []).find(a => a.id === assetId);
-                if (!asset || asset.state !== requiredState) return false;
-            }
-        }
-        if (obj.conditions.unlockedEvents) {
-            for (const evtId of obj.conditions.unlockedEvents) {
-                if (!unlockedEvents.includes(evtId)) return false;
-            }
-        }
-        if (obj.conditions.triggeredEvents) {
-            for (const evtId of obj.conditions.triggeredEvents) {
-                if (!triggeredEvents.includes(evtId)) return false;
-            }
-        }
+        const c = obj.conditions;
+        if (!c) return true;
+        if (c.minScores && !Object.entries(c.minScores).every(([k, v]) => (scores[k] || 0) >= v)) return false;
+        if (c.maxScores && !Object.entries(c.maxScores).every(([k, v]) => (scores[k] || 0) <= v)) return false;
+        if (c.assets && !Object.entries(c.assets).every(([k, v]) => (assets.find(a => a.id === k) || {}).state === v)) return false;
+        if (c.unlockedEvents && !c.unlockedEvents.every(e => unlockedEvents.includes(e))) return false;
+        if (c.triggeredEvents && !c.triggeredEvents.every(e => triggeredEvents.includes(e))) return false;
         return true;
     }
 

@@ -1,6 +1,6 @@
 # Crisis
 
-A Node.js real-time game engine server built with Express and Socket.IO.
+A Node.js real-time game engine server built with Express and Socket.IO for the UK Crisis Wargame.
 
 ## Local Development
 
@@ -13,6 +13,25 @@ A Node.js real-time game engine server built with Express and Socket.IO.
    node server.js
    ```
    The server will run on `http://localhost:3000`.
+
+## Documentation
+
+The project includes several key pieces of documentation for understanding the data structures and development standards:
+
+- **[Data Schema Guide](schema.md)**: The core documentation explaining how to construct Scenarios, Events, Decisions, and AI Configurations.
+- **[Agent Prompts](AGENT.md)**: Guidelines for AI agent behaviour within the project.
+- **[Game Details](Details.md)**: Detailed explanations of the game mechanics, design principles, and overall system architecture.
+- **[Image Style Guide](IMAGE_STYLE_GUIDE.md)**: Standards for imagery and assets.
+
+## Testing & Validation
+
+The engine includes built-in test scripts to ensure the integrity of your scenarios and game logic before deployment.
+
+- `npm run test`: Runs all tests.
+- `npm run test:scenarios`: Runs `validate-scenarios.test.js` to ensure your scenario JSON structures adhere to the schema and contain no broken references or impossible conditions.
+- `npm run test:engine`: Runs `engine-actions.test.js` to validate core logic like role fallbacks, scoring math, and state management.
+
+*Always run tests before committing new scenarios to catch simple typos in event IDs or asset states.*
 
 ## Docker Deployment (Synology NAS)
 
@@ -62,8 +81,3 @@ If you used **Method 2**, go to the **Project** tab, select the project, and cli
 ### Accessing the App
 Once deployed, the server will be available on your local network at:
 `http://<your_nas_ip>:3000`
-
-## Scripts
-
-- `npm run test`: Runs the test suites (`engine-actions.test.js` and `validate-scenarios.test.js`).
-- `npm run audit`: Runs the token audit script.

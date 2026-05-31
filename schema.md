@@ -15,6 +15,14 @@ The top-level object representing a fully playable module.
         zoom: number          // Initial zoom level (1-19)
     },
     roles: ["string"],        // Array of station IDs (e.g., 'home', 'defence', 'display'). 'display' and 'facilitator' are implicitly supported.
+    roleNames: {              // Optional friendly names for roles
+        "role_id": "string"
+    },
+    minUsers: number,         // Minimum human players required (e.g., 2)
+    mandatoryRoles: ["string"], // Array of role IDs that are essential for this scenario
+    roleFallbacks: {          // Fallback array in case a role's specific decision task lacks an active player
+        "role_id": ["fallback_role_1", "fallback_role_2"]
+    },
     initialScores: {          // Key-value pairs of starting scores (1-5)
         "score_id": number
     },
@@ -38,7 +46,16 @@ The top-level object representing a fully playable module.
     ],
     eventTemplates: [         // Array of all events (flat structure, no nesting)
         // ... See Event Template Object ...
-    ]
+    ],
+    aiConfig: {               // AI Configuration for scenario summaries and intelligence briefings
+        systemPrompt: "string", // System prompt governing AI behavior and writing style
+        scoreLabels: {        // Human-readable labels for the 1-5 score scale
+            number: "string"  // e.g., 1: "Critical"
+        },
+        roleContexts: {       // Guidance for the AI on what each role focuses on
+            "role_id": "string"
+        }
+    }
 }
 ```
 

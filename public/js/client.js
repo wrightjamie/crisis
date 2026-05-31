@@ -198,6 +198,25 @@ function showBriefing() {
     
     document.getElementById('briefing-body').innerHTML = html;
     switchView('briefing');
+
+    // Timeout if AI generation takes too long
+    setTimeout(() => {
+        const aiSummaryText = document.getElementById('briefing-ai-summary-text');
+        if (aiSummaryText && aiSummaryText.innerHTML.includes('Writing your brief')) {
+            const config = localState.scenarioConfig;
+            const general = config.briefings._general || '';
+            const roleSpecific = config.briefings[role] || '';
+            const variants = (config.variantBriefings || []).map(vb => {
+                const genVar = vb.briefingText || '';
+                const roleVar = (vb.roleBriefings && vb.roleBriefings[role]) ? vb.roleBriefings[role] : '';
+                return (genVar + '\n' + roleVar).trim();
+            }).filter(t => t).join('\n\n');
+            
+            const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
+            
+            aiSummaryText.innerHTML = `<div class="text-accent-orange mb-1 text-sm"><em>(AI generation timed out. Showing raw briefing data.)</em></div><div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
+        }
+    }, 45000);
 }
 
 function enterMap() {
@@ -291,15 +310,14 @@ function handleStateUpdate(state) {
             switchView('role_selection');
             renderRoleSelection();
         } else {
-            if (appEl.style.display === 'none') {
+            if (appEl.style.display === 'none' && briefingScreen.style.display === 'none') {
                 if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
                     showBriefing();
                 } else {
                     switchView('map');
                 }
-            } else {
-                updateUI();
             }
+            updateUI();
         }
     } else if (state.status === 'ended') {
         appEl.style.display = 'none';
@@ -340,25 +358,15 @@ function renderRoleSelection() {
     const roles = localState.scenarioConfig.roles;
     const roleNames = localState.scenarioConfig.roleNames || {};
 
-    roles.forEach(r => {
-        if (r === 'facilitator') return;
-
-        const isTaken = activeRolesList.includes(r);
-        const btn = document.createElement('button');
-        btn.className = `btn ${isTaken ? 'client-btn-taken' : 'client-btn-free'}`;
-        
-        const displayName = roleNames[r] || r.toUpperCase();
-        btn.textContent = displayName;
-
-        if (isTaken) {
-            btn.textContent += ' (Taken)';
-            btn.disabled = true;
-        } else {
-            btn.onclick = () => socket.emit('register_role', r);
-        }
-
-        roleButtonsContainer.appendChild(btn);
-    });
+    roleButtonsContainer.innerHTML = roles
+        .filter(r => r !== 'facilitator')
+        .map(r => {
+            const isTaken = activeRolesList.includes(r);
+            const displayName = roleNames[r] || r.toUpperCase();
+            const btnText = isTaken ? `${displayName} (Taken)` : displayName;
+            const btnClass = `btn ${isTaken ? 'client-btn-taken' : 'client-btn-free'}`;
+            return `<button class="${btnClass}" ${isTaken ? 'disabled' : `onclick="socket.emit('register_role', '${r}')"`}>${btnText}</button>`;
+        }).join('');
 }
 
 // Main UI Update Function
@@ -369,15 +377,9 @@ function updateUI() {
 
     if (localState.aiScenarioSummaries && localState.aiScenarioSummaries[role]) {
         const aiSummaryText = document.getElementById('briefing-ai-summary-text');
-        if (aiSummaryText && aiSummaryText.innerHTML.includes('Writing')) {
+        if (aiSummaryText && (aiSummaryText.innerHTML.includes('Writing') || aiSummaryText.innerHTML.includes('raw briefing data'))) {
             const summaryData = localState.aiScenarioSummaries[role];
             let html = p(summaryData.text);
-            if (summaryData.prompt) {
-                html += `\n\n<details class="mt-2 border-top pt-1">
-                    <summary class="cursor-pointer text-muted text-sm outline-none">View Prompt Context</summary>
-                    <pre class="text-xs text-muted mt-1 bg-primary p-1 radius-sm pre-wrap font-inherit">${p(summaryData.prompt)}</pre>
-                </details>`;
-            }
             aiSummaryText.innerHTML = html;
         }
     }

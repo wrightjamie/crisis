@@ -41,7 +41,6 @@ module.exports = function setupSockets(io, engine) {
 
             io.emit('templates', engine.getScenarioTemplates());
             io.emit('state_update', engine.gameState);
-            io.emit('generate_ai_briefing_all', { isStart: true });
         });
 
         // Facilitator ends a scenario
@@ -69,6 +68,11 @@ module.exports = function setupSockets(io, engine) {
             engine.connectedClients[socket.id] = role;
             socket.emit('role_registered', role);
             io.emit('active_roles', engine.getActiveRoles());
+
+            // Queue AI briefing for this newly active user
+            if (engine.gameState.status === 'lobby' || engine.gameState.status === 'active') {
+                io.emit('generate_ai_briefing', { role: role, mode: 'initial', includeSummary: true });
+            }
         });
 
         // Facilitator triggers an event
@@ -144,7 +148,7 @@ module.exports = function setupSockets(io, engine) {
 
         // Facilitator submits an AI generated executive summary of the scenario
         socket.on('submit_scenario_summary', (data) => {
-            if (engine.gameState.status === 'active') {
+            if (engine.gameState.status === 'active' || engine.gameState.status === 'lobby') {
                 console.log(`Received AI scenario summary for ${data.role}`);
                 engine.gameState.aiScenarioSummaries[data.role] = {
                     text: data.text,
@@ -172,7 +176,7 @@ module.exports = function setupSockets(io, engine) {
         });
 
         socket.on('submit_ai_briefing', (data) => {
-            if (engine.gameState.status !== 'active') return;
+            if (engine.gameState.status !== 'active' && engine.gameState.status !== 'lobby') return;
             if (!engine.gameState.aiBriefings) engine.gameState.aiBriefings = {};
             engine.gameState.aiBriefings[data.role] = data;
             io.emit('state_update', engine.gameState);

@@ -47,30 +47,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 socket.on('generate_ai_briefing', (data) => {
     if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.aiConfig) return;
+    if (data.role === 'display' || data.role === 'facilitator') return;
+    
+    if (data.includeSummary) {
+        const r = data.role;
+        const config = currentState.scenarioConfig;
+        const general = config.briefings._general || '';
+        const roleSpecific = config.briefings[r] || '';
+        const variants = (config.variantBriefings || []).map(vb => {
+            const genVar = vb.briefingText || '';
+            const roleVar = (vb.roleBriefings && vb.roleBriefings[r]) ? vb.roleBriefings[r] : '';
+            return `${genVar}\n${roleVar}`;
+        }).join('\n');
+        const combinedText = `${general}\n${variants}\n${roleSpecific}`;
+        aiQueue.push({ type: 'summary', role: r, combinedText });
+    }
+
     queueAiGeneration(data.role, data.mode === 'initial');
 });
 
 socket.on('generate_ai_briefing_all', (data) => {
     if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.aiConfig) return;
     
-    if (data && data.isStart) {
-        scenarioRoles.forEach(r => {
-            if (r === 'display' || r === 'facilitator') return;
-            const config = currentState.scenarioConfig;
-            const general = config.briefings._general || '';
-            const roleSpecific = config.briefings[r] || '';
-            const variants = (config.variantBriefings || []).map(vb => {
-                const genVar = vb.briefingText || '';
-                const roleVar = (vb.roleBriefings && vb.roleBriefings[r]) ? vb.roleBriefings[r] : '';
-                return `${genVar}\n${roleVar}`;
-            }).join('\n');
-            const combinedText = `${general}\n${variants}\n${roleSpecific}`;
-            aiQueue.push({ type: 'summary', role: r, combinedText });
-        });
-    }
-
     const context = data ? data.context : null;
-    scenarioRoles.forEach(r => queueAiGeneration(r, false, context));
+    currentActiveRoles
+        .filter(r => r !== 'display' && r !== 'facilitator')
+        .forEach(r => queueAiGeneration(r, false, context));
 });
 
 function queueAiGeneration(role, forceInitial, context = null) {
@@ -146,29 +148,31 @@ socket.on('scenario_error', (msg) => {
     alert(msg);
 });
 
-function createStationBadgeHtml(role, isOnline, mode) {
+function createStationBadgeHtml(role, isOnline, mode, isMandatory = false) {
     const badgeModeClass = mode === 'dropdown' ? 'dropdown-mode' : 'lobby-mode';
     const statusClass = isOnline ? 'online' : 'offline';
+    const mandatoryHtml = (mode === 'lobby' && isMandatory) ? ' <span style="color: var(--accent-orange); font-size: 0.8em; margin-left: 4px;">*</span>' : '';
     
     return `
         <div class="station-badge ${badgeModeClass} ${statusClass}">
             <div class="station-indicator ${badgeModeClass} ${statusClass}"></div>
-            ${role.toUpperCase()}
+            ${role.toUpperCase()}${mandatoryHtml}
         </div>
     `;
 }
 
+let currentActiveRoles = [];
 socket.on('active_roles', (roles) => {
+    currentActiveRoles = roles;
     const container = document.getElementById('active-roles-display');
+    const config = currentState && currentState.scenarioConfig ? currentState.scenarioConfig : {};
+    const mandatoryRoles = config.mandatoryRoles || [];
+    const minUsers = config.minUsers || 1;
     if (container) {
         container.innerHTML = '<div class="text-xs text-muted" style="margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">STATIONS:</div>';
         
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
-        
-        expectedRoles.forEach(r => {
-            const isOnline = roles.includes(r);
-            container.innerHTML += createStationBadgeHtml(r, isOnline, 'dropdown');
-        });
+        container.innerHTML += expectedRoles.map(r => createStationBadgeHtml(r, roles.includes(r), 'dropdown', mandatoryRoles.includes(r))).join('');
     }
 
     // Also update lobby screen if active
@@ -176,12 +180,25 @@ socket.on('active_roles', (roles) => {
     if (lobbyRoles && currentState && currentState.status === 'lobby') {
         lobbyRoles.innerHTML = '';
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
-        const activeOnly = expectedRoles.filter(r => r !== 'facilitator');
+        lobbyRoles.innerHTML = expectedRoles
+            .filter(r => r !== 'facilitator')
+            .map(r => createStationBadgeHtml(r, roles.includes(r), 'lobby', mandatoryRoles.includes(r)))
+            .join('');
+            
+        let minUsersEl = document.getElementById('lobby-min-users-text');
+        if (!minUsersEl) {
+            minUsersEl = document.createElement('div');
+            minUsersEl.id = 'lobby-min-users-text';
+            minUsersEl.className = 'text-sm text-muted mt-1 w-100 text-center';
+            lobbyRoles.parentNode.insertBefore(minUsersEl, lobbyRoles.nextSibling);
+        }
         
-        activeOnly.forEach(r => {
-            const isOnline = roles.includes(r);
-            lobbyRoles.innerHTML += createStationBadgeHtml(r, isOnline, 'lobby');
-        });
+        const activePlayerCount = roles.filter(r => r !== 'display' && r !== 'facilitator').length;
+        if (activePlayerCount < minUsers) {
+            minUsersEl.innerHTML = `<span style="color: var(--accent-orange);">Waiting for more players... (${activePlayerCount}/${minUsers} minimum required)</span>`;
+        } else {
+            minUsersEl.innerHTML = `<span style="color: var(--status-1);">Ready to start! Minimum players met (${activePlayerCount}/${minUsers})</span>`;
+        }
     }
 });
 
