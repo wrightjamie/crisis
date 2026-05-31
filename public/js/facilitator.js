@@ -146,28 +146,43 @@ socket.on('scenario_error', (msg) => {
     alert(msg);
 });
 
+function createStationBadgeHtml(role, isOnline, mode) {
+    const badgeModeClass = mode === 'dropdown' ? 'dropdown-mode' : 'lobby-mode';
+    const statusClass = isOnline ? 'online' : 'offline';
+    
+    return `
+        <div class="station-badge ${badgeModeClass} ${statusClass}">
+            <div class="station-indicator ${badgeModeClass} ${statusClass}"></div>
+            ${role.toUpperCase()}
+        </div>
+    `;
+}
+
 socket.on('active_roles', (roles) => {
     const container = document.getElementById('active-roles-display');
-    if (!container) return;
-    container.innerHTML = '<span class="text-xs text-muted">STATIONS:</span>';
-    
-    // Fallback to default if scenarioRoles is empty
-    const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
-    
-    expectedRoles.forEach(r => {
-        const isOnline = roles.includes(r);
-        const badge = document.createElement('span');
-        badge.className = 'role-badge';
+    if (container) {
+        container.innerHTML = '<div class="text-xs text-muted" style="margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">STATIONS:</div>';
         
-        if (isOnline) {
-            badge.classList.add("fac-status-online");
-        } else {
-            badge.classList.add("fac-status-offline");
-        }
+        const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
+        
+        expectedRoles.forEach(r => {
+            const isOnline = roles.includes(r);
+            container.innerHTML += createStationBadgeHtml(r, isOnline, 'dropdown');
+        });
+    }
 
-        badge.textContent = r;
-        container.appendChild(badge);
-    });
+    // Also update lobby screen if active
+    const lobbyRoles = document.getElementById('lobby-active-roles');
+    if (lobbyRoles && currentState && currentState.status === 'lobby') {
+        lobbyRoles.innerHTML = '';
+        const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
+        const activeOnly = expectedRoles.filter(r => r !== 'facilitator');
+        
+        activeOnly.forEach(r => {
+            const isOnline = roles.includes(r);
+            lobbyRoles.innerHTML += createStationBadgeHtml(r, isOnline, 'lobby');
+        });
+    }
 });
 
 socket.on('templates', (templates) => {
@@ -184,19 +199,32 @@ socket.on('state_update', (state) => {
 });
 
 function handleState(state) {
+    const lobbyEl = document.getElementById('facilitator-lobby-screen');
+
     if (state.status === 'holding') {
         dashboardEl.style.display = 'none';
+        lobbyEl.style.display = 'none';
         holdingEl.style.display = 'block';
         availableScenarios = state.availableScenarios;
         aiBaselineScores = {}; // Reset AI tracking
         prevFacilitatorScores = null;
         renderHoldingScreen();
+    } else if (state.status === 'lobby') {
+        dashboardEl.style.display = 'none';
+        holdingEl.style.display = 'none';
+        lobbyEl.style.display = 'block';
+        currentState = state;
+        if (state.scenarioConfig && state.scenarioConfig.roles) {
+            scenarioRoles = state.scenarioConfig.roles;
+        }
+        renderLobbyScreen();
     } else {
         if (!currentState || currentState.scenarioId !== state.scenarioId) {
             aiBaselineScores = {}; // Reset on new scenario
             prevFacilitatorScores = null;
             aiQueue = [];
         }
+        lobbyEl.style.display = 'none';
         dashboardEl.style.display = 'block';
         holdingEl.style.display = 'none';
         currentState = state;
@@ -208,6 +236,14 @@ function handleState(state) {
         renderScoreAdjust();
         renderGlobalView();
     }
+}
+
+function renderLobbyScreen() {
+    if (!currentState || !currentState.scenarioConfig) return;
+    const config = currentState.scenarioConfig;
+    document.getElementById('lobby-scenario-title').innerHTML = window.parseAcronyms ? window.parseAcronyms(config.name) : config.name;
+    document.getElementById('lobby-scenario-desc').innerHTML = window.parseAcronyms ? window.parseAcronyms(config.description) : config.description;
+    document.getElementById('lobby-error-msg').textContent = '';
 }
 
 let variantSelections = {}; // { scenarioId: { axisId: optionId } }
@@ -258,7 +294,7 @@ function renderHoldingScreen() {
             <p class="text-secondary mb-1">${p(s.description)}</p>
             ${validationHtml}
             ${axesHtml}
-            <button class="btn btn-primary w-100 mt-1" onclick="startScenario('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Start Scenario</button>
+            <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
         `;
         scenariosListEl.appendChild(div);
     });
@@ -292,10 +328,14 @@ window.randomiseVariants = function(scenarioId) {
     });
 };
 
-function startScenario(id) {
+window.openLobby = function(id) {
     const selectedVariants = variantSelections[id] || {};
-    socket.emit('start_scenario', { scenarioId: id, selectedVariants });
-}
+    socket.emit('open_lobby', { scenarioId: id, selectedVariants });
+};
+
+window.startScenario = function() {
+    socket.emit('start_scenario');
+};
 
 function endScenario() {
     if (confirm("End this scenario and return to the holding screen?")) {
@@ -411,7 +451,8 @@ function renderGlobalView() {
     // Top bar scores were removed in a previous refactor
 
     // Events List
-    const recentEvents = currentState.events.slice().reverse().slice(0, 5);
+    // Filter out player-triggered manual actions (IDs starting with 'evt_action_')
+    const recentEvents = currentState.events.filter(e => !e.id.startsWith('evt_action_')).slice().reverse().slice(0, 5);
     eventsList.innerHTML = recentEvents.length === 0 ? '<p>No active events.</p>' : '';
     recentEvents.forEach(evt => {
         eventsList.innerHTML += `
@@ -423,8 +464,10 @@ function renderGlobalView() {
     });
 
     // Tasks/Decisions List
-    const pendingTasks = currentState.decisionTasks.filter(t => t.status !== 'resolved');
-    const resolvedTasks = currentState.decisionTasks.filter(t => t.status === 'resolved').slice(-5).reverse();
+    // Filter out player-triggered manual action approval tasks (IDs starting with 'task_action_')
+    const scenarioTasks = currentState.decisionTasks.filter(t => !t.id.startsWith('task_action_'));
+    const pendingTasks = scenarioTasks.filter(t => t.status !== 'resolved');
+    const resolvedTasks = scenarioTasks.filter(t => t.status === 'resolved').slice(-5).reverse();
     const displayTasks = [...pendingTasks, ...resolvedTasks];
     
     tasksList.innerHTML = displayTasks.length === 0 ? '<p>No decisions generated.</p>' : '';

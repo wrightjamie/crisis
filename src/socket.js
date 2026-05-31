@@ -12,19 +12,28 @@ module.exports = function setupSockets(io, engine) {
             socket.emit('active_roles', engine.getActiveRoles());
         }
 
-        // Facilitator starts a scenario
-        socket.on('start_scenario', (data) => {
+        // Facilitator opens a lobby
+        socket.on('open_lobby', (data) => {
             const scenarioId = typeof data === 'string' ? data : data.scenarioId;
             const selectedVariants = typeof data === 'object' ? data.selectedVariants : null;
 
-            const validation = engine.validateScenarioStart(scenarioId);
+            console.log(`Opening lobby for scenario: ${scenarioId}`);
+            engine.createLobby(scenarioId, selectedVariants);
+
+            io.emit('state_update', engine.gameState);
+            io.emit('active_roles', engine.getActiveRoles());
+        });
+
+        // Facilitator starts a scenario
+        socket.on('start_scenario', () => {
+            const validation = engine.validateScenarioStart(engine.gameState.scenarioId);
             if (!validation.valid) {
                 socket.emit('scenario_error', validation.error);
                 return;
             }
 
-            console.log(`Starting scenario: ${scenarioId}`);
-            engine.loadScenario(scenarioId, selectedVariants);
+            console.log(`Starting scenario: ${engine.gameState.scenarioId}`);
+            engine.startGame();
 
             engine.startSchedulerLoop((updatedState) => {
                 io.emit('state_update', updatedState);
@@ -32,7 +41,6 @@ module.exports = function setupSockets(io, engine) {
 
             io.emit('templates', engine.getScenarioTemplates());
             io.emit('state_update', engine.gameState);
-            io.emit('active_roles', engine.getActiveRoles());
             io.emit('generate_ai_briefing_all', { isStart: true });
         });
 
@@ -47,6 +55,11 @@ module.exports = function setupSockets(io, engine) {
 
         // Client registers their role
         socket.on('register_role', (role) => {
+            if (!role) {
+                engine.connectedClients[socket.id] = null;
+                return;
+            }
+
             const takenRoles = engine.getActiveRoles();
             if (role !== 'display' && role !== 'facilitator' && takenRoles.includes(role)) {
                 socket.emit('role_error', 'Role already taken');
@@ -154,7 +167,7 @@ module.exports = function setupSockets(io, engine) {
         socket.on('reset_game', () => {
             if (engine.gameState.status !== 'active') return;
             console.log('Game reset by facilitator');
-            engine.loadScenario(engine.gameState.scenarioId);
+            engine.createLobby(engine.gameState.scenarioId);
             io.emit('state_update', engine.gameState);
         });
 

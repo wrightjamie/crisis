@@ -68,7 +68,7 @@ class GameEngine {
         return { valid: true };
     }
 
-    loadScenario(scenarioId, selectedVariants) {
+    createLobby(scenarioId, selectedVariants) {
         const scenario = scenarios.find(s => s.id === scenarioId);
         if (!scenario) return null;
 
@@ -116,7 +116,7 @@ class GameEngine {
         }
 
         this.gameState = {
-            status: 'active',
+            status: 'lobby',
             scenarioId: scenario.id,
             scenarioConfig: {
                 id: scenario.id,
@@ -124,6 +124,7 @@ class GameEngine {
                 description: scenario.description,
                 mapConfig: scenario.mapConfig,
                 roles: scenario.roles,
+                roleNames: scenario.roleNames || {},
                 briefings: scenario.briefings || {},
                 variantBriefings: variantBriefings,
                 selectedVariantNames: selectedVariantNames,
@@ -142,6 +143,21 @@ class GameEngine {
 
         this.connectedClients = {}; // reset roles
         return this.gameState;
+    }
+
+    startGame() {
+        if (this.gameState.status !== 'lobby') return false;
+        this.gameState.status = 'active';
+        return true;
+    }
+
+    resolveRoleFallback(targetRole, connectedRoles, roleFallbacks = {}) {
+        if (connectedRoles.includes(targetRole)) return targetRole;
+        const fallbacks = roleFallbacks[targetRole] || [];
+        for (let fb of fallbacks) {
+            if (connectedRoles.includes(fb)) return fb;
+        }
+        return null;
     }
 
     checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEvents = []) {
@@ -218,13 +234,10 @@ class GameEngine {
                     let assignedRole = dec.role;
                     const activeRoles = Object.values(this.connectedClients);
 
-                    if (assignedRole !== 'all' && !activeRoles.includes(assignedRole)) {
-                        const fallbacks = (scenario.roleFallbacks && scenario.roleFallbacks[assignedRole]) ? scenario.roleFallbacks[assignedRole] : [];
-                        for (let fb of fallbacks) {
-                            if (activeRoles.includes(fb)) {
-                                assignedRole = fb;
-                                break;
-                            }
+                    if (assignedRole !== 'all') {
+                        const resolvedRole = this.resolveRoleFallback(assignedRole, activeRoles, scenario.roleFallbacks);
+                        if (resolvedRole) {
+                            assignedRole = resolvedRole;
                         }
                     }
 
@@ -376,25 +389,12 @@ class GameEngine {
             
             const activeRoles = Object.values(this.connectedClients);
             
-            // 1. Try finding a directly specified active approver
+            // 1. Try finding a resolved approver from the allowed list
             for (let pa of possibleApprovers) {
-                if (activeRoles.includes(pa)) {
-                    approver = pa;
+                const resolved = this.resolveRoleFallback(pa, activeRoles, scenario.roleFallbacks);
+                if (resolved) {
+                    approver = resolved;
                     break;
-                }
-            }
-            
-            // 2. Fallback using scenario.roleFallbacks
-            if (!approver) {
-                for (let pa of possibleApprovers) {
-                    const fallbacks = (scenario.roleFallbacks && scenario.roleFallbacks[pa]) ? scenario.roleFallbacks[pa] : [];
-                    for (let fb of fallbacks) {
-                        if (activeRoles.includes(fb)) {
-                            approver = fb;
-                            break;
-                        }
-                    }
-                    if (approver) break;
                 }
             }
             

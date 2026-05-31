@@ -4,6 +4,15 @@ module.exports = {
         description: 'Earth faces an unprecedented extraterrestrial threat. Coordinate global defense and survival.',
         mapConfig: { center: [20, 0], zoom: 2 },
         roles: ['PM', 'usa', 'uk', 'china', 'russia', 'un_command', 'display'],
+        roleNames: {
+            'PM': 'Secretary General',
+            'usa': 'US President',
+            'uk': 'UK Prime Minister',
+            'china': 'President of China',
+            'russia': 'President of Russia',
+            'un_command': 'UN Supreme Commander',
+            'display': 'Display Screen'
+        },
         minUsers: 2,
         mandatoryRoles: ['PM'],
         roleFallbacks: {

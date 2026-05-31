@@ -45,7 +45,7 @@ function renderScenarioExplorer() {
             }
         }
         
-        const children = allTemplates.filter(t => t.prerequisites && t.prerequisites.includes(templateId));
+        const children = allTemplates.filter(t => !t.hidden && t.prerequisites && t.prerequisites.includes(templateId));
         const hasChildren = children.length > 0;
         
         // Determine if node is triggered to set default expansion
@@ -98,15 +98,15 @@ function renderScenarioExplorer() {
             <ul class="scenario-tree" style="padding-left: 2.5rem;">
     `;
     
-    // Find roots
-    const roots = allTemplates.filter(t => !t.prerequisites || t.prerequisites.length === 0);
+    // Find roots (excluding hidden ones)
+    const roots = allTemplates.filter(t => !t.hidden && (!t.prerequisites || t.prerequisites.length === 0));
     roots.forEach(root => {
         html += renderNode(root.id, true);
     });
     
     // Render any unconnected nodes
     allTemplates.forEach(t => {
-        if (!renderedNodes.has(t.id)) {
+        if (!t.hidden && !renderedNodes.has(t.id)) {
             html += renderNode(t.id, true);
         }
     });

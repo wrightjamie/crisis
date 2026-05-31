@@ -4,6 +4,15 @@ module.exports = {
         description: 'Manage domestic and international fallout during escalating tensions in Europe.',
         mapConfig: { center: [54.5, -2.5], zoom: 6 },
         roles: ['PM', 'home', 'defence', 'foreign', 'media', 'cyber', 'display'],
+        roleNames: {
+            'PM': 'Prime Minister',
+            'home': 'Home Secretary',
+            'defence': 'Defence Secretary',
+            'foreign': 'Foreign Secretary',
+            'media': 'Media & Comms Director',
+            'cyber': 'Cyber Security Lead',
+            'display': 'Display Screen'
+        },
         minUsers: 2,
         mandatoryRoles: ['PM'],
         roleFallbacks: {
@@ -72,8 +81,8 @@ CRITICAL RULES:
                         name: 'Deployed to RIMPAC (Australia)',
                         briefingText: 'The QEC Prince of Wales is currently deployed to RIMPAC exercises near Australia, approximately 3 weeks from home waters.',
                         roleBriefings: {
-                            defence: 'Your primary carrier group is on the far side of the world. Air cover for the North Atlantic will be severely limited until she returns.',
-                            foreign: 'Australia is expecting the RIMPAC deployment to continue. Withdrawing early risks damaging the AUKUS relationship.'
+                            defence: 'The QEC Prince of Wales is currently deployed to RIMPAC in Australia. Your primary carrier group is on the far side of the world. Air cover for the North Atlantic will be severely limited until she returns.',
+                            foreign: 'The QEC Prince of Wales is currently deployed to RIMPAC. Australia is expecting the deployment to continue. Withdrawing early risks damaging the AUKUS relationship.'
                         },
                         scoreModifiers: { military_readiness: -1 },
                         assetModifiers: [
@@ -85,7 +94,7 @@ CRITICAL RULES:
                         name: 'Exercising in English Channel',
                         briefingText: 'The QEC Prince of Wales is exercising in the English Channel, approximately 2 hours from Portsmouth.',
                         roleBriefings: {
-                            defence: 'Your carrier is close to home and can be operationally deployed within hours. This gives you significant flexibility.'
+                            defence: 'The QEC Prince of Wales is exercising in the English Channel. Your carrier is close to home and can be operationally deployed within hours. This gives you significant flexibility.'
                         },
                         scoreModifiers: { military_readiness: +1 },
                         assetModifiers: [
@@ -103,9 +112,9 @@ CRITICAL RULES:
                         name: 'War in Iran ongoing',
                         briefingText: 'British forces remain committed to coalition operations in the Persian Gulf. Logistics chains are stretched and reserve units are depleted.',
                         roleBriefings: {
-                            defence: 'Two brigades are committed to Gulf operations. Redeployment would take weeks and damage coalition credibility.',
-                            home: 'Anti-war sentiment is growing domestically. A second front would be politically toxic.',
-                            foreign: 'The US expects continued UK commitment. Wavering now would severely damage the special relationship.'
+                            defence: 'The war in Iran is ongoing. Two brigades are committed to Gulf operations. Redeployment would take weeks and damage coalition credibility.',
+                            home: 'The war in Iran is ongoing. Anti-war sentiment is growing domestically. A second front would be politically toxic.',
+                            foreign: 'The war in Iran is ongoing. The US expects continued UK commitment. Wavering now would severely damage the special relationship.'
                         },
                         scoreModifiers: { military_readiness: -1, uk_us: +1 }
                     },
@@ -114,8 +123,8 @@ CRITICAL RULES:
                         name: 'Iran conflict resolved',
                         briefingText: 'The Iran conflict concluded 6 months ago. Forces are returning but morale is fragile and equipment requires refurbishment.',
                         roleBriefings: {
-                            defence: 'Returning units are fatigued but available. Equipment serviceability is around 70%.',
-                            home: 'Public appetite for further military action is extremely low. Veterans\' support is a hot-button issue.'
+                            defence: 'The Iran conflict concluded 6 months ago. Returning units are fatigued but available. Equipment serviceability is around 70%.',
+                            home: 'The Iran conflict concluded 6 months ago. Public appetite for further military action is extremely low. Veterans\' support is a hot-button issue.'
                         },
                         scoreModifiers: { civilian_stability: +1 }
                     }
@@ -136,8 +145,8 @@ CRITICAL RULES:
                         name: 'Isolationist Shift',
                         briefingText: 'The US administration is facing domestic pressure to pull back from European conflicts, focusing heavily on the Indo-Pacific instead.',
                         roleBriefings: {
-                            foreign: 'Washington is reluctant to commit resources. You will need to rely more heavily on European partners.',
-                            defence: 'US logistical support is not guaranteed. Conserve your assets.'
+                            foreign: 'The US administration is facing domestic pressure to pivot to the Indo-Pacific. Washington is reluctant to commit resources here. You will need to rely more heavily on European partners.',
+                            defence: 'The US administration is pivoting to the Indo-Pacific. US logistical support is not guaranteed. Conserve your assets.'
                         },
                         scoreModifiers: { uk_us: -2, uk_europe: +1 }
                     }
@@ -158,8 +167,8 @@ CRITICAL RULES:
                         name: 'Winter of Discontent',
                         briefingText: 'The crisis hits during a period of intense domestic strife, with ongoing strikes in public sectors and high inflation.',
                         roleBriefings: {
-                            home: 'Public order is already fragile. Any disruption to supply chains will lead to immediate panic buying and unrest.',
-                            media: 'The press is highly critical of government competence. Selling a war narrative will be extremely difficult.'
+                            home: 'We are in a "Winter of Discontent" with ongoing strikes. Public order is already fragile. Any disruption to supply chains will lead to immediate panic buying and unrest.',
+                            media: 'We are in a "Winter of Discontent" with ongoing strikes. The press is highly critical of government competence. Selling a war narrative will be extremely difficult.'
                         },
                         scoreModifiers: { civilian_stability: -2 }
                     }
@@ -837,6 +846,7 @@ CRITICAL RULES:
             {
                 id: 'ev_us_support_success',
                 name: 'US Authorizes Logistics Support',
+                hidden: true,
                 description: 'The US administration has approved the immediate redirection of heavy airlift and logistics support to the UK.',
                 location: [51.5, -0.1],
                 roleDescriptions: {
@@ -848,6 +858,7 @@ CRITICAL RULES:
             {
                 id: 'ev_us_support_fail',
                 name: 'US Declines Immediate Logistics Support',
+                hidden: true,
                 description: 'The US administration has politely declined to redirect strategic airlift to the UK at this time, citing other global commitments.',
                 location: [38.89, -77.03],
                 roleDescriptions: {
@@ -859,6 +870,7 @@ CRITICAL RULES:
             {
                 id: 'ev_russia_deescalate',
                 name: 'Backchannel Success: Russia Agrees to Pause',
+                hidden: true,
                 description: 'Following a tense emergency backchannel communication, Russian leadership has agreed to a temporary tactical pause, conditional on a reduction in UK military posture.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -870,6 +882,7 @@ CRITICAL RULES:
             {
                 id: 'ev_russia_leak',
                 name: 'Backchannel Failure: Russia Leaks Call',
+                hidden: true,
                 description: 'Russia has leaked edited transcripts of our emergency backchannel communication, portraying the UK as begging for a ceasefire.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -881,6 +894,7 @@ CRITICAL RULES:
             {
                 id: 'ev_cyber_success',
                 name: 'Covert Cyber Offensive Successful',
+                hidden: true,
                 description: 'A major covert cyber offensive against Russian logistics networks has been highly successful, degrading their command and control without immediate attribution.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -891,6 +905,7 @@ CRITICAL RULES:
             {
                 id: 'ev_cyber_fail',
                 name: 'Covert Cyber Offensive Thwarted',
+                hidden: true,
                 description: 'Our covert cyber offensive was detected and neutralized by Russian defenses. They are now publicly attributing the attack to the UK.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -902,6 +917,7 @@ CRITICAL RULES:
             {
                 id: 'ev_sf_success',
                 name: 'Special Forces Operation Success',
+                hidden: true,
                 description: 'A highly classified Special Forces operation has successfully secured critical intelligence on Russian deployments without detection.',
                 location: [50.0, 30.0],
                 roleDescriptions: {
@@ -912,6 +928,7 @@ CRITICAL RULES:
             {
                 id: 'ev_sf_fail',
                 name: 'Special Forces Operation Compromised',
+                hidden: true,
                 description: 'A classified Special Forces operation has been compromised. Several operators have been captured and are being paraded on Russian state media.',
                 location: [50.0, 30.0],
                 roleDescriptions: {
@@ -923,6 +940,7 @@ CRITICAL RULES:
             {
                 id: 'ev_f35_success',
                 name: 'Deep Strike Success',
+                hidden: true,
                 description: 'Our F-35s successfully bypassed Russian air defenses and destroyed a key strategic asset without losses. Russian leadership appears stunned and is signaling a desire to de-escalate.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -934,6 +952,7 @@ CRITICAL RULES:
             {
                 id: 'ev_f35_fail',
                 name: 'Deep Strike Failure',
+                hidden: true,
                 description: 'Our F-35 strike package was intercepted. We have lost multiple advanced airframes and pilots. Russia considers this an act of total war.',
                 location: [55.75, 37.61],
                 roleDescriptions: {
@@ -945,6 +964,7 @@ CRITICAL RULES:
             {
                 id: 'ev_eu_success',
                 name: 'European Coalition Formed',
+                hidden: true,
                 description: 'A historic European Defense Coalition has been cemented, uniting the continent behind the UK. Russia realizes it cannot divide and conquer.',
                 location: [50.8503, 4.3517], // Brussels
                 roleDescriptions: {
@@ -955,6 +975,7 @@ CRITICAL RULES:
             {
                 id: 'ev_eu_fail',
                 name: 'European Coalition Fails',
+                hidden: true,
                 description: 'Our attempts to forge a unified European defense bloc have failed spectacularly amid internal bickering. We look weak and divided.',
                 location: [50.8503, 4.3517],
                 roleDescriptions: {
@@ -1004,6 +1025,7 @@ CRITICAL RULES:
             {
                 id: 'ev_strike_options_leak',
                 name: 'Strike Planning Leaked',
+                hidden: true,
                 description: 'Intelligence regarding our requests for deep strike target packages has leaked. Russia is infuriated, and some European allies are questioning our escalation control.',
                 location: [51.5033, -0.1276],
                 roleDescriptions: {
@@ -1015,6 +1037,7 @@ CRITICAL RULES:
             {
                 id: 'ev_strike_options_secured',
                 name: 'Strike Planning Secured',
+                hidden: true,
                 description: 'The CDS has successfully compartmentalized the target package requests. No intelligence has leaked.',
                 location: [51.5033, -0.1276],
                 roleDescriptions: {
@@ -1025,6 +1048,7 @@ CRITICAL RULES:
             {
                 id: 'ev_strike_options_ready',
                 name: 'Strike Options Ready',
+                hidden: true,
                 description: 'The Chief of Defence Staff has finalized the deep strike target packages. We have viable options against a forward Russian airbase or a critical Command & Control node.',
                 location: [51.5033, -0.1276],
                 roleDescriptions: {

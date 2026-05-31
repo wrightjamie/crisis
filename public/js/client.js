@@ -28,7 +28,7 @@ const btnActions = document.getElementById('btn-actions');
 // Socket events for roles
 socket.on('active_roles', (roles) => {
     activeRolesList = roles;
-    if (localState && localState.status === 'active' && !role) {
+    if (localState && (localState.status === 'active' || localState.status === 'lobby') && !role) {
         renderRoleSelection();
     }
 });
@@ -47,11 +47,21 @@ socket.on('role_registered', (registeredRole) => {
         map.setView(localState.scenarioConfig.mapConfig.center, localState.scenarioConfig.mapConfig.zoom);
     }
 
-    // Show briefing if available, otherwise go straight to map
-    if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
-        showBriefing();
+    if (localState.status === 'lobby') {
+        holdingScreen.style.display = 'flex';
+        const h1 = holdingScreen.querySelector('h1');
+        const p = holdingScreen.querySelector('p');
+        const roleNames = localState.scenarioConfig ? (localState.scenarioConfig.roleNames || {}) : {};
+        const displayName = roleNames[role] || role.toUpperCase();
+        if (h1) h1.textContent = `Welcome ${displayName}`;
+        if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
     } else {
-        enterMap();
+        // Show briefing if available, otherwise go straight to map
+        if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+            showBriefing();
+        } else {
+            enterMap();
+        }
     }
 });
 
@@ -110,6 +120,10 @@ function showBriefing() {
     
     document.getElementById('briefing-subtitle').textContent = config.name || '';
     
+    const roleNames = config.roleNames || {};
+    const displayName = roleNames[role] || role.toUpperCase();
+    document.getElementById('briefing-title').textContent = `${displayName.toUpperCase()} BRIEFING`;
+    
     let html = '';
     
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
@@ -126,20 +140,18 @@ function showBriefing() {
     
     // Variant briefings (general text + role-specific)
     variantBriefings.forEach(vb => {
-        if (vb.briefingText) {
-            html += `
-                <div class="briefing-section briefing-variant">
-                    <div class="briefing-section-label">${vb.axisName}</div>
-                    ${p(vb.briefingText)}
-                </div>
-            `;
-        }
-        // Role-specific variant briefing
         if (vb.roleBriefings && vb.roleBriefings[role]) {
             html += `
                 <div class="briefing-section briefing-role">
                     <div class="briefing-section-label">${vb.axisName} — ${role.toUpperCase()} Intel</div>
                     ${p(vb.roleBriefings[role])}
+                </div>
+            `;
+        } else if (vb.briefingText) {
+            html += `
+                <div class="briefing-section briefing-variant">
+                    <div class="briefing-section-label">${vb.axisName}</div>
+                    ${p(vb.briefingText)}
                 </div>
             `;
         }
@@ -230,6 +242,11 @@ function handleStateUpdate(state) {
     if (state.status === 'holding') {
         role = null;
         holdingScreen.style.display = 'flex';
+        const h1 = holdingScreen.querySelector('h1');
+        const p = holdingScreen.querySelector('p');
+        if (h1) h1.textContent = "Waiting for Game to Start";
+        if (p) p.textContent = "The facilitator is selecting a scenario...";
+        
         roleSelectionScreen.style.display = 'none';
         appEl.style.display = 'none';
 
@@ -240,6 +257,23 @@ function handleStateUpdate(state) {
         mapMarkers = {};
         viewedEvents.clear();
 
+    } else if (state.status === 'lobby') {
+        appEl.style.display = 'none';
+        
+        if (!role) {
+            holdingScreen.style.display = 'none';
+            roleSelectionScreen.style.display = 'flex';
+            renderRoleSelection();
+        } else {
+            roleSelectionScreen.style.display = 'none';
+            holdingScreen.style.display = 'flex';
+            const h1 = holdingScreen.querySelector('h1');
+            const p = holdingScreen.querySelector('p');
+            const roleNames = state.scenarioConfig ? (state.scenarioConfig.roleNames || {}) : {};
+            const displayName = roleNames[role] || role.toUpperCase();
+            if (h1) h1.textContent = `Welcome ${displayName}`;
+            if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
+        }
     } else if (state.status === 'active') {
         holdingScreen.style.display = 'none';
 
@@ -249,8 +283,16 @@ function handleStateUpdate(state) {
             renderRoleSelection();
         } else {
             roleSelectionScreen.style.display = 'none';
-            appEl.style.display = 'block';
-            updateUI();
+            if (appEl.style.display === 'none') {
+                if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+                    showBriefing();
+                } else {
+                    enterMap();
+                }
+            } else {
+                appEl.style.display = 'block';
+                updateUI();
+            }
         }
     } else if (state.status === 'ended') {
         appEl.style.display = 'none';
@@ -289,18 +331,22 @@ function renderRoleSelection() {
 
     roleButtonsContainer.innerHTML = '';
     const roles = localState.scenarioConfig.roles;
+    const roleNames = localState.scenarioConfig.roleNames || {};
 
     roles.forEach(r => {
+        if (r === 'facilitator') return;
+
         const isTaken = activeRolesList.includes(r);
         const btn = document.createElement('button');
         btn.className = 'btn';
         btn.style.padding = '1.5rem';
         btn.style.fontSize = '1.1rem';
-        btn.style.textTransform = 'uppercase';
         btn.style.backgroundColor = isTaken ? 'var(--bg-tertiary)' : 'var(--bg-secondary)';
         btn.style.color = isTaken ? 'var(--text-muted)' : 'var(--text-primary)';
         btn.style.border = `1px solid ${isTaken ? 'var(--border-color)' : 'var(--accent-blue)'}`;
-        btn.textContent = r;
+        
+        const displayName = roleNames[r] || r.toUpperCase();
+        btn.textContent = displayName;
 
         if (isTaken) {
             btn.textContent += ' (Taken)';

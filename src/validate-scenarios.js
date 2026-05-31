@@ -16,6 +16,17 @@ function validateScenario(scenario) {
         errors.push("Missing or invalid 'roles' array");
     }
 
+    // Check roleNames
+    if (!scenario.roleNames || typeof scenario.roleNames !== 'object') {
+        errors.push("Missing or invalid 'roleNames' object");
+    } else if (scenario.roles && Array.isArray(scenario.roles)) {
+        scenario.roles.forEach(role => {
+            if (!scenario.roleNames[role] || typeof scenario.roleNames[role] !== 'string') {
+                errors.push(`Missing or invalid 'roleNames' entry for role: '${role}'`);
+            }
+        });
+    }
+
     // Check initialScores
     if (!scenario.initialScores || typeof scenario.initialScores !== 'object') {
         errors.push("Missing or invalid 'initialScores'");
