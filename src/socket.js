@@ -139,6 +139,14 @@ module.exports = function setupSockets(io, engine) {
             }
         });
 
+        // Facilitator changes scenario stage
+        socket.on('change_stage', (stageIndex) => {
+            if (engine.setStage(stageIndex)) {
+                console.log(`Facilitator advanced scenario to stage index: ${stageIndex}`);
+                io.emit('state_update', engine.gameState);
+            }
+        });
+
         // Facilitator dismisses a pending decision
         socket.on('dismiss_decision', (taskId) => {
             if (engine.dismissTask(taskId)) {

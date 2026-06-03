@@ -128,8 +128,15 @@
             <!-- Controls -->
             <!-- Interactive Scenario Explorer (Replacing Available Events) -->
             <div class="admin-card span-2" style="grid-column: span 2; display: flex; flex-direction: column;">
-                <h2>Scenario Explorer</h2>
-                <p class="text-sm text-secondary mb-1">Click nodes to view details and trigger events.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                    <h2>Scenario Explorer</h2>
+                    <div id="stage-controls" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button class="btn" style="padding: 0.2rem 0.5rem; margin: 0;" onclick="window.changeStage(-1)">&lt;</button>
+                        <span id="current-stage-display" style="font-weight: bold; color: var(--accent-blue);">Stage 1</span>
+                        <button class="btn" style="padding: 0.2rem 0.5rem; margin: 0;" onclick="window.changeStage(1)">&gt;</button>
+                    </div>
+                </div>
+                <p class="text-sm text-secondary mb-1">Click nodes to view details and trigger events. Events from future stages are hidden.</p>
                 <div id="scenario-explorer-container" class="fac-event-list">
                     <!-- Tree injected via JS -->
                 </div>

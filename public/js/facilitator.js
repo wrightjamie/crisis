@@ -458,7 +458,28 @@ function renderEventButtons() {
     if (window.renderScenarioExplorer) {
         window.renderScenarioExplorer();
     }
+    
+    // Update Stage Display
+    if (currentState && currentState.scenarioConfig && currentState.scenarioConfig.stages) {
+        const stages = currentState.scenarioConfig.stages;
+        const currentStageIndex = currentState.currentStageIndex || 0;
+        const stageDisplay = document.getElementById('current-stage-display');
+        if (stageDisplay && stages[currentStageIndex]) {
+            stageDisplay.textContent = `Stage ${currentStageIndex + 1}: ${stages[currentStageIndex].name}`;
+        }
+    }
 }
+
+window.changeStage = function(delta) {
+    if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.stages) return;
+    const maxStage = currentState.scenarioConfig.stages.length - 1;
+    const currentStage = currentState.currentStageIndex || 0;
+    const newStage = Math.max(0, Math.min(maxStage, currentStage + delta));
+    
+    if (newStage !== currentStage) {
+        socket.emit('change_stage', newStage);
+    }
+};
 
 
 

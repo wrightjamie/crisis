@@ -18,7 +18,8 @@ class GameEngine {
             unlockedEvents: [],
             scheduledEvents: [],
             aiBriefings: {},
-            aiScenarioSummaries: {}
+            aiScenarioSummaries: {},
+            currentStageIndex: 0
         };
     }
 
@@ -130,7 +131,8 @@ class GameEngine {
                 briefings: scenario.briefings || {},
                 variantBriefings: variantBriefings,
                 selectedVariantNames: selectedVariantNames,
-                aiConfig: scenario.aiConfig
+                aiConfig: scenario.aiConfig,
+                stages: scenario.stages || []
             },
             scores: scores,
             events: [],
@@ -140,11 +142,21 @@ class GameEngine {
             unlockedEvents: [],
             scheduledEvents: [],
             aiBriefings: {},
-            aiScenarioSummaries: {}
+            aiScenarioSummaries: {},
+            currentStageIndex: 0
         };
 
         this.connectedClients = {}; // reset roles
         return this.gameState;
+    }
+
+    setStage(stageIndex) {
+        if (this.gameState.status !== 'active' && this.gameState.status !== 'lobby') return false;
+        if (!this.gameState.scenarioConfig.stages || this.gameState.scenarioConfig.stages.length === 0) return false;
+        
+        const targetIndex = Math.max(0, Math.min(this.gameState.scenarioConfig.stages.length - 1, parseInt(stageIndex)));
+        this.gameState.currentStageIndex = targetIndex;
+        return true;
     }
 
     startGame() {

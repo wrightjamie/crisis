@@ -44,6 +44,12 @@ The top-level object representing a fully playable module.
     variantAxes: [            // Independent axes of variability (see Variant Axis Object)
         // ... See below ...
     ],
+    stages: [                 // Array of stages to group events and control pacing
+        {
+            id: "string",     // e.g., 'stage_1'
+            name: "string"    // e.g., 'Tension & Sabotage'
+        }
+    ],
     eventTemplates: [         // Array of all events (flat structure, no nesting)
         // ... See Event Template Object ...
     ],
@@ -92,6 +98,7 @@ Events define map incidents and generate decision tasks for players.
 {
     id: "string",             // Unique identifier referenced by triggers/unlocks
     name: "string",           // Display title
+    stage: "string",          // (Optional) ID of the stage this belongs to
     description: "string",    // General description visible to everyone
     image: "string",          // (Optional) URL path to a dramatic, tactical image of the crisis
     location: [lat, lng],     // Where the marker drops on the map

@@ -190,9 +190,18 @@ CRITICAL RULES:
             { id: 'a_astute', name: 'Astute Class Submarine', location: [56.07, -4.81], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/images/assets/astute_class_submarine.png', briefing: 'Astute-class nuclear attack submarines are actively deployed. Their exact locations are classified, but they are tasked with shadowing hostile ballistic missile submarines.' },
             { id: 'a_vanguard', name: 'Vanguard Class Submarine', location: [56.06, -4.82], state: 'operational', tags: ['military', 'naval', 'sub', 'strategic'], image: '/images/assets/vanguard_class_sub.png', briefing: 'The Vanguard-class carries the UK\'s Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure.' }
         ],
+        
+        stages: [
+            { id: 'stage_1', name: 'Intelligence & Warnings' },
+            { id: 'stage_2', name: 'Tension & Sabotage' },
+            { id: 'stage_3', name: 'Initial Skirmishes' },
+            { id: 'stage_4', name: 'Open Kinetic Conflict' },
+            { id: 'stage_5', name: 'Escalation / Resolution' }
+        ],
         eventTemplates: [
             {
                 id: 'ev_cyber_london',
+                stage: 'stage_2',
                 name: 'Major Cyber Attack on London Financial District',
                 prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
@@ -226,6 +235,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_protest_manchester',
+                stage: 'stage_1',
                 name: 'Mass Anti-War Protests in Manchester',
                 repeatable: false,
                 location: [53.48, -2.24],
@@ -249,6 +259,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_logistics_failure',
+                stage: 'stage_2',
                 name: 'Coordinated Logistics Failure',
                 repeatable: false,
                 location: [51.5, -0.1], // General UK
@@ -288,6 +299,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_cyber_exposure',
+                stage: 'stage_1',
                 name: 'Allied Intelligence Leak: Cyber Operations Exposed',
                 prerequisites: ['ev_cyber_london'],
                 repeatable: false,
@@ -321,6 +333,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_airspace_intercept',
+                stage: 'stage_3',
                 name: 'Airspace Intercept Incident',
                 prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
@@ -353,6 +366,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_maritime_shadowing',
+                stage: 'stage_1',
                 name: 'Maritime Shadowing & Infrastructure Tension',
                 prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
@@ -420,6 +434,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_kinetic_strike',
+                stage: 'stage_4',
                 name: 'Kinetic Incident Against UK Military Asset',
                 prerequisites: ['ev_maritime_shadowing'],
                 conditions: { minScores: { military_escalation: 3 } },
@@ -454,6 +469,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_sub_surfaces',
+                stage: 'stage_3',
                 name: 'Russian Submarine Surfaces in the Channel',
                 prerequisites: [],
                 conditions: { maxScores: { civilian_stability: 4 } },
@@ -486,6 +502,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_undersea_cables',
+                stage: 'stage_2',
                 name: 'Severing of Undersea Internet Cables',
                 prerequisites: [],
                 conditions: { minScores: { uk_russia: 3 } },
@@ -510,6 +527,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_uk_casualty_leak',
+                stage: 'stage_2',
                 name: 'UK Forces Casualty Leaks to Press',
                 prerequisites: [],
                 repeatable: false,
@@ -541,6 +559,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_chemical_attempt',
+                stage: 'stage_5',
                 name: 'Attempted Chemical Attack on UK Soil',
                 prerequisites: [],
                 conditions: { minScores: { uk_russia: 3, military_escalation: 2 } },
@@ -573,6 +592,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_us_neutrality',
+                stage: 'stage_5',
                 name: 'US Declares European Neutrality',
                 prerequisites: [],
                 conditions: { maxScores: { uk_us: 2 } },
@@ -605,6 +625,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_akrotiri_strike',
+                stage: 'stage_3',
                 name: 'Hypersonic Strike on RAF Akrotiri',
                 prerequisites: ['ev_uk_casualty_leak'],
                 conditions: { minScores: { military_escalation: 3 } },
@@ -629,6 +650,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_article5_ambiguity',
+                stage: 'stage_5',
                 name: 'NATO Article 5 Ambiguity',
                 prerequisites: ['ev_akrotiri_strike'],
                 repeatable: false,
@@ -652,6 +674,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_raf_bases_strike',
+                stage: 'stage_4',
                 name: 'Coordinated Strikes on RAF Bases',
                 prerequisites: ['ev_akrotiri_strike'],
                 conditions: { minScores: { military_escalation: 4 } },
@@ -676,6 +699,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_portsmouth_strike',
+                stage: 'stage_4',
                 name: 'Strike on HMNB Portsmouth',
                 prerequisites: ['ev_raf_bases_strike'],
                 repeatable: false,
@@ -699,6 +723,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_faslane_strike_1',
+                stage: 'stage_4',
                 name: 'First Strike on HMNB Clyde (Faslane)',
                 prerequisites: ['ev_raf_bases_strike'],
                 repeatable: false,
@@ -722,6 +747,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_faslane_strike_2',
+                stage: 'stage_4',
                 name: 'Second Strike on HMNB Clyde',
                 prerequisites: ['ev_faslane_strike_1'],
                 conditions: { minScores: { military_escalation: 4 } },
@@ -746,6 +772,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_power_grid_strike',
+                stage: 'stage_4',
                 name: 'Targeted Strike on UK Power Grid',
                 prerequisites: ['ev_raf_bases_strike'],
                 conditions: { minScores: { military_escalation: 4 } },
@@ -770,6 +797,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_airspace_incursion',
+                stage: 'stage_3',
                 name: 'Total Airspace Incursion',
                 prerequisites: [],
                 conditions: { minScores: { military_escalation: 5 }, maxScores: { uk_us: 2, uk_europe: 3 } },
@@ -794,6 +822,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_nuclear_readiness',
+                stage: 'stage_4',
                 name: 'Imminent Nuclear Readiness Detected',
                 prerequisites: ['ev_airspace_incursion'],
                 conditions: { minScores: { military_escalation: 5 } },
@@ -818,6 +847,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_final_authorization',
+                stage: 'stage_5',
                 name: 'The Final Authorization (Trident Decision)',
                 prerequisites: ['ev_nuclear_readiness'],
                 conditions: { minScores: { military_escalation: 5 } },
@@ -845,6 +875,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_us_support_success',
+                stage: 'stage_4',
                 name: 'US Authorizes Logistics Support',
                 hidden: true,
                 description: 'The US administration has approved the immediate redirection of heavy airlift and logistics support to the UK.',
@@ -857,6 +888,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_us_support_fail',
+                stage: 'stage_4',
                 name: 'US Declines Immediate Logistics Support',
                 hidden: true,
                 description: 'The US administration has politely declined to redirect strategic airlift to the UK at this time, citing other global commitments.',
@@ -869,6 +901,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_russia_deescalate',
+                stage: 'stage_5',
                 name: 'Backchannel Success: Russia Agrees to Pause',
                 hidden: true,
                 description: 'Following a tense emergency backchannel communication, Russian leadership has agreed to a temporary tactical pause, conditional on a reduction in UK military posture.',
@@ -881,6 +914,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_russia_leak',
+                stage: 'stage_5',
                 name: 'Backchannel Failure: Russia Leaks Call',
                 hidden: true,
                 description: 'Russia has leaked edited transcripts of our emergency backchannel communication, portraying the UK as begging for a ceasefire.',
@@ -893,6 +927,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_cyber_success',
+                stage: 'stage_3',
                 name: 'Covert Cyber Offensive Successful',
                 hidden: true,
                 description: 'A major covert cyber offensive against Russian logistics networks has been highly successful, degrading their command and control without immediate attribution.',
@@ -904,6 +939,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_cyber_fail',
+                stage: 'stage_3',
                 name: 'Covert Cyber Offensive Thwarted',
                 hidden: true,
                 description: 'Our covert cyber offensive was detected and neutralized by Russian defenses. They are now publicly attributing the attack to the UK.',
@@ -916,6 +952,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_sf_success',
+                stage: 'stage_3',
                 name: 'Special Forces Operation Success',
                 hidden: true,
                 description: 'A highly classified Special Forces operation has successfully secured critical intelligence on Russian deployments without detection.',
@@ -927,6 +964,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_sf_fail',
+                stage: 'stage_3',
                 name: 'Special Forces Operation Compromised',
                 hidden: true,
                 description: 'A classified Special Forces operation has been compromised. Several operators have been captured and are being paraded on Russian state media.',
@@ -939,6 +977,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_f35_success',
+                stage: 'stage_4',
                 name: 'Deep Strike Success',
                 hidden: true,
                 description: 'Our F-35s successfully bypassed Russian air defenses and destroyed a key strategic asset without losses. Russian leadership appears stunned and is signaling a desire to de-escalate.',
@@ -951,6 +990,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_f35_fail',
+                stage: 'stage_4',
                 name: 'Deep Strike Failure',
                 hidden: true,
                 description: 'Our F-35 strike package was intercepted. We have lost multiple advanced airframes and pilots. Russia considers this an act of total war.',
@@ -963,6 +1003,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_eu_success',
+                stage: 'stage_4',
                 name: 'European Coalition Formed',
                 hidden: true,
                 description: 'A historic European Defense Coalition has been cemented, uniting the continent behind the UK. Russia realizes it cannot divide and conquer.',
@@ -974,6 +1015,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_eu_fail',
+                stage: 'stage_4',
                 name: 'European Coalition Fails',
                 hidden: true,
                 description: 'Our attempts to forge a unified European defense bloc have failed spectacularly amid internal bickering. We look weak and divided.',
@@ -985,6 +1027,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_endgame_diplomatic',
+                stage: 'stage_5',
                 name: 'END GAME: Diplomatic Breakthrough',
                 description: 'A neutral third party has successfully brokered a ceasefire. Russian forces hold in place. The immediate existential threat to the UK is lifted, though a new Cold War begins.',
                 location: [46.2044, 6.1432], // Geneva
@@ -998,6 +1041,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_endgame_domestic',
+                stage: 'stage_5',
                 name: 'END GAME: Domestic Collapse',
                 description: 'Before nuclear war can even begin, the UK government collapses due to riots, power grid failures, and complete loss of public confidence. The military is forced to step in to maintain order, withdrawing from the international conflict entirely.',
                 location: [51.5072, -0.1276],
@@ -1011,6 +1055,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_endgame_eu_defense',
+                stage: 'stage_5',
                 name: 'END GAME: European Defence Pact',
                 description: 'European allies and the UK launch a massive, coordinated conventional defense. Faced with an unwinnable correlation of forces, Russia withdraws. A costly but decisive conventional victory.',
                 location: [50.8503, 4.3517],
@@ -1024,6 +1069,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_strike_options_leak',
+                stage: 'stage_4',
                 name: 'Strike Planning Leaked',
                 hidden: true,
                 description: 'Intelligence regarding our requests for deep strike target packages has leaked. Russia is infuriated, and some European allies are questioning our escalation control.',
@@ -1036,6 +1082,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_strike_options_secured',
+                stage: 'stage_4',
                 name: 'Strike Planning Secured',
                 hidden: true,
                 description: 'The CDS has successfully compartmentalized the target package requests. No intelligence has leaked.',
@@ -1047,6 +1094,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_strike_options_ready',
+                stage: 'stage_4',
                 name: 'Strike Options Ready',
                 hidden: true,
                 description: 'The Chief of Defence Staff has finalized the deep strike target packages. We have viable options against a forward Russian airbase or a critical Command & Control node.',

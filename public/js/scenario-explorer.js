@@ -45,7 +45,21 @@ function renderScenarioExplorer() {
             }
         }
         
-        const children = allTemplates.filter(t => !t.hidden && t.prerequisites && t.prerequisites.includes(templateId));
+        const stages = currentState.scenarioConfig.stages || [];
+        const currentStageIndex = currentState.currentStageIndex || 0;
+        
+        function getStageIndex(stageId) {
+            if (!stageId) return 0;
+            const idx = stages.findIndex(s => s.id === stageId);
+            return idx !== -1 ? idx : 0;
+        }
+
+        // Filter children by stage
+        const children = allTemplates.filter(t => {
+            if (t.hidden || !t.prerequisites || !t.prerequisites.includes(templateId)) return false;
+            return getStageIndex(t.stage) <= currentStageIndex;
+        });
+        
         const hasChildren = children.length > 0;
         
         // Determine if node is triggered to set default expansion
@@ -93,29 +107,67 @@ function renderScenarioExplorer() {
         return nodeHtml;
     }
     
-    let html = `
-        <div style="padding: 1rem; background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto;">
-            <ul class="scenario-tree" style="padding-left: 2.5rem;">
-    `;
+    let html = `<div style="padding: 1rem; background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto;">`;
     
-    // Find roots (excluding hidden ones)
-    const roots = allTemplates.filter(t => !t.hidden && (!t.prerequisites || t.prerequisites.length === 0));
-    roots.forEach(root => {
-        html += renderNode(root.id, true);
-    });
+    const stages = currentState.scenarioConfig.stages || [];
+    const currentStageIndex = currentState.currentStageIndex || 0;
     
-    // Render any unconnected nodes
-    allTemplates.forEach(t => {
-        if (!t.hidden && !renderedNodes.has(t.id)) {
-            html += renderNode(t.id, true);
+    function getStageIndex(stageId) {
+        if (!stageId) return 0;
+        const idx = stages.findIndex(s => s.id === stageId);
+        return idx !== -1 ? idx : 0;
+    }
+
+    if (stages.length === 0) {
+        // Fallback if no stages defined
+        html += `<ul class="scenario-tree" style="padding-left: 2.5rem;">`;
+        const roots = allTemplates.filter(t => !t.hidden && (!t.prerequisites || t.prerequisites.length === 0));
+        roots.forEach(root => { html += renderNode(root.id, true); });
+        allTemplates.forEach(t => { if (!t.hidden && !renderedNodes.has(t.id)) html += renderNode(t.id, true); });
+        html += `</ul>`;
+    } else {
+        // Render each stage as a collapsible block
+        for (let i = 0; i <= currentStageIndex; i++) {
+            const stage = stages[i];
+            if (!stage) continue;
+            
+            const stageEvents = allTemplates.filter(t => !t.hidden && getStageIndex(t.stage) === i);
+            const roots = stageEvents.filter(t => !t.prerequisites || t.prerequisites.length === 0);
+            
+            const isCurrentStage = i === currentStageIndex;
+            const displayStyle = isCurrentStage ? 'block' : 'none';
+            const toggleText = isCurrentStage ? '[-]' : '[+]';
+            
+            html += `
+                <div style="margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden;">
+                    <div onclick="const ul = this.nextElementSibling; if(ul.style.display==='none'){ul.style.display='block';this.querySelector('.toggle').textContent='[-]'}else{ul.style.display='none';this.querySelector('.toggle').textContent='[+]'}" style="background: var(--bg-secondary); padding: 0.5rem 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: bold; color: var(--accent-blue);">Stage ${i + 1}: ${stage.name}</span>
+                        <span class="toggle" style="font-family: monospace;">${toggleText}</span>
+                    </div>
+                    <div style="display: ${displayStyle}; padding: 1rem; background: var(--bg-primary);">
+                        <ul class="scenario-tree" style="padding-left: 1.5rem;">
+            `;
+            
+            roots.forEach(root => {
+                html += renderNode(root.id, true);
+            });
+            
+            // Unconnected nodes in this stage (that weren't rendered as children of other roots)
+            stageEvents.forEach(t => {
+                if (!renderedNodes.has(t.id)) {
+                    html += renderNode(t.id, true);
+                }
+            });
+            
+            html += `
+                        </ul>
+                    </div>
+                </div>
+            `;
         }
-    });
+    }
     
-    html += `
-            </ul>
-        </div>
-    `;
-    
+    html += `</div>`;
     container.innerHTML = html;
 }
 
