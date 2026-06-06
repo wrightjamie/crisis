@@ -94,15 +94,15 @@
         </div>
     </header>
 
-    <div id="facilitator-holding-screen" class="fac-dashboard-container">
+    <dialog id="facilitator-holding-screen" class="fac-dashboard-container">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
         <div id="scenarios-list" class="fac-dashboard-grid">
             <!-- Scenarios injected via JS -->
         </div>
-    </div>
+    </dialog>
 
     <!-- Lobby Screen -->
-    <div class="facilitator-container fac-modal-content" id="facilitator-lobby-screen">
+    <dialog class="facilitator-container fac-modal-content" id="facilitator-lobby-screen">
         <h1 class="mb-2 text-center text-primary">Scenario Lobby</h1>
         <div class="admin-card text-center mb-2">
             <h2 id="lobby-scenario-title" class="mb-1">Scenario Name</h2>
@@ -120,7 +120,7 @@
                 <button class="btn m-0" onclick="window.endScenario()">Cancel / Back to Holding</button>
             </div>
         </div>
-    </div>
+    </dialog>
 
     <div class="facilitator-container" id="facilitator-dashboard">
         <div class="grid">
@@ -142,16 +142,7 @@
                 </div>
             </div>
 
-            <!-- Terminal Events / End Games -->
-            <div class="admin-card span-2 border-red" >
-                <details open>
-                    <summary><h2 class="text-red">Terminal Scenarios (End Games)</h2></summary>
-                    <p class="text-sm text-secondary mb-1">Triggering these will end the game and lock the players' screens.</p>
-                    <div id="terminal-scenarios-list" class="action-list">
-                        <!-- Injected via JS -->
-                    </div>
-                </details>
-            </div>
+
 
             <!-- State View (Moved Up) -->
             <div class="admin-card">
@@ -169,15 +160,7 @@
             </div>
 
             <!-- New Panels -->
-            <div class="admin-card">
-                <details open>
-                    <summary><h2>Pending Conditions</h2></summary>
-                    <p class="text-sm text-secondary mb-1">Events unlocked but awaiting score criteria.</p>
-                    <div id="pending-conditions-events" class="action-list">
-                        <!-- Injected via JS -->
-                    </div>
-                </details>
-            </div>
+
 
             <div class="admin-card">
                 <details open>

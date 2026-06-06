@@ -12,19 +12,19 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="view-map"> <!-- Default to map view on mobile -->
-    <div id="holding-screen" class="client-holding-overlay">
+    <dialog id="holding-screen" class="client-holding-overlay">
         <h1 class="mb-1">Waiting for Game to Start</h1>
         <p class="text-secondary">The facilitator is selecting a scenario...</p>
-    </div>
+    </dialog>
 
-    <div id="role-selection-screen" class="client-holding-hidden">
+    <dialog id="role-selection-screen" class="client-holding-hidden">
         <h1 class="mb-2 text-center text-primary">Select Your Station</h1>
         <div id="role-buttons" class="client-role-grid">
             <!-- Buttons injected by JS -->
         </div>
-    </div>
+    </dialog>
 
-    <div id="briefing-screen" class="briefing-screen">
+    <dialog id="briefing-screen" class="briefing-screen">
         <div class="briefing-content">
             <h1 id="briefing-title" class="text-center mb-1">SITUATION BRIEFING</h1>
             <p id="briefing-subtitle" class="text-center text-muted text-sm mb-2 uppercase"></p>
@@ -33,7 +33,7 @@
             </div>
             <button id="btn-continue-briefing" class="btn btn-primary w-100 mt-1 text-md">CONTINUE TO MAP</button>
         </div>
-    </div>
+    </dialog>
 
     <div id="app" style="display: none;">
         <!-- Top Bar -->
@@ -68,14 +68,14 @@
     </div>
 
     <!-- End Game Screen -->
-    <div id="endgame-screen" class="holding-screen scenario-overlay">
+    <dialog id="endgame-screen" class="holding-screen scenario-overlay">
         <div class="holding-content text-center scenario-modal">
             <h1 id="endgame-title" class="text-red mb-2" >SIMULATION TERMINATED</h1>
             <p id="endgame-desc" class="text-lg text-secondary mb-3" ></p>
             <div id="endgame-role-desc" class="card bg-red-faded border-red p-2 mb-2 d-none" ></div>
             <p class="text-muted mt-3">Awaiting facilitator reset...</p>
         </div>
-    </div>
+    </dialog>
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>

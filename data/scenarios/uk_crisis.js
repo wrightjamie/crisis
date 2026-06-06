@@ -292,7 +292,7 @@ CRITICAL RULES:
                         role: 'cyber',
                         text: 'Shall we authorise a covert cyber response?',
                         options: [
-                            { id: 'opt_log_5', text: 'Authorise Limited Covert Cyber Response', effects: { scores: { uk_russia: +1, military_escalation: +2, uk_us: -1 } } },
+                            { id: 'opt_log_5', text: 'Authorise Limited Covert Cyber Response', effects: { scores: { uk_russia: +1, military_escalation: +2, uk_us: -1 }, triggerEvents: [{ id: 'ev_cyber_exposure', probability: 0.5, delayMs: 15000 }] } },
                             { id: 'opt_log_6', text: 'Maintain Defensive Posture', effects: { scores: { military_escalation: -1 } } }
                         ]
                     }
@@ -300,9 +300,10 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_cyber_exposure',
-                stage: 'stage_1',
+                stage: 'stage_2',
                 name: 'Allied Intelligence Leak: Cyber Operations Exposed',
-                prerequisites: ['ev_cyber_london'],
+                requiresUnlock: true,
+                prerequisites: [],
                 repeatable: false,
                 location: [51.5, -0.1], // General UK
                 image: '/images/events/ev_cyber_exposure.png',
@@ -369,7 +370,7 @@ CRITICAL RULES:
                 id: 'ev_maritime_shadowing',
                 stage: 'stage_1',
                 name: 'Maritime Shadowing & Infrastructure Tension',
-                prerequisites: ['ev_logistics_failure'],
+                prerequisites: [],
                 repeatable: true,
                 location: [57.0, -15.0], // Atlantic near GIUK gap
                 image: '/images/events/ev_maritime_shadowing.png',

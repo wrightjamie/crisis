@@ -12,13 +12,14 @@
   --accent-red: #ef4444;
   --accent-green: #10b981;
   --accent-orange: #f59e0b;
+  --accent-orange-dark: #f97316;
   
   /* Status Colors (1-5 scale) */
-  --status-1: #10b981; /* Stable */
-  --status-2: #3b82f6; /* Managed */
-  --status-3: #f59e0b; /* Strained */
-  --status-4: #f97316; /* Crisis */
-  --status-5: #ef4444; /* Critical */
+  --status-1: var(--accent-green); /* Stable */
+  --status-2: var(--accent-blue); /* Managed */
+  --status-3: var(--accent-orange); /* Strained */
+  --status-4: var(--accent-orange-dark); /* Crisis */
+  --status-5: var(--accent-red); /* Critical */
 
   /* Typography */
   --font-normal: 400;

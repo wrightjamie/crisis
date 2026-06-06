@@ -15,6 +15,11 @@ const holdingScreen = document.getElementById('holding-screen');
 const roleSelectionScreen = document.getElementById('role-selection-screen');
 const roleButtonsContainer = document.getElementById('role-buttons');
 const briefingScreen = document.getElementById('briefing-screen');
+const endgameScreen = document.getElementById('endgame-screen');
+
+[holdingScreen, roleSelectionScreen, briefingScreen, endgameScreen].forEach(el => {
+    if (el) el.addEventListener('cancel', e => e.preventDefault());
+});
 
 const roleDisplay = document.getElementById('role-display');
 const mainContent = document.getElementById('main-content');
@@ -35,18 +40,18 @@ socket.on('active_roles', (roles) => {
 
 function switchView(viewName) {
     // Hide all
-    roleSelectionScreen.style.display = 'none';
-    holdingScreen.style.display = 'none';
-    briefingScreen.style.display = 'none';
+    if (roleSelectionScreen.open) roleSelectionScreen.close();
+    if (holdingScreen.open) holdingScreen.close();
+    if (briefingScreen.open) briefingScreen.close();
     appEl.style.display = 'none';
 
     // Show requested
     switch (viewName) {
         case 'role_selection':
-            roleSelectionScreen.style.display = 'flex';
+            if (!roleSelectionScreen.open) roleSelectionScreen.showModal();
             break;
         case 'lobby':
-            holdingScreen.style.display = 'flex';
+            if (!holdingScreen.open) holdingScreen.showModal();
             const h1 = holdingScreen.querySelector('h1');
             const p = holdingScreen.querySelector('p');
             const roleNames = localState.scenarioConfig ? (localState.scenarioConfig.roleNames || {}) : {};
@@ -55,7 +60,7 @@ function switchView(viewName) {
             if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
             break;
         case 'briefing':
-            briefingScreen.style.display = 'flex';
+            if (!briefingScreen.open) briefingScreen.showModal();
             break;
         case 'map':
             appEl.style.display = 'grid';
@@ -66,6 +71,7 @@ function switchView(viewName) {
 
 socket.on('role_registered', (registeredRole) => {
     role = registeredRole;
+    sessionStorage.setItem('crisis_role', registeredRole);
     roleDisplay.textContent = role.toUpperCase();
     if (role === 'display') {
         document.body.classList.add('role-display');
@@ -79,7 +85,9 @@ socket.on('role_registered', (registeredRole) => {
     if (localState.status === 'lobby') {
         switchView('lobby');
     } else {
-        if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+        if (sessionStorage.getItem('crisis_view_state') === 'map') {
+            switchView('map');
+        } else if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
             showBriefing();
         } else {
             switchView('map');
@@ -89,6 +97,9 @@ socket.on('role_registered', (registeredRole) => {
 
 socket.on('role_error', (msg) => {
     alert(msg);
+    sessionStorage.removeItem('crisis_role');
+    role = null;
+    switchView('role_selection');
 });
 
 if (btnWiki) {
@@ -220,8 +231,9 @@ function showBriefing() {
 }
 
 function enterMap() {
+    sessionStorage.setItem('crisis_view_state', 'map');
     switchView('map');
-    refreshEventFeed();
+    if (typeof refreshEventFeed === 'function') refreshEventFeed();
 }
 
 function openPanel(title) {
@@ -258,10 +270,81 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 // Keep track of markers to update/remove them
 let mapMarkers = {};
 let viewedEvents = new Set();
+let edgeMarkersContainer = null;
+
+// Edge marker logic
+function updateEdgeMarkers() {
+    if (!edgeMarkersContainer) {
+        edgeMarkersContainer = document.createElement('div');
+        edgeMarkersContainer.id = 'edge-markers-container';
+        edgeMarkersContainer.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; overflow: hidden;';
+        document.getElementById('map').appendChild(edgeMarkersContainer);
+    }
+    
+    edgeMarkersContainer.innerHTML = '';
+    if (!localState || !localState.events) return;
+    
+    const bounds = map.getBounds();
+    const mapSize = map.getSize();
+    
+    if (mapSize.x === 0 || mapSize.y === 0) return;
+    
+    const w = mapSize.x / 2;
+    const h = mapSize.y / 2;
+    
+    localState.events.forEach(evt => {
+        const eventTasks = localState.decisionTasks.filter(t => t.eventId === evt.id);
+        const hasTasks = eventTasks.length > 0;
+        let isResolved = hasTasks ? eventTasks.every(t => t.status === 'resolved') : viewedEvents.has(evt.id);
+        
+        if (isResolved) return; // Only point to unresolved events
+        
+        const latLng = L.latLng(evt.location);
+        if (bounds.contains(latLng)) return; 
+        
+        const pt = map.latLngToContainerPoint(latLng);
+        const dxRaw = pt.x - w;
+        const dyRaw = pt.y - h;
+        const angle = Math.atan2(dyRaw, dxRaw);
+        
+        let dx = Math.cos(angle);
+        let dy = Math.sin(angle);
+        
+        if (Math.abs(dx) < 0.0001) dx = dx > 0 ? 0.0001 : -0.0001;
+        if (Math.abs(dy) < 0.0001) dy = dy > 0 ? 0.0001 : -0.0001;
+        
+        const tX = dx > 0 ? w / dx : -w / dx;
+        const tY = dy > 0 ? h / dy : -h / dy;
+        const t = Math.min(tX, tY) - 10; // 10px padding from the edge
+        
+        const edgeX = w + dx * t;
+        const edgeY = h + dy * t;
+        
+        const indicator = document.createElement('div');
+        indicator.className = 'map-marker map-marker-edge';
+        indicator.style.left = `${edgeX}px`;
+        indicator.style.top = `${edgeY}px`;
+        
+        indicator.onclick = () => {
+            map.flyTo(latLng, map.getZoom());
+        };
+        
+        edgeMarkersContainer.appendChild(indicator);
+    });
+}
+
+map.on('move', updateEdgeMarkers);
+map.on('zoom', updateEdgeMarkers);
+map.on('resize', updateEdgeMarkers);
 
 // Register role on connect
 socket.on('connect', () => {
-    socket.emit('register_role', role);
+    const savedRole = sessionStorage.getItem('crisis_role');
+    if (savedRole) {
+        socket.emit('register_role', savedRole);
+    } else if (role) {
+        socket.emit('register_role', role);
+    }
 });
 
 // Socket events
@@ -275,13 +358,15 @@ socket.on('state_update', (state) => {
 
 function handleHoldingState() {
     role = null;
-    holdingScreen.style.display = 'flex';
+    sessionStorage.removeItem('crisis_role');
+    sessionStorage.removeItem('crisis_view_state');
+    if (!holdingScreen.open) holdingScreen.showModal();
     const h1 = holdingScreen.querySelector('h1');
     const p = holdingScreen.querySelector('p');
     if (h1) h1.textContent = "Waiting for Game to Start";
     if (p) p.textContent = "The facilitator is selecting a scenario...";
     
-    roleSelectionScreen.style.display = 'none';
+    if (roleSelectionScreen.open) roleSelectionScreen.close();
     appEl.style.display = 'none';
 
     // Clear markers when returning to hold
@@ -304,14 +389,16 @@ function handleLobbyState() {
 }
 
 function handleActiveState() {
-    holdingScreen.style.display = 'none';
+    if (holdingScreen.open) holdingScreen.close();
 
     if (!role) {
         switchView('role_selection');
         renderRoleSelection();
     } else {
-        if (appEl.style.display === 'none' && briefingScreen.style.display === 'none') {
-            if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+        if (appEl.style.display === 'none' && !briefingScreen.open) {
+            if (sessionStorage.getItem('crisis_view_state') === 'map') {
+                switchView('map');
+            } else if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
                 showBriefing();
             } else {
                 switchView('map');
@@ -323,8 +410,8 @@ function handleActiveState() {
 
 function _hideAllScreens() {
     appEl.style.display = 'none';
-    holdingScreen.style.display = 'none';
-    roleSelectionScreen.style.display = 'none';
+    if (holdingScreen.open) holdingScreen.close();
+    if (roleSelectionScreen.open) roleSelectionScreen.close();
 }
 
 function _applyEndgameContent(endgameEvent) {
@@ -350,7 +437,7 @@ function handleEndedState(state) {
     
     const endgameScreen = document.getElementById('endgame-screen');
     if (endgameScreen) {
-        endgameScreen.style.display = 'flex';
+        if (!endgameScreen.open) endgameScreen.showModal();
         
         const endgameEvent = state.events.find(e => e.templateId === state.endGameEventId);
         if (endgameEvent) {
@@ -484,6 +571,8 @@ function renderMap(events, assets) {
         marker.addTo(map);
         mapMarkers[evt.id] = marker;
     });
+
+    updateEdgeMarkers();
 }
 
 
