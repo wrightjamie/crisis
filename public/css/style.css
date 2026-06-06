@@ -140,14 +140,6 @@ body {
   margin-bottom: var(--space-md);
 }
 
-.variant-card {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: var(--space-sm) var(--space-md);
-  margin-bottom: var(--space-md);
-}
-
 .task-options {
   display: flex;
   flex-direction: column;
