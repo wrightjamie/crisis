@@ -284,14 +284,14 @@ function renderHoldingScreen() {
                 axesHtml += `<label class="text-base text-bold text-secondary mb-1 d-block">${axis.name}</label>`;
                 axesHtml += `<div class="flex-center gap-1 flex-wrap" id="axis-${s.id}-${axis.id}">`;
                 axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'variant-selected' : ''} text-sm p-1" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
+                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'variant-selected' : ''} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
                 });
                 axesHtml += '</div></div>';
                 // Default to first option
                 variantSelections[s.id][axis.id] = axis.options[0].id;
             });
 
-            axesHtml += `<button class="btn text-sm p-1 text-muted border-muted mt-1 bg-none" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
+            axesHtml += `<button class="btn text-muted border-muted mt-sm bg-none text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
             axesHtml += '</div>';
         }
 
