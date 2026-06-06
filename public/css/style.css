@@ -140,6 +140,14 @@ body {
   margin-bottom: var(--space-md);
 }
 
+.variant-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
 .task-options {
   display: flex;
   flex-direction: column;
@@ -669,7 +677,7 @@ body:has(dialog[open]) {
 .border-status-1 { border-left: 3px solid var(--status-1); }
 .btn-outline-blue { border: 1px solid var(--accent-blue); background: none; color: var(--accent-blue); width: 100%; padding: var(--space-sm); border-radius: var(--radius-sm); font-weight: var(--font-bold); cursor: pointer; }
 .btn-outline-blue:hover { background: var(--color-blue-faded); }
-.text-sm { font-size: var(--space-sm); }
+
 .ml-xs { margin-left: var(--space-xs); }
 .pb-xs { padding-bottom: var(--space-xs); }
 .border-bottom { border-bottom: 1px solid var(--border-color); }

@@ -280,7 +280,7 @@ function renderHoldingScreen() {
             axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
             
             s.variantAxes.forEach(axis => {
-                axesHtml += `<div class="btn wiki-back-btn">`;
+                axesHtml += `<div class="variant-card">`;
                 axesHtml += `<label class="text-base text-bold text-secondary mb-1 d-block">${axis.name}</label>`;
                 axesHtml += `<div class="flex-center gap-1 flex-wrap" id="axis-${s.id}-${axis.id}">`;
                 axis.options.forEach((opt, idx) => {
