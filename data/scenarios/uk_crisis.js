@@ -86,7 +86,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: -1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The second of the Royal Navy\'s Queen Elizabeth-class aircraft carriers, currently deployed to the Indo-Pacific for exercises.' }
+                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently deployed to the Indo-Pacific.' }
                         ]
                     },
                     {
@@ -98,7 +98,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: +1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'HMS Prince of Wales', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The second of the Royal Navy\'s Queen Elizabeth-class aircraft carriers, currently operating in home waters.' }
+                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/hms_prince_of_wales.png', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently operating in home waters.' }
                         ]
                     }
                 ]
@@ -185,10 +185,11 @@ CRITICAL RULES:
             { id: 'a_a400m', name: 'A400M Atlas', location: [51.74, -1.59], state: 'operational', tags: ['military', 'air', 'logistics'], image: '/images/assets/a400m_transport.png', briefing: 'The A400M Atlas provides tactical airlift capabilities. Heavy transport readiness is at 80%, critical for rapid deployment of personnel and equipment.' },
             { id: 'a_type45', name: 'Type 45 Destroyer', location: [50.80, -1.11], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/type_45_destroyer.png', briefing: 'Type 45 Daring-class destroyers form the backbone of the Royal Navy\'s air defense. HMS Defender is currently at sea providing a protective umbrella over carrier groups.' },
             { id: 'a_type23', name: 'Type 23 Frigate', location: [50.38, -4.18], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/type_23_frigate.png', briefing: 'The Type 23 Duke-class frigates are the core anti-submarine warfare (ASW) vessels. Two are currently tracking suspected Russian Akula-class submarines in the GIUK gap.' },
-            { id: 'a_type26', name: 'Type 26 Frigate', location: [55.88, -4.38], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/type_26_frigate.png', briefing: 'The advanced Type 26 City-class frigate provides next-generation ASW capabilities. Initial sea trials are being expedited due to rising tensions.' },
-            { id: 'a_qe', name: 'HMS Queen Elizabeth', location: [50.81, -1.09], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/qe_class_carrier.png', briefing: 'HMS Queen Elizabeth is the fleet flagship. Currently alongside in Portsmouth loading munitions and provisions for an extended North Atlantic deployment.' },
-            { id: 'a_astute', name: 'Astute Class Submarine', location: [56.07, -4.81], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/images/assets/astute_class_submarine.png', briefing: 'Astute-class nuclear attack submarines are actively deployed. Their exact locations are classified, but they are tasked with shadowing hostile ballistic missile submarines.' },
-            { id: 'a_vanguard', name: 'Vanguard Class Submarine', location: [56.06, -4.82], state: 'operational', tags: ['military', 'naval', 'sub', 'strategic'], image: '/images/assets/vanguard_class_sub.png', briefing: 'The Vanguard-class carries the UK\'s Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure.' }
+            { id: 'a_type26', name: 'Type 26 Frigate', location: [59.00, -10.00], state: 'operational', tags: ['military', 'naval'], image: '/images/assets/type_26_frigate.png', briefing: 'The advanced Type 26 City-class frigate provides next-generation ASW capabilities. Currently patrolling the North Atlantic.' },
+            { id: 'a_qe', name: 'HMS Queen Elizabeth', location: [56.02, -3.44], state: 'maintenance', tags: ['military', 'naval'], image: '/images/assets/qe_class_carrier.png', briefing: 'HMS Queen Elizabeth is the fleet flagship. Currently undergoing deep maintenance in Rosyth. Unavailable for immediate deployment.' },
+            { id: 'a_astute', name: 'Astute Class Submarine', location: [60.50, -5.00], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/images/assets/astute_class_submarine.png', briefing: 'Astute-class nuclear attack submarines are actively deployed. Their exact locations are classified, but they are tasked with shadowing hostile ballistic missile submarines.' },
+            { id: 'a_astute2', name: 'Astute Class Submarine (HMS Ambush)', location: [55.00, -0.50], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/images/assets/astute_class_submarine.png', briefing: 'A second Astute-class submarine currently patrolling the North Sea approaches to the UK.' },
+            { id: 'a_vanguard', name: 'Vanguard Class Submarine', location: [62.00, -15.00], state: 'operational', tags: ['military', 'naval', 'sub', 'strategic'], image: '/images/assets/vanguard_class_sub.png', briefing: 'The Vanguard-class carries the UK\'s Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure.' }
         ],
         
         stages: [

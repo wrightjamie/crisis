@@ -190,7 +190,7 @@ function showBriefing() {
     }
 
     html += `
-        <div class="briefing-section briefing-ai" style="border-left: 3px solid var(--status-1);">
+        <div class="briefing-section briefing-ai" class="border-status-1">
             <div class="briefing-section-label">Executive Summary</div>
             <div id="briefing-ai-summary-text" class="pre-wrap"><em>Writing your brief... Please wait.</em></div>
         </div>
@@ -273,81 +273,103 @@ socket.on('state_update', (state) => {
     handleStateUpdate(state);
 });
 
+function handleHoldingState() {
+    role = null;
+    holdingScreen.style.display = 'flex';
+    const h1 = holdingScreen.querySelector('h1');
+    const p = holdingScreen.querySelector('p');
+    if (h1) h1.textContent = "Waiting for Game to Start";
+    if (p) p.textContent = "The facilitator is selecting a scenario...";
+    
+    roleSelectionScreen.style.display = 'none';
+    appEl.style.display = 'none';
+
+    // Clear markers when returning to hold
+    for (let id in mapMarkers) {
+        map.removeLayer(mapMarkers[id]);
+    }
+    mapMarkers = {};
+    viewedEvents.clear();
+}
+
+function handleLobbyState() {
+    appEl.style.display = 'none';
+    
+    if (!role) {
+        switchView('role_selection');
+        renderRoleSelection();
+    } else {
+        switchView('lobby');
+    }
+}
+
+function handleActiveState() {
+    holdingScreen.style.display = 'none';
+
+    if (!role) {
+        switchView('role_selection');
+        renderRoleSelection();
+    } else {
+        if (appEl.style.display === 'none' && briefingScreen.style.display === 'none') {
+            if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+                showBriefing();
+            } else {
+                switchView('map');
+            }
+        }
+        updateUI();
+    }
+}
+
+function _hideAllScreens() {
+    appEl.style.display = 'none';
+    holdingScreen.style.display = 'none';
+    roleSelectionScreen.style.display = 'none';
+}
+
+function _applyEndgameContent(endgameEvent) {
+    const titleEl = document.getElementById('endgame-title');
+    const descEl = document.getElementById('endgame-desc');
+    const roleDescEl = document.getElementById('endgame-role-desc');
+
+    if (titleEl) titleEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.name) : endgameEvent.name;
+    if (descEl) descEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.description) : endgameEvent.description;
+    
+    if (role && endgameEvent.roleDescriptions && endgameEvent.roleDescriptions[role]) {
+        if (roleDescEl) {
+            roleDescEl.style.display = 'block';
+            roleDescEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.roleDescriptions[role]) : endgameEvent.roleDescriptions[role];
+        }
+    } else if (roleDescEl) {
+        roleDescEl.style.display = 'none';
+    }
+}
+
+function handleEndedState(state) {
+    _hideAllScreens();
+    
+    const endgameScreen = document.getElementById('endgame-screen');
+    if (endgameScreen) {
+        endgameScreen.style.display = 'flex';
+        
+        const endgameEvent = state.events.find(e => e.templateId === state.endGameEventId);
+        if (endgameEvent) {
+            _applyEndgameContent(endgameEvent);
+        }
+    }
+}
+
 function handleStateUpdate(state) {
     localState = state;
 
     if (state.status === 'holding') {
-        role = null;
-        holdingScreen.style.display = 'flex';
-        const h1 = holdingScreen.querySelector('h1');
-        const p = holdingScreen.querySelector('p');
-        if (h1) h1.textContent = "Waiting for Game to Start";
-        if (p) p.textContent = "The facilitator is selecting a scenario...";
-        
-        roleSelectionScreen.style.display = 'none';
-        appEl.style.display = 'none';
-
-        // Clear markers when returning to hold
-        for (let id in mapMarkers) {
-            map.removeLayer(mapMarkers[id]);
-        }
-        mapMarkers = {};
-        viewedEvents.clear();
-
+        handleHoldingState();
     } else if (state.status === 'lobby') {
-        appEl.style.display = 'none';
-        
-        if (!role) {
-            switchView('role_selection');
-            renderRoleSelection();
-        } else {
-            switchView('lobby');
-        }
+        handleLobbyState();
     } else if (state.status === 'active') {
-        holdingScreen.style.display = 'none';
-
-        if (!role) {
-            switchView('role_selection');
-            renderRoleSelection();
-        } else {
-            if (appEl.style.display === 'none' && briefingScreen.style.display === 'none') {
-                if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
-                    showBriefing();
-                } else {
-                    switchView('map');
-                }
-            }
-            updateUI();
-        }
+        handleActiveState();
     } else if (state.status === 'ended') {
-        appEl.style.display = 'none';
-        holdingScreen.style.display = 'none';
-        roleSelectionScreen.style.display = 'none';
-        
-        const endgameScreen = document.getElementById('endgame-screen');
-        const titleEl = document.getElementById('endgame-title');
-        const descEl = document.getElementById('endgame-desc');
-        const roleDescEl = document.getElementById('endgame-role-desc');
-        
-        if (endgameScreen) {
-            endgameScreen.style.display = 'flex';
-            
-            // Find the endgame event in the state
-            const endgameEvent = state.events.find(e => e.templateId === state.endGameEventId);
-            if (endgameEvent) {
-                if (titleEl) titleEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.name) : endgameEvent.name;
-                if (descEl) descEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.description) : endgameEvent.description;
-                
-                if (role && endgameEvent.roleDescriptions && endgameEvent.roleDescriptions[role]) {
-                    if (roleDescEl) {
-                        roleDescEl.style.display = 'block';
-                        roleDescEl.textContent = window.parseAcronyms ? window.parseAcronyms(endgameEvent.roleDescriptions[role]) : endgameEvent.roleDescriptions[role];
-                    }
-                } else if (roleDescEl) {
-                    roleDescEl.style.display = 'none';
-                }
-            }
-        }
+        handleEndedState(state);
     }
 }
 
@@ -417,7 +439,7 @@ function renderMap(events, assets) {
 
     // Add assets
     assets.forEach(asset => {
-        const iconHtml = `<div class="bg-blue w-12 h-12 radius-full border-white"></div>`;
+        const iconHtml = `<div class="map-marker map-marker-asset"></div>`;
         const icon = L.divIcon({ html: iconHtml, className: '' });
         const marker = L.marker(asset.location, { icon });
 
@@ -444,10 +466,9 @@ function renderMap(events, assets) {
             isResolved = viewedEvents.has(evt.id);
         }
         
-        const bgColor = isResolved ? 'var(--text-muted)' : 'var(--accent-red)';
-        const animation = isResolved ? '' : 'animation: pulse 2s infinite;';
+        const markerClass = isResolved ? 'map-marker-event-resolved' : 'map-marker-event';
         
-        const iconHtml = `<div style="background-color: ${bgColor}; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; ${animation}"></div>`;
+        const iconHtml = `<div class="map-marker ${markerClass}"></div>`;
         const icon = L.divIcon({ html: iconHtml, className: '' });
         const marker = L.marker(evt.location, { icon });
 
@@ -467,188 +488,192 @@ function renderMap(events, assets) {
 
 
 
+function buildAiPanelHtml(p) {
+    const aiBriefing = localState.aiBriefings && localState.aiBriefings[role];
+    
+    let html = `
+        <div class="mb-3">
+            ${aiBriefing && aiBriefing.text ? `<p class="text-base lh-16">${p(aiBriefing.text)}</p>` : '<p class="text-muted">Briefing is currently unavailable.</p>'}
+        </div>
+    `;
+
+    if (aiBriefing && aiBriefing.seeds && aiBriefing.seeds.length > 0) {
+        html += `<h4 class="mb-sm text-secondary">Score Changes</h4>
+                 <ul class="list-none p-0 m-0 text-sm text-muted">`;
+        aiBriefing.seeds.forEach(seed => {
+            html += `<li class="mb-05">• ${p(seed.text)}</li>`;
+        });
+        html += `</ul>`;
+    }
+    
+    html += `
+        <div class="mt-2">
+            <button id="btn-request-ai-briefing" class="btn" class="w-100 btn-outline-blue">Request Full Refresh</button>
+        </div>
+    `;
+    
+    return html;
+}
+
+function buildEventPanelHtml(p) {
+    const evt = localState.events.find(e => e.id === currentInfoView.id);
+    if (!evt) return null;
+
+    let html = `<div class="card">`;
+    if (evt.image) html += `<img src="${evt.image}" alt="${evt.name}" class="wiki-img">`;
+
+    html += `
+            <div class="card-title">${evt.name}</div>
+            <div class="card-desc">${p(evt.description)}</div>
+    `;
+
+    if (evt.roleDescriptions && evt.roleDescriptions[role]) {
+        html += `<div class="card-role-desc mt-2"><b>Intel (${role.toUpperCase()}):</b> ${p(evt.roleDescriptions[role])}</div>`;
+    }
+    html += `<div class="card-meta mt-2">Time: ${new Date(evt.timestamp).toLocaleTimeString()}</div></div>`;
+
+    // Tasks for this event
+    const roleTasks = localState.decisionTasks.filter(t => t.eventId === evt.id && (t.role === role || role === 'display'));
+
+    if (roleTasks.length > 0) {
+        html += `<h3 class="my-3 text-base text-secondary uppercase border-bottom pb-1">Decision Tasks</h3>`;
+        roleTasks.forEach(task => {
+            const isResolved = task.status === 'resolved';
+            const statusBadge = isResolved
+                ? `<span class="text-status-1 text-sm float-right">RESOLVED</span>`
+                : `<span class="text-status-4 text-sm float-right">PENDING</span>`;
+
+            html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
+
+            if (!isResolved) {
+                html += `<div class="task-options">`;
+                task.options.forEach(opt => {
+                    html += `<button class="btn" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
+                });
+                html += `</div>`;
+            } else {
+                const selectedOpt = task.options.find(o => o.id === task.selectedOption);
+                html += `<div class="card-role-desc" class="mt-sm">Decision Made: ${selectedOpt ? p(selectedOpt.text) : 'Unknown'}</div>`;
+            }
+            html += `</div>`;
+        });
+    }
+
+    return html;
+}
+
+function buildAssetPanelHtml(p) {
+    const asset = localState.assets.find(a => a.id === currentInfoView.id);
+    if (!asset) return null;
+
+    let html = `<div class="card wiki-card-blue">`;
+    if (asset.image) html += `<img src="${asset.image}" alt="${asset.name}" class="wiki-img">`;
+
+    html += `
+            <div class="card-title wiki-title-blue">${asset.name}</div>
+            <div class="card-desc">
+                <strong>Status:</strong> <span class="uppercase">${asset.state}</span>
+            </div>
+    `;
+
+    if (asset.briefing) {
+        html += `
+            <div class="card-role-desc mt-2 border-left-blue">
+                <strong>Intelligence Brief:</strong><br>
+                ${p(asset.briefing)}
+            </div>
+        `;
+    }
+
+    html += `<div class="card-meta mt-2 flex-center gap-1 flex-wrap">`;
+    asset.tags.forEach(tag => {
+        html += `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase">${tag}</span>`;
+    });
+    html += `</div></div>`;
+
+    return html;
+}
+
+function buildActionsPanelHtml(p) {
+    if (!localState.scenarioConfig || !localState.scenarioConfig.manualActions) {
+        return '<p class="text-muted">No manual actions available.</p>';
+    }
+
+    let html = '<div class="actions-list">';
+    let actionsShown = 0;
+    
+    localState.scenarioConfig.manualActions.forEach(action => {
+        if (!action.initiator.includes(role)) return;
+
+        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId));
+        if (!isMet) return; // Hide if conditions aren't met
+
+        actionsShown++;
+        html += `<div class="card wiki-card-blue mb-2">`;
+        if (action.image) {
+            html += `<img src="${action.image}" alt="${action.name}" class="wiki-img" class="mb-sm">`;
+        }
+        html += `<div class="card-title wiki-title-blue">${action.name}</div>
+                 <div class="card-desc">${p(action.description)}</div>`;
+        
+        let approvers = null;
+        if (action.requiresApprovalFrom) {
+            if (Array.isArray(action.requiresApprovalFrom)) {
+                approvers = action.requiresApprovalFrom.filter(r => r !== role).join(' or ');
+            } else if (action.requiresApprovalFrom !== role) {
+                approvers = action.requiresApprovalFrom;
+            }
+        }
+
+        if (approvers) {
+            html += `<div class="card-meta mt-1 text-status-4" class="text-bold">Requires approval from: ${approvers.toUpperCase()}</div>`;
+        } else {
+            html += `<div class="card-meta mt-1 text-status-1" style="font-weight:bold;">Immediate Execution</div>`;
+        }
+
+        html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+        html += `</div>`;
+    });
+    
+    if (actionsShown === 0) {
+        html += '<p class="text-muted">No actions currently available. (Requirements not met)</p>';
+    }
+    html += '</div>';
+    
+    return html;
+}
+
 function refreshInfoPanel() {
     if (!currentInfoView || !localState) return;
 
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
 
     if (currentInfoView.type === 'ai') {
-        const aiBriefing = localState.aiBriefings && localState.aiBriefings[role];
-        
-        let html = `
-            <div class="mb-3">
-                ${aiBriefing && aiBriefing.text ? `<p class="text-base lh-16">${p(aiBriefing.text)}</p>` : '<p class="text-muted">Briefing is currently unavailable.</p>'}
-            </div>
-        `;
-
-        if (aiBriefing && aiBriefing.seeds && aiBriefing.seeds.length > 0) {
-            html += `<h4 style="margin-bottom: 0.5rem; color: var(--text-secondary);">Score Changes</h4>
-                     <ul class="list-none p-0 m-0 text-sm text-muted">`;
-            aiBriefing.seeds.forEach(seed => {
-                html += `<li class="mb-05">• ${p(seed.text)}</li>`;
-            });
-            html += `</ul>`;
-        }
-        
-        html += `
-            <div class="mt-2">
-                <button id="btn-request-ai-briefing" class="btn" style="width: 100%; border: 1px solid var(--accent-blue); background: none; color: var(--accent-blue);">Request Full Refresh</button>
-            </div>
-        `;
-        
-        infoContent.innerHTML = html;
-        
+        infoContent.innerHTML = buildAiPanelHtml(p);
         document.getElementById('btn-request-ai-briefing').onclick = (e) => {
             socket.emit('request_ai_briefing', role);
             e.target.textContent = 'Requesting...';
             e.target.disabled = true;
             e.target.style.opacity = '0.5';
         };
-
     } else if (currentInfoView.type === 'event') {
-        const evt = localState.events.find(e => e.id === currentInfoView.id);
-        if (!evt) {
+        const html = buildEventPanelHtml(p);
+        if (html === null) {
             closePanel();
-            return;
+        } else {
+            infoContent.innerHTML = html;
         }
-
-        let html = `
-            <div class="card">
-        `;
-        
-        if (evt.image) {
-            html += `<img src="${evt.image}" alt="${evt.name}" class="wiki-img">`;
-        }
-
-        html += `
-                <div class="card-title">${evt.name}</div>
-                <div class="card-desc">${p(evt.description)}</div>
-        `;
-
-        if (evt.roleDescriptions && evt.roleDescriptions[role]) {
-            html += `<div class="card-role-desc mt-2"><b>Intel (${role.toUpperCase()}):</b> ${p(evt.roleDescriptions[role])}</div>`;
-        }
-        html += `<div class="card-meta mt-2">Time: ${new Date(evt.timestamp).toLocaleTimeString()}</div></div>`;
-
-        // Tasks for this event
-        const roleTasks = localState.decisionTasks.filter(t => t.eventId === evt.id && (t.role === role || role === 'display'));
-
-        if (roleTasks.length > 0) {
-            html += `<h3 class="my-3 text-base text-secondary uppercase border-bottom pb-1">Decision Tasks</h3>`;
-            roleTasks.forEach(task => {
-                const isResolved = task.status === 'resolved';
-                const statusBadge = isResolved
-                    ? `<span class="text-status-1 text-sm float-right">RESOLVED</span>`
-                    : `<span class="text-status-4 text-sm float-right">PENDING</span>`;
-
-                html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
-
-                if (!isResolved) {
-                    html += `<div class="task-options">`;
-                    task.options.forEach(opt => {
-                        html += `<button class="btn" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
-                    });
-                    html += `</div>`;
-                } else {
-                    const selectedOpt = task.options.find(o => o.id === task.selectedOption);
-                    html += `<div class="card-role-desc" style="margin-top: 0.5rem;">Decision Made: ${selectedOpt ? p(selectedOpt.text) : 'Unknown'}</div>`;
-                }
-                html += `</div>`;
-            });
-        }
-
-        infoContent.innerHTML = html;
-
     } else if (currentInfoView.type === 'asset') {
-        const asset = localState.assets.find(a => a.id === currentInfoView.id);
-        if (!asset) {
+        const html = buildAssetPanelHtml(p);
+        if (html === null) {
             closePanel();
-            return;
+        } else {
+            infoContent.innerHTML = html;
         }
-
-        let html = `
-            <div class="card wiki-card-blue">
-        `;
-        
-        if (asset.image) {
-            html += `<img src="${asset.image}" alt="${asset.name}" class="wiki-img">`;
-        }
-
-        html += `
-                <div class="card-title wiki-title-blue">${asset.name}</div>
-                <div class="card-desc">
-                    <strong>Status:</strong> <span class="uppercase">${asset.state}</span>
-                </div>
-        `;
-
-        if (asset.briefing) {
-            html += `
-                <div class="card-role-desc mt-2 border-left-blue">
-                    <strong>Intelligence Brief:</strong><br>
-                    ${p(asset.briefing)}
-                </div>
-            `;
-        }
-
-        html += `<div class="card-meta mt-2 flex-center gap-1 flex-wrap">`;
-        
-        asset.tags.forEach(tag => {
-            html += `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase">${tag}</span>`;
-        });
-        html += `</div></div>`;
-
-        infoContent.innerHTML = html;
     } else if (currentInfoView.type === 'wiki') {
         infoContent.innerHTML = window.generateWikiHtml(localState, currentInfoView.category, currentInfoView.itemId);
     } else if (currentInfoView.type === 'actions') {
-        if (!localState.scenarioConfig || !localState.scenarioConfig.manualActions) {
-            infoContent.innerHTML = '<p class="text-muted">No manual actions available.</p>';
-            return;
-        }
-
-        let html = '<div class="actions-list">';
-        let actionsShown = 0;
-        
-        localState.scenarioConfig.manualActions.forEach(action => {
-            if (!action.initiator.includes(role)) return;
-
-            const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId));
-            
-            if (!isMet) return; // Hide if conditions aren't met
-
-            actionsShown++;
-            html += `<div class="card wiki-card-blue mb-2">`;
-            if (action.image) {
-                html += `<img src="${action.image}" alt="${action.name}" class="wiki-img" style="margin-bottom: 0.5rem;">`;
-            }
-            html += `<div class="card-title wiki-title-blue">${action.name}</div>
-                     <div class="card-desc">${p(action.description)}</div>`;
-            
-            let approvers = null;
-            if (action.requiresApprovalFrom) {
-                if (Array.isArray(action.requiresApprovalFrom)) {
-                    approvers = action.requiresApprovalFrom.filter(r => r !== role).join(' or ');
-                } else if (action.requiresApprovalFrom !== role) {
-                    approvers = action.requiresApprovalFrom;
-                }
-            }
-
-            if (approvers) {
-                html += `<div class="card-meta mt-1 text-status-4" style="font-weight:bold;">Requires approval from: ${approvers.toUpperCase()}</div>`;
-            } else {
-                html += `<div class="card-meta mt-1 text-status-1" style="font-weight:bold;">Immediate Execution</div>`;
-            }
-
-            html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
-            html += `</div>`;
-        });
-        
-        if (actionsShown === 0) {
-            html += '<p class="text-muted">No actions currently available. (Requirements not met)</p>';
-        }
-        html += '</div>';
-        
-        infoContent.innerHTML = html;
+        infoContent.innerHTML = buildActionsPanelHtml(p);
     }
 }
 

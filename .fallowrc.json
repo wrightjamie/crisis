@@ -1,0 +1,9 @@
+{
+  "entry": [
+    "server.js",
+    "public/**/*.js",
+    "public/**/*.html",
+    "scripts/**/*.js",
+    "src/**/*.js"
+  ]
+}

@@ -7,6 +7,15 @@ function renderScenarioExplorer() {
     const renderedNodes = new Set();
     const triggeredIds = new Set(currentState.events.map(e => e.templateId));
     
+    const stages = currentState.scenarioConfig.stages || [];
+    const currentStageIndex = currentState.currentStageIndex || 0;
+    
+    function getStageIndex(stageId) {
+        if (!stageId) return 0;
+        const idx = stages.findIndex(s => s.id === stageId);
+        return idx !== -1 ? idx : 0;
+    }
+    
     function renderNode(templateId, isRoot = false) {
         if (renderedNodes.has(templateId)) return '';
         renderedNodes.add(templateId);
@@ -45,15 +54,6 @@ function renderScenarioExplorer() {
             }
         }
         
-        const stages = currentState.scenarioConfig.stages || [];
-        const currentStageIndex = currentState.currentStageIndex || 0;
-        
-        function getStageIndex(stageId) {
-            if (!stageId) return 0;
-            const idx = stages.findIndex(s => s.id === stageId);
-            return idx !== -1 ? idx : 0;
-        }
-
         // Filter children by stage
         const children = allTemplates.filter(t => {
             if (t.hidden || !t.prerequisites || !t.prerequisites.includes(templateId)) return false;
@@ -68,16 +68,16 @@ function renderScenarioExplorer() {
         let toggleHtml = '';
         if (hasChildren) {
             const btnText = isTriggered ? '[-]' : '[+]';
-            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.style.display==='none'){ul.style.display='block';this.textContent='[-]'}else{ul.style.display='none';this.textContent='[+]'};" style="position: absolute; left: -30px; top: 15px; width: 22px; height: 22px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-family: monospace; font-size: 0.9rem; font-weight: bold; line-height: 1;" title="Toggle branch">${btnText}</button>`;
+            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.style.display==='none'){ul.style.display='block';this.textContent='[-]'}else{ul.style.display='none';this.textContent='[+]'};" class="scenario-tree-toggle" title="Toggle branch">${btnText}</button>`;
         }
 
         // Semantic list item structure with CSS variables for dynamic branch coloring
         let nodeHtml = `
             <li style="--branch-color: ${borderColor}; position: relative;">
                 ${toggleHtml}
-                <div ${clickHandler} style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid ${borderColor}; padding: 0.8rem; border-radius: var(--radius-sm); width: 300px; ${interactivity}" class="explorer-node">
-                    <div style="color: var(--text-primary); font-weight: bold; margin-bottom: 0.2rem; font-size: 0.95rem; line-height: 1.2;">${template.name}</div>
-                    <div style="font-size: 0.8rem; color: ${statusColor}; font-weight: bold; letter-spacing: 0.5px;">${statusText}</div>
+                <div ${clickHandler} class="scenario-tree-node ${interactivity ? 'clickable' : ''}" style="border-left-color: ${borderColor};" class="explorer-node">
+                    <div class="scenario-node-title">${template.name}</div>
+                    <div class="scenario-node-status" style="color: ${statusColor};">${statusText}</div>
         `;
         
         if (template.conditions) {
@@ -86,7 +86,7 @@ function renderScenarioExplorer() {
                 for (const [k, v] of Object.entries(template.conditions.minScores)) condStrs.push(`Min ${formatName(k)}: ${v}`);
             }
             if (condStrs.length > 0) {
-                nodeHtml += `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.3rem;">Cond: ${condStrs.join(', ')}</div>`;
+                nodeHtml += `<div class="scenario-node-reqs">Cond: ${condStrs.join(', ')}</div>`;
             }
         }
         
@@ -107,20 +107,11 @@ function renderScenarioExplorer() {
         return nodeHtml;
     }
     
-    let html = `<div style="padding: 1rem; background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto;">`;
+    let html = `<div class="scenario-explorer-container">`;
     
-    const stages = currentState.scenarioConfig.stages || [];
-    const currentStageIndex = currentState.currentStageIndex || 0;
-    
-    function getStageIndex(stageId) {
-        if (!stageId) return 0;
-        const idx = stages.findIndex(s => s.id === stageId);
-        return idx !== -1 ? idx : 0;
-    }
-
     if (stages.length === 0) {
         // Fallback if no stages defined
-        html += `<ul class="scenario-tree" style="padding-left: 2.5rem;">`;
+        html += `<ul class="scenario-tree" class="pl-lg">`;
         const roots = allTemplates.filter(t => !t.hidden && (!t.prerequisites || t.prerequisites.length === 0));
         roots.forEach(root => { html += renderNode(root.id, true); });
         allTemplates.forEach(t => { if (!t.hidden && !renderedNodes.has(t.id)) html += renderNode(t.id, true); });
@@ -139,13 +130,13 @@ function renderScenarioExplorer() {
             const toggleText = isCurrentStage ? '[-]' : '[+]';
             
             html += `
-                <div style="margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden;">
-                    <div onclick="const ul = this.nextElementSibling; if(ul.style.display==='none'){ul.style.display='block';this.querySelector('.toggle').textContent='[-]'}else{ul.style.display='none';this.querySelector('.toggle').textContent='[+]'}" style="background: var(--bg-secondary); padding: 0.5rem 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: bold; color: var(--accent-blue);">Stage ${i + 1}: ${stage.name}</span>
-                        <span class="toggle" style="font-family: monospace;">${toggleText}</span>
+                <div class="scenario-stage-group">
+                    <div onclick="const ul = this.nextElementSibling; if(ul.style.display==='none'){ul.style.display='block';this.querySelector('.toggle').textContent='[-]'}else{ul.style.display='none';this.querySelector('.toggle').textContent='[+]'}" class="scenario-stage-header">
+                        <span class="text-bold text-accent-blue">Stage ${i + 1}: ${stage.name}</span>
+                        <span class="toggle" class="font-mono">${toggleText}</span>
                     </div>
-                    <div style="display: ${displayStyle}; padding: 1rem; background: var(--bg-primary);">
-                        <ul class="scenario-tree" style="padding-left: 1.5rem;">
+                    <div class="scenario-stage-content" style="display: ${displayStyle};">
+                        <ul class="scenario-tree" class="pl-md">
             `;
             
             roots.forEach(root => {

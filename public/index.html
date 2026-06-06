@@ -39,12 +39,12 @@
         <!-- Top Bar -->
         <header class="top-bar">
             <div id="role-display" class="role-badge">Loading...</div>
-            <div style="display: flex; gap: 0.5rem;">
+            <div class="flex-row gap-sm">
                 <button id="btn-actions" class="btn">Actions</button>
                 <button id="btn-wiki" class="btn">Wiki</button>
-                <button id="btn-ai-briefing" class="btn" style="background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: bold; position: relative;">
+                <button id="btn-ai-briefing" class="btn client-scenario-btn">
                     Briefing
-                    <span id="ai-briefing-badge" style="display: none; position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; background-color: var(--status-1); border-radius: 50%; box-shadow: 0 0 8px var(--status-1);"></span>
+                    <span id="ai-briefing-badge" class="client-scenario-badge"></span>
                 </button>
             </div>
         </header>
@@ -56,9 +56,9 @@
 
             <!-- Info Panel -->
             <aside class="info-panel" id="info-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
-                    <h2 id="info-panel-title" style="margin: 0; font-size: 1.1rem; color: var(--text-secondary); text-transform: uppercase;">Information</h2>
-                    <button id="btn-close-info" class="btn" style="padding: 0.2rem 0.6rem; font-weight: bold; background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; line-height: 1; cursor: pointer;">&times;</button>
+                <div class="event-panel-header">
+                    <h2 id="info-panel-title" class="scenario-title">Information</h2>
+                    <button id="btn-close-info" class="scenario-close">&times;</button>
                 </div>
                 <div id="info-content">
                     <!-- Dynamic content injected by JS -->
@@ -68,11 +68,11 @@
     </div>
 
     <!-- End Game Screen -->
-    <div id="endgame-screen" class="holding-screen" style="display: none; background-color: rgba(0, 0, 0, 0.95); z-index: 9999;">
-        <div class="holding-content text-center" style="max-width: 800px; padding: 3rem; background: var(--bg-tertiary); border: 2px solid var(--accent-red); box-shadow: 0 0 40px rgba(231, 76, 60, 0.3);">
-            <h1 id="endgame-title" class="text-red mb-2" style="font-size: 2.5rem; text-transform: uppercase;">SIMULATION TERMINATED</h1>
-            <p id="endgame-desc" class="text-lg text-secondary mb-3" style="line-height: 1.6;"></p>
-            <div id="endgame-role-desc" class="card bg-red-faded border-red p-2 mb-2" style="font-size: 1.2rem; display: none;"></div>
+    <div id="endgame-screen" class="holding-screen scenario-overlay">
+        <div class="holding-content text-center scenario-modal">
+            <h1 id="endgame-title" class="text-red mb-2" >SIMULATION TERMINATED</h1>
+            <p id="endgame-desc" class="text-lg text-secondary mb-3" ></p>
+            <div id="endgame-role-desc" class="card bg-red-faded border-red p-2 mb-2 d-none" ></div>
             <p class="text-muted mt-3">Awaiting facilitator reset...</p>
         </div>
     </div>
@@ -84,6 +84,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- Client Logic -->
+    <script src="js/shared.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/acronyms.js"></script>
     <script src="js/client.js"></script>

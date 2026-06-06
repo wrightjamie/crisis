@@ -1,22 +1,20 @@
-function validateScenario(scenario) {
-    const errors = [];
-
-    // Basic structure checks
+function validateBasicStructure(scenario, errors) {
     if (!scenario.id || typeof scenario.id !== 'string') errors.push("Missing or invalid 'id'");
     if (!scenario.name || typeof scenario.name !== 'string') errors.push("Missing or invalid 'name'");
     if (!scenario.description || typeof scenario.description !== 'string') errors.push("Missing or invalid 'description'");
-    
-    // Check mapConfig
+}
+
+function validateMapConfig(scenario, errors) {
     if (!scenario.mapConfig || !Array.isArray(scenario.mapConfig.center) || scenario.mapConfig.center.length !== 2) {
         errors.push("Missing or invalid 'mapConfig.center'");
     }
-    
-    // Check roles
+}
+
+function validateRoles(scenario, errors) {
     if (!scenario.roles || !Array.isArray(scenario.roles)) {
         errors.push("Missing or invalid 'roles' array");
     }
 
-    // Check roleNames
     if (!scenario.roleNames || typeof scenario.roleNames !== 'object') {
         errors.push("Missing or invalid 'roleNames' object");
     } else if (scenario.roles && Array.isArray(scenario.roles)) {
@@ -26,8 +24,9 @@ function validateScenario(scenario) {
             }
         });
     }
+}
 
-    // Check initialScores
+function validateInitialScores(scenario, errors) {
     if (!scenario.initialScores || typeof scenario.initialScores !== 'object') {
         errors.push("Missing or invalid 'initialScores'");
     } else {
@@ -37,8 +36,9 @@ function validateScenario(scenario) {
             }
         }
     }
+}
 
-    // Check eventTemplates
+function validateEventTemplates(scenario, errors) {
     if (!scenario.eventTemplates || !Array.isArray(scenario.eventTemplates)) {
         errors.push("Missing or invalid 'eventTemplates'");
     } else {
@@ -54,43 +54,55 @@ function validateScenario(scenario) {
             }
         });
     }
+}
 
-    // Check variantAxes (optional)
-    if (scenario.variantAxes) {
-        if (!Array.isArray(scenario.variantAxes)) {
-            errors.push("'variantAxes' must be an array");
-        } else {
-            scenario.variantAxes.forEach((axis, index) => {
-                const axisPath = `variantAxis[${index}]`;
-                if (!axis.id) errors.push(`${axisPath} missing 'id'`);
-                if (!axis.name) errors.push(`${axisPath} missing 'name'`);
-                if (!axis.options || !Array.isArray(axis.options)) {
-                    errors.push(`${axisPath} missing or invalid 'options'`);
-                } else {
-                    axis.options.forEach((opt, optIndex) => {
-                        if (!opt.id) errors.push(`${axisPath}.options[${optIndex}] missing 'id'`);
-                        if (!opt.name) errors.push(`${axisPath}.options[${optIndex}] missing 'name'`);
-                    });
-                }
-            });
-        }
+function validateVariantAxes(scenario, errors) {
+    if (!scenario.variantAxes) return;
+    if (!Array.isArray(scenario.variantAxes)) {
+        errors.push("'variantAxes' must be an array");
+    } else {
+        scenario.variantAxes.forEach((axis, index) => {
+            const axisPath = `variantAxis[${index}]`;
+            if (!axis.id) errors.push(`${axisPath} missing 'id'`);
+            if (!axis.name) errors.push(`${axisPath} missing 'name'`);
+            if (!axis.options || !Array.isArray(axis.options)) {
+                errors.push(`${axisPath} missing or invalid 'options'`);
+            } else {
+                axis.options.forEach((opt, optIndex) => {
+                    if (!opt.id) errors.push(`${axisPath}.options[${optIndex}] missing 'id'`);
+                    if (!opt.name) errors.push(`${axisPath}.options[${optIndex}] missing 'name'`);
+                });
+            }
+        });
     }
+}
 
-    // Check manualActions (optional)
-    if (scenario.manualActions) {
-        if (!Array.isArray(scenario.manualActions)) {
-            errors.push("'manualActions' must be an array");
-        } else {
-            scenario.manualActions.forEach((action, index) => {
-                const actionPath = `manualAction[${index}]`;
-                if (!action.id) errors.push(`${actionPath} missing 'id'`);
-                if (!action.name) errors.push(`${actionPath} missing 'name'`);
-                if (!action.initiator || !Array.isArray(action.initiator)) {
-                    errors.push(`${actionPath} (${action.id || 'unknown'}) missing or invalid 'initiator' array`);
-                }
-            });
-        }
+function validateManualActions(scenario, errors) {
+    if (!scenario.manualActions) return;
+    if (!Array.isArray(scenario.manualActions)) {
+        errors.push("'manualActions' must be an array");
+    } else {
+        scenario.manualActions.forEach((action, index) => {
+            const actionPath = `manualAction[${index}]`;
+            if (!action.id) errors.push(`${actionPath} missing 'id'`);
+            if (!action.name) errors.push(`${actionPath} missing 'name'`);
+            if (!action.initiator || !Array.isArray(action.initiator)) {
+                errors.push(`${actionPath} (${action.id || 'unknown'}) missing or invalid 'initiator' array`);
+            }
+        });
     }
+}
+
+function validateScenario(scenario) {
+    const errors = [];
+
+    validateBasicStructure(scenario, errors);
+    validateMapConfig(scenario, errors);
+    validateRoles(scenario, errors);
+    validateInitialScores(scenario, errors);
+    validateEventTemplates(scenario, errors);
+    validateVariantAxes(scenario, errors);
+    validateManualActions(scenario, errors);
 
     return {
         isValid: errors.length === 0,
@@ -98,4 +110,4 @@ function validateScenario(scenario) {
     };
 }
 
-module.exports = { validateScenario };
+module.exports = { validateScenario, validateBasicStructure, validateRoles };

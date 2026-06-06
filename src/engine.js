@@ -1,6 +1,47 @@
 const scenarios = require('../data/scenarios');
-
 const { validateScenario } = require('./validate-scenarios');
+const { checkConditions } = require('../public/js/shared.js');
+
+function applyVariantsToScenario(scenario, selectedVariants, scores, assets, selectedVariantNames, variantBriefings) {
+    if (!selectedVariants || !scenario.variantAxes) return;
+
+    for (const axis of scenario.variantAxes) {
+        const selectedOptionId = selectedVariants[axis.id];
+        if (!selectedOptionId) continue;
+
+        const option = axis.options.find(o => o.id === selectedOptionId);
+        if (!option) continue;
+
+        selectedVariantNames.push(`${axis.name}: ${option.name}`);
+
+        if (option.scoreModifiers) {
+            for (const [key, delta] of Object.entries(option.scoreModifiers)) {
+                if (scores[key] !== undefined) {
+                    scores[key] = Math.max(1, Math.min(5, scores[key] + delta));
+                }
+            }
+        }
+
+        if (option.assetModifiers) {
+            option.assetModifiers.forEach(modAsset => {
+                const existingIdx = assets.findIndex(a => a.id === modAsset.id);
+                if (existingIdx !== -1) {
+                    assets[existingIdx] = JSON.parse(JSON.stringify(modAsset));
+                } else {
+                    assets.push(JSON.parse(JSON.stringify(modAsset)));
+                }
+            });
+        }
+
+        variantBriefings.push({
+            axisName: axis.name,
+            optionName: option.name,
+            briefingText: option.briefingText || '',
+            roleBriefings: option.roleBriefings || {}
+        });
+    }
+}
+
 
 class GameEngine {
     constructor() {
@@ -79,41 +120,7 @@ class GameEngine {
         const selectedVariantNames = [];
 
         if (selectedVariants && scenario.variantAxes) {
-            for (const axis of scenario.variantAxes) {
-                const selectedOptionId = selectedVariants[axis.id];
-                if (!selectedOptionId) continue;
-
-                const option = axis.options.find(o => o.id === selectedOptionId);
-                if (!option) continue;
-
-                selectedVariantNames.push(`${axis.name}: ${option.name}`);
-
-                if (option.scoreModifiers) {
-                    for (const [key, delta] of Object.entries(option.scoreModifiers)) {
-                        if (scores[key] !== undefined) {
-                            scores[key] = Math.max(1, Math.min(5, scores[key] + delta));
-                        }
-                    }
-                }
-
-                if (option.assetModifiers) {
-                    option.assetModifiers.forEach(modAsset => {
-                        const existingIdx = assets.findIndex(a => a.id === modAsset.id);
-                        if (existingIdx !== -1) {
-                            assets[existingIdx] = JSON.parse(JSON.stringify(modAsset));
-                        } else {
-                            assets.push(JSON.parse(JSON.stringify(modAsset)));
-                        }
-                    });
-                }
-
-                variantBriefings.push({
-                    axisName: axis.name,
-                    optionName: option.name,
-                    briefingText: option.briefingText || '',
-                    roleBriefings: option.roleBriefings || {}
-                });
-            }
+            applyVariantsToScenario(scenario, selectedVariants, scores, assets, selectedVariantNames, variantBriefings);
         }
 
         this.gameState = {
@@ -174,16 +181,7 @@ class GameEngine {
         return null;
     }
 
-    checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEvents = []) {
-        const c = obj.conditions;
-        if (!c) return true;
-        if (c.minScores && !Object.entries(c.minScores).every(([k, v]) => (scores[k] || 0) >= v)) return false;
-        if (c.maxScores && !Object.entries(c.maxScores).every(([k, v]) => (scores[k] || 0) <= v)) return false;
-        if (c.assets && !Object.entries(c.assets).every(([k, v]) => (assets.find(a => a.id === k) || {}).state === v)) return false;
-        if (c.unlockedEvents && !c.unlockedEvents.every(e => unlockedEvents.includes(e))) return false;
-        if (c.triggeredEvents && !c.triggeredEvents.every(e => triggeredEvents.includes(e))) return false;
-        return true;
-    }
+
 
     triggerScenarioEvent(eventId) {
         if (this.gameState.status !== 'active') return false;
@@ -221,7 +219,7 @@ class GameEngine {
         if (template.decisions) {
             template.decisions.forEach(dec => {
                 const availableOptions = (dec.options || []).filter(opt =>
-                    this.checkConditions(opt, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))
+                    checkConditions(opt, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))
                 );
 
                 if (availableOptions.length > 0) {
@@ -371,7 +369,7 @@ class GameEngine {
         if (!action.initiator.includes(initiatorRole)) return false;
 
         // Verify conditions
-        if (!this.checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))) return false;
+        if (!checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))) return false;
 
         console.log(`Manual Action triggered: ${action.name} by ${initiatorRole}`);
 

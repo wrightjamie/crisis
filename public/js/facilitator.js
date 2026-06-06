@@ -151,7 +151,7 @@ socket.on('scenario_error', (msg) => {
 function createStationBadgeHtml(role, isOnline, mode, isMandatory = false) {
     const badgeModeClass = mode === 'dropdown' ? 'dropdown-mode' : 'lobby-mode';
     const statusClass = isOnline ? 'online' : 'offline';
-    const mandatoryHtml = (mode === 'lobby' && isMandatory) ? ' <span style="color: var(--accent-orange); font-size: 0.8em; margin-left: 4px;">*</span>' : '';
+    const mandatoryHtml = (mode === 'lobby' && isMandatory) ? ' <span class="text-accent-orange text-sm ml-xs">*</span>' : '';
     
     return `
         <div class="station-badge ${badgeModeClass} ${statusClass}">
@@ -169,7 +169,7 @@ socket.on('active_roles', (roles) => {
     const mandatoryRoles = config.mandatoryRoles || [];
     const minUsers = config.minUsers || 1;
     if (container) {
-        container.innerHTML = '<div class="text-xs text-muted" style="margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.25rem;">STATIONS:</div>';
+        container.innerHTML = '<div class="text-xs text-muted" class="mb-sm border-bottom pb-xs">STATIONS:</div>';
         
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
         container.innerHTML += expectedRoles.map(r => createStationBadgeHtml(r, roles.includes(r), 'dropdown', mandatoryRoles.includes(r))).join('');
@@ -195,9 +195,9 @@ socket.on('active_roles', (roles) => {
         
         const activePlayerCount = roles.filter(r => r !== 'display' && r !== 'facilitator').length;
         if (activePlayerCount < minUsers) {
-            minUsersEl.innerHTML = `<span style="color: var(--accent-orange);">Waiting for more players... (${activePlayerCount}/${minUsers} minimum required)</span>`;
+            minUsersEl.innerHTML = `<span class="text-accent-orange">Waiting for more players... (${activePlayerCount}/${minUsers} minimum required)</span>`;
         } else {
-            minUsersEl.innerHTML = `<span style="color: var(--status-1);">Ready to start! Minimum players met (${activePlayerCount}/${minUsers})</span>`;
+            minUsersEl.innerHTML = `<span class="text-status-1">Ready to start! Minimum players met (${activePlayerCount}/${minUsers})</span>`;
         }
     }
 });
@@ -361,36 +361,7 @@ function endScenario() {
     }
 }
 
-function checkConditions(template, scores, assets, unlockedEvents = [], triggeredEvents = []) {
-    if (!template.conditions) return true;
-    if (template.conditions.minScores) {
-        for (const [key, val] of Object.entries(template.conditions.minScores)) {
-            if ((scores[key] || 0) < val) return false;
-        }
-    }
-    if (template.conditions.maxScores) {
-        for (const [key, val] of Object.entries(template.conditions.maxScores)) {
-            if ((scores[key] || 0) > val) return false;
-        }
-    }
-    if (template.conditions.assets) {
-        for (const [assetId, requiredState] of Object.entries(template.conditions.assets)) {
-            const asset = (assets || []).find(a => a.id === assetId);
-            if (!asset || asset.state !== requiredState) return false;
-        }
-    }
-    if (template.conditions.unlockedEvents) {
-        for (const evtId of template.conditions.unlockedEvents) {
-            if (!unlockedEvents.includes(evtId)) return false;
-        }
-    }
-    if (template.conditions.triggeredEvents) {
-        for (const evtId of template.conditions.triggeredEvents) {
-            if (!triggeredEvents.includes(evtId)) return false;
-        }
-    }
-    return true;
-}
+
 
 function renderEventButtons() {
     const usedEventsContainer = document.getElementById('used-events');
@@ -608,28 +579,56 @@ window.triggerEventFromPanel = function(templateId) {
     closeFacilitatorPanel();
 };
 
-function refreshFacilitatorInfoPanel() {
-    if (!currentEventDetailsId || !currentState) return;
-    const template = allTemplates.find(t => t.id === currentEventDetailsId);
-    if (!template) return;
-
-    const titleEl = document.getElementById('fac-info-title');
-    const contentEl = document.getElementById('fac-info-content');
-
-    titleEl.textContent = 'Event Details';
-
-    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId));
-    const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
-    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
-    
-    let html = `
-        <div class="card btn wiki-back-btn">
-    `;
-    
-    if (template.image) {
-        html += `<img src="${template.image}" alt="${template.name}" class="wiki-img">`;
+function _checkMinScoreWarnings(minScores, currentState) {
+    let html = '';
+    for (const [key, val] of Object.entries(minScores)) {
+        const current = currentState.scores[key] || 0;
+        if (current < val) html += `<div>• ${formatName(key)} must be ≥ ${val} (currently ${current})</div>`;
     }
+    return html;
+}
 
+function _checkMaxScoreWarnings(maxScores, currentState) {
+    let html = '';
+    for (const [key, val] of Object.entries(maxScores)) {
+        const current = currentState.scores[key] || 0;
+        if (current > val) html += `<div>• ${formatName(key)} must be ≤ ${val} (currently ${current})</div>`;
+    }
+    return html;
+}
+
+function _checkAssetWarnings(assetReqs, currentState) {
+    let html = '';
+    for (const [assetId, requiredState] of Object.entries(assetReqs)) {
+        const asset = (currentState.assets || []).find(a => a.id === assetId);
+        const currentAssetState = asset ? asset.state : 'missing';
+        if (!asset || asset.state !== requiredState) {
+            html += `<div>• Asset "${asset ? asset.name : assetId}" must be ${requiredState} (currently ${currentAssetState})</div>`;
+        }
+    }
+    return html;
+}
+
+function buildFacilitatorEventConditionsWarning(template, currentState) {
+    let reasonHtml = '';
+    if (template.conditions) {
+        if (template.conditions.minScores) reasonHtml += _checkMinScoreWarnings(template.conditions.minScores, currentState);
+        if (template.conditions.maxScores) reasonHtml += _checkMaxScoreWarnings(template.conditions.maxScores, currentState);
+        if (template.conditions.assets) reasonHtml += _checkAssetWarnings(template.conditions.assets, currentState);
+    }
+    return `
+        <div class="card mb-2 border-red bg-red-faded">
+            <div class="card-title text-red text-base mb-1">Warning: Conditions Not Met</div>
+            <div class="card-desc text-base">${reasonHtml || 'This event requires conditions that have not been reached.'} You may still force trigger it.</div>
+        </div>
+    `;
+}
+
+function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentState, p) {
+    const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
+    
+    let html = `<div class="card btn wiki-back-btn">`;
+    if (template.image) html += `<img src="${template.image}" alt="${template.name}" class="wiki-img">`;
     html += `
             <div class="card-title">${p(template.name)}</div>
             <div class="card-desc">${p(template.description)}</div>
@@ -646,36 +645,7 @@ function refreshFacilitatorInfoPanel() {
     }
 
     if (!meetsConditions) {
-        let reasonHtml = '';
-        if (template.conditions) {
-            if (template.conditions.minScores) {
-                for (const [key, val] of Object.entries(template.conditions.minScores)) {
-                    const current = currentState.scores[key] || 0;
-                    if (current < val) reasonHtml += `<div>• ${formatName(key)} must be ≥ ${val} (currently ${current})</div>`;
-                }
-            }
-            if (template.conditions.maxScores) {
-                for (const [key, val] of Object.entries(template.conditions.maxScores)) {
-                    const current = currentState.scores[key] || 0;
-                    if (current > val) reasonHtml += `<div>• ${formatName(key)} must be ≤ ${val} (currently ${current})</div>`;
-                }
-            }
-            if (template.conditions.assets) {
-                for (const [assetId, requiredState] of Object.entries(template.conditions.assets)) {
-                    const asset = (currentState.assets || []).find(a => a.id === assetId);
-                    const currentAssetState = asset ? asset.state : 'missing';
-                    if (!asset || asset.state !== requiredState) {
-                        reasonHtml += `<div>• Asset "${asset ? asset.name : assetId}" must be ${requiredState} (currently ${currentAssetState})</div>`;
-                    }
-                }
-            }
-        }
-        html += `
-            <div class="card mb-2 border-red bg-red-faded">
-                <div class="card-title text-red text-base mb-1">Warning: Conditions Not Met</div>
-                <div class="card-desc text-base">${reasonHtml || 'This event requires conditions that have not been reached.'} You may still force trigger it.</div>
-            </div>
-        `;
+        html += buildFacilitatorEventConditionsWarning(template, currentState);
     }
 
     if (template.decisions && template.decisions.length > 0) {
@@ -700,8 +670,24 @@ function refreshFacilitatorInfoPanel() {
             </button>
         </div>
     `;
+    
+    return html;
+}
 
-    contentEl.innerHTML = html;
+function refreshFacilitatorInfoPanel() {
+    if (!currentEventDetailsId || !currentState) return;
+    const template = allTemplates.find(t => t.id === currentEventDetailsId);
+    if (!template) return;
+
+    const titleEl = document.getElementById('fac-info-title');
+    const contentEl = document.getElementById('fac-info-content');
+
+    titleEl.textContent = 'Event Details';
+
+    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId));
+    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+    
+    contentEl.innerHTML = buildFacilitatorEventDetailsHtml(template, meetsConditions, currentState, p);
 }
 
 window.submitScores = function() {
@@ -767,13 +753,13 @@ function renderScheduledEvents() {
                 <strong>${name}</strong>
                 ${statusHtml}
             </div>
-            <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-                <button class="btn btn-primary" style="padding:0.2rem 0.5rem; font-size:0.8rem;" onclick="socket.emit('force_trigger_scheduled', '${se.uuid}')">Trigger Now</button>
+            <div class="flex-row gap-sm mt-sm">
+                <button class="btn btn-primary" class="badge-sm" onclick="socket.emit('force_trigger_scheduled', '${se.uuid}')">Trigger Now</button>
                 ${se.paused 
-                    ? `<button class="btn" style="padding:0.2rem 0.5rem; font-size:0.8rem;" onclick="socket.emit('resume_scheduled_event', '${se.uuid}')">Resume</button>`
-                    : `<button class="btn" style="padding:0.2rem 0.5rem; font-size:0.8rem;" onclick="socket.emit('pause_scheduled_event', '${se.uuid}')">Pause</button>`
+                    ? `<button class="btn" class="badge-sm" onclick="socket.emit('resume_scheduled_event', '${se.uuid}')">Resume</button>`
+                    : `<button class="btn" class="badge-sm" onclick="socket.emit('pause_scheduled_event', '${se.uuid}')">Pause</button>`
                 }
-                <button class="btn text-danger" style="padding:0.2rem 0.5rem; font-size:0.8rem;" onclick="socket.emit('delete_scheduled_event', '${se.uuid}')">Delete</button>
+                <button class="btn text-danger" class="badge-sm" onclick="socket.emit('delete_scheduled_event', '${se.uuid}')">Delete</button>
             </div>
         `;
         container.appendChild(card);

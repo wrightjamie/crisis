@@ -12,3 +12,4 @@
 - [x] Perform a full review of our CSS and styles approach to ensure consistency and modern design practices.
 - [ ] Visually indicate in the UI when new Manual Actions become available to players.
 - [ ] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
+- [ ] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
