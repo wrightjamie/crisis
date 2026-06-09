@@ -401,9 +401,9 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_russia_hub_explosion',
+                stage: 'stage_2',
                 name: 'Russian Logistics Hub Explosion',
-                prerequisites: ['ev_cyber_exposure'],
-                conditions: { minScores: { military_escalation: 2 } },
+                prerequisites: [],
                 repeatable: false,
                 location: [55.75, 37.61], // Moscow area / Western Russia
                 image: '/images/events/ev_russia_hub_explosion.png',
@@ -529,7 +529,7 @@ CRITICAL RULES:
             },
             {
                 id: 'ev_uk_casualty_leak',
-                stage: 'stage_2',
+                stage: 'stage_1',
                 name: 'UK Forces Casualty Leaks to Press',
                 prerequisites: [],
                 repeatable: false,

@@ -43,6 +43,7 @@ function switchView(viewName) {
     if (roleSelectionScreen.open) roleSelectionScreen.close();
     if (holdingScreen.open) holdingScreen.close();
     if (briefingScreen.open) briefingScreen.close();
+    if (endgameScreen && endgameScreen.open) endgameScreen.close();
     appEl.style.display = 'none';
 
     // Show requested
@@ -337,6 +338,57 @@ map.on('move', updateEdgeMarkers);
 map.on('zoom', updateEdgeMarkers);
 map.on('resize', updateEdgeMarkers);
 
+socket.on('decision_made', (data) => {
+    let roleText = 'Someone';
+    if (data.role && data.role !== 'display' && data.role !== 'facilitator') {
+        const roleNames = localState?.scenarioConfig?.roleNames || {};
+        roleText = roleNames[data.role] || data.role.toUpperCase();
+    }
+    
+    if (data.role !== role) {
+        showToast(`<strong>${data.eventName}</strong><br/>${roleText} selected: <em>${data.text}</em>`);
+    }
+});
+
+function showToast(message) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.display = 'flex';
+    toast.style.alignItems = 'center';
+    toast.style.justifyContent = 'space-between';
+    toast.style.gap = '15px';
+    
+    const content = document.createElement('div');
+    content.innerHTML = message;
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.style.cssText = 'background: none; border: none; color: inherit; font-size: 1.5rem; cursor: pointer; padding: 0; opacity: 0.6; display: flex; line-height: 1;';
+    closeBtn.onmouseover = () => closeBtn.style.opacity = '1';
+    closeBtn.onmouseout = () => closeBtn.style.opacity = '0.6';
+    closeBtn.onclick = () => {
+        if (!toast.classList.contains('fade-out')) {
+            toast.classList.add('fade-out');
+            toast.addEventListener('animationend', () => toast.remove());
+        }
+    };
+    
+    toast.appendChild(content);
+    toast.appendChild(closeBtn);
+    
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement && !toast.classList.contains('fade-out')) {
+            toast.classList.add('fade-out');
+            toast.addEventListener('animationend', () => toast.remove());
+        }
+    }, 10000);
+}
+
 // Register role on connect
 socket.on('connect', () => {
     const savedRole = sessionStorage.getItem('crisis_role');
@@ -367,6 +419,8 @@ function handleHoldingState() {
     if (p) p.textContent = "The facilitator is selecting a scenario...";
     
     if (roleSelectionScreen.open) roleSelectionScreen.close();
+    if (briefingScreen.open) briefingScreen.close();
+    if (endgameScreen && endgameScreen.open) endgameScreen.close();
     appEl.style.display = 'none';
 
     // Clear markers when returning to hold

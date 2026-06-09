@@ -43,13 +43,13 @@ module.exports = function setupSockets(io, engine) {
             io.emit('state_update', engine.gameState);
         });
 
-        // Facilitator ends a scenario
         socket.on('end_scenario', () => {
             console.log('Scenario ended');
             engine.stopSchedulerLoop();
             engine.gameState = { status: 'holding', scenarioId: null };
             engine.connectedClients = {};
             io.emit('state_update', engine.getHoldingState());
+            io.emit('active_roles', engine.getActiveRoles());
         });
 
         // Client registers their role
@@ -130,8 +130,17 @@ module.exports = function setupSockets(io, engine) {
 
         // Client submits a decision
         socket.on('submit_decision', (data) => {
+            const task = engine.gameState.decisionTasks.find(t => t.id === data.taskId);
+            let eventName = 'Unknown Event';
+            if (task) {
+                const template = engine.getScenarioTemplates().find(t => t.id === task.eventId);
+                if (template) eventName = template.name;
+            }
+
             const option = engine.resolveTask(data.taskId, data.optionId);
             if (option) {
+                const deciderRole = engine.connectedClients[socket.id] || 'Someone';
+                io.emit('decision_made', { role: deciderRole, text: option.text, eventName: eventName });
                 io.emit('state_update', engine.gameState);
                 if (option.effects && option.effects.scores) {
                     io.emit('generate_ai_briefing_all', { context: `The following action was taken: ${option.text}` });
