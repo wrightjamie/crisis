@@ -13,4 +13,4 @@
 - [ ] Visually indicate in the UI when new Manual Actions become available to players.
 - [ ] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
 - [x] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
-- [ ] Kick player and allow a new player to join
+- [x] Kick player and allow a new player to join
