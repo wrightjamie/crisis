@@ -16,6 +16,11 @@ app.get('/ping', (req, res) => {
     res.send('pong');
 });
 
+// Clean route for facilitator
+app.get('/facilitator', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'facilitator.html'));
+});
+
 const engine = new GameEngine();
 
 const setupSockets = require('./src/socket');
