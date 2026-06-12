@@ -13,11 +13,12 @@ let currentInfoView = null;
 const appEl = document.getElementById('app');
 const holdingScreen = document.getElementById('holding-screen');
 const roleSelectionScreen = document.getElementById('role-selection-screen');
+const pendingApprovalScreen = document.getElementById('pending-approval-screen');
 const roleButtonsContainer = document.getElementById('role-buttons');
 const briefingScreen = document.getElementById('briefing-screen');
 const endgameScreen = document.getElementById('endgame-screen');
 
-[holdingScreen, roleSelectionScreen, briefingScreen, endgameScreen].forEach(el => {
+[holdingScreen, roleSelectionScreen, pendingApprovalScreen, briefingScreen, endgameScreen].forEach(el => {
     if (el) el.addEventListener('cancel', e => e.preventDefault());
 });
 
@@ -42,6 +43,7 @@ function switchView(viewName) {
     // Hide all
     if (roleSelectionScreen.open) roleSelectionScreen.close();
     if (holdingScreen.open) holdingScreen.close();
+    if (pendingApprovalScreen && pendingApprovalScreen.open) pendingApprovalScreen.close();
     if (briefingScreen.open) briefingScreen.close();
     if (endgameScreen && endgameScreen.open) endgameScreen.close();
     appEl.style.display = 'none';
@@ -60,6 +62,9 @@ function switchView(viewName) {
             if (h1) h1.textContent = `Welcome ${displayName}`;
             if (p) p.textContent = "The facilitator is preparing to launch the scenario...";
             break;
+        case 'pending_approval':
+            if (pendingApprovalScreen && !pendingApprovalScreen.open) pendingApprovalScreen.showModal();
+            break;
         case 'briefing':
             if (!briefingScreen.open) briefingScreen.showModal();
             break;
@@ -72,8 +77,11 @@ function switchView(viewName) {
 
 socket.on('role_registered', (registeredRole) => {
     role = registeredRole;
-    sessionStorage.setItem('crisis_role', registeredRole);
-    roleDisplay.textContent = role.toUpperCase();
+    sessionStorage.setItem('crisis_role', role);
+    const roleDisplay = document.getElementById('role-display');
+    if (roleDisplay) roleDisplay.textContent = role.toUpperCase();
+    updateGlobalLeaveButton();
+    if (localState) handleStateUpdate(localState); // Re-render correct view
     if (role === 'display') {
         document.body.classList.add('role-display');
     }
@@ -98,10 +106,80 @@ socket.on('role_registered', (registeredRole) => {
 
 socket.on('role_error', (msg) => {
     alert(msg);
-    sessionStorage.removeItem('crisis_role');
     role = null;
-    switchView('role_selection');
+    sessionStorage.removeItem('crisis_role');
+    updateGlobalLeaveButton();
+    if (localState && localState.status === 'lobby') {
+        switchView('role_selection');
+        renderRoleSelection();
+    }
 });
+
+socket.on('role_pending_approval', () => {
+    switchView('pending_approval');
+});
+
+socket.on('role_rejected', () => {
+    alert("Your station request was rejected by the facilitator.");
+    role = null;
+    sessionStorage.removeItem('crisis_role');
+    updateGlobalLeaveButton();
+    if (localState && localState.status === 'holding') {
+        switchView('holding');
+        handleHoldingState();
+    } else {
+        switchView('role_selection');
+        if (localState && localState.status === 'lobby' || localState.status === 'active') {
+            renderRoleSelection();
+        }
+    }
+});
+
+socket.on('kicked', () => {
+    alert("You have been removed from your station by the facilitator.");
+    role = null;
+    sessionStorage.removeItem('crisis_role');
+    sessionStorage.removeItem('crisis_view_state');
+    updateGlobalLeaveButton();
+    if (localState && localState.status === 'holding') {
+        switchView('holding');
+        handleHoldingState();
+    } else {
+        switchView('role_selection');
+        if (localState && localState.status === 'lobby') {
+            renderRoleSelection();
+        }
+    }
+});
+
+function updateGlobalLeaveButton() {
+    const btnContainer = document.getElementById('global-leave-container');
+    if (btnContainer) {
+        btnContainer.style.display = role ? 'block' : 'none';
+    }
+}
+
+const btnGlobalLeave = document.getElementById('btn-global-leave');
+if (btnGlobalLeave) {
+    btnGlobalLeave.addEventListener('click', () => {
+        if (confirm("Are you sure you want to leave your station?")) {
+            socket.emit('leave_role');
+            role = null;
+            sessionStorage.removeItem('crisis_role');
+            sessionStorage.removeItem('crisis_view_state');
+            updateGlobalLeaveButton();
+            if (localState && localState.status === 'holding') {
+                switchView('holding');
+                handleHoldingState();
+            } else {
+                switchView('role_selection');
+                if (localState && localState.status === 'lobby') {
+                    renderRoleSelection();
+                }
+            }
+        }
+    });
+}
 
 if (btnWiki) {
     btnWiki.addEventListener('click', () => {
@@ -392,11 +470,11 @@ function showToast(message) {
 // Register role on connect
 socket.on('connect', () => {
     const savedRole = sessionStorage.getItem('crisis_role');
-    if (savedRole) {
-        socket.emit('register_role', savedRole);
-    } else if (role) {
+    if (savedRole && !role) {
+        role = savedRole;
         socket.emit('register_role', role);
     }
+    updateGlobalLeaveButton();
 });
 
 // Socket events
@@ -412,6 +490,7 @@ function handleHoldingState() {
     role = null;
     sessionStorage.removeItem('crisis_role');
     sessionStorage.removeItem('crisis_view_state');
+    updateGlobalLeaveButton();
     if (!holdingScreen.open) holdingScreen.showModal();
     const h1 = holdingScreen.querySelector('h1');
     const p = holdingScreen.querySelector('p');

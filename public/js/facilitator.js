@@ -155,22 +155,50 @@ socket.on('scenario_error', (msg) => {
     alert(msg);
 });
 
-function createStationBadgeHtml(role, isOnline, mode, isMandatory = false) {
+function kickPlayer(role) {
+    if (confirm(`Are you sure you want to kick the player currently acting as ${role.toUpperCase()}?`)) {
+        socket.emit('kick_player', role);
+    }
+}
+
+function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandatory = false) {
     const badgeModeClass = mode === 'dropdown' ? 'dropdown-mode' : 'lobby-mode';
-    const statusClass = isOnline ? 'online' : 'offline';
+    const statusClass = pendingSocketId ? 'pending-approval' : (isOnline ? 'online' : 'offline');
     const mandatoryHtml = (mode === 'lobby' && isMandatory) ? ' <span class="text-accent-orange text-sm ml-xs">*</span>' : '';
     
+    let actionHtml = '';
+    if (pendingSocketId) {
+        actionHtml = `
+            <div style="display:flex; gap: 5px; margin-left: auto;">
+                <button class="btn btn-secondary text-xs py-0 px-1" style="border: 1px solid var(--status-2); color: var(--status-2); background: transparent;" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
+                <button class="btn btn-secondary text-xs py-0 px-1" style="border: 1px solid var(--status-4); color: var(--status-4); background: transparent;" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
+            </div>
+        `;
+    } else if (isOnline) {
+        actionHtml = `<button class="btn btn-secondary text-xs ml-auto py-0 px-1" style="border: 1px solid var(--status-4); color: var(--status-4); background: transparent;" onclick="kickPlayer('${role}')" title="Kick Player">&times;</button>`;
+    }
+    
     return `
-        <div class="station-badge ${badgeModeClass} ${statusClass}">
+        <div class="station-badge ${badgeModeClass} ${statusClass}" style="display: flex; align-items: center;">
             <div class="station-indicator ${badgeModeClass} ${statusClass}"></div>
-            ${role.toUpperCase()}${mandatoryHtml}
+            <span>${role.toUpperCase()}${mandatoryHtml}</span>
+            ${actionHtml}
         </div>
     `;
 }
 
 let currentActiveRoles = [];
-socket.on('active_roles', (roles) => {
-    currentActiveRoles = roles;
+let pendingPlayers = {};
+
+function approvePlayer(socketId) {
+    socket.emit('approve_player', socketId);
+}
+
+function rejectPlayer(socketId) {
+    socket.emit('reject_player', socketId);
+}
+
+function renderActiveRoles() {
     const container = document.getElementById('active-roles-display');
     const config = currentState && currentState.scenarioConfig ? currentState.scenarioConfig : {};
     const mandatoryRoles = config.mandatoryRoles || [];
@@ -179,17 +207,39 @@ socket.on('active_roles', (roles) => {
         container.innerHTML = '<div class="text-xs text-muted" class="mb-sm border-bottom pb-xs">STATIONS:</div>';
         
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
-        container.innerHTML += expectedRoles.map(r => createStationBadgeHtml(r, roles.includes(r), 'dropdown', mandatoryRoles.includes(r))).join('');
+        container.innerHTML += expectedRoles.map(r => {
+            const isOnline = currentActiveRoles.includes(r);
+            // Check if there is a pending socketId for this role
+            let pendingSocketId = null;
+            for (const [sId, role] of Object.entries(pendingPlayers)) {
+                if (role === r) {
+                    pendingSocketId = sId;
+                    break;
+                }
+            }
+            return createStationBadgeHtml(r, isOnline, pendingSocketId, 'dropdown', mandatoryRoles.includes(r));
+        }).join('');
     }
+}
 
+socket.on('pending_players', (players) => {
+    pendingPlayers = players;
+    renderActiveRoles();
+});
+
+socket.on('active_roles', (roles) => {
+    currentActiveRoles = roles;
+    renderActiveRoles();
     // Also update lobby screen if active
     const lobbyRoles = document.getElementById('lobby-active-roles');
     if (lobbyRoles && currentState && currentState.status === 'lobby') {
         lobbyRoles.innerHTML = '';
+        const config = currentState.scenarioConfig || {};
+        const mandatoryRoles = config.mandatoryRoles || [];
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
         lobbyRoles.innerHTML = expectedRoles
             .filter(r => r !== 'facilitator')
-            .map(r => createStationBadgeHtml(r, roles.includes(r), 'lobby', mandatoryRoles.includes(r)))
+            .map(r => createStationBadgeHtml(r, roles.includes(r), null, 'lobby', mandatoryRoles.includes(r)))
             .join('');
             
         let minUsersEl = document.getElementById('lobby-min-users-text');

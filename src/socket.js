@@ -56,12 +56,21 @@ module.exports = function setupSockets(io, engine) {
         socket.on('register_role', (role) => {
             if (!role) {
                 engine.connectedClients[socket.id] = null;
+                delete engine.pendingPlayers[socket.id];
                 return;
             }
 
             const takenRoles = engine.getActiveRoles();
             if (role !== 'display' && role !== 'facilitator' && takenRoles.includes(role)) {
                 socket.emit('role_error', 'Role already taken');
+                return;
+            }
+
+            // Late join logic
+            if (engine.gameState.status === 'active' && role !== 'display' && role !== 'facilitator') {
+                engine.pendingPlayers[socket.id] = role;
+                socket.emit('role_pending_approval');
+                io.emit('pending_players', engine.pendingPlayers);
                 return;
             }
 
@@ -72,6 +81,51 @@ module.exports = function setupSockets(io, engine) {
             // Queue AI briefing for this newly active user
             if (engine.gameState.status === 'lobby' || engine.gameState.status === 'active') {
                 io.emit('generate_ai_briefing', { role: role, mode: 'initial', includeSummary: true });
+            }
+        });
+
+        // Player leaves their role voluntarily
+        socket.on('leave_role', () => {
+            if (engine.connectedClients[socket.id]) {
+                delete engine.connectedClients[socket.id];
+                io.emit('active_roles', engine.getActiveRoles());
+            }
+            if (engine.pendingPlayers[socket.id]) {
+                delete engine.pendingPlayers[socket.id];
+                io.emit('pending_players', engine.pendingPlayers);
+            }
+        });
+
+        // Facilitator kicks a player
+        socket.on('kick_player', (roleToKick) => {
+            if (engine.connectedClients[socket.id] === 'facilitator') {
+                const targetSocketId = engine.kickRole(roleToKick);
+                if (targetSocketId) {
+                    io.to(targetSocketId).emit('kicked');
+                    io.emit('active_roles', engine.getActiveRoles());
+                }
+            }
+        });
+
+        socket.on('approve_player', (targetSocketId) => {
+            if (engine.connectedClients[socket.id] !== 'facilitator') return;
+            const role = engine.pendingPlayers[targetSocketId];
+            if (role) {
+                delete engine.pendingPlayers[targetSocketId];
+                engine.connectedClients[targetSocketId] = role;
+                io.to(targetSocketId).emit('role_registered', role);
+                io.emit('active_roles', engine.getActiveRoles());
+                io.emit('pending_players', engine.pendingPlayers);
+                io.emit('generate_ai_briefing', { role: role, mode: 'initial', includeSummary: true });
+            }
+        });
+
+        socket.on('reject_player', (targetSocketId) => {
+            if (engine.connectedClients[socket.id] !== 'facilitator') return;
+            if (engine.pendingPlayers[targetSocketId]) {
+                delete engine.pendingPlayers[targetSocketId];
+                io.to(targetSocketId).emit('role_rejected');
+                io.emit('pending_players', engine.pendingPlayers);
             }
         });
 
@@ -207,6 +261,10 @@ module.exports = function setupSockets(io, engine) {
         socket.on('disconnect', () => {
             console.log(`Client disconnected: ${socket.id}`);
             delete engine.connectedClients[socket.id];
+            if (engine.pendingPlayers[socket.id]) {
+                delete engine.pendingPlayers[socket.id];
+                io.emit('pending_players', engine.pendingPlayers);
+            }
             io.emit('active_roles', engine.getActiveRoles());
         });
     });

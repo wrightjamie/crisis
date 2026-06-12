@@ -47,6 +47,7 @@ class GameEngine {
     constructor() {
         this.scheduleLoopInterval = null;
         this.connectedClients = {}; // socket.id -> role
+        this.pendingPlayers = {}; // socket.id -> role
 
         this.gameState = {
             status: 'holding',
@@ -87,6 +88,18 @@ class GameEngine {
 
     getActiveRoles() {
         return [...new Set(Object.values(this.connectedClients))];
+    }
+
+    kickRole(roleToKick) {
+        let kickedSocketId = null;
+        for (const [socketId, role] of Object.entries(this.connectedClients)) {
+            if (role === roleToKick) {
+                kickedSocketId = socketId;
+                delete this.connectedClients[socketId];
+                break;
+            }
+        }
+        return kickedSocketId;
     }
 
     validateScenarioStart(scenarioId) {
@@ -154,6 +167,8 @@ class GameEngine {
         };
 
         this.connectedClients = {}; // reset roles
+        this.pendingPlayers = {};
+        const isRestart = this.gameState.scenarioId === scenarioId;
         return this.gameState;
     }
 

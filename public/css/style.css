@@ -698,6 +698,16 @@ body:has(dialog[open]) {
   border: none; padding: var(--space-xl); width: 100%; height: 100%; max-width: 100vw; max-height: 100vh; margin: 0; background: var(--bg-primary); color: var(--text-primary);
 }
 .fac-modal-content[open] { display: block; }
+
+/* Facilitator Dropdown Glow */
+@keyframes button-glow {
+    0% { background-color: transparent; box-shadow: 0 0 0px var(--status-2); color: inherit; }
+    100% { background-color: var(--status-2); box-shadow: 0 0 10px var(--status-2); color: #000; border-color: var(--status-2); }
+}
+
+.hamburger-menu:has(.pending-approval) .hamburger-btn {
+    animation: button-glow 1s infinite alternate;
+}
 .warning-banner {
   background: var(--status-1); color: var(--text-primary); padding: var(--space-sm) var(--space-xl); font-size: 1.var(--space-xl); margin: 0;
 }
