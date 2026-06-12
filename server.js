@@ -8,17 +8,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the 'public' directory, allowing extensionless URLs
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // Basic route to ensure server is running
 app.get('/ping', (req, res) => {
     res.send('pong');
-});
-
-// Clean route for facilitator
-app.get('/facilitator', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'facilitator.html'));
 });
 
 const engine = new GameEngine();
