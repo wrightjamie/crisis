@@ -10,7 +10,7 @@
 - [x] Add a mechanism for users to take manual actions outside of a structured scenario (which might trigger otherwise disabled scenarios)
 - [x] Add pre-game options to set initial variables (e.g. baseline US support) to introduce variety
 - [x] Perform a full review of our CSS and styles approach to ensure consistency and modern design practices.
-- [ ] Visually indicate in the UI when new Manual Actions become available to players.
-- [ ] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
+- [x] Visually indicate in the UI when new Manual Actions become available to players.
+- [x] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
 - [x] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
 - [x] Kick player and allow a new player to join

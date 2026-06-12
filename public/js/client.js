@@ -8,6 +8,7 @@ let localState = null;
 let previousScores = null;
 let previousAiBriefingTimestamp = null;
 let currentInfoView = null;
+let previousAvailableActions = [];
 
 // DOM Elements
 const appEl = document.getElementById('app');
@@ -189,6 +190,8 @@ if (btnWiki) {
 
 if (btnActions) {
     btnActions.addEventListener('click', () => {
+        const badge = document.getElementById('actions-badge');
+        if (badge) badge.style.display = 'none';
         if (window.showActionsPanel) window.showActionsPanel();
     });
 }
@@ -646,6 +649,32 @@ function updateUI() {
         }
     }
 
+    // Check for new manual actions
+    if (localState.scenarioConfig && localState.scenarioConfig.manualActions) {
+        const currentAvailableActions = localState.scenarioConfig.manualActions
+            .filter(a => a.initiator.includes(role) && window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId)))
+            .map(a => a.id);
+
+        if (previousAvailableActions.length > 0) {
+            const newActions = currentAvailableActions.filter(id => !previousAvailableActions.includes(id));
+            if (newActions.length > 0) {
+                if (!currentInfoView || currentInfoView.type !== 'actions') {
+                    const badge = document.getElementById('actions-badge');
+                    if (badge) badge.style.display = 'block';
+                    if (btnActions) {
+                        btnActions.classList.remove('btn-score-changed');
+                        void btnActions.offsetWidth;
+                        btnActions.classList.add('btn-score-changed');
+                        setTimeout(() => btnActions.classList.remove('btn-score-changed'), 2500);
+                    }
+                } else {
+                    refreshInfoPanel();
+                }
+            }
+        }
+        previousAvailableActions = currentAvailableActions;
+    }
+
     renderMap(localState.events, localState.assets);
     refreshInfoPanel();
 }
@@ -828,10 +857,15 @@ function buildActionsPanelHtml(p) {
         if (!action.initiator.includes(role)) return;
 
         const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId));
-        if (!isMet) return; // Hide if conditions aren't met
 
         actionsShown++;
-        html += `<div class="card wiki-card-blue mb-2">`;
+        
+        if (isMet) {
+            html += `<div class="card wiki-card-blue mb-2">`;
+        } else {
+            html += `<div class="card wiki-card-blue mb-2" style="opacity: 0.6; filter: grayscale(1);">`;
+        }
+        
         if (action.image) {
             html += `<img src="${action.image}" alt="${action.name}" class="wiki-img" class="mb-sm">`;
         }
@@ -853,12 +887,17 @@ function buildActionsPanelHtml(p) {
             html += `<div class="card-meta mt-1 text-status-1" style="font-weight:bold;">Immediate Execution</div>`;
         }
 
-        html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+        if (isMet) {
+            html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+        } else {
+            html += `<div class="mt-2 text-status-4 text-xs font-mono">🔒 REQUIREMENTS NOT MET</div>`;
+            html += `<button class="btn mt-1 w-100" disabled style="opacity: 0.5; cursor: not-allowed;">Initiate Action</button>`;
+        }
         html += `</div>`;
     });
     
     if (actionsShown === 0) {
-        html += '<p class="text-muted">No actions currently available. (Requirements not met)</p>';
+        html += '<p class="text-muted">No actions currently assigned to your station.</p>';
     }
     html += '</div>';
     
