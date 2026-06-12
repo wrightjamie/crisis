@@ -3,12 +3,12 @@ version: '3.8'
 services:
   crisis-app:
     # Uses the pre-built image from GitHub Container Registry
-    image: ghcr.io/wrightjamie/crisis:latest
+    # image: ghcr.io/wrightjamie/crisis:latest
     # To build locally instead, uncomment 'build' and comment out 'image'
-    # build: .
+    build: .
     container_name: crisis_app
     ports:
-      - "3000:3000"
+      - "999:3000"
     restart: unless-stopped
     environment:
       - NODE_ENV=production
