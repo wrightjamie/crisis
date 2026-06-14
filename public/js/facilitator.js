@@ -236,6 +236,7 @@ socket.on('active_roles', (roles) => {
         lobbyRoles.innerHTML = '';
         const config = currentState.scenarioConfig || {};
         const mandatoryRoles = config.mandatoryRoles || [];
+        const minUsers = config.minUsers || 1;
         const expectedRoles = scenarioRoles.length > 0 ? scenarioRoles : ['home', 'defence', 'foreign', 'media', 'cyber', 'display'];
         lobbyRoles.innerHTML = expectedRoles
             .filter(r => r !== 'facilitator')
