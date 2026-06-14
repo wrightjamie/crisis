@@ -187,8 +187,8 @@ module.exports = function setupSockets(io, engine) {
             const task = engine.gameState.decisionTasks.find(t => t.id === data.taskId);
             let eventName = 'Unknown Event';
             if (task) {
-                const template = engine.getScenarioTemplates().find(t => t.id === task.eventId);
-                if (template) eventName = template.name;
+                const event = engine.gameState.events.find(e => e.id === task.eventId);
+                if (event) eventName = event.name;
             }
 
             const option = engine.resolveTask(data.taskId, data.optionId);

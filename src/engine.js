@@ -221,6 +221,7 @@ class GameEngine {
             location: eventLocation,
             description: template.description,
             roleDescriptions: template.roleDescriptions,
+            image: template.image,
             timestamp: Date.now()
         };
 
