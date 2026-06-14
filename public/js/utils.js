@@ -23,7 +23,7 @@ function generateWikiMainMenu(currentState, p) {
         
         // Sort alphabetically
         uniqueAssets.sort((a, b) => a.name.localeCompare(b.name)).forEach(a => {
-            html += `<li><button class="btn wiki-asset-btn" onclick="window.showWikiPanel('asset', '${a.id}')">${a.name}</button></li>`;
+            html += `<li><button class="btn btn-secondary wiki-asset-btn" onclick="window.showWikiPanel('asset', '${a.id}')">${a.name}</button></li>`;
         });
     } else {
         html += `<li class="wiki-empty-msg">No assets currently deployed.</li>`;
@@ -40,7 +40,7 @@ function generateWikiMainMenu(currentState, p) {
             const item = window.ACRONYMS[ac];
             const hasWiki = typeof item === 'object' && item.wiki;
             if (hasWiki) {
-                html += `<li><button class="btn wiki-term-btn" onclick="window.showWikiPanel('term', '${ac}')"><strong>${ac}</strong> - ${item.definition}</button></li>`;
+                html += `<li><button class="btn btn-secondary wiki-term-btn" onclick="window.showWikiPanel('term', '${ac}')"><strong>${ac}</strong> - ${item.definition}</button></li>`;
             }
         }
     }
@@ -49,7 +49,7 @@ function generateWikiMainMenu(currentState, p) {
 }
 
 function generateWikiAsset(currentState, itemId, p) {
-    let html = `<button class="btn wiki-back-btn" onclick="window.showWikiPanel()">← Back to Wiki</button>`;
+    let html = `<button class="btn btn-secondary wiki-back-btn" onclick="window.showWikiPanel()">← Back to Wiki</button>`;
     const asset = (currentState && currentState.assets) ? currentState.assets.find(a => a.id === itemId) : null;
     if (asset) {
         html += `<div class="card wiki-card-blue">`;
@@ -64,7 +64,7 @@ function generateWikiAsset(currentState, itemId, p) {
 }
 
 function generateWikiTerm(itemId, p) {
-    let html = `<button class="btn wiki-back-btn" onclick="window.showWikiPanel()">← Back to Wiki</button>`;
+    let html = `<button class="btn btn-secondary wiki-back-btn" onclick="window.showWikiPanel()">← Back to Wiki</button>`;
     const item = window.ACRONYMS ? window.ACRONYMS[itemId] : null;
     if (item) {
         html += `<div class="card wiki-card-orange">

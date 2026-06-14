@@ -166,12 +166,70 @@ body {
 .btn-primary {
   background-color: var(--accent-blue);
   color: var(--color-white);
-  border: none;
+  border: 1px solid var(--accent-blue);
   text-align: center;
 }
-
 .btn-primary:hover {
   background-color: var(--color-blue-hover);
+  border-color: var(--color-blue-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+.btn-danger {
+  background-color: rgba(255, 60, 60, 0.1);
+  color: var(--status-4);
+  border: 1px solid var(--status-4);
+  text-align: center;
+}
+.btn-danger:hover {
+  background-color: rgba(255, 60, 60, 0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid transparent;
+}
+.btn-ghost:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+/* Button Group */
+.btn-group {
+    display: flex;
+    width: 100%;
+}
+.btn-group.inline {
+    display: inline-flex;
+    width: auto;
+}
+.btn-group .btn {
+    border-radius: 0;
+    margin-right: -1px;
+    flex: 1;
+    text-align: center;
+}
+.btn-group .btn:first-child {
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+}
+.btn-group .btn:last-child {
+    border-top-right-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+    margin-right: 0;
+}
+.btn-group .btn:hover {
+    z-index: 1;
 }
 
 /* Icon Buttons */
@@ -556,19 +614,27 @@ body:has(dialog[open]) {
 .fac-roles { font-size: var(--text-xs); display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); border-left: 1px solid var(--border-color); padding-left: var(--space-md); margin-left: var(--space-sm); }
 
 /* Station Badge Styles */
+.station-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-xs);
+}
+
 .station-badge {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     border-radius: var(--radius-md);
     padding: var(--space-sm) var(--space-md);
     font-size: var(--text-md);
-    margin: var(--space-xs);
+    margin: 0;
 }
 .station-badge.dropdown-mode {
-    padding: var(--space-xs) 0;
-    font-size: var(--text-base);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-tertiary);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-sm);
     margin: 0;
-    border-radius: 0;
 }
 .station-badge.online {
     background: var(--bg-secondary);

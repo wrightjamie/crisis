@@ -759,7 +759,7 @@ function buildAiPanelHtml(p) {
     
     html += `
         <div class="mt-2">
-            <button id="btn-request-ai-briefing" class="btn" class="w-100 btn-outline-blue">Request Full Refresh</button>
+            <button id="btn-request-ai-briefing" class="btn btn-secondary w-100 mt-sm">Request Full Refresh</button>
         </div>
     `;
     
@@ -799,7 +799,7 @@ function buildEventPanelHtml(p) {
             if (!isResolved) {
                 html += `<div class="task-options">`;
                 task.options.forEach(opt => {
-                    html += `<button class="btn" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
+                    html += `<button class="btn btn-secondary" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
                 });
                 html += `</div>`;
             } else {
@@ -888,10 +888,10 @@ function buildActionsPanelHtml(p) {
         }
 
         if (isMet) {
-            html += `<button class="btn mt-2 w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+            html += `<button class="btn btn-primary mt-sm w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
         } else {
             html += `<div class="mt-2 text-status-4 text-xs font-mono">🔒 REQUIREMENTS NOT MET</div>`;
-            html += `<button class="btn mt-1 w-100" disabled style="opacity: 0.5; cursor: not-allowed;">Initiate Action</button>`;
+            html += `<button class="btn btn-primary mt-sm w-100" disabled style="opacity: 0.5; cursor: not-allowed;">Initiate Action</button>`;
         }
         html += `</div>`;
     });

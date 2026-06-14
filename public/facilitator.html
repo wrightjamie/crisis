@@ -79,12 +79,12 @@
             </div>
         </div>
         <div class="flex-center gap-1">
-            <button id="btn-wiki" class="btn" onclick="if(window.showWikiPanel) window.showWikiPanel();">Wiki</button>
+            <button id="btn-wiki" class="btn btn-secondary" onclick="if(window.showWikiPanel) window.showWikiPanel();">Wiki</button>
             <div class="hamburger-menu">
                 <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
                 <div id="dropdown-menu" class="dropdown-content">
                     <div class="fac-list-item">
-                        <div id="active-roles-display" class="flex-col gap-sm w-100">
+                        <div id="active-roles-display" class="mt-sm station-grid">
                             <!-- Roles injected via JS -->
                         </div>
                     </div>
@@ -110,15 +110,15 @@
             <p id="lobby-scenario-desc" class="text-secondary mb-2">Description</p>
             
             <h3>Joined Stations</h3>
-            <div id="lobby-active-roles" class="mb-2 mt-1 flex-wrap gap-sm justify-center" >
+            <div id="lobby-active-roles" class="mb-2 mt-1 station-grid">
                 <!-- Joined roles injected via JS -->
             </div>
             
             <p id="lobby-error-msg" class="text-red mb-1 text-bold"></p>
             
             <div class="flex-row gap-md justify-center items-center mt-md">
-                <button class="btn warning-banner" onclick="window.startScenario()">Launch Scenario</button>
-                <button class="btn m-0" onclick="window.endScenario()">Cancel / Back to Holding</button>
+                <button class="btn btn-primary" onclick="window.startScenario()">Launch Scenario</button>
+                <button class="btn btn-secondary" onclick="window.endScenario()">Cancel / Back to Holding</button>
             </div>
         </div>
     </dialog>
@@ -132,9 +132,11 @@
                 <div class="fac-list-item-header">
                     <h2>Scenario Explorer</h2>
                     <div id="stage-controls" class="flex-row items-center gap-sm">
-                        <button class="btn badge-sm" onclick="window.changeStage(-1)">&lt;</button>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary text-sm" onclick="window.changeStage(-1)">&lt;</button>
+                            <button class="btn btn-secondary text-sm" onclick="window.changeStage(1)">&gt;</button>
+                        </div>
                         <span id="current-stage-display" class="text-bold text-accent-blue">Stage 1</span>
-                        <button class="btn badge-sm" onclick="window.changeStage(1)">&gt;</button>
                     </div>
                 </div>
                 <p class="text-sm text-secondary mb-1">Click nodes to view details and trigger events. Events from future stages are hidden.</p>
@@ -200,7 +202,7 @@
     <dialog class="info-dialog" id="fac-info-panel">
         <div class="panel-header event-panel-header">
             <h2 id="fac-info-title" class="m-0">Event Info</h2>
-            <button class="fac-close-btn" onclick="closeFacilitatorPanel()">&times;</button>
+            <button class="btn-icon action-reject" onclick="closeFacilitatorPanel()">&times;</button>
         </div>
         <div class="panel-content p-md flex-1" id="fac-info-content" style="overflow-y: auto;">
             <!-- Content injected via JS -->

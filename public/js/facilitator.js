@@ -339,16 +339,16 @@ function renderHoldingScreen() {
             s.variantAxes.forEach(axis => {
                 axesHtml += `<div class="mb-lg">`;
                 axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
-                axesHtml += `<div class="flex-center gap-1 flex-wrap" id="axis-${s.id}-${axis.id}">`;
+                axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
                 axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'variant-selected' : ''} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
+                    axesHtml += `<button class="btn ${idx === 0 ? 'variant-selected' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
                 });
                 axesHtml += '</div></div>';
                 // Default to first option
                 variantSelections[s.id][axis.id] = axis.options[0].id;
             });
 
-            axesHtml += `<button class="btn text-muted border-muted mt-sm bg-none text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
+            axesHtml += `<button class="btn btn-ghost text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
             axesHtml += '</div>';
         }
 
@@ -505,7 +505,7 @@ function renderGlobalView() {
             : `<span class="text-status-4">Pending</span>`;
             
         const dismissBtn = task.status === 'pending' 
-            ? `<button onclick="dismissDecision('${task.id}')" class="btn text-sm p-1 fac-status-offline">Dismiss</button>` 
+            ? `<button onclick="dismissDecision('${task.id}')" class="btn btn-danger text-sm p-1">Dismiss</button>` 
             : '';
 
         tasksList.innerHTML += `
@@ -646,7 +646,7 @@ function buildFacilitatorEventConditionsWarning(template, currentState) {
 function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentState, p) {
     const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
     
-    let html = `<div class="card btn wiki-back-btn">`;
+    let html = `<div class="card btn btn-secondary wiki-back-btn">`;
     if (template.image) html += `<img src="${template.image}" alt="${template.name}" class="wiki-img">`;
     html += `
             <div class="card-title">${p(template.name)}</div>
@@ -670,7 +670,7 @@ function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentStat
     if (template.decisions && template.decisions.length > 0) {
         html += `
             <h3 class="my-3 text-muted text-base uppercase">Generated Tasks</h3>
-            <div class="action-list btn wiki-back-btn">
+            <div class="action-list btn btn-secondary wiki-back-btn">
         `;
         template.decisions.forEach(dec => {
             html += `
@@ -772,13 +772,13 @@ function renderScheduledEvents() {
                 <strong>${name}</strong>
                 ${statusHtml}
             </div>
-            <div class="flex-row gap-sm mt-sm">
-                <button class="btn btn-primary" class="badge-sm" onclick="socket.emit('force_trigger_scheduled', '${se.uuid}')">Trigger Now</button>
+            <div class="btn-group mt-sm">
+                <button class="btn btn-primary text-sm" onclick="socket.emit('force_trigger_scheduled', '${se.uuid}')">Trigger Now</button>
                 ${se.paused 
-                    ? `<button class="btn" class="badge-sm" onclick="socket.emit('resume_scheduled_event', '${se.uuid}')">Resume</button>`
-                    : `<button class="btn" class="badge-sm" onclick="socket.emit('pause_scheduled_event', '${se.uuid}')">Pause</button>`
+                    ? `<button class="btn btn-secondary text-sm" onclick="socket.emit('resume_scheduled_event', '${se.uuid}')">Resume</button>`
+                    : `<button class="btn btn-secondary text-sm" onclick="socket.emit('pause_scheduled_event', '${se.uuid}')">Pause</button>`
                 }
-                <button class="btn text-danger" class="badge-sm" onclick="socket.emit('delete_scheduled_event', '${se.uuid}')">Delete</button>
+                <button class="btn btn-danger text-sm" onclick="socket.emit('delete_scheduled_event', '${se.uuid}')">Delete</button>
             </div>
         `;
         container.appendChild(card);
