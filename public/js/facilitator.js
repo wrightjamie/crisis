@@ -169,13 +169,13 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     let actionHtml = '';
     if (pendingSocketId) {
         actionHtml = `
-            <div style="display:flex; gap: 5px; margin-left: auto;">
-                <button class="btn btn-secondary text-xs py-0 px-1" style="border: 1px solid var(--status-2); color: var(--status-2); background: transparent;" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
-                <button class="btn btn-secondary text-xs py-0 px-1" style="border: 1px solid var(--status-4); color: var(--status-4); background: transparent;" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
+            <div style="display:flex; gap: 2px; margin-left: auto;">
+                <button class="btn-icon action-approve" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
+                <button class="btn-icon action-reject" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
             </div>
         `;
     } else if (isOnline) {
-        actionHtml = `<button class="btn btn-secondary text-xs ml-auto py-0 px-1" style="border: 1px solid var(--status-4); color: var(--status-4); background: transparent;" onclick="kickPlayer('${role}')" title="Kick Player">&times;</button>`;
+        actionHtml = `<button class="btn-icon action-kick ml-auto" onclick="kickPlayer('${role}')" title="Kick Player">&times;</button>`;
     }
     
     return `
