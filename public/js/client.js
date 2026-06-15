@@ -371,8 +371,14 @@ function updateEdgeMarkers() {
     
     if (mapSize.x === 0 || mapSize.y === 0) return;
     
-    const w = mapSize.x / 2;
-    const h = mapSize.y / 2;
+    const isPanelOpen = document.getElementById('main-content').classList.contains('panel-open');
+    const panelWidth = isPanelOpen ? 400 : 0;
+    
+    // Effective visible area center
+    const centerX = (mapSize.x - panelWidth) / 2;
+    const centerY = mapSize.y / 2;
+    const halfVisW = (mapSize.x - panelWidth) / 2;
+    const halfVisH = mapSize.y / 2;
     
     localState.events.forEach(evt => {
         const eventTasks = localState.decisionTasks.filter(t => t.eventId === evt.id);
@@ -382,11 +388,13 @@ function updateEdgeMarkers() {
         if (isResolved) return; // Only point to unresolved events
         
         const latLng = L.latLng(evt.location);
-        if (bounds.contains(latLng)) return; 
-        
         const pt = map.latLngToContainerPoint(latLng);
-        const dxRaw = pt.x - w;
-        const dyRaw = pt.y - h;
+        
+        // Check if point is within the visible bounds (accounting for panel)
+        if (pt.x >= 0 && pt.x <= (mapSize.x - panelWidth) && pt.y >= 0 && pt.y <= mapSize.y) return; 
+        
+        const dxRaw = pt.x - centerX;
+        const dyRaw = pt.y - centerY;
         const angle = Math.atan2(dyRaw, dxRaw);
         
         let dx = Math.cos(angle);
@@ -395,12 +403,12 @@ function updateEdgeMarkers() {
         if (Math.abs(dx) < 0.0001) dx = dx > 0 ? 0.0001 : -0.0001;
         if (Math.abs(dy) < 0.0001) dy = dy > 0 ? 0.0001 : -0.0001;
         
-        const tX = dx > 0 ? w / dx : -w / dx;
-        const tY = dy > 0 ? h / dy : -h / dy;
+        const tX = dx > 0 ? halfVisW / dx : -halfVisW / dx;
+        const tY = dy > 0 ? halfVisH / dy : -halfVisH / dy;
         const t = Math.min(tX, tY) - 10; // 10px padding from the edge
         
-        const edgeX = w + dx * t;
-        const edgeY = h + dy * t;
+        const edgeX = centerX + dx * t;
+        const edgeY = centerY + dy * t;
         
         const indicator = document.createElement('div');
         indicator.className = 'map-marker map-marker-edge';
@@ -797,11 +805,15 @@ function buildEventPanelHtml(p) {
             html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
 
             if (!isResolved) {
-                html += `<div class="task-options">`;
-                task.options.forEach(opt => {
-                    html += `<button class="btn btn-secondary" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
-                });
-                html += `</div>`;
+                if (role !== 'display') {
+                    html += `<div class="task-options">`;
+                    task.options.forEach(opt => {
+                        html += `<button class="btn btn-secondary" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<div class="mt-sm text-sm text-muted"><em>Waiting for station to make a decision...</em></div>`;
+                }
             } else {
                 const selectedOpt = task.options.find(o => o.id === task.selectedOption);
                 html += `<div class="card-role-desc" class="mt-sm">Decision Made: ${selectedOpt ? p(selectedOpt.text) : 'Unknown'}</div>`;
