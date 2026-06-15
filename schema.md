@@ -53,6 +53,9 @@ The top-level object representing a fully playable module.
     eventTemplates: [         // Array of all events (flat structure, no nesting)
         // ... See Event Template Object ...
     ],
+    manualActions: [          // Actions players can trigger proactively
+        // ... See Manual Action Object ...
+    ],
     aiConfig: {               // AI Configuration for scenario summaries and intelligence briefings
         systemPrompt: "string", // System prompt governing AI behavior and writing style
         scoreLabels: {        // Human-readable labels for the 1-5 score scale
@@ -161,5 +164,38 @@ Presented to a specific role when an event is triggered.
             }
         }
     ]
+}
+```
+
+## Manual Action Object
+Actions that players can trigger proactively from the "Actions" menu, independent of events.
+
+```javascript
+{
+    id: "string",             // Unique identifier (e.g., 'act_nuke')
+    name: "string",           // Display title
+    description: "string",    // Description shown to players
+    image: "string",          // (Optional) URL path to an image
+    initiator: ["string"],    // Array of role IDs that can initiate this action
+    requiresApprovalFrom: ["string"], // (Optional) Roles that must approve before it triggers
+    conditions: {             // Requirements for this action to be available (or visible)
+        minScores: { "score_id": number },
+        maxScores: { "score_id": number },
+        assets: { "asset_id": "required_state" }
+    },
+    effects: {                // What happens when this action is fully approved and triggered
+        scores: { "score_id": number }, // E.g., { military_escalation: +2 }
+        unlockEvents: ["event_id"],
+        triggerEvents: [
+            {
+                id: "event_id",
+                delayMs: number,
+                probability: number
+            }
+        ],
+        randomEvents: [       // Selects one event to trigger based on weight
+            { id: "event_id", weight: number, effects: { scores: { "score_id": number } } }
+        ]
+    }
 }
 ```
