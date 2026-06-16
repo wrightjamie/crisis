@@ -341,20 +341,6 @@ body.fac-panel-open .info-panel {
   transform: translateX(0);
 }
 
-/* Variant Selector Buttons */
-.variant-opt {
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  transition: all var(--transition-fast);
-}
-
-.variant-opt.variant-selected {
-  background-color: var(--accent-blue);
-  color: var(--color-white);
-  border-color: var(--accent-blue);
-}
-
 /* Briefing Screen */
 .briefing-screen {
   border: none;
