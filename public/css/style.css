@@ -734,6 +734,8 @@ body:has(dialog[open]) {
 .p-0 { padding: 0; }
 .p-sm { padding: var(--space-sm); }
 .p-md { padding: var(--space-md); }
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
 
 /* Typography & Colors */
 .text-bold { font-weight: var(--font-bold); }
@@ -863,3 +865,8 @@ body:has(dialog[open]) {
 .scenario-stage-header { background: var(--bg-secondary); padding: var(--space-sm) var(--space-md); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
 .font-mono { font-family: monospace; }
 .scenario-stage-content { padding: var(--space-md); background: var(--bg-primary); }
+
+/* Utility Classes */
+.d-block { display: block !important; }
+.d-none { display: none !important; }
+.d-flex { display: flex !important; }

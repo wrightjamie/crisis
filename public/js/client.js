@@ -321,10 +321,18 @@ function enterMap() {
 function openPanel(title) {
     infoPanelTitle.textContent = title;
     mainContent.classList.add('panel-open');
+    if (typeof updateEdgeMarkers === 'function') {
+        updateEdgeMarkers();
+        setTimeout(updateEdgeMarkers, 350);
+    }
 }
 
 function closePanel() {
     mainContent.classList.remove('panel-open');
+    if (typeof updateEdgeMarkers === 'function') {
+        updateEdgeMarkers();
+        setTimeout(updateEdgeMarkers, 350);
+    }
 }
 
 // Global function to be called from inline onclick handlers
@@ -812,7 +820,9 @@ function buildEventPanelHtml(p) {
                     });
                     html += `</div>`;
                 } else {
-                    html += `<div class="mt-sm text-sm text-muted"><em>Waiting for station to make a decision...</em></div>`;
+                    const roleNames = localState?.scenarioConfig?.roleNames || {};
+                    const roleName = roleNames[task.role] || task.role.toUpperCase();
+                    html += `<div class="mt-sm text-sm text-muted"><em>Waiting for ${roleName} to make a decision...</em></div>`;
                 }
             } else {
                 const selectedOpt = task.options.find(o => o.id === task.selectedOption);
