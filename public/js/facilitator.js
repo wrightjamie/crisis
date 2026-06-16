@@ -342,7 +342,7 @@ function renderHoldingScreen() {
                 axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
                 axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
                 axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn ${idx === 0 ? 'variant-selected' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
+                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'btn-primary' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
                 });
                 axesHtml += '</div></div>';
                 // Default to first option
@@ -380,8 +380,12 @@ window.selectVariant = function(scenarioId, axisId, optionId, btnEl) {
     // Update visual selection
     const container = document.getElementById(`axis-${scenarioId}-${axisId}`);
     if (container) {
-        container.querySelectorAll('.variant-opt').forEach(b => b.classList.remove('variant-selected'));
-        btnEl.classList.add('variant-selected');
+        container.querySelectorAll('.variant-opt').forEach(b => {
+            b.classList.remove('btn-primary');
+            b.classList.add('btn-secondary');
+        });
+        btnEl.classList.remove('btn-secondary');
+        btnEl.classList.add('btn-primary');
     }
 };
 
@@ -397,7 +401,14 @@ window.randomiseVariants = function(scenarioId) {
         const container = document.getElementById(`axis-${scenarioId}-${axis.id}`);
         if (container) {
             container.querySelectorAll('.variant-opt').forEach(b => {
-                b.classList.toggle('variant-selected', b.getAttribute('data-option') === randomOpt.id);
+                const isSelected = b.getAttribute('data-option') === randomOpt.id;
+                if (isSelected) {
+                    b.classList.remove('btn-secondary');
+                    b.classList.add('btn-primary');
+                } else {
+                    b.classList.remove('btn-primary');
+                    b.classList.add('btn-secondary');
+                }
             });
         }
     });
