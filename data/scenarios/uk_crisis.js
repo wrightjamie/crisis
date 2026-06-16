@@ -1106,7 +1106,7 @@ CRITICAL RULES:
                     defence: 'Target packages finalized and loaded. Awaiting orders.'
                 },
                 decisions: []
-            },,
+            },
             {
                 id: 'ev_protest_london',
                 stage: 'stage_1',
