@@ -1106,7 +1106,240 @@ CRITICAL RULES:
                     defence: 'Target packages finalized and loaded. Awaiting orders.'
                 },
                 decisions: []
-            }
+            },,
+            {
+                id: 'ev_protest_london',
+                stage: 'stage_1',
+                name: 'Anti-War Protests (London)',
+                repeatable: false,
+                location: [51.50, -0.12],
+                image: '/images/events/ev_protest_london.png',
+                description: 'Large scale protests have erupted outside Downing Street demanding neutrality in the escalating Eastern European situation.',
+                roleDescriptions: {
+                    home: 'Crowds are swelling. Intelligence suggests foreign provocateurs may be inciting violence among fringe groups.',
+                    media: 'Social media is heavily amplifying the protests, trending globally with anti-government hashtags.'
+                },
+                decisions: [
+                    {
+                        role: 'home',
+                        text: 'How should the police manage the growing crowds?',
+                        options: [
+                            { id: 'opt_pl1', text: 'Disperse protests to maintain order', effects: { scores: { civilian_stability: -1, uk_russia: +1 }, triggerEvents: [{ id: 'ev_protest_violence', probability: 0.3, delayMs: 10000 }] } },
+                            { id: 'opt_pl2', text: 'Allow protests to continue peacefully', effects: { scores: { civilian_stability: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_protest_violence',
+                stage: 'stage_1',
+                name: 'Protests Turn Violent',
+                requiresUnlock: true,
+                repeatable: false,
+                location: [51.50, -0.12],
+                image: '/images/events/ev_protest_london.png',
+                description: 'Following the dispersal order, protests have turned violent. Suspected foreign instigators ("little green men") have been spotted clashing with police.',
+                roleDescriptions: {
+                    home: 'Multiple officers injured. Several arrests of individuals carrying forged documents.',
+                    foreign: 'Russian media is broadcasting the clashes, accusing the UK of "brutal crackdowns on democracy".'
+                },
+                decisions: [
+                    {
+                        role: 'home',
+                        text: 'How to respond to the escalation?',
+                        options: [
+                            { id: 'opt_pv1', text: 'Deploy public order units and make mass arrests', effects: { scores: { civilian_stability: -2 } } },
+                            { id: 'opt_pv2', text: 'Targeted extraction of suspected foreign provocateurs', effects: { scores: { civilian_stability: -1, uk_russia: +1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_dissident_discovery',
+                stage: 'stage_1',
+                name: 'Attack on Russian Dissident (Discovery)',
+                repeatable: false,
+                location: [51.06, -1.79], // Salisbury
+                image: '/images/events/ev_dissident_discovery.png',
+                description: 'A prominent Russian dissident and Putin critic has been found unconscious in a Salisbury park. Emergency services are on the scene.',
+                autoEffects: { scores: { civilian_stability: -1 } },
+                triggerEvents: [{ id: 'ev_dissident_results', probability: 1.0, delayMs: 120000 }], // 2 minutes
+                roleDescriptions: {
+                    home: 'Local police have cordoned off the area. Counter-terrorism units have been alerted as a precaution.',
+                    foreign: 'The dissident was a high-profile defector under UK protection.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_disinfo_campaign',
+                stage: 'stage_1',
+                name: 'Disinformation Campaign Surge',
+                repeatable: true,
+                location: [51.5, -0.1],
+                image: '/images/events/ev_disinfo_campaign.png',
+                description: 'Intelligence detects a massive surge in bot networks amplifying divisive domestic issues on social media, aiming to fracture public unity.',
+                autoEffects: { scores: { civilian_stability: -1, uk_russia: +1 } },
+                roleDescriptions: {
+                    cyber: 'GCHQ confirms the botnets trace back to known GRU-affiliated troll farms in St. Petersburg.',
+                    media: 'Mainstream news is beginning to pick up the fabricated stories, mistaking them for genuine public outrage.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_bomber_intercept',
+                stage: 'stage_1',
+                name: 'Surge in Bomber Intercepts',
+                repeatable: true,
+                location: [59.0, 0.0], // North Sea
+                image: '/images/events/ev_bomber_intercept.png',
+                description: 'RAF Typhoons have been scrambled a record number of times this week to escort Tu-95 Bear bombers skirting UK airspace without transponders.',
+                autoEffects: { scores: { military_escalation: +1, uk_russia: +1 } },
+                roleDescriptions: {
+                    defence: 'This is a significant spike in activity, testing our response times and exhausting QRA crews.',
+                    foreign: 'This posturing is designed to send a clear message to NATO regarding their strategic reach.'
+                },
+                decisions: []
+            },
+            {
+                id: 'ev_gps_jamming',
+                stage: 'stage_1',
+                name: 'GPS Jamming of VIP Transport',
+                repeatable: false,
+                location: [55.0, 19.0], // Baltic Sea
+                image: '/images/events/ev_gps_jamming.png',
+                description: 'An RAF transport carrying the Defence Secretary experienced severe GPS jamming and spoofing while flying over the Baltic Sea near Kaliningrad.',
+                roleDescriptions: {
+                    defence: 'The aircraft safely navigated using alternative instruments, but the jamming was highly targeted and aggressive.',
+                    foreign: 'This is a blatant provocation against a senior cabinet minister.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'How should the UK respond diplomatically?',
+                        options: [
+                            { id: 'opt_gps1', text: 'Issue a strong, public diplomatic protest (Summon Ambassador)', effects: { scores: { uk_russia: +1, military_escalation: +1 } } },
+                            { id: 'opt_gps2', text: 'Downplay the incident publicly to avoid panic', effects: { scores: { civilian_stability: +1, uk_europe: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_black_sea_intercept',
+                stage: 'stage_1',
+                name: 'Aggressive Interception in Black Sea',
+                repeatable: false,
+                location: [43.0, 31.0], // Black Sea
+                image: '/images/events/ev_black_sea_intercept.png',
+                description: 'A UK Rivet Joint intelligence aircraft was aggressively intercepted by Russian Su-27s near Crimea, coming within 15 feet in an unsafe maneuver.',
+                roleDescriptions: {
+                    defence: 'The Russian pilots fired flares across the flight path. The Rivet Joint had to take evasive action.',
+                    foreign: 'Russia claims the aircraft was violating their airspace, which we strongly deny.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'How should we adjust our intelligence patrols?',
+                        options: [
+                            { id: 'opt_bsi1', text: 'Temporarily suspend flights in the area', effects: { scores: { military_readiness: -1, military_escalation: -1 } } },
+                            { id: 'opt_bsi2', text: 'Continue patrols but deploy Typhoon escorts', effects: { scores: { military_readiness: +1, military_escalation: +2 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_dissident_results',
+                stage: 'stage_2',
+                name: 'Dissident Attack - Investigation Results',
+                requiresUnlock: true,
+                repeatable: false,
+                location: [51.06, -1.79], // Salisbury
+                image: '/images/events/ev_dissident_results.png',
+                description: 'Toxicology confirms the use of a military-grade nerve agent on the Russian dissident. Intelligence heavily points to GRU operatives who fled the country.',
+                roleDescriptions: {
+                    foreign: 'Our allies are waiting to see our response. Failing to act strongly will signal weakness.',
+                    home: 'Public outrage is significant. Chemical weapons used on British soil demands a severe response.'
+                },
+                decisions: [
+                    {
+                        role: 'foreign',
+                        text: 'What action should we take against Russia?',
+                        options: [
+                            { id: 'opt_dr1', text: 'Expel 23 diplomats and publicly assign blame', effects: { scores: { uk_russia: +2, civilian_stability: +1, uk_europe: +1 } } },
+                            { id: 'opt_dr2', text: 'Demand a joint OPCW investigation before acting', effects: { scores: { uk_europe: -1, civilian_stability: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_sub_detection',
+                stage: 'stage_2',
+                name: 'Unidentified Submarine Detection',
+                repeatable: false,
+                location: [56.0, -5.5], // Near Faslane
+                image: '/images/events/ev_sub_detection.png',
+                description: 'Sonar contacts near HMNB Clyde suggest a Russian Akula-class attack submarine is probing the defenses of the UK strategic nuclear deterrent base.',
+                roleDescriptions: {
+                    defence: 'The submarine is lingering just outside territorial waters but testing our response times.',
+                    foreign: 'This is a direct challenge to the security of the Vanguard fleet.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'What are the orders for the antisubmarine forces?',
+                        options: [
+                            { id: 'opt_sub1', text: 'Aggressively prosecute with active sonar and ASW helicopters', effects: { scores: { military_escalation: +2, military_readiness: +1 } } },
+                            { id: 'opt_sub2', text: 'Quietly monitor the contact to gather acoustic intelligence', effects: { scores: { military_readiness: +2, military_escalation: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_oligarch_sanctions',
+                stage: 'stage_2',
+                name: 'Targeted Sanctions on Oligarchs',
+                repeatable: false,
+                location: [51.5, -0.1], // London
+                image: '/images/events/ev_oligarch_sanctions.png',
+                description: 'Following rising tensions, pressure mounts in Parliament to aggressively freeze the assets of prominent Russian billionaires operating in "Londongrad".',
+                roleDescriptions: {
+                    home: 'The public is demanding action against corrupt wealth flowing through the capital.',
+                    treasury: 'Immediate freezing will cause capital flight and legal challenges, but targeted monitoring may be seen as weak.'
+                },
+                decisions: [
+                    {
+                        role: 'home',
+                        text: 'How far do we go with financial sanctions?',
+                        options: [
+                            { id: 'opt_os1', text: 'Immediately freeze high-profile assets and seize properties', effects: { scores: { uk_russia: +2, civilian_stability: +1 } } },
+                            { id: 'opt_os2', text: 'Implement mild financial monitoring and Unexplained Wealth Orders', effects: { scores: { civilian_stability: -1, uk_europe: -1 } } }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ev_undersea_cable',
+                stage: 'stage_2',
+                name: 'Suspicious Activity near Undersea Cables',
+                repeatable: false,
+                location: [50.0, -6.5], // Off Cornwall
+                image: '/images/events/ev_undersea_cable.png',
+                description: 'A Russian oceanographic research vessel (Yantar-class) is loitering and deploying submersibles near critical transatlantic communication cables off the coast of Cornwall.',
+                roleDescriptions: {
+                    defence: 'This vessel is known to carry deep-sea submersibles capable of tapping or severing communication lines.',
+                    cyber: 'If those cables are cut, UK internet traffic and financial data flows to the US will be severely impacted.'
+                },
+                decisions: [
+                    {
+                        role: 'defence',
+                        text: 'How should the Royal Navy handle the research vessel?',
+                        options: [
+                            { id: 'opt_uc1', text: 'Deploy a frigate to forcefully escort them away from the cables', effects: { scores: { military_escalation: +1, uk_russia: +1 } } },
+                            { id: 'opt_uc2', text: 'Deploy a shadowing vessel to observe but do not engage', effects: { scores: { military_escalation: -1, uk_us: -1 } } }
+                        ]
+                    }
+                ]
+            },
+
         ],
         manualActions: [
             {

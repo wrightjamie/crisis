@@ -232,6 +232,14 @@ class GameEngine {
             this.gameState.endGameEventId = template.id;
         }
 
+        if (template.autoEffects) {
+            this.applyEffects(template.autoEffects);
+        }
+
+        if (template.triggerEvents) {
+            this.applyEffects({ triggerEvents: template.triggerEvents });
+        }
+
         if (template.decisions) {
             template.decisions.forEach(dec => {
                 const availableOptions = (dec.options || []).filter(opt =>
