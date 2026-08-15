@@ -68,6 +68,7 @@ module.exports = {
             id: 'ev_start',
             name: 'Shadows Over Earth',
             description: 'Massive unidentified objects have entered low Earth orbit, positioning themselves over major global capitals. Total global satellite blackout has commenced.',
+            image: '/scenarios/independence_day/images/ev_start.jpg',
             decisions: [
                 { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Military Posture?', options: [{ id: 'defcon1', text: 'DEFCON 1 (Prepare Nukes)', effects: { scores: { usa_survival: +1, eu_survival: -1 } } }, { id: 'wait', text: 'Observe', effects: { scores: { usa_tech: +1, global_tech: +1 } } }] },
                 { role: 'china', hiddenFrom: ['usa', 'india'], text: 'Public Stance?', options: [{ id: 'lockdown', text: 'Total Martial Law', effects: { scores: { china_survival: +1 } } }, { id: 'evac', text: 'Mass Evacuation', effects: { scores: { china_survival: -1, china_tech: +1, global_tech: +1 } } }] },

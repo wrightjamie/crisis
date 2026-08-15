@@ -50,6 +50,7 @@ module.exports = {
             location: [48.5, 35.0],
             state: "operational",
             tags: ["drone", "recon"],
+            image: '/scenarios/eastern_front_breach/images/drone_squad.jpg',
             briefing: "Providing vital ISR (Intelligence, Surveillance, Reconnaissance)."
         }
     ],
