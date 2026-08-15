@@ -14,3 +14,9 @@
 - [x] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
 - [x] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
 - [x] Kick player and allow a new player to join
+
+## Caribbean Crisis Tasks
+- [ ] Generate image: RFA Mounts Bay (Bay-class landing ship) `/images/assets/rfa_mounts_bay.png`
+- [ ] Generate image: Governor House (BVI) `/images/assets/bvi_gov_house.png`
+- [ ] Generate image: Terrance B. Lettsome Airport (Debris/Flooded) `/images/assets/bvi_airport.png`
+- [ ] Generate event images: Hurricane Zephyr Map, Flooded Hospital, Airdrop Riot, etc.

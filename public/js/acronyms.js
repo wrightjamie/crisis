@@ -66,6 +66,26 @@ const ACRONYMS = {
     "CDS": {
         definition: "Chief of the Defence Staff - The professional head of the British Armed Forces",
         wiki: "The professional head of the British Armed Forces and the most senior uniformed military adviser to the Secretary of State for Defence and the Prime Minister."
+    },
+    "FCDO": {
+        definition: "Foreign, Commonwealth & Development Office",
+        wiki: "A department of the Government of the United Kingdom responsible for protecting and promoting British interests worldwide and delivering international development aid."
+    },
+    "DFID": {
+        definition: "Department for International Development",
+        wiki: "A former UK government department responsible for administering overseas aid. Now merged into the FCDO, though the acronym is sometimes still used colloquially for international aid teams."
+    },
+    "RFA": {
+        definition: "Royal Fleet Auxiliary",
+        wiki: "A naval auxiliary fleet owned by the UK Ministry of Defence, providing logistical and operational support to the Royal Navy around the world, including disaster relief."
+    },
+    "BVI": {
+        definition: "British Virgin Islands",
+        wiki: "A British Overseas Territory in the Caribbean, located to the east of Puerto Rico. As a UK territory, the UK government holds responsibility for its defence and major disaster response."
+    },
+    "USCG": {
+        definition: "United States Coast Guard",
+        wiki: "The maritime security, search and rescue, and law enforcement service branch of the United States Armed Forces, highly active in the Caribbean."
     }
 };
 
