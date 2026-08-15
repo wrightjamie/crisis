@@ -651,7 +651,10 @@ function updateUI() {
         const aiSummaryText = document.getElementById('briefing-ai-summary-text');
         if (aiSummaryText && (aiSummaryText.innerHTML.includes('Writing') || aiSummaryText.innerHTML.includes('raw briefing data'))) {
             const summaryData = localState.aiScenarioSummaries[role];
-            let html = p(summaryData.text);
+            let processedText = p(summaryData.text);
+            let html = window.marked && window.DOMPurify 
+                ? DOMPurify.sanitize(marked.parse(processedText))
+                : processedText.replace(/\n/g, '<br>');
             aiSummaryText.innerHTML = html;
         }
     }
@@ -772,7 +775,9 @@ function buildAiPanelHtml(p) {
     
     let html = `
         <div class="mb-3">
-            ${aiBriefing && aiBriefing.text ? `<p class="text-base lh-16">${p(aiBriefing.text)}</p>` : '<p class="text-muted">Briefing is currently unavailable.</p>'}
+            ${aiBriefing && aiBriefing.text 
+                ? `<div class="text-base lh-16">${window.marked && window.DOMPurify ? DOMPurify.sanitize(marked.parse(p(aiBriefing.text))) : p(aiBriefing.text).replace(/\n/g, '<br>')}</div>` 
+                : '<p class="text-muted">Briefing is currently unavailable.</p>'}
         </div>
     `;
 
