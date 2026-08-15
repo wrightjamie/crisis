@@ -68,14 +68,14 @@ CRITICAL RULES:
                     name: 'Counter-Narcotics (Curacao)',
                     briefingText: 'The RFA Mounts Bay is currently off the coast of Curacao conducting counter-narcotics ops.',
                     scoreModifiers: { logistics: -1 },
-                    assetModifiers: [{ id: 'a_rfa', name: 'RFA Mounts Bay', location: [12.11, -68.93], state: 'deployed', tags: ['military', 'naval'], image: '', briefing: 'Bay-class landing ship.' }]
+                    assetModifiers: [{ id: 'a_rfa', name: 'RFA Mounts Bay', location: [12.11, -68.93], state: 'deployed', tags: ['military', 'naval'], image: '/scenarios/caribbean_crisis/images/rfa_mounts_bay.jpg', briefing: 'Bay-class landing ship.' }]
                 },
                 {
                     id: 'rfa_prepo',
                     name: 'Pre-positioned (Bahamas)',
                     briefingText: 'The RFA Mounts Bay tracked the storm and pre-positioned in the Bahamas.',
                     scoreModifiers: { logistics: +1 },
-                    assetModifiers: [{ id: 'a_rfa', name: 'RFA Mounts Bay', location: [24.0, -76.0], state: 'deployed', tags: ['military', 'naval'], image: '', briefing: 'Bay-class landing ship.' }]
+                    assetModifiers: [{ id: 'a_rfa', name: 'RFA Mounts Bay', location: [24.0, -76.0], state: 'deployed', tags: ['military', 'naval'], image: '/scenarios/caribbean_crisis/images/rfa_mounts_bay.jpg', briefing: 'Bay-class landing ship.' }]
                 }
             ]
         },
@@ -89,8 +89,8 @@ CRITICAL RULES:
         }
     ],
     assets: [
-        { id: 'a_bvi_gov', name: 'Governor House', location: [18.42, -64.62], state: 'operational', tags: ['civilian'], image: '', briefing: 'The seat of local government in Road Town.' },
-        { id: 'a_airport', name: 'Terrance B. Lettsome Airport', location: [18.44, -64.54], state: 'offline', tags: ['infrastructure'], image: '', briefing: 'The main international airport on Beef Island.' }
+        { id: 'a_bvi_gov', name: 'Governor House', location: [18.42, -64.62], state: 'operational', tags: ['civilian'], image: '/scenarios/caribbean_crisis/images/bvi_gov_house.jpg', briefing: 'The seat of local government in Road Town.' },
+        { id: 'a_airport', name: 'Terrance B. Lettsome Airport', location: [18.44, -64.54], state: 'offline', tags: ['infrastructure'], image: '/scenarios/caribbean_crisis/images/bvi_airport.jpg', briefing: 'The main international airport on Beef Island.' }
     ],
     
     eventTemplates: [
@@ -132,7 +132,7 @@ CRITICAL RULES:
         },
         { id: 'ev_a400_enroute', name: 'A400M Airborne', description: 'RAF transport planes are airborne.', triggerEvents: [{ id: 'ev_a400_arrives', delayMs: 300000 }] },
         { id: 'ev_rfa_enroute', name: 'RFA Mounts Bay En Route', description: 'The RFA vessel has altered course.', triggerEvents: [{ id: 'ev_rfa_arrives', delayMs: 300000 }] },
-        { id: 'ev_initial_recon', name: 'First Aerial Reconnaissance', description: 'Road Town is devastated.', decisions: [{ role: 'media', text: 'Release imagery?', options: [{ id: 'rel', text: 'Release', effects: { scores: { political: +1, public_order: -1 } } }, { id: 'hold', text: 'Hold', effects: { scores: { political: -1, public_order: +1 } } }] }] },
+        { id: 'ev_initial_recon', name: 'First Aerial Reconnaissance', description: 'Road Town is devastated.', image: '/scenarios/caribbean_crisis/images/ev_hurricane_map.jpg', decisions: [{ role: 'media', text: 'Release imagery?', options: [{ id: 'rel', text: 'Release', effects: { scores: { political: +1, public_order: -1 } } }, { id: 'hold', text: 'Hold', effects: { scores: { political: -1, public_order: +1 } } }] }] },
         { id: 'ev_hospital_power', name: 'Hospital Generators Failing', description: 'Peebles Hospital reports flooding.', decisions: [{ role: 'dfid', text: 'Hospital Priority?', options: [{ id: 'evac', text: 'Evacuate', effects: { scores: { humanitarian: -1, logistics: -1 } } }, { id: 'eng', text: 'Send Engineers', effects: { scores: { infrastructure: +1 } } }] }], triggerEvents: [{ id: 'ev_hospital_blackout', delayMs: 120000 }] },
         { id: 'ev_prison_damage', name: 'Prison Roof Collapsed', description: 'Guards are abandoning posts at Balsam Ghut.', decisions: [{ role: 'fcdo', text: 'Request local police to secure?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { public_order: +1 } } }, { id: 'no', text: 'Wait for military', effects: { scores: { public_order: -1 } } }] }] },
         { id: 'ev_water_plant', name: 'Desalination Plant Destroyed', description: 'Fresh water supply severed.', effects: { scores: { infrastructure: -1 } } },
@@ -146,12 +146,12 @@ CRITICAL RULES:
         { id: 'ev_a400_arrives', name: 'A400M in Airspace', description: 'Runway is not clear yet. Divert or airdrop?', decisions: [{ role: 'defence', text: 'A400M Action?', options: [{ id: 'airdrop', text: 'Airdrop (risky)', effects: { scores: { public_order: -1, humanitarian: +1 }, triggerEvents: [{ id: 'ev_airdrop_riot', delayMs: 60000 }] } }, { id: 'divert', text: 'Divert to PR', effects: { scores: { political: -1, logistics: -1 } } }] }] },
         { id: 'ev_rfa_arrives', name: 'RFA Arrives', description: 'Where to deploy engineers first?', decisions: [{ role: 'defence', text: 'Deployment?', options: [{ id: 'airport', text: 'Clear Airport', effects: { scores: { infrastructure: +2, logistics: +1 }, triggerEvents: [{ id: 'ev_airport_cleared', delayMs: 60000 }] } }, { id: 'hospital', text: 'Secure Hospital', effects: { scores: { humanitarian: +2 } } }] }] },
         { id: 'ev_hospital_blackout', name: 'Hospital Loses Power', description: 'Generators failed. Critical patients dying.', effects: { scores: { humanitarian: -2 } } },
-        { id: 'ev_airdrop_riot', name: 'Airdrop Riot', description: 'Supplies landed in unsecured area causing a riot.', effects: { scores: { public_order: -2 } } },
+        { id: 'ev_airdrop_riot', name: 'Airdrop Riot', description: 'Supplies landed in unsecured area causing a riot.', image: '/scenarios/caribbean_crisis/images/ev_airdrop_riot.jpg', effects: { scores: { public_order: -2 } } },
         { id: 'ev_airport_cleared', name: 'Airport Cleared', description: 'Runway cleared for fixed-wing aircraft.', effects: { scores: { logistics: +2 } } },
         { id: 'ev_cruise_ship', name: 'Cruise Ship Offer', description: 'Cruise ship offshore offers medical assistance.', decisions: [{ role: 'fcdo', text: 'Accept?', options: [{ id: 'yes', text: 'Accept (Needs secure dock)', effects: { scores: { humanitarian: +1, logistics: -1 } } }, { id: 'no', text: 'Decline', effects: { scores: { political: -1 } } }] }], triggerEvents: [{ id: 'ev_us_coastguard', delayMs: 30000 }] },
         { id: 'ev_us_coastguard', name: 'US Coast Guard Offers Cutter', description: 'USCG offers to divert a cutter.', decisions: [{ role: 'fcdo', text: 'Approve?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { logistics: +1 } } }] }] },
         { id: 'ev_stadium_hospital', name: 'Stadium Hospital', description: 'Makeshift hospital setup requested in national stadium.', effects: { scores: { infrastructure: -1 } } },
-        { id: 'ev_supermarket_looting', name: 'Supermarket Looting', description: 'First reports of coordinated looting at supermarkets.', effects: { scores: { public_order: -1 } } },
+        { id: 'ev_supermarket_looting', name: 'Supermarket Looting', description: 'First reports of coordinated looting at supermarkets.', image: '/scenarios/caribbean_crisis/images/ev_supermarket_looting.jpg', effects: { scores: { public_order: -1 } } },
         { id: 'ev_fuel_contam', name: 'Fuel Contaminated', description: 'Aviation fuel reserves are contaminated.', effects: { scores: { logistics: -2 } } },
         { id: 'ev_media_timeline', name: 'Media Demands Timeline', description: 'Press demands timeline for Royal Navy arrival.', decisions: [{ role: 'media', text: 'Provide timeline?', options: [{ id: 'honest', text: 'Be honest', effects: { scores: { political: -1 } } }, { id: 'vague', text: 'Be vague', effects: { scores: { political: -2 } } }] }] },
         { id: 'ev_hnwi_evac', name: 'HNWI Demands', description: 'High-net-worth individuals demand private helicopter evacuations.', decisions: [{ role: 'PM', text: 'Allow private evacs?', options: [{ id: 'yes', text: 'Allow', effects: { scores: { public_order: -1, political: -1 } } }, { id: 'no', text: 'Deny', effects: { scores: { political: +1 } } }] }] },

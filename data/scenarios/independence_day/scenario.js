@@ -83,14 +83,15 @@ module.exports = {
                 { id: 'ev_china_hoard', delayMs: 420000 },
                 { id: 'ev_russia_false_flag', delayMs: 600000 }, // 10 mins
                 { id: 'ev_arms_race_start', delayMs: 900000 }, // 15 mins
-                { id: 'ev_mothership_lowers', delayMs: 1800000 }, // 30 mins
+                { id: 'ev_mothership', delayMs: 1800000 }, // 30 mins
                 { id: 'ev_endgame_trigger', delayMs: 2700000 } // 45 mins
             ]
         },
         {
-            id: 'ev_roswell_cache',
+            id: 'ev_roswell',
             name: 'The Roswell Cache',
-            description: 'The US Department of Defense has activated a classified vault containing historic alien material.',
+            description: 'The US unlocks decades of hidden research.',
+            image: '/scenarios/independence_day/images/ev_alien_tech.jpg',
             decisions: [
                 { role: 'usa', text: 'Share Roswell Tech?', options: [{ id: 'share_all', text: 'Share Globally', effects: { scores: { global_tech: +3, eu_tech: +1, uk_tech: +1 } } }, { id: 'keep', text: 'Classified (USA Only)', effects: { scores: { usa_tech: +3, global_tech: +3 } } }] }
             ]
@@ -108,7 +109,8 @@ module.exports = {
         {
             id: 'ev_global_strike',
             name: 'The Global Strike',
-            description: 'The alien ships have fired. New York, Beijing, Moscow, London, Paris, and New Delhi are gone. Millions are dead.',
+            description: 'Coordinated energy beams obliterate major landmarks worldwide.',
+            image: '/scenarios/independence_day/images/ev_orbital_strike.jpg',
             effects: { scores: { usa_survival: -1, china_survival: -1, russia_survival: -1, eu_survival: -1, india_survival: -1, uk_survival: -1 } }
         },
         {
@@ -152,9 +154,10 @@ module.exports = {
             ]
         },
         {
-            id: 'ev_mothership_lowers',
+            id: 'ev_mothership',
             name: 'The Mothership Descends',
-            description: 'The primary alien vessel is entering the upper atmosphere. Its shields are weakening, but it is preparing a planet-cracking weapon.',
+            description: 'The primary alien vessel enters the atmosphere. Global survival depends on our response.',
+            image: '/scenarios/independence_day/images/ev_mothership.jpg',
             decisions: [
                 { role: 'usa', text: 'Final Push?', options: [{ id: 'nuke', text: 'Launch all remaining Nukes', effects: { scores: { usa_survival: -1, global_tech: +3 } } }] },
                 { role: 'russia', text: 'Dead Hand?', options: [{ id: 'activate', text: 'Activate Dead Hand', effects: { scores: { russia_survival: -1, global_tech: +2 } } }] }
@@ -188,6 +191,7 @@ module.exports = {
         {
             id: 'ev_end_supremacy',
             name: 'Global Supremacy',
+            image: '/scenarios/independence_day/images/ev_supremacy_victory.jpg',
             description: (state) => {
                 const nations = ['usa', 'china', 'russia', 'eu', 'india', 'uk'];
                 const displayNames = { usa: 'The United States', china: 'China', russia: 'Russia', eu: 'The European Union', india: 'India', uk: 'The United Kingdom' };
