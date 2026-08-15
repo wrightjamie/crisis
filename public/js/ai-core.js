@@ -58,9 +58,8 @@ window.AICore = {
             } else if (mode === 'update') {
                 const prevVal = baselineScores[key];
                 if (currentVal !== prevVal) {
-                    const direction = currentVal > prevVal ? "improved" : "deteriorated";
                     const prevLabelLower = aiConfig.scoreLabels[prevVal].toLowerCase();
-                    sentence = `${capitalizedSubject} ${has} ${direction} from ${prevLabelLower} to ${labelLower}.`;
+                    sentence = `${capitalizedSubject} ${has} changed from ${prevLabelLower} to ${labelLower}.`;
                     sentences.push({ label: scoreObj.label, text: sentence, changed: true, prevVal, newVal: currentVal });
                 }
             }
