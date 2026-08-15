@@ -495,9 +495,13 @@ function renderGlobalView() {
     const recentEvents = currentState.events.filter(e => !e.id.startsWith('evt_action_')).slice().reverse().slice(0, 5);
     eventsList.innerHTML = recentEvents.length === 0 ? '<p>No active events.</p>' : '';
     recentEvents.forEach(evt => {
+        let secretBadge = '';
+        if (evt.visibleTo || evt.hiddenFrom) {
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-left: 8px;">Secret</span>`;
+        }
         eventsList.innerHTML += `
             <div class="card mb-1 p-1">
-                <strong>${p(evt.name)}</strong><br>
+                <strong>${p(evt.name)}</strong>${secretBadge}<br>
                 <small>${new Date(evt.timestamp).toLocaleTimeString()}</small>
             </div>
         `;
@@ -520,10 +524,15 @@ function renderGlobalView() {
             ? `<button onclick="dismissDecision('${task.id}')" class="btn btn-danger text-sm p-1">Dismiss</button>` 
             : '';
 
+        let secretBadge = '';
+        if (task.visibleTo || task.hiddenFrom) {
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-right: 8px;">Secret</span>`;
+        }
+
         tasksList.innerHTML += `
             <div class="card mb-1 p-1">
                 <div class="flex-between">
-                    <strong>[${task.role.toUpperCase()}]</strong>
+                    <strong>[${task.role.toUpperCase()}] ${secretBadge}</strong>
                     <div class="flex-center gap-1">
                         ${statusStr}
                         ${dismissBtn}

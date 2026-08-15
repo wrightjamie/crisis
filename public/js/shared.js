@@ -12,8 +12,27 @@ function checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEven
     return true;
 }
 
+function canSee(item, role) {
+    if (role === 'facilitator') return true;
+
+    if (item.visibleTo || item.hiddenFrom) {
+        if (role === 'display') return false;
+
+        if (item.hiddenFrom && item.hiddenFrom.includes(role)) {
+            return false;
+        }
+
+        if (item.visibleTo && !item.visibleTo.includes(role)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { checkConditions };
+    module.exports = { checkConditions, canSee };
 } else if (typeof window !== 'undefined') {
     window.checkConditions = checkConditions;
+    window.canSee = canSee;
 }

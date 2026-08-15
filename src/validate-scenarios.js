@@ -49,8 +49,24 @@ function validateEventTemplates(scenario, errors) {
             if (!event.location || !Array.isArray(event.location) || event.location.length !== 2) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) missing or invalid 'location'`);
             }
+            if (event.visibleTo && !Array.isArray(event.visibleTo)) {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'visibleTo' must be an array`);
+            }
+            if (event.hiddenFrom && !Array.isArray(event.hiddenFrom)) {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'hiddenFrom' must be an array`);
+            }
             if (event.decisions && !Array.isArray(event.decisions)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'decisions' must be an array`);
+            } else if (event.decisions) {
+                event.decisions.forEach((dec, decIndex) => {
+                    const decPath = `${eventPath}.decisions[${decIndex}]`;
+                    if (dec.visibleTo && !Array.isArray(dec.visibleTo)) {
+                        errors.push(`${decPath} 'visibleTo' must be an array`);
+                    }
+                    if (dec.hiddenFrom && !Array.isArray(dec.hiddenFrom)) {
+                        errors.push(`${decPath} 'hiddenFrom' must be an array`);
+                    }
+                });
             }
         });
     }

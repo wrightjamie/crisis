@@ -389,6 +389,7 @@ function updateEdgeMarkers() {
     const halfVisH = mapSize.y / 2;
     
     localState.events.forEach(evt => {
+        if (!window.canSee(evt, role)) return;
         const eventTasks = localState.decisionTasks.filter(t => t.eventId === evt.id);
         const hasTasks = eventTasks.length > 0;
         let isResolved = hasTasks ? eventTasks.every(t => t.status === 'resolved') : viewedEvents.has(evt.id);
@@ -436,6 +437,8 @@ map.on('zoom', updateEdgeMarkers);
 map.on('resize', updateEdgeMarkers);
 
 socket.on('decision_made', (data) => {
+    if (data.taskInfo && !window.canSee(data.taskInfo, role)) return;
+
     let roleText = 'Someone';
     if (data.role && data.role !== 'display' && data.role !== 'facilitator') {
         const roleNames = localState?.scenarioConfig?.roleNames || {};
@@ -601,6 +604,14 @@ function handleEndedState(state) {
 function handleStateUpdate(state) {
     localState = state;
 
+    if (localState && localState.events) {
+        localState.events = localState.events.filter(evt => window.canSee(evt, role));
+    }
+
+    if (localState && localState.decisionTasks) {
+        localState.decisionTasks = localState.decisionTasks.filter(task => window.canSee(task, role));
+    }
+
     if (state.status === 'holding') {
         handleHoldingState();
     } else if (state.status === 'lobby') {
@@ -720,6 +731,7 @@ function renderMap(events, assets) {
 
     // Add events
     events.forEach(evt => {
+
         // Determine if this event is "resolved"
         const eventTasks = localState.decisionTasks.filter(t => t.eventId === evt.id);
         const hasTasks = eventTasks.length > 0;

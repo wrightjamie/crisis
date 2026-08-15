@@ -112,6 +112,8 @@ Events define map incidents and generate decision tasks for players.
     
     // Advanced Logic (Optional)
     requiresUnlock: boolean,  // If true, this event is hidden from the Facilitator until a decision explicitly unlocks it.
+    visibleTo: ["string"],    // (Optional) Array of roles that can see this event. If used, the 'display' role is also hidden from it.
+    hiddenFrom: ["string"],   // (Optional) Array of roles that cannot see this event. If used, the 'display' role is also hidden from it.
     conditions: {             // The event can only be triggered if current scores meet these bounds
         minScores: { "score_id": number }, // E.g. { "global_panic": 4 }
         maxScores: { "score_id": number },
@@ -135,6 +137,8 @@ Presented to a specific role when an event is triggered.
 ```javascript
 {
     role: "string",           // Which station receives this decision
+    visibleTo: ["string"],    // (Optional) Array of roles that can see this decision is pending or resolved.
+    hiddenFrom: ["string"],   // (Optional) Array of roles that cannot see this decision is pending or resolved.
     text: "string",           // The prompt/question
     options: [                // Array of possible answers
         {
