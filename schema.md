@@ -63,6 +63,14 @@ The top-level object representing a fully playable module.
         },
         roleContexts: {       // Guidance for the AI on what each role focuses on
             "role_id": "string"
+        },
+        scores: {             // Required mapping of score IDs to their AI configuration
+            "score_id": {
+                label: "string",    // Display label for the score (e.g. "Public Panic")
+                subject: "string",  // Lowercase subject used in sentences (e.g. "public panic")
+                isPlural: boolean,  // True if subject takes plural verbs (e.g. "ammo reserves are")
+                roles: ["string"]   // Which roles this score is relevant to
+            }
         }
     }
 }
