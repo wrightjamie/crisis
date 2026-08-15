@@ -190,6 +190,96 @@ module.exports = {
                     ]
                 }
             ]
+        },
+        {
+            id: "evt_media_rumor",
+            name: "Social Media Rumors",
+            stage: "stage_1",
+            description: "False reports of an upstream dam failing are spreading rapidly online, causing panic.\n\n*(Tutorial: This event highlights how the Media role can independently control the 'Public Panic' score.)*",
+            location: [51.52, -0.10],
+            repeatable: false,
+            decisions: [
+                {
+                    role: "media",
+                    text: "How to respond to the rumors?",
+                    options: [
+                        {
+                            id: "rumor_denial",
+                            text: "Issue Official Denial",
+                            effects: {
+                                scores: { "public_panic": -1 }
+                            }
+                        },
+                        {
+                            id: "rumor_ignore",
+                            text: "Ignore it (Focus elsewhere)",
+                            effects: {
+                                scores: { "public_panic": 1 }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "evt_hospital_flooding",
+            name: "Hospital Basement Flooding",
+            stage: "stage_2",
+            description: "The local hospital's backup generators are in the basement and water is rising fast.\n\n*(Tutorial: Sometimes you won't have enough 'Emergency Capacity' to save everything. Prioritization is key.)*",
+            location: [51.525, -0.135],
+            repeatable: false,
+            decisions: [
+                {
+                    role: "emergency",
+                    text: "Divert emergency pumps to the hospital?",
+                    options: [
+                        {
+                            id: "hospital_divert",
+                            text: "Divert Pumps (Cost capacity, save infra)",
+                            effects: {
+                                scores: { "emergency_capacity": 1, "infrastructure_damage": -1 }
+                            }
+                        },
+                        {
+                            id: "hospital_reserve",
+                            text: "Reserve Pumps (Save capacity, lose infra)",
+                            effects: {
+                                scores: { "infrastructure_damage": 1 }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: "evt_aftermath",
+            name: "Storm Receding",
+            stage: "stage_2",
+            description: "The rain has finally stopped and waters are slowly receding. The immediate crisis is over.\n\n*(Tutorial: The game is ending! Your final choices and scores will determine the AI-generated After Action Report.)*",
+            location: [51.50, -0.12],
+            repeatable: false,
+            decisions: [
+                {
+                    role: "mayor",
+                    text: "Announce the initial recovery focus?",
+                    options: [
+                        {
+                            id: "recovery_rebuild",
+                            text: "Focus on Rebuilding",
+                            effects: {
+                                scores: { "infrastructure_damage": -1 }
+                            }
+                        },
+                        {
+                            id: "recovery_support",
+                            text: "Focus on Community Support",
+                            effects: {
+                                scores: { "public_panic": -1 }
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ],
     manualActions: [
