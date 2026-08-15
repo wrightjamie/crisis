@@ -38,6 +38,20 @@ function validateInitialScores(scenario, errors) {
     }
 }
 
+function validateConditions(conditions, path, errors) {
+    if (!conditions) return;
+    if (typeof conditions !== 'object') {
+        errors.push(`${path} 'conditions' must be an object`);
+        return;
+    }
+    if (conditions.activeRoles && !Array.isArray(conditions.activeRoles)) {
+        errors.push(`${path}.conditions 'activeRoles' must be an array`);
+    }
+    if (conditions.anyActiveRoles && !Array.isArray(conditions.anyActiveRoles)) {
+        errors.push(`${path}.conditions 'anyActiveRoles' must be an array`);
+    }
+}
+
 function validateEventTemplates(scenario, errors) {
     if (!scenario.eventTemplates || !Array.isArray(scenario.eventTemplates)) {
         errors.push("Missing or invalid 'eventTemplates'");
@@ -55,6 +69,9 @@ function validateEventTemplates(scenario, errors) {
             if (event.hiddenFrom && !Array.isArray(event.hiddenFrom)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'hiddenFrom' must be an array`);
             }
+            if (event.conditions) {
+                validateConditions(event.conditions, `${eventPath} (${event.id || 'unknown'})`, errors);
+            }
             if (event.decisions && !Array.isArray(event.decisions)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'decisions' must be an array`);
             } else if (event.decisions) {
@@ -65,6 +82,13 @@ function validateEventTemplates(scenario, errors) {
                     }
                     if (dec.hiddenFrom && !Array.isArray(dec.hiddenFrom)) {
                         errors.push(`${decPath} 'hiddenFrom' must be an array`);
+                    }
+                    if (dec.options && Array.isArray(dec.options)) {
+                        dec.options.forEach((opt, optIndex) => {
+                            if (opt.conditions) {
+                                validateConditions(opt.conditions, `${decPath}.options[${optIndex}]`, errors);
+                            }
+                        });
                     }
                 });
             }
@@ -105,7 +129,27 @@ function validateManualActions(scenario, errors) {
             if (!action.initiator || !Array.isArray(action.initiator)) {
                 errors.push(`${actionPath} (${action.id || 'unknown'}) missing or invalid 'initiator' array`);
             }
+            if (action.conditions) {
+                validateConditions(action.conditions, `${actionPath} (${action.id || 'unknown'})`, errors);
+            }
         });
+    }
+}
+
+function validateAiConfig(scenario, errors) {
+    if (scenario.aiConfig) {
+        if (!scenario.aiConfig.systemPrompt) {
+            errors.push("aiConfig missing 'systemPrompt'");
+        }
+        if (!scenario.aiConfig.scoreLabels || typeof scenario.aiConfig.scoreLabels !== 'object') {
+            errors.push("aiConfig missing or invalid 'scoreLabels'");
+        }
+        if (!scenario.aiConfig.roleContexts || typeof scenario.aiConfig.roleContexts !== 'object') {
+            errors.push("aiConfig missing or invalid 'roleContexts'");
+        }
+        if (!scenario.aiConfig.scores || typeof scenario.aiConfig.scores !== 'object') {
+            errors.push("aiConfig missing or invalid 'scores'");
+        }
     }
 }
 
@@ -119,11 +163,12 @@ function validateScenario(scenario) {
     validateEventTemplates(scenario, errors);
     validateVariantAxes(scenario, errors);
     validateManualActions(scenario, errors);
+    validateAiConfig(scenario, errors);
 
     return {
         isValid: errors.length === 0,
-        errors
+        errors: errors
     };
 }
 
-module.exports = { validateScenario, validateBasicStructure, validateRoles };
+module.exports = { validateScenario, validateBasicStructure, validateRoles, validateEventTemplates, validateManualActions, validateAiConfig };

@@ -1,0 +1,90 @@
+[ERROR] css/style.css:188
+  Violation: Hardcoded Color -> "rgba(255, 60, 60, 0.1)"
+[ERROR] css/style.css:194
+  Violation: Hardcoded Color -> "rgba(255, 60, 60, 0.2)"
+[ERROR] css/style.css:232
+  Violation: Hardcoded Z-Index -> "1"
+[WARNING] css/style.css:246
+  Violation: Hardcoded Transition -> "all 0.2s"
+[ERROR] css/style.css:247
+  Violation: Hardcoded Font Size -> "1.2rem"
+[ERROR] css/style.css:258
+  Violation: Hardcoded Color -> "rgba(30, 215, 96, 0.15)"
+[ERROR] css/style.css:262
+  Violation: Hardcoded Font Size -> "1.4rem"
+[ERROR] css/style.css:265
+  Violation: Hardcoded Color -> "rgba(255, 75, 75, 0.15)"
+[ERROR] css/style.css:421
+  Violation: Hardcoded Box Shadow -> "-4px 0 20px  0"
+[WARNING] css/style.css:422
+  Violation: Hardcoded Transition -> "display  0  allow-discrete, overlay  0  allow-discrete, transform  0  ease-out"
+[WARNING] css/style.css:437
+  Violation: Hardcoded Transition -> "display  0  allow-discrete, overlay  0  allow-discrete, opacity  0  ease-out"
+[ERROR] css/style.css:576
+  Violation: Hardcoded Spacing -> "- 0  - 0   0  - 0"
+[ERROR] css/style.css:698
+  Violation: Hardcoded Box Shadow -> "0 0 0 10px transparent"
+[ERROR] css/style.css:742
+  Violation: Hardcoded Z-Index -> "10000"
+[ERROR] css/style.css:753
+  Violation: Hardcoded Font Size -> "0.9rem"
+[ERROR] css/style.css:754
+  Violation: Hardcoded Color -> "rgba(0,0,0,0.5)"
+[ERROR] css/style.css:754
+  Violation: Hardcoded Box Shadow -> "0 4px 12px rgba(0,0,0,0.5)"
+[ERROR] css/style.css:791
+  Violation: Hardcoded Box Shadow -> "0 0 0px  0"
+[ERROR] css/style.css:792
+  Violation: Hardcoded Color -> "#000"
+[ERROR] css/style.css:792
+  Violation: Hardcoded Box Shadow -> "0 0 10px  0"
+[ERROR] css/style.css:799
+  Violation: Hardcoded Font Size -> "1. 0"
+[ERROR] css/style.css:808
+  Violation: Hardcoded Font Size -> "1. 0"
+[ERROR] css/style.css:817
+  Violation: Hardcoded Color -> "rgba(0, 0, 0, 0.8)"
+[ERROR] css/style.css:826
+  Violation: Hardcoded Spacing -> "-5px"
+[ERROR] css/style.css:826
+  Violation: Hardcoded Spacing -> "-5px"
+[ERROR] css/style.css:840
+  Violation: Hardcoded Spacing -> "-30px"
+[ERROR] css/style.css:840
+  Violation: Hardcoded Spacing -> "15px"
+[ERROR] css/style.css:840
+  Violation: Hardcoded Border Radius -> "4px"
+[WARNING] css/style.css:842
+  Violation: Hardcoded Transition -> "transform  0 , border-left-width  0"
+[ERROR] css/style.css:847
+  Violation: Hardcoded Border Radius -> "8px"
+[ERROR] facilitator.html:205
+  Violation: Inline Style -> "overflow-y: auto;"
+[ERROR] index.html:49
+  Violation: Inline Style -> "display:none"
+[ERROR] js/client.js:900
+  Violation: Inline Style -> "opacity: 0.6; filter: grayscale(1);"
+[ERROR] js/client.js:921
+  Violation: Inline Style -> "font-weight:bold;"
+[ERROR] js/client.js:928
+  Violation: Inline Style -> "opacity: 0.5; cursor: not-allowed;"
+[ERROR] js/facilitator.js:172
+  Violation: Inline Style -> "display:flex; gap: 2px; margin-left: auto;"
+[ERROR] js/facilitator.js:182
+  Violation: Inline Style -> "display: flex; align-items: center;"
+[ERROR] js/facilitator.js:500
+  Violation: Inline Style -> "margin-left: 8px;"
+[ERROR] js/facilitator.js:529
+  Violation: Inline Style -> "margin-right: 8px;"
+[ERROR] js/scenario-explorer.js:76
+  Violation: Inline Style -> "--branch-color: ${borderColor}; position: relative;"
+[ERROR] js/scenario-explorer.js:78
+  Violation: Inline Style -> "border-left-color: ${borderColor};"
+[ERROR] js/scenario-explorer.js:80
+  Violation: Inline Style -> "color: ${statusColor};"
+[ERROR] js/scenario-explorer.js:99
+  Violation: Inline Style -> "display: ${displayStyle};"
+[ERROR] js/scenario-explorer.js:138
+  Violation: Inline Style -> "display: ${displayStyle};"
+
+Audit complete: 40 Errors, 4 Warnings.

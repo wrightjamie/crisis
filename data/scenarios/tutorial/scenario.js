@@ -220,6 +220,11 @@ module.exports = {
             "mayor": "Focus on overall stability and public perception.",
             "emergency": "Focus on resource allocation and saving lives.",
             "media": "Focus on information flow and managing panic."
+        },
+        scores: {
+            public_panic: { label: "Public Panic", subject: "public panic", isPlural: false, roles: ["mayor", "media"] },
+            infrastructure_damage: { label: "Infrastructure Damage", subject: "infrastructure damage", isPlural: false, roles: ["mayor", "emergency"] },
+            emergency_capacity: { label: "Emergency Capacity", subject: "emergency capacity", isPlural: false, roles: ["emergency"] }
         }
     }
 };

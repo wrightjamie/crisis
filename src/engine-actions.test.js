@@ -35,6 +35,20 @@ const testScenario = {
             initiator: ['defence', 'foreign'],
             requiresApprovalFrom: ['defence', 'foreign'],
             effects: { scores: { military_readiness: 1 } }
+        },
+        {
+            id: 'test_active_roles_action',
+            name: 'Active Roles Action',
+            initiator: ['home'],
+            conditions: { activeRoles: ['defence'] },
+            effects: { scores: { uk_us: 1 } }
+        },
+        {
+            id: 'test_any_active_roles_action',
+            name: 'Any Active Roles Action',
+            initiator: ['home'],
+            conditions: { anyActiveRoles: ['defence', 'foreign'] },
+            effects: { scores: { uk_us: 1 } }
         }
     ]
 };
@@ -130,6 +144,28 @@ engine.gameState.status = 'ended';
 stageResult = engine.setStage(0);
 assert.strictEqual(stageResult, false, "Should fail if not in active or lobby state");
 console.log("✅ setStage tests passed.");
+
+// --- New Tests for activeRoles and anyActiveRoles ---
+console.log("Testing activeRoles conditions...");
+resetEngine();
+engine.connectedClients = { 'socket1': 'home' }; // Only home is connected
+result = engine.triggerManualAction('test_active_roles_action', 'home');
+assert.strictEqual(result, false, "Should fail because defence is not active");
+
+engine.connectedClients = { 'socket1': 'home', 'socket2': 'defence' };
+result = engine.triggerManualAction('test_active_roles_action', 'home');
+assert.strictEqual(result, true, "Should succeed because defence is active");
+assert.strictEqual(engine.gameState.scores.uk_us, 4, "Effect should be applied");
+
+resetEngine();
+engine.connectedClients = { 'socket1': 'home' }; // Only home is connected
+result = engine.triggerManualAction('test_any_active_roles_action', 'home');
+assert.strictEqual(result, false, "Should fail because neither defence nor foreign are active");
+
+engine.connectedClients = { 'socket1': 'home', 'socket2': 'foreign' };
+result = engine.triggerManualAction('test_any_active_roles_action', 'home');
+assert.strictEqual(result, true, "Should succeed because foreign is active");
+console.log("✅ activeRoles conditions tests passed.");
 
 // Cleanup
 scenarios.pop();
