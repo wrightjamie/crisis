@@ -222,6 +222,8 @@ class GameEngine {
             description: typeof template.description === 'function' ? template.description(this.gameState) : template.description,
             roleDescriptions: template.roleDescriptions,
             image: template.image,
+            visibleTo: template.visibleTo,
+            hiddenFrom: template.hiddenFrom,
             timestamp: Date.now()
         };
 
@@ -262,6 +264,8 @@ class GameEngine {
                         eventId: newEvent.id,
                         role: assignedRole,
                         text: dec.text,
+                        visibleTo: dec.visibleTo,
+                        hiddenFrom: dec.hiddenFrom,
                         options: availableOptions,
                         status: 'pending'
                     });

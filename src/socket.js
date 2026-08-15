@@ -191,10 +191,12 @@ module.exports = function setupSockets(io, engine) {
                 if (event) eventName = event.name;
             }
 
+            const taskInfo = task ? { visibleTo: task.visibleTo, hiddenFrom: task.hiddenFrom } : null;
+
             const option = engine.resolveTask(data.taskId, data.optionId);
             if (option) {
                 const deciderRole = engine.connectedClients[socket.id] || 'Someone';
-                io.emit('decision_made', { role: deciderRole, text: option.text, eventName: eventName });
+                io.emit('decision_made', { role: deciderRole, text: option.text, eventName: eventName, taskInfo: taskInfo });
                 io.emit('state_update', engine.gameState);
                 if (option.effects && option.effects.scores) {
                     io.emit('generate_ai_briefing_all', { context: `The following action was taken: ${option.text}` });
