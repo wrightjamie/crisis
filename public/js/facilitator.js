@@ -724,7 +724,7 @@ function refreshFacilitatorInfoPanel() {
 
     titleEl.textContent = 'Event Details';
 
-    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId));
+    const meetsConditions = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId), currentActiveRoles);
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
     
     contentEl.innerHTML = buildFacilitatorEventDetailsHtml(template, meetsConditions, currentState, p);

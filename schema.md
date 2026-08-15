@@ -117,7 +117,9 @@ Events define map incidents and generate decision tasks for players.
     conditions: {             // The event can only be triggered if current scores meet these bounds
         minScores: { "score_id": number }, // E.g. { "global_panic": 4 }
         maxScores: { "score_id": number },
-        assets: { "asset_id": "required_state" } // E.g. { "area51": "operational" }
+        assets: { "asset_id": "required_state" }, // E.g. { "area51": "operational" }
+        activeRoles: ["role_id"], // All of these roles must be active players in the session
+        anyActiveRoles: ["role_id"] // At least one of these roles must be active players in the session
     },
     
     facilitatorNotes: "string", // Secret context only shown in the Facilitator's info panel before triggering
@@ -147,7 +149,9 @@ Presented to a specific role when an event is triggered.
             conditions: {     // (Optional) If present, this option is hidden from the player when conditions are not met
                 assets: { "asset_id": "required_state" },
                 minScores: { "score_id": number },
-                maxScores: { "score_id": number }
+                maxScores: { "score_id": number },
+                activeRoles: ["role_id"],
+                anyActiveRoles: ["role_id"]
             },
             effects: {        // What happens when this is clicked
                 
@@ -185,7 +189,9 @@ Actions that players can trigger proactively from the "Actions" menu, independen
     conditions: {             // Requirements for this action to be available (or visible)
         minScores: { "score_id": number },
         maxScores: { "score_id": number },
-        assets: { "asset_id": "required_state" }
+        assets: { "asset_id": "required_state" },
+        activeRoles: ["role_id"],
+        anyActiveRoles: ["role_id"]
     },
     effects: {                // What happens when this action is fully approved and triggered
         scores: { "score_id": number }, // E.g., { military_escalation: +2 }

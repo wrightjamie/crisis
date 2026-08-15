@@ -245,12 +245,12 @@ class GameEngine {
         if (template.decisions) {
             template.decisions.forEach(dec => {
                 const availableOptions = (dec.options || []).filter(opt =>
-                    checkConditions(opt, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))
+                    checkConditions(opt, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId), this.getActiveRoles())
                 );
 
                 if (availableOptions.length > 0) {
                     let assignedRole = dec.role;
-                    const activeRoles = Object.values(this.connectedClients);
+                    const activeRoles = this.getActiveRoles();
 
                     if (assignedRole !== 'all') {
                         const resolvedRole = this.resolveRoleFallback(assignedRole, activeRoles, scenario.roleFallbacks);
@@ -397,7 +397,7 @@ class GameEngine {
         if (!action.initiator.includes(initiatorRole)) return false;
 
         // Verify conditions
-        if (!checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId))) return false;
+        if (!checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId), this.getActiveRoles())) return false;
 
         console.log(`Manual Action triggered: ${action.name} by ${initiatorRole}`);
 
@@ -407,7 +407,7 @@ class GameEngine {
             let possibleApprovers = Array.isArray(action.requiresApprovalFrom) ? action.requiresApprovalFrom : [action.requiresApprovalFrom];
             possibleApprovers = possibleApprovers.filter(r => r !== initiatorRole);
             
-            const activeRoles = Object.values(this.connectedClients);
+            const activeRoles = this.getActiveRoles();
             
             // 1. Try finding a resolved approver from the allowed list
             for (let pa of possibleApprovers) {

@@ -679,7 +679,7 @@ function updateUI() {
     // Check for new manual actions
     if (localState.scenarioConfig && localState.scenarioConfig.manualActions) {
         const currentAvailableActions = localState.scenarioConfig.manualActions
-            .filter(a => a.initiator.includes(role) && window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId)))
+            .filter(a => a.initiator.includes(role) && window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId), activeRolesList))
             .map(a => a.id);
 
         if (previousAvailableActions.length > 0) {
@@ -890,7 +890,7 @@ function buildActionsPanelHtml(p) {
     localState.scenarioConfig.manualActions.forEach(action => {
         if (!action.initiator.includes(role)) return;
 
-        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId));
+        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId), activeRolesList);
 
         actionsShown++;
         

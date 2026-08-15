@@ -46,8 +46,8 @@ function validateEventTemplates(scenario, errors) {
             const eventPath = `eventTemplate[${index}]`;
             if (!event.id) errors.push(`${eventPath} missing 'id'`);
             if (!event.name) errors.push(`${eventPath} missing 'name'`);
-            if (!event.location || !Array.isArray(event.location) || event.location.length !== 2) {
-                errors.push(`${eventPath} (${event.id || 'unknown'}) missing or invalid 'location'`);
+            if (event.location && (!Array.isArray(event.location) || event.location.length !== 2)) {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) invalid 'location' array`);
             }
             if (event.visibleTo && !Array.isArray(event.visibleTo)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'visibleTo' must be an array`);

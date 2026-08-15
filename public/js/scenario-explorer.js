@@ -37,7 +37,7 @@ function renderScenarioExplorer() {
             interactivity = 'cursor: not-allowed; opacity: 0.85;';
         } else {
             const prereqsMet = !template.prerequisites || template.prerequisites.every(p => triggeredIds.has(p));
-            const conditionsMet = checkConditions(template, currentState.scores, currentState.assets);
+            const conditionsMet = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId), currentActiveRoles);
             
             if (prereqsMet && conditionsMet) {
                 statusColor = 'var(--accent-blue)';
