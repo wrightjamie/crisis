@@ -43,7 +43,7 @@ module.exports = {
         }
     ],
     briefings: {
-        _general: "Welcome to the Tutorial Scenario. A severe storm has just hit the area. Flash flooding is imminent. Your goal is to keep public panic and infrastructure damage low, while maintaining emergency capacity.",
+        _general: "Welcome to the Tutorial Scenario. A severe storm has just hit the area. Flash flooding is imminent. Your goal is to keep public panic and infrastructure damage low, while maintaining emergency capacity. *(Tutorial: Pay attention to your AI Intelligence Briefing in the top right—it will analyze your decisions and summarize the situation based on your specific role!)*",
         "mayor": "As Mayor, you have the final say on major decisions and public announcements. Keep the town calm.",
         "emergency": "You are directing the EMS, Police, and Fire departments. Watch your capacity and deploy assets wisely.",
         "media": "Your job is to manage the flow of information to the public. Be careful not to cause panic."
@@ -89,7 +89,7 @@ module.exports = {
             id: "evt_flood_warning",
             name: "Flash Flood Warning Issued",
             stage: "stage_1",
-            description: "The national weather service has issued a severe flash flood warning for the downtown area. Immediate action is required.",
+            description: "The national weather service has issued a severe flash flood warning for the downtown area. Immediate action is required.\n\n*(Tutorial: Your decisions here directly impact the game's scores. A Standard Alert might raise Public Panic slightly, but a Mandatory Evacuation could drastically lower Infrastructure Damage at the cost of high panic and secondary consequences.)*",
             location: [51.5074, -0.1278],
             repeatable: false,
             facilitatorNotes: "This is the opening event. Let players read the briefing before triggering.",
@@ -130,7 +130,7 @@ module.exports = {
             id: "evt_evac_jam",
             name: "Traffic Jam During Evacuation",
             stage: "stage_1",
-            description: "Evacuation routes are jammed. People are trapped in their cars as water rises.",
+            description: "Evacuation routes are jammed. People are trapped in their cars as water rises.\n\n*(Tutorial: This event only triggered because you chose to evacuate earlier! Notice how the 'Deploy Rescue Heli' option below requires the Rescue Helicopter asset to be operational. If that asset was destroyed, this option would be locked!)*",
             location: [51.515, -0.13],
             repeatable: false,
             requiresUnlock: false,
@@ -165,7 +165,7 @@ module.exports = {
             id: "evt_water_plant",
             name: "Water Plant Threat",
             stage: "stage_2",
-            description: "Floodwaters are threatening the main water treatment plant. If it goes offline, the town will lose clean water.",
+            description: "Floodwaters are threatening the main water treatment plant. If it goes offline, the town will lose clean water.\n\n*(Tutorial: Keep a close eye on your scores. If a critical score reaches 'Failing', the simulation could end in failure. You must balance the risk to infrastructure against public panic.)*",
             location: [51.51, -0.11],
             repeatable: false,
             decisions: [
@@ -196,7 +196,7 @@ module.exports = {
         {
             id: "act_press_conference",
             name: "Hold Press Conference",
-            description: "Hold a press conference to reassure the public.",
+            description: "Hold a press conference to reassure the public.\n\n*(Tutorial: This is a Manual Action. It requires the 'media' or 'mayor' to initiate, and the 'mayor' must approve it. It also requires Public Panic to be 'Strained' (3) or worse before you can even attempt it!)*",
             initiator: ["media", "mayor"],
             requiresApprovalFrom: ["mayor"],
             conditions: {
