@@ -1,0 +1,22 @@
+{
+    "UN": {
+        "definition": "United Nations",
+        "wiki": "An intergovernmental organization whose stated purposes are to maintain international peace and security."
+    },
+    "DEFCON": {
+        "definition": "Defense Readiness Condition",
+        "wiki": "An alert state used by the United States Armed Forces. DEFCON 1 is maximum readiness, meaning nuclear war is imminent or has already started."
+    },
+    "USA": {
+        "definition": "United States of America",
+        "wiki": "The world's foremost economic and military superpower."
+    },
+    "EU": {
+        "definition": "European Union",
+        "wiki": "A political and economic union of 27 member states that are located primarily in Europe."
+    },
+    "UK": {
+        "definition": "United Kingdom",
+        "wiki": "A sovereign country in Europe, off the north-western coast of the continental mainland."
+    }
+}

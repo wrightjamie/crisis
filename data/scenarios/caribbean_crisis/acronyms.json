@@ -1,0 +1,38 @@
+{
+    "COBRA": {
+        "definition": "Cabinet Office Briefing Room A",
+        "wiki": "COBRA is the crisis response committee of the UK Government, convened to handle matters of national emergency."
+    },
+    "FCDO": {
+        "definition": "Foreign, Commonwealth & Development Office",
+        "wiki": "A department of the Government of the United Kingdom responsible for protecting and promoting British interests worldwide and delivering international development aid."
+    },
+    "DFID": {
+        "definition": "Department for International Development",
+        "wiki": "A former UK government department responsible for administering overseas aid. Now merged into the FCDO."
+    },
+    "RFA": {
+        "definition": "Royal Fleet Auxiliary",
+        "wiki": "A naval auxiliary fleet owned by the UK Ministry of Defence, providing logistical and operational support to the Royal Navy around the world, including disaster relief."
+    },
+    "BVI": {
+        "definition": "British Virgin Islands",
+        "wiki": "A British Overseas Territory in the Caribbean, located to the east of Puerto Rico. As a UK territory, the UK government holds responsibility for its defence and major disaster response."
+    },
+    "USCG": {
+        "definition": "United States Coast Guard",
+        "wiki": "The maritime security, search and rescue, and law enforcement service branch of the United States Armed Forces, highly active in the Caribbean."
+    },
+    "MOD": {
+        "definition": "Ministry of Defence",
+        "wiki": "The British government department responsible for implementing the defence policy set by Her Majesty's Government, and is the headquarters of the British Armed Forces."
+    },
+    "C2": {
+        "definition": "Command and Control",
+        "wiki": "The exercise of authority and direction by a properly designated commander over assigned and attached forces in the accomplishment of the mission."
+    },
+    "UK": {
+        "definition": "United Kingdom",
+        "wiki": "A sovereign country in Europe, comprising England, Wales, Scotland, and Northern Ireland."
+    }
+}

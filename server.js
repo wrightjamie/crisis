@@ -11,6 +11,9 @@ const io = new Server(server);
 // Serve static files from the 'public' directory, allowing extensionless URLs
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
+// Serve static scenario files (images, acronyms, wikis)
+app.use('/scenarios', express.static(path.join(__dirname, 'data/scenarios')));
+
 // Basic route to ensure server is running
 app.get('/ping', (req, res) => {
     res.send('pong');

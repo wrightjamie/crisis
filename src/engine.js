@@ -219,7 +219,7 @@ class GameEngine {
             templateId: template.id,
             name: template.name,
             location: eventLocation,
-            description: template.description,
+            description: typeof template.description === 'function' ? template.description(this.gameState) : template.description,
             roleDescriptions: template.roleDescriptions,
             image: template.image,
             timestamp: Date.now()

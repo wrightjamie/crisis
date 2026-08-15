@@ -1,103 +1,44 @@
-const ACRONYMS = {
-    "COBRA": {
-        definition: "Cabinet Office Briefing Room A - UK Government's emergency response committee",
-        wiki: "COBRA (Cabinet Office Briefing Room A) is the crisis response committee of the UK Government, convened to handle matters of national emergency or major disruption. Its meetings are typically held in the Cabinet Office buildings in London and are chaired by the Prime Minister or other senior ministers depending on the nature of the emergency."
-    },
-    "NATO": {
-        definition: "North Atlantic Treaty Organization",
-        wiki: "An intergovernmental military alliance between North American and European countries. Its core principle is collective defence, enshrined in Article 5: an attack against one Ally is considered an attack against all."
-    },
-    "NCSC": {
-        definition: "National Cyber Security Centre",
-        wiki: "The UK Government's authority on cyber security, providing support to the most critical organizations in the UK, the wider public sector, industry, and the general public."
-    },
-    "SWIFT": {
-        definition: "Society for Worldwide Interbank Financial Telecommunication",
-        wiki: "A vast messaging network used by financial institutions to securely transmit information and instructions through a standardized system of codes. Blocking a country from SWIFT is considered a severe financial sanction."
-    },
-    "DDoS": {
-        definition: "Distributed Denial of Service",
-        wiki: "A malicious attempt to disrupt the normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic."
-    },
-    "GCHQ": {
-        definition: "Government Communications Headquarters",
-        wiki: "An intelligence and security organization responsible for providing signals intelligence (SIGINT) and information assurance to the government and armed forces of the United Kingdom."
-    },
-    "QEC": {
-        definition: "Queen Elizabeth Class (Aircraft Carrier)",
-        wiki: "A class of two aircraft carriers of the Royal Navy. They are the largest and most powerful surface warships ever constructed for the Royal Navy, capable of carrying up to 40 aircraft including the F-35B Lightning II."
-    },
-    "RIMPAC": {
-        definition: "Rim of the Pacific Exercise",
-        wiki: "The world's largest international maritime warfare exercise, hosted and administered by the United States Navy's Indo-Pacific Command. It is held biennially during June and July."
-    },
-    "AUKUS": {
-        definition: "Australia, UK, US Security Pact",
-        wiki: "AUKUS is a trilateral security partnership between Australia, the United Kingdom, and the United States, announced in September 2021. Its primary focus is to support Australia in acquiring conventionally armed, nuclear-powered submarines (SSNs), but it also includes broader cooperation on advanced capabilities such as cyber, artificial intelligence, quantum technologies, and undersea capabilities. It is widely viewed as an effort to counter China's growing influence in the Indo-Pacific region."
-    },
-    "MOD": {
-        definition: "Ministry of Defence",
-        wiki: "The British government department responsible for implementing the defence policy set by Her Majesty's Government, and is the headquarters of the British Armed Forces."
-    },
-    "C2": {
-        definition: "Command and Control",
-        wiki: "The exercise of authority and direction by a properly designated commander over assigned and attached forces in the accomplishment of the mission."
-    },
-    "UK": {
-        definition: "United Kingdom",
-        wiki: "A sovereign country in Europe, off the north-western coast of the continental mainland, comprising England, Wales, Scotland, and Northern Ireland."
-    },
-    "US": {
-        definition: "United States",
-        wiki: "A country primarily located in North America, consisting of 50 states and a federal district. It is a founding member of NATO and the UK's closest ally."
-    },
-    "USA": {
-        definition: "United States of America",
-        wiki: "A country primarily located in North America, consisting of 50 states and a federal district. It is a founding member of NATO and the UK's closest ally."
-    },
-    "UN": {
-        definition: "United Nations",
-        wiki: "An intergovernmental organization whose stated purposes are to maintain international peace and security, develop friendly relations among nations, achieve international cooperation, and be a centre for harmonizing the actions of nations."
-    },
-    "Article 5": {
-        definition: "NATO Article 5 - The principle of collective defence",
-        wiki: "Article 5 is the cornerstone of NATO, stating that an armed attack against one or more of its members shall be considered an attack against them all. It has only been invoked once, following the 9/11 attacks in the US."
-    },
-    "CDS": {
-        definition: "Chief of the Defence Staff - The professional head of the British Armed Forces",
-        wiki: "The professional head of the British Armed Forces and the most senior uniformed military adviser to the Secretary of State for Defence and the Prime Minister."
-    },
-    "FCDO": {
-        definition: "Foreign, Commonwealth & Development Office",
-        wiki: "A department of the Government of the United Kingdom responsible for protecting and promoting British interests worldwide and delivering international development aid."
-    },
-    "DFID": {
-        definition: "Department for International Development",
-        wiki: "A former UK government department responsible for administering overseas aid. Now merged into the FCDO, though the acronym is sometimes still used colloquially for international aid teams."
-    },
-    "RFA": {
-        definition: "Royal Fleet Auxiliary",
-        wiki: "A naval auxiliary fleet owned by the UK Ministry of Defence, providing logistical and operational support to the Royal Navy around the world, including disaster relief."
-    },
-    "BVI": {
-        definition: "British Virgin Islands",
-        wiki: "A British Overseas Territory in the Caribbean, located to the east of Puerto Rico. As a UK territory, the UK government holds responsibility for its defence and major disaster response."
-    },
-    "USCG": {
-        definition: "United States Coast Guard",
-        wiki: "The maritime security, search and rescue, and law enforcement service branch of the United States Armed Forces, highly active in the Caribbean."
+window.ACRONYMS = {};
+
+window.loadScenarioAcronyms = async function(scenarioId) {
+    if (!scenarioId) return;
+    try {
+        const response = await fetch(`/scenarios/${scenarioId}/acronyms.json`);
+        if (response.ok) {
+            window.ACRONYMS = await response.json();
+            console.log(`Loaded acronyms for scenario: ${scenarioId}`);
+        } else {
+            console.warn(`No acronyms.json found for scenario: ${scenarioId}`);
+            window.ACRONYMS = {};
+        }
+    } catch (err) {
+        console.error('Error loading scenario acronyms:', err);
+        window.ACRONYMS = {};
     }
 };
 
+if (typeof socket !== 'undefined') {
+    let currentScenarioId = null;
+    socket.on('state_update', (state) => {
+        if (state && state.scenarioId && state.scenarioId !== currentScenarioId) {
+            currentScenarioId = state.scenarioId;
+            window.loadScenarioAcronyms(state.scenarioId);
+        } else if (state && !state.scenarioId) {
+            currentScenarioId = null;
+            window.ACRONYMS = {};
+        }
+    });
+}
+
 function parseAcronyms(text) {
-    if (!text) return text;
+    if (!text || !window.ACRONYMS) return text;
     let parsedText = text;
     
     // Sort acronyms by length descending to prevent partial matches 
-    const sortedAcronyms = Object.keys(ACRONYMS).sort((a, b) => b.length - a.length);
+    const sortedAcronyms = Object.keys(window.ACRONYMS).sort((a, b) => b.length - a.length);
     
     for (const acronym of sortedAcronyms) {
-        const item = ACRONYMS[acronym];
+        const item = window.ACRONYMS[acronym];
         const definition = typeof item === 'object' ? item.definition : item;
         const hasWiki = typeof item === 'object' && item.wiki;
         
@@ -114,7 +55,6 @@ function parseAcronyms(text) {
 
 if (typeof window !== 'undefined') {
     window.parseAcronyms = parseAcronyms;
-    window.ACRONYMS = ACRONYMS;
     
     // Global handler for opening wiki from text
     window.openWikiTerm = function(term) {
