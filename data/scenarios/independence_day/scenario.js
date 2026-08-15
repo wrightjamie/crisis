@@ -69,12 +69,12 @@ module.exports = {
             name: 'Shadows Over Earth',
             description: 'Massive unidentified objects have entered low Earth orbit, positioning themselves over major global capitals. Total global satellite blackout has commenced.',
             decisions: [
-                { role: 'usa', text: 'Military Posture?', options: [{ id: 'defcon1', text: 'DEFCON 1 (Prepare Nukes)', effects: { scores: { usa_survival: +1, eu_survival: -1 } } }, { id: 'wait', text: 'Observe', effects: { scores: { usa_tech: +1, global_tech: +1 } } }] },
-                { role: 'china', text: 'Public Stance?', options: [{ id: 'lockdown', text: 'Total Martial Law', effects: { scores: { china_survival: +1 } } }, { id: 'evac', text: 'Mass Evacuation', effects: { scores: { china_survival: -1, china_tech: +1, global_tech: +1 } } }] },
-                { role: 'russia', text: 'Strategic Response?', options: [{ id: 'bunkers', text: 'Retreat to Bunkers', effects: { scores: { russia_survival: +2 } } }, { id: 'cyber', text: 'Probe Alien Comms', effects: { scores: { russia_tech: +2, global_tech: +2, russia_survival: -1 } } }] },
+                { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Military Posture?', options: [{ id: 'defcon1', text: 'DEFCON 1 (Prepare Nukes)', effects: { scores: { usa_survival: +1, eu_survival: -1 } } }, { id: 'wait', text: 'Observe', effects: { scores: { usa_tech: +1, global_tech: +1 } } }] },
+                { role: 'china', hiddenFrom: ['usa', 'india'], text: 'Public Stance?', options: [{ id: 'lockdown', text: 'Total Martial Law', effects: { scores: { china_survival: +1 } } }, { id: 'evac', text: 'Mass Evacuation', effects: { scores: { china_survival: -1, china_tech: +1, global_tech: +1 } } }] },
+                { role: 'russia', hiddenFrom: ['usa', 'eu', 'uk'], text: 'Strategic Response?', options: [{ id: 'bunkers', text: 'Retreat to Bunkers', effects: { scores: { russia_survival: +2 } } }, { id: 'cyber', text: 'Probe Alien Comms', effects: { scores: { russia_tech: +2, global_tech: +2, russia_survival: -1 } } }] },
                 { role: 'eu', text: 'Coalition Directive?', options: [{ id: 'unite', text: 'Pool Resources', effects: { scores: { eu_survival: +1, eu_tech: +1, global_tech: +1 } } }] },
                 { role: 'india', text: 'Border Control?', options: [{ id: 'close', text: 'Seal Borders', effects: { scores: { india_survival: +1 } } }] },
-                { role: 'uk', text: 'Intelligence?', options: [{ id: 'share', text: 'Share with US/EU', effects: { scores: { uk_tech: +1, global_tech: +1 } } }, { id: 'hoard', text: 'Keep Classified', effects: { scores: { uk_tech: +2, global_tech: +2 } } }] }
+                { role: 'uk', hiddenFrom: ['russia', 'china', 'india'], text: 'Intelligence?', options: [{ id: 'share', text: 'Share with US/EU', effects: { scores: { uk_tech: +1, global_tech: +1 } } }, { id: 'hoard', text: 'Keep Classified', effects: { scores: { uk_tech: +2, global_tech: +2 } } }] }
             ],
             triggerEvents: [
                 { id: 'ev_roswell_cache', delayMs: 60000 },
@@ -91,6 +91,7 @@ module.exports = {
             id: 'ev_roswell',
             name: 'The Roswell Cache',
             description: 'The US unlocks decades of hidden research.',
+            visibleTo: ['usa'],
             image: '/scenarios/independence_day/images/ev_alien_tech.jpg',
             decisions: [
                 { role: 'usa', text: 'Share Roswell Tech?', options: [{ id: 'share_all', text: 'Share Globally', effects: { scores: { global_tech: +3, eu_tech: +1, uk_tech: +1 } } }, { id: 'keep', text: 'Classified (USA Only)', effects: { scores: { usa_tech: +3, global_tech: +3 } } }] }
@@ -101,8 +102,8 @@ module.exports = {
             name: 'Energy Signatures Detected',
             description: 'The orbital ships are powering up massive energy weapons. They are targeting high-density populations.',
             decisions: [
-                { role: 'india', text: 'Redirect Targets?', options: [{ id: 'hack', text: 'Hack beacons (Diverts attack from India to EU)', effects: { scores: { india_survival: +1, eu_survival: -2 } } }, { id: 'brace', text: 'Brace for impact', effects: { scores: { india_survival: -2 } } }] },
-                { role: 'eu', text: 'Activate Prototype Shields?', options: [{ id: 'shield', text: 'Yes (Burns Tech)', effects: { scores: { eu_survival: +2, eu_tech: -1, global_tech: -1 } } }, { id: 'save', text: 'Save Research', effects: { scores: { eu_survival: -2 } } }] }
+                { role: 'india', hiddenFrom: ['eu'], text: 'Redirect Targets?', options: [{ id: 'hack', text: 'Hack beacons (Diverts attack from India to EU)', effects: { scores: { india_survival: +1, eu_survival: -2 } } }, { id: 'brace', text: 'Brace for impact', effects: { scores: { india_survival: -2 } } }] },
+                { role: 'eu', hiddenFrom: ['india'], text: 'Activate Prototype Shields?', options: [{ id: 'shield', text: 'Yes (Burns Tech)', effects: { scores: { eu_survival: +2, eu_tech: -1, global_tech: -1 } } }, { id: 'save', text: 'Save Research', effects: { scores: { eu_survival: -2 } } }] }
             ]
         },
         // PHASE 2: Global Strike
@@ -117,6 +118,7 @@ module.exports = {
             id: 'ev_china_hoard',
             name: 'Rare Earth Monopoly',
             description: 'China has secured the remaining global supply of rare-earth materials vital for orbital defense grids.',
+            visibleTo: ['china'],
             decisions: [
                 { role: 'china', text: 'Exploit Resources?', options: [{ id: 'hoard', text: 'Keep for China', effects: { scores: { china_survival: +2, usa_survival: -1, eu_survival: -1 } } }, { id: 'distribute', text: 'Distribute', effects: { scores: { global_tech: +2 } } }] }
             ]
@@ -125,6 +127,7 @@ module.exports = {
             id: 'ev_russia_false_flag',
             name: 'European Grid Collapse',
             description: 'As the aliens attacked, a secondary terrestrial cyber-attack wiped out the remaining European defense grids.',
+            visibleTo: ['russia'],
             decisions: [
                 { role: 'russia', text: 'Launch False Flag?', options: [{ id: 'launch', text: 'Launch Attack on EU', effects: { scores: { eu_survival: -2, russia_survival: +1 } } }, { id: 'help', text: 'Assist EU Instead', effects: { scores: { global_tech: +1, eu_survival: +1 } } }] }
             ]
@@ -141,6 +144,7 @@ module.exports = {
             id: 'ev_espionage_uk',
             name: 'Intelligence Coup',
             description: 'UK Intelligence has intercepted raw data from downed ships.',
+            visibleTo: ['uk'],
             decisions: [
                 { role: 'uk', text: 'Action?', options: [{ id: 'steal_us', text: 'Steal US Research', effects: { scores: { uk_tech: +2, global_tech: +2, usa_tech: -1, global_tech: -1 } } }, { id: 'share', text: 'Open Source', effects: { scores: { global_tech: +2 } } }] }
             ]
@@ -149,6 +153,7 @@ module.exports = {
             id: 'ev_espionage_china',
             name: 'Cyber Infiltration',
             description: 'Chinese hackers have breached the global research network.',
+            visibleTo: ['china'],
             decisions: [
                 { role: 'china', text: 'Action?', options: [{ id: 'steal_ru', text: 'Steal Russian Research', effects: { scores: { china_tech: +2, global_tech: +2, russia_tech: -1, global_tech: -1 } } }, { id: 'share', text: 'Collaborate', effects: { scores: { global_tech: +2 } } }] }
             ]
@@ -159,8 +164,8 @@ module.exports = {
             description: 'The primary alien vessel enters the atmosphere. Global survival depends on our response.',
             image: '/scenarios/independence_day/images/ev_mothership.jpg',
             decisions: [
-                { role: 'usa', text: 'Final Push?', options: [{ id: 'nuke', text: 'Launch all remaining Nukes', effects: { scores: { usa_survival: -1, global_tech: +3 } } }] },
-                { role: 'russia', text: 'Dead Hand?', options: [{ id: 'activate', text: 'Activate Dead Hand', effects: { scores: { russia_survival: -1, global_tech: +2 } } }] }
+                { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Final Push?', options: [{ id: 'nuke', text: 'Launch all remaining Nukes', effects: { scores: { usa_survival: -1, global_tech: +3 } } }] },
+                { role: 'russia', hiddenFrom: ['usa', 'china', 'eu', 'uk'], text: 'Dead Hand?', options: [{ id: 'activate', text: 'Activate Dead Hand', effects: { scores: { russia_survival: -1, global_tech: +2 } } }] }
             ]
         },
         // Endgame Evaluation
