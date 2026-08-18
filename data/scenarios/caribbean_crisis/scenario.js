@@ -139,7 +139,7 @@ CRITICAL RULES:
         { id: 'ev_tourist_resort', name: 'Resort Flooded', description: 'Hundreds of UK/US nationals trapped.', effects: { scores: { humanitarian: -1 } } },
         { id: 'ev_roads_blocked', name: 'Arteries Blocked', description: 'Main roads blocked by landslides.', effects: { scores: { logistics: -1 } } },
         { id: 'ev_police_disband', name: 'Police Absent', description: 'Local police force largely absent checking on families.', effects: { scores: { public_order: -1 } } },
-        { id: 'ev_port_damage', name: 'Port Cranes Collapsed', description: 'Heavy lift capability destroyed at port.', effects: { scores: { infrastructure: -1, logistics: -1 } } },
+        { id: 'ev_port_damage', name: 'Port Cranes Collapsed', description: 'Heavy lift capability destroyed at port.', image: '/images/events/ev_port_damage.jpg', effects: { scores: { infrastructure: -1, logistics: -1 } } },
         { id: 'ev_funds_request', name: 'Emergency Funds', description: 'FCDO requests immediate release of emergency funds.', decisions: [{ role: 'PM', text: 'Approve?', options: [{ id: 'yes', text: 'Approve', effects: { scores: { political: +1 } } }, { id: 'delay', text: 'Delay', effects: { scores: { humanitarian: -1 } } }] }] },
 
         // T+5 to T+20
@@ -167,8 +167,8 @@ CRITICAL RULES:
         { id: 'ev_tabloid_attack', name: 'Tabloid Attack', description: 'UK tabloid publishes "UK Abandons Its Own".', effects: { scores: { political: -2 } } },
         
         // Secondary Weather
-        { id: 'ev_weather_warning', name: 'Weather Warning', description: 'A massive secondary sea swell is approaching.', effects: { scores: { political: 0 } } },
-        { id: 'ev_secondary_weather', name: 'Secondary Swell Hits', description: 'A massive secondary sea swell has hit. Temporary structures damaged.', effects: { scores: { infrastructure: -1, logistics: -1 } }, triggerEvents: [{ id: 'ev_gangs_emerge', delayMs: 15000 }, { id: 'ev_prison_riot', delayMs: 30000 }] },
+        { id: 'ev_weather_warning', name: 'Weather Warning', description: 'A massive secondary sea swell is approaching.', image: '/images/events/ev_weather_warning.jpg', effects: { scores: { political: 0 } } },
+        { id: 'ev_secondary_weather', name: 'Secondary Swell Hits', description: 'A massive secondary sea swell has hit. Temporary structures damaged.', image: '/images/events/ev_secondary_weather.jpg', effects: { scores: { infrastructure: -1, logistics: -1 } }, triggerEvents: [{ id: 'ev_gangs_emerge', delayMs: 15000 }, { id: 'ev_prison_riot', delayMs: 30000 }] },
 
         // Score Gated (T+25 onwards)
         { id: 'ev_gangs_emerge', name: 'Criminal Gangs Take Control', description: 'Organised gangs take control of eastern district.', conditions: { maxScores: { public_order: 2 } }, effects: { scores: { public_order: -2, humanitarian: -1 } } },
@@ -178,10 +178,10 @@ CRITICAL RULES:
         { id: 'ev_gunfire_gov', name: 'Gunfire at Gov Residence', description: 'Gunfire reported near Governor\'s residence.', effects: { scores: { public_order: -1, political: -1 } } },
         { id: 'ev_local_threat', name: 'Local Gov Threatens US Intervention', description: 'Local gov threatens to request US intervention if UK fails.', decisions: [{ role: 'fcdo', text: 'Response?', options: [{ id: 'reassure', text: 'Reassure', effects: { scores: { political: +1 } } }, { id: 'allow', text: 'Allow US lead', effects: { scores: { political: -2, logistics: +2 } } }] }], triggerEvents: [{ id: 'ev_curfew', delayMs: 15000 }] },
         { id: 'ev_curfew', name: 'Curfew Declared', description: 'Decision on rules of engagement for Royal Marines.', decisions: [{ role: 'defence', text: 'ROE?', options: [{ id: 'strict', text: 'Strict (Self-defence only)', effects: { scores: { public_order: -1 } } }, { id: 'loose', text: 'Loose (Lethal force authorized)', effects: { scores: { public_order: +2, political: -2 } } }] }] },
-        { id: 'ev_port_riot', name: 'Port Riots', description: 'Riots at port as aid shipment unloaded.', effects: { scores: { public_order: -1, logistics: -1 } } },
+        { id: 'ev_port_riot', name: 'Port Riots', description: 'Riots at port as aid shipment unloaded.', image: '/images/events/ev_port_riot.jpg', effects: { scores: { public_order: -1, logistics: -1 } } },
         { id: 'ev_black_market', name: 'Black Market Emerges', description: 'Black market for water and fuel run by armed groups.', effects: { scores: { public_order: -1 } } },
         { id: 'ev_media_attacked', name: 'Media Crew Attacked', description: 'Media crew attacked while filming riots.', effects: { scores: { political: -1 } } },
-        { id: 'ev_bridge_collapse', name: 'Bridge Collapse', description: 'Critical bridge collapses under aid convoy.', effects: { scores: { logistics: -2, infrastructure: -1 } } },
+        { id: 'ev_bridge_collapse', name: 'Bridge Collapse', description: 'Critical bridge collapses under aid convoy.', image: '/images/events/ev_bridge_collapse.jpg', effects: { scores: { logistics: -2, infrastructure: -1 } } },
         { id: 'ev_mass_exodus', name: 'Mass Exodus', description: 'Small boats attempting to reach Puerto Rico.', effects: { scores: { humanitarian: -1, political: -1 } } },
         
         { id: 'ev_marines_push', name: 'Marines Retake Prison', description: 'Royal Marines launch operation to retake prison.', effects: { scores: { public_order: +2 } } },

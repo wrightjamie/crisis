@@ -33,7 +33,7 @@
 - [ ] Event: "Resort Flooded" (ev_tourist_resort) needs an image
 - [ ] Event: "Arteries Blocked" (ev_roads_blocked) needs an image
 - [ ] Event: "Police Absent" (ev_police_disband) needs an image
-- [ ] Event: "Port Cranes Collapsed" (ev_port_damage) needs an image
+- [x] Event: "Port Cranes Collapsed" (ev_port_damage) needs an image
 - [ ] Event: "Emergency Funds" (ev_funds_request) needs an image
 - [ ] Event: "A400M in Airspace" (ev_a400_arrives) needs an image
 - [ ] Event: "RFA Arrives" (ev_rfa_arrives) needs an image
@@ -53,17 +53,17 @@
 - [ ] Event: "Telecom Restoration Offer" (ev_telecom_offer) needs an image
 - [ ] Event: "Evacuation Clashes" (ev_foreign_clash) needs an image
 - [ ] Event: "Tabloid Attack" (ev_tabloid_attack) needs an image
-- [ ] Event: "Weather Warning" (ev_weather_warning) needs an image
-- [ ] Event: "Secondary Swell Hits" (ev_secondary_weather) needs an image
+- [x] Event: "Weather Warning" (ev_weather_warning) needs an image
+- [x] Event: "Secondary Swell Hits" (ev_secondary_weather) needs an image
 - [ ] Event: "Criminal Gangs Take Control" (ev_gangs_emerge) needs an image
 - [ ] Event: "Prison Break" (ev_prison_riot) needs an image
 - [ ] Event: "Gunfire at Gov Residence" (ev_gunfire_gov) needs an image
 - [ ] Event: "Local Gov Threatens US Intervention" (ev_local_threat) needs an image
 - [ ] Event: "Curfew Declared" (ev_curfew) needs an image
-- [ ] Event: "Port Riots" (ev_port_riot) needs an image
+- [x] Event: "Port Riots" (ev_port_riot) needs an image
 - [ ] Event: "Black Market Emerges" (ev_black_market) needs an image
 - [ ] Event: "Media Crew Attacked" (ev_media_attacked) needs an image
-- [ ] Event: "Bridge Collapse" (ev_bridge_collapse) needs an image
+- [x] Event: "Bridge Collapse" (ev_bridge_collapse) needs an image
 - [ ] Event: "Mass Exodus" (ev_mass_exodus) needs an image
 - [ ] Event: "Marines Retake Prison" (ev_marines_push) needs an image
 - [ ] Event: "Epidemic Confirmed" (ev_epidemic) needs an image
@@ -78,20 +78,20 @@
 - [ ] Event: "Scenario Concluded: Total Collapse" (ev_end_failure) needs an image
 
 ### Eastern Front Breach (eastern_front_breach)
-- [ ] Asset: "72nd Mechanized Brigade" (brigade_alpha) needs an image
+- [x] Asset: "72nd Mechanized Brigade" (brigade_alpha) needs an image
 - [ ] Asset: "Central Supply Hub" (supply_depot) needs an image
 - [ ] Asset: "Aerorozvidka Unit" (drone_squad) needs an image
-- [ ] Event: "Enemy Armored Push" (evt_armor_push) needs an image
-- [ ] Event: "Brigade Alpha Encirclement Threat" (evt_encirclement_threat) needs an image
-- [ ] Event: "Missile Strike on Supply Depot" (evt_depot_strike) needs an image
+- [x] Event: "Enemy Armored Push" (evt_armor_push) needs an image
+- [x] Event: "Brigade Alpha Encirclement Threat" (evt_encirclement_threat) needs an image
+- [x] Event: "Missile Strike on Supply Depot" (evt_depot_strike) needs an image
 - [ ] Action: "Request Emergency Resupply" (act_request_resupply) needs an image
 
 ### Independence Day: Global Supremacy (independence_day)
-- [ ] Event: "Shadows Over Earth" (ev_start) needs an image
-- [ ] Event: "Energy Signatures Detected" (ev_first_strike_prep) needs an image
+- [x] Event: "Shadows Over Earth" (ev_start) needs an image
+- [x] Event: "Energy Signatures Detected" (ev_first_strike_prep) needs an image
 - [ ] Event: "Rare Earth Monopoly" (ev_china_hoard) needs an image
-- [ ] Event: "European Grid Collapse" (ev_russia_false_flag) needs an image
-- [ ] Event: "Fighters Downed" (ev_arms_race_start) needs an image
+- [x] Event: "European Grid Collapse" (ev_russia_false_flag) needs an image
+- [x] Event: "Fighters Downed" (ev_arms_race_start) needs an image
 - [ ] Event: "Intelligence Coup" (ev_espionage_uk) needs an image
 - [ ] Event: "Cyber Infiltration" (ev_espionage_china) needs an image
 - [ ] Event: "45 Minutes: The Final Stand" (ev_endgame_trigger) needs an image
@@ -101,34 +101,34 @@
 ### Metropolis Blackout (metropolis_blackout)
 - [ ] Asset: "Metro General Hospital" (main_hospital) needs an image
 - [ ] Asset: "Central Police Precinct" (central_precinct) needs an image
-- [ ] Asset: "Power Substation Alpha" (substation_alpha) needs an image
-- [ ] Event: "Hospital Generator Failure" (evt_hospital_power_failure) needs an image
-- [ ] Event: "Central Precinct Vulnerable" (evt_precinct_vulnerable) needs an image
-- [ ] Event: "Supermarket Riot" (evt_supermarket_riot) needs an image
+- [x] Asset: "Power Substation Alpha" (substation_alpha) needs an image
+- [x] Event: "Hospital Generator Failure" (evt_hospital_power_failure) needs an image
+- [x] Event: "Central Precinct Vulnerable" (evt_precinct_vulnerable) needs an image
+- [x] Event: "Supermarket Riot" (evt_supermarket_riot) needs an image
 - [ ] Action: "Release Emergency Funds" (act_emergency_funds) needs an image
 
 ### Tutorial Scenario (tutorial)
 - [ ] Asset: "Main Water Treatment Plant" (water_treatment) needs an image
-- [ ] Asset: "Rescue Helicopter" (rescue_heli) needs an image
-- [ ] Event: "Flash Flood Warning Issued" (evt_flood_warning) needs an image
-- [ ] Event: "Traffic Jam During Evacuation" (evt_evac_jam) needs an image
-- [ ] Event: "Water Plant Threat" (evt_water_plant) needs an image
+- [x] Asset: "Rescue Helicopter" (rescue_heli) needs an image
+- [x] Event: "Flash Flood Warning Issued" (evt_flood_warning) needs an image
+- [x] Event: "Traffic Jam During Evacuation" (evt_evac_jam) needs an image
+- [x] Event: "Water Plant Threat" (evt_water_plant) needs an image
 - [ ] Action: "Hold Press Conference" (act_press_conference) needs an image
 
 ### UK Crisis: Russian Tensions (uk_crisis)
-- [ ] Event: "Russian Submarine Surfaces in the Channel" (ev_sub_surfaces) needs an image
+- [x] Event: "Russian Submarine Surfaces in the Channel" (ev_sub_surfaces) needs an image
 - [ ] Event: "Severing of Undersea Internet Cables" (ev_undersea_cables) needs an image
 - [ ] Event: "UK Forces Casualty Leaks to Press" (ev_uk_casualty_leak) needs an image
 - [ ] Event: "Attempted Chemical Attack on UK Soil" (ev_chemical_attempt) needs an image
 - [ ] Event: "US Declares European Neutrality" (ev_us_neutrality) needs an image
-- [ ] Event: "Hypersonic Strike on RAF Akrotiri" (ev_akrotiri_strike) needs an image
+- [x] Event: "Hypersonic Strike on RAF Akrotiri" (ev_akrotiri_strike) needs an image
 - [ ] Event: "NATO Article 5 Ambiguity" (ev_article5_ambiguity) needs an image
 - [ ] Event: "Coordinated Strikes on RAF Bases" (ev_raf_bases_strike) needs an image
 - [ ] Event: "Strike on HMNB Portsmouth" (ev_portsmouth_strike) needs an image
 - [ ] Event: "First Strike on HMNB Clyde (Faslane)" (ev_faslane_strike_1) needs an image
 - [ ] Event: "Second Strike on HMNB Clyde" (ev_faslane_strike_2) needs an image
-- [ ] Event: "Targeted Strike on UK Power Grid" (ev_power_grid_strike) needs an image
-- [ ] Event: "Total Airspace Incursion" (ev_airspace_incursion) needs an image
+- [x] Event: "Targeted Strike on UK Power Grid" (ev_power_grid_strike) needs an image
+- [x] Event: "Total Airspace Incursion" (ev_airspace_incursion) needs an image
 - [ ] Event: "Imminent Nuclear Readiness Detected" (ev_nuclear_readiness) needs an image
 - [ ] Event: "CABINET DECISION: Final Authorization" (ev_final_authorization) needs an image
 - [ ] Event: "US Authorizes Logistics Support" (ev_us_support_success) needs an image

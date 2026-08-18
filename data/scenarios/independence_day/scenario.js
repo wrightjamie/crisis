@@ -68,7 +68,7 @@ module.exports = {
             id: 'ev_start',
             name: 'Shadows Over Earth',
             description: 'Massive unidentified objects have entered low Earth orbit, positioning themselves over major global capitals. Total global satellite blackout has commenced.',
-            image: '/scenarios/independence_day/images/ev_start.jpg',
+            image: '/images/events/ev_start_id4.jpg',
             decisions: [
                 { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Military Posture?', options: [{ id: 'defcon1', text: 'DEFCON 1 (Prepare Nukes)', effects: { scores: { usa_survival: +1, eu_survival: -1 } } }, { id: 'wait', text: 'Observe', effects: { scores: { usa_tech: +1, global_tech: +1 } } }] },
                 { role: 'china', hiddenFrom: ['usa', 'india'], text: 'Public Stance?', options: [{ id: 'lockdown', text: 'Total Martial Law', effects: { scores: { china_survival: +1 } } }, { id: 'evac', text: 'Mass Evacuation', effects: { scores: { china_survival: -1, china_tech: +1, global_tech: +1 } } }] },
@@ -101,6 +101,7 @@ module.exports = {
         {
             id: 'ev_first_strike_prep',
             name: 'Energy Signatures Detected',
+            image: '/images/events/ev_first_strike_prep.jpg',
             description: 'The orbital ships are powering up massive energy weapons. They are targeting high-density populations.',
             decisions: [
                 { role: 'india', hiddenFrom: ['eu'], text: 'Redirect Targets?', options: [{ id: 'hack', text: 'Hack beacons (Diverts attack from India to EU)', effects: { scores: { india_survival: +1, eu_survival: -2 } } }, { id: 'brace', text: 'Brace for impact', effects: { scores: { india_survival: -2 } } }] },
@@ -127,6 +128,7 @@ module.exports = {
         {
             id: 'ev_russia_false_flag',
             name: 'European Grid Collapse',
+            image: '/images/events/ev_russia_false_flag.jpg',
             description: 'As the aliens attacked, a secondary terrestrial cyber-attack wiped out the remaining European defense grids.',
             visibleTo: ['russia'],
             decisions: [
@@ -137,6 +139,7 @@ module.exports = {
         {
             id: 'ev_arms_race_start',
             name: 'Fighters Downed',
+            image: '/images/events/ev_arms_race_start.jpg',
             description: 'Conventional military forces have managed to down several small alien fighters. The race to reverse-engineer them begins.',
             effects: { scores: { global_tech: +1 } },
             triggerEvents: [{ id: 'ev_espionage_uk', delayMs: 120000 }, { id: 'ev_espionage_china', delayMs: 240000 }]

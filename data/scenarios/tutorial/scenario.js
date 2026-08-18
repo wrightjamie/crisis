@@ -36,6 +36,7 @@ module.exports = {
         {
             id: "rescue_heli",
             name: "Rescue Helicopter",
+            image: "/images/assets/rescue_heli.jpg",
             location: [51.50, -0.14],
             state: "operational",
             tags: ["emergency"],
@@ -88,6 +89,7 @@ module.exports = {
         {
             id: "evt_flood_warning",
             name: "Flash Flood Warning Issued",
+            image: "/images/events/evt_flood_warning.jpg",
             stage: "stage_1",
             description: "The national weather service has issued a severe flash flood warning for the downtown area. Immediate action is required.\n\n*(Tutorial: Your decisions here directly impact the game's scores. A Standard Alert might raise Public Panic slightly, but a Mandatory Evacuation could drastically lower Infrastructure Damage at the cost of high panic and secondary consequences.)*",
             location: [51.5074, -0.1278],
@@ -129,6 +131,7 @@ module.exports = {
         {
             id: "evt_evac_jam",
             name: "Traffic Jam During Evacuation",
+            image: "/images/events/evt_evac_jam.jpg",
             stage: "stage_1",
             description: "Evacuation routes are jammed. People are trapped in their cars as water rises.\n\n*(Tutorial: This event only triggered because you chose to evacuate earlier! Notice how the 'Deploy Rescue Heli' option below requires the Rescue Helicopter asset to be operational. If that asset was destroyed, this option would be locked!)*",
             location: [51.515, -0.13],
@@ -164,6 +167,7 @@ module.exports = {
         {
             id: "evt_water_plant",
             name: "Water Plant Threat",
+            image: "/images/events/evt_water_plant.jpg",
             stage: "stage_2",
             description: "Floodwaters are threatening the main water treatment plant. If it goes offline, the town will lose clean water.\n\n*(Tutorial: Keep a close eye on your scores. If a critical score reaches 'Failing', the simulation could end in failure. You must balance the risk to infrastructure against public panic.)*",
             location: [51.51, -0.11],
