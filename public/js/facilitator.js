@@ -325,54 +325,111 @@ let variantSelections = {}; // { scenarioId: { axisId: optionId } }
 
 function renderHoldingScreen() {
     scenariosListEl.innerHTML = '';
+
+    // Reset details panel
+    const detailsPanel = document.getElementById('scenario-details-panel');
+    if (detailsPanel) {
+        detailsPanel.innerHTML = '<p class="text-secondary text-lg">Select a scenario to view details</p>';
+        detailsPanel.style.display = 'flex';
+        detailsPanel.style.flexDirection = 'column';
+        detailsPanel.style.justifyContent = 'center';
+        detailsPanel.style.alignItems = 'center';
+        detailsPanel.style.textAlign = 'center';
+        detailsPanel.className = 'admin-card';
+    }
+
     availableScenarios.forEach(s => {
+        // Init default variants regardless of selection so they're ready if needed
         variantSelections[s.id] = {};
-
-        const div = document.createElement('div');
-        div.className = 'admin-card';
-        div.style.textAlign = 'left';
-
-        let axesHtml = '';
         if (s.variantAxes && s.variantAxes.length > 0) {
-            axesHtml += '<div class="mt-2 pt-1 border-top">';
-            axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
-            
             s.variantAxes.forEach(axis => {
-                axesHtml += `<div class="mb-lg">`;
-                axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
-                axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
-                axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'btn-primary' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
-                });
-                axesHtml += '</div></div>';
-                // Default to first option
                 variantSelections[s.id][axis.id] = axis.options[0].id;
             });
-
-            axesHtml += `<button class="btn btn-ghost text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
-            axesHtml += '</div>';
         }
 
         const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
-        let validationHtml = '';
-        if (s.isValid === false) {
-            validationHtml = `<div class="mb-1 p-1 border-red bg-red-faded text-red text-sm radius-sm">
-                <strong>⚠️ Scenario configuration invalid:</strong>
-                <ul class="mt-1 ml-2 p-0">
-                    ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
-                </ul>
-            </div>`;
-        }
         
+        const div = document.createElement('div');
+        div.className = 'admin-card scenario-item';
+
+        // One liner description (just take the first sentence or truncate)
+        let shortDesc = p(s.description || '');
+        const firstSentenceMatch = shortDesc.match(/^.*?[.!?](?:\s|$)/);
+        if (firstSentenceMatch) {
+            shortDesc = firstSentenceMatch[0].trim();
+        } else if (shortDesc.length > 80) {
+            shortDesc = shortDesc.substring(0, 80) + '...';
+        }
+
         div.innerHTML = `
-            <h2>${p(s.name)}</h2>
-            <p class="text-secondary mb-1">${p(s.description)}</p>
-            ${validationHtml}
-            ${axesHtml}
-            <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
+            <h3 class="text-primary m-0 mb-xs">${p(s.name)}</h3>
+            <p class="text-secondary text-sm m-0">${shortDesc}</p>
         `;
+
+        div.onclick = () => {
+            // Highlight selected
+            document.querySelectorAll('#scenarios-list .scenario-item').forEach(card => {
+                card.classList.remove('active');
+            });
+            div.classList.add('active');
+
+            renderScenarioDetails(s.id);
+        };
+
         scenariosListEl.appendChild(div);
     });
+}
+
+function renderScenarioDetails(scenarioId) {
+    const detailsPanel = document.getElementById('scenario-details-panel');
+    if (!detailsPanel) return;
+
+    const s = availableScenarios.find(x => x.id === scenarioId);
+    if (!s) return;
+
+    detailsPanel.style.display = 'block';
+    detailsPanel.style.textAlign = 'left';
+
+    let axesHtml = '';
+    if (s.variantAxes && s.variantAxes.length > 0) {
+        axesHtml += '<div class="mt-2 pt-1 border-top">';
+        axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
+
+        s.variantAxes.forEach(axis => {
+            axesHtml += `<div class="mb-lg">`;
+            axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
+            axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
+            axis.options.forEach((opt, idx) => {
+                const isSelected = variantSelections[s.id][axis.id] === opt.id;
+                axesHtml += `<button class="btn variant-opt ${isSelected ? 'btn-primary' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
+            });
+            axesHtml += '</div></div>';
+        });
+
+        axesHtml += `<button class="btn btn-ghost text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
+        axesHtml += '</div>';
+    }
+
+    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+    let validationHtml = '';
+    if (s.isValid === false) {
+        validationHtml = `<div class="mb-1 p-1 border-red bg-red-faded text-red text-sm radius-sm">
+            <strong>⚠️ Scenario configuration invalid:</strong>
+            <ul class="mt-1 ml-2 p-0">
+                ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
+            </ul>
+        </div>`;
+    }
+
+    detailsPanel.innerHTML = `
+        <h2 style="color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">${p(s.name)}</h2>
+        <p class="text-secondary mb-2" style="white-space: pre-wrap;">${p(s.description)}</p>
+        ${validationHtml}
+        ${axesHtml}
+        <div style="margin-top: auto; padding-top: 1rem;">
+            <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
+        </div>
+    `;
 }
 
 window.selectVariant = function(scenarioId, axisId, optionId, btnEl) {
