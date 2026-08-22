@@ -361,23 +361,38 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_start",
-                    "delayMs": 10000,
+                    "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_omaha_start",
-                    "delayMs": 60000,
+                    "delayMs": 270000,
                     "probability": 1
                 },
                 {
                     "id": "th3_carentan_start",
-                    "delayMs": 120000,
+                    "delayMs": 450000,
                     "probability": 1
                 },
                 {
                     "id": "ev_endgame_eval",
                     "delayMs": 600000,
                     "probability": 1
+                },
+                {
+                    "id": "ev_luftwaffe_appearance",
+                    "delayMs": 400000,
+                    "probability": 0.3
+                },
+                {
+                    "id": "ev_french_sabotage",
+                    "delayMs": 200000,
+                    "probability": 0.6
+                },
+                {
+                    "id": "ev_allied_air_superiority",
+                    "delayMs": 600000,
+                    "probability": 0.9
                 }
             ]
         },
@@ -425,13 +440,18 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_pegasus_gliders",
-                    "delayMs": 15000,
+                    "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th1_axis_confusion",
-                    "delayMs": 25000,
+                    "delayMs": 90000,
                     "probability": 1
+                },
+                {
+                    "id": "th1_merville_battery",
+                    "delayMs": 150000,
+                    "probability": 0.8
                 }
             ]
         },
@@ -478,7 +498,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_21st_panzer",
-                    "delayMs": 30000,
+                    "delayMs": 90000,
                     "probability": 0.8
                 }
             ]
@@ -520,6 +540,13 @@ module.exports = {
                             }
                         }
                     ]
+                }
+            ],
+            "triggerEvents": [
+                {
+                    "id": "th1_glider_crash",
+                    "delayMs": 120000,
+                    "probability": 0.3
                 }
             ]
         },
@@ -566,12 +593,17 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_linkup",
-                    "delayMs": 40000,
+                    "delayMs": 90000,
                     "probability": 0.6
                 },
                 {
                     "id": "th1_glider_reinforcements",
-                    "delayMs": 50000,
+                    "delayMs": 90000,
+                    "probability": 0.7
+                },
+                {
+                    "id": "th1_bayeux_push",
+                    "delayMs": 240000,
                     "probability": 0.7
                 }
             ]
@@ -699,18 +731,28 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_pointe_du_hoc",
-                    "delayMs": 20000,
+                    "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_naval_close_support",
-                    "delayMs": 35000,
+                    "delayMs": 90000,
                     "probability": 0.8
                 },
                 {
                     "id": "th2_wn62_resistance",
-                    "delayMs": 50000,
+                    "delayMs": 90000,
                     "probability": 0.9
+                },
+                {
+                    "id": "th2_vierville_draw",
+                    "delayMs": 180000,
+                    "probability": 0.9
+                },
+                {
+                    "id": "th2_artillery_spotters",
+                    "delayMs": 150000,
+                    "probability": 0.6
                 }
             ]
         },
@@ -766,7 +808,12 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_dog_green_breakout",
-                    "delayMs": 20000,
+                    "delayMs": 90000,
+                    "probability": 0.7
+                },
+                {
+                    "id": "th2_omaha_ammunition",
+                    "delayMs": 240000,
                     "probability": 0.7
                 }
             ]
@@ -810,6 +857,13 @@ module.exports = {
                             }
                         }
                     ]
+                }
+            ],
+            "triggerEvents": [
+                {
+                    "id": "th2_ranger_reinforcements",
+                    "delayMs": 180000,
+                    "probability": 0.5
                 }
             ]
         },
@@ -884,13 +938,18 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_flooded_fields",
-                    "delayMs": 25000,
+                    "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th3_counter_attack_carentan",
-                    "delayMs": 45000,
+                    "delayMs": 90000,
                     "probability": 0.6
+                },
+                {
+                    "id": "th3_douve_bridges",
+                    "delayMs": 150000,
+                    "probability": 0.8
                 }
             ]
         },
@@ -911,7 +970,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_engineer_assault",
-                    "delayMs": 20000,
+                    "delayMs": 90000,
                     "probability": 0.8
                 }
             ]
@@ -997,6 +1056,18 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "triggerEvents": [
+                {
+                    "id": "th3_bloody_gulch",
+                    "delayMs": 180000,
+                    "probability": 0.7
+                },
+                {
+                    "id": "th3_friendly_fire",
+                    "delayMs": 210000,
+                    "probability": 0.2
+                }
             ]
         },
         {
@@ -1010,7 +1081,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "ev_panzer_assault",
-                    "delayMs": 15000
+                    "delayMs": 90000
                 }
             ]
         },
@@ -1090,6 +1161,389 @@ module.exports = {
             "name": "A Bloody Stalemate",
             "description": "The Allies have a tenuous foothold, but the Axis defensive line remains intact. A brutal war of attrition in the bocage country awaits.",
             "isEndGame": true
+        },
+        {
+            "id": "th1_merville_battery",
+            "name": "The Merville Battery",
+            "description": "British paratroopers must assault heavily fortified gun emplacements threatening Sword Beach.",
+            "location": [
+                49.27,
+                -0.19
+            ],
+            "hiddenFrom": [
+                "axis_command",
+                "axis_panzer",
+                "axis_display"
+            ],
+            "decisions": [
+                {
+                    "role": "allied_command",
+                    "text": "Assault Plan?",
+                    "options": [
+                        {
+                            "id": "stealth",
+                            "text": "Stealth approach",
+                            "effects": {
+                                "scores": {
+                                    "allied_supply": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "brute",
+                            "text": "Brute force assault",
+                            "effects": {
+                                "scores": {
+                                    "allied_momentum": 1,
+                                    "allied_supply": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th1_bayeux_push",
+            "name": "Advance on Bayeux",
+            "description": "Elements of the 50th Infantry Division are making a rapid push towards Bayeux.",
+            "location": [
+                49.27,
+                -0.7
+            ],
+            "decisions": [
+                {
+                    "role": "axis_panzer",
+                    "text": "Defend Bayeux?",
+                    "options": [
+                        {
+                            "id": "ambush",
+                            "text": "Set up Panzer ambushes in the bocage",
+                            "effects": {
+                                "scores": {
+                                    "axis_reserves": -1,
+                                    "allied_momentum": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "withdraw",
+                            "text": "Withdraw to better defensive lines",
+                            "effects": {
+                                "scores": {
+                                    "axis_fortifications": 1,
+                                    "allied_momentum": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th1_glider_crash",
+            "name": "Glider LZ Compromised",
+            "description": "Rommel's Asparagus (anti-glider poles) have decimated a wave of incoming gliders.",
+            "location": [
+                49.31,
+                -1.3
+            ],
+            "effects": {
+                "scores": {
+                    "allied_momentum": -1,
+                    "allied_supply": -1
+                }
+            }
+        },
+        {
+            "id": "th2_vierville_draw",
+            "name": "Assault on Vierville Draw",
+            "description": "The 29th Infantry is attempting to blast through the heavily defended draw at Vierville-sur-Mer.",
+            "location": [
+                49.37,
+                -0.9
+            ],
+            "decisions": [
+                {
+                    "role": "allied_command",
+                    "text": "Commit Engineers?",
+                    "options": [
+                        {
+                            "id": "send_engineers",
+                            "text": "Send combat engineers to clear obstacles",
+                            "effects": {
+                                "scores": {
+                                    "beach_control": 1,
+                                    "allied_supply": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th2_omaha_ammunition",
+            "name": "Ammunition Shortage on Omaha",
+            "description": "Troops pinned on the shingle are running critically low on ammunition.",
+            "location": [
+                49.37,
+                -0.88
+            ],
+            "hiddenFrom": [
+                "axis_command",
+                "axis_panzer",
+                "axis_display"
+            ],
+            "decisions": [
+                {
+                    "role": "allied_logistics",
+                    "text": "Supply Priorities?",
+                    "options": [
+                        {
+                            "id": "ammo_boats",
+                            "text": "Risk landing craft to bring ammo",
+                            "effects": {
+                                "scores": {
+                                    "allied_supply": -1,
+                                    "allied_momentum": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "scavenge",
+                            "text": "Order troops to scavenge",
+                            "effects": {
+                                "scores": {
+                                    "allied_momentum": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th2_artillery_spotters",
+            "name": "Axis Artillery Spotters",
+            "description": "Hidden German observers are directing devastating artillery fire onto the beaches.",
+            "location": [
+                49.36,
+                -0.85
+            ],
+            "decisions": [
+                {
+                    "role": "axis_command",
+                    "text": "Artillery Targets?",
+                    "options": [
+                        {
+                            "id": "infantry",
+                            "text": "Target clustered infantry",
+                            "effects": {
+                                "scores": {
+                                    "allied_momentum": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "landing_craft",
+                            "text": "Target landing craft",
+                            "effects": {
+                                "scores": {
+                                    "allied_supply": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th2_ranger_reinforcements",
+            "name": "Rangers Diverted",
+            "description": "Ranger battalions meant for Pointe du Hoc are landing on Omaha to reinforce the line.",
+            "location": [
+                49.37,
+                -0.88
+            ],
+            "effects": {
+                "scores": {
+                    "beach_control": 1,
+                    "allied_momentum": 1
+                }
+            }
+        },
+        {
+            "id": "th3_douve_bridges",
+            "name": "The Douve River Bridges",
+            "description": "Crucial bridges over the Douve river are wired with explosives. The Allies must capture them intact.",
+            "location": [
+                49.33,
+                -1.27
+            ],
+            "decisions": [
+                {
+                    "role": "axis_command",
+                    "text": "Blow the bridges?",
+                    "options": [
+                        {
+                            "id": "blow",
+                            "text": "Blow them (Delays Allies, limits counter-attacks)",
+                            "effects": {
+                                "scores": {
+                                    "allied_momentum": -2,
+                                    "axis_reserves": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "hold",
+                            "text": "Hold them for Panzer use",
+                            "effects": {
+                                "scores": {
+                                    "axis_reserves": 1,
+                                    "allied_momentum": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th3_bloody_gulch",
+            "name": "Battle of Bloody Gulch",
+            "description": "Elements of the 17th SS are launching a massive armored attack against the 101st Airborne outside Carentan.",
+            "location": [
+                49.28,
+                -1.26
+            ],
+            "decisions": [
+                {
+                    "role": "allied_logistics",
+                    "text": "Air Support?",
+                    "options": [
+                        {
+                            "id": "call_typhoons",
+                            "text": "Call in Rocket-firing Typhoons",
+                            "effects": {
+                                "scores": {
+                                    "axis_reserves": -2,
+                                    "allied_supply": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "th3_friendly_fire",
+            "name": "Friendly Fire Incident",
+            "description": "Allied bombers have accidentally struck friendly positions near Carentan.",
+            "location": [
+                49.3,
+                -1.24
+            ],
+            "effects": {
+                "scores": {
+                    "allied_momentum": -1,
+                    "allied_supply": -1
+                }
+            }
+        },
+        {
+            "id": "ev_luftwaffe_appearance",
+            "name": "Luftwaffe Sortie",
+            "description": "Two Fw 190s make a strafing run down the beaches. A rare sight today.",
+            "location": [
+                49.37,
+                -0.88
+            ],
+            "effects": {
+                "scores": {
+                    "allied_momentum": -1
+                }
+            }
+        },
+        {
+            "id": "ev_french_sabotage",
+            "name": "Rail Network Sabotaged",
+            "description": "The Resistance has blown key rail lines, delaying Axis reinforcements.",
+            "location": [
+                48.85,
+                2.35
+            ],
+            "effects": {
+                "scores": {
+                    "axis_reserves": -1
+                }
+            }
+        },
+        {
+            "id": "ev_allied_air_superiority",
+            "name": "Air Supremacy",
+            "description": "Allied fighters are dominating the skies, severely restricting Axis daytime movement.",
+            "location": [
+                49.3,
+                -0.8
+            ],
+            "effects": {
+                "scores": {
+                    "axis_reserves": -1,
+                    "axis_fortifications": -1
+                }
+            }
+        },
+        {
+            "id": "fac_allied_intel_coup",
+            "name": "FACILITATOR: Ultra Intel Coup (Pro-Allied)",
+            "description": "Bletchley Park has decrypted vital German deployment orders. This gives the Allies a massive advantage.",
+            "requiresUnlock": true,
+            "effects": {
+                "scores": {
+                    "allied_momentum": 2,
+                    "axis_fortifications": -1,
+                    "axis_reserves": -1
+                }
+            }
+        },
+        {
+            "id": "fac_axis_strategic_reserve",
+            "name": "FACILITATOR: OKW Releases Reserves (Pro-Axis)",
+            "description": "The German High Command has unexpectedly released heavy Panzer and SS reserves directly into the battle.",
+            "requiresUnlock": true,
+            "effects": {
+                "scores": {
+                    "axis_reserves": 3,
+                    "allied_momentum": -2,
+                    "beach_control": -1
+                }
+            }
+        },
+        {
+            "id": "fac_logistics_disaster",
+            "name": "FACILITATOR: Mulberry Collapse (Pro-Axis)",
+            "description": "A catastrophic structural failure at the artificial harbors has crippled the Allied supply chain.",
+            "requiresUnlock": true,
+            "effects": {
+                "scores": {
+                    "allied_supply": -3,
+                    "allied_momentum": -1
+                }
+            }
+        },
+        {
+            "id": "fac_french_uprising",
+            "name": "FACILITATOR: Maquis General Uprising (Pro-Allied)",
+            "description": "The French Resistance has launched a coordinated, massive uprising across Normandy, throwing German rear echelons into chaos.",
+            "requiresUnlock": true,
+            "effects": {
+                "scores": {
+                    "axis_reserves": -2,
+                    "axis_fortifications": -2
+                }
+            }
         }
     ]
 };
