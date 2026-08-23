@@ -110,7 +110,7 @@ async function processAiQueue() {
             const currentScores = currentState.scores;
             let baseline = task.forceInitial ? null : (aiBaselineScores[task.role] || null);
             
-            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context);
+            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context, currentState.scenarioConfig?.scoreConfigs || {});
             
             if (result.generated) {
                 aiBaselineScores[task.role] = JSON.parse(JSON.stringify(currentScores));
@@ -621,25 +621,31 @@ function renderScoreAdjust() {
             row.style.padding = '0.2rem';
         }
 
+        const config = currentState.scenarioConfig?.scoreConfigs?.[key];
+
         const label = document.createElement('span');
-        label.textContent = formatName(key);
+        let labelText = formatName(key);
+        if (config && config.visibleToPlayers === false) {
+             labelText += ' 🔒';
+        }
+        label.textContent = labelText;
         
         const input = document.createElement('input');
         input.type = 'range';
-        input.min = 1;
-        input.max = 5;
+        input.min = config && config.min !== undefined ? config.min : 1;
+        input.max = config && config.max !== undefined ? config.max : 5;
         input.value = value;
         input.style.width = '100%';
         input.style.accentColor = 'var(--accent-blue)';
         
         const valueDisplay = document.createElement('span');
-        valueDisplay.textContent = value;
+        valueDisplay.textContent = config && config.unit ? `${value} ${config.unit}` : value;
         valueDisplay.style.fontWeight = 'bold';
         valueDisplay.style.minWidth = '20px';
         valueDisplay.style.textAlign = 'right';
         
         input.oninput = (e) => {
-            valueDisplay.textContent = e.target.value;
+            valueDisplay.textContent = config && config.unit ? `${e.target.value} ${config.unit}` : e.target.value;
         };
         
         currentInputs[key] = input;

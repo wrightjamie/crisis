@@ -23,15 +23,24 @@ The top-level object representing a fully playable module.
     roleFallbacks: {          // Fallback array in case a role's specific decision task lacks an active player
         "role_id": ["fallback_role_1", "fallback_role_2"]
     },
-    initialScores: {          // Key-value pairs of starting scores (1-5)
+    initialScores: {          // Key-value pairs of starting scores (default 1-5, or defined in scoreConfigs)
         "score_id": number
+    },
+    scoreConfigs: {           // (Optional) Advanced configuration for specific scores
+        "score_id": {
+            min: number,              // Minimum allowed value
+            max: number,              // Maximum allowed value
+            unit: "string",           // (Optional) Display unit, e.g., '£m', '%'
+            visibleToPlayers: boolean,// If false, hidden from standard players
+            promptAI: boolean         // If true, include in AI summaries
+        }
     },
     assets: [                 // Array of static map points/resources
         {
             id: "string",
             name: "string",
             location: [lat, lng],
-            state: "string",  // e.g., 'operational', 'destroyed'
+            state: "string",  // Custom state (e.g., 'operational', 'damaged', 'deployed')
             tags: ["string"], // UI badges (e.g., 'military', 'cyber')
             image: "string",  // (Optional) URL path to asset image
             briefing: "string"// (Optional) Intelligence brief for the asset
@@ -150,6 +159,8 @@ Presented to a specific role when an event is triggered.
     visibleTo: ["string"],    // (Optional) Array of roles that can see this decision is pending or resolved.
     hiddenFrom: ["string"],   // (Optional) Array of roles that cannot see this decision is pending or resolved.
     text: "string",           // The prompt/question
+    timeLimitMs: number,      // (Optional) Auto-resolve the task after this many milliseconds
+    defaultOptionId: "string",// (Optional) The ID of the option chosen when time limit expires
     options: [                // Array of possible answers
         {
             id: "string",
@@ -169,7 +180,12 @@ Presented to a specific role when an event is triggered.
                 // 2. Unlock Manual Events
                 unlockEvents: ["event_id"], // Event IDs that become visible to the Facilitator
                 
-                // 3. Schedule Automatic Events
+                // 3. Update Asset States
+                assetStateChanges: {
+                    "asset_id": "new_state_string" // E.g., { "power_grid": "offline" }
+                },
+
+                // 4. Schedule Automatic Events
                 triggerEvents: [ 
                     { 
                         id: "event_id",     // The event to trigger
@@ -204,6 +220,9 @@ Actions that players can trigger proactively from the "Actions" menu, independen
     effects: {                // What happens when this action is fully approved and triggered
         scores: { "score_id": number }, // E.g., { military_escalation: +2 }
         unlockEvents: ["event_id"],
+        assetStateChanges: {
+            "asset_id": "new_state_string"
+        },
         triggerEvents: [
             {
                 id: "event_id",

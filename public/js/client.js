@@ -827,7 +827,14 @@ function buildEventPanelHtml(p) {
                 ? `<span class="text-status-1 text-sm float-right">RESOLVED</span>`
                 : `<span class="text-status-4 text-sm float-right">PENDING</span>`;
 
-            html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
+            let timeWarningHtml = '';
+            if (!isResolved && task.timeLimitMs) {
+                const remainingMs = Math.max(0, (task.startTime + task.timeLimitMs) - Date.now());
+                const secondsLeft = Math.ceil(remainingMs / 1000);
+                timeWarningHtml = `<div class="mt-2 text-status-4 text-sm font-mono countdown-timer" data-endtime="${task.startTime + task.timeLimitMs}">TIME REMAINING: ${secondsLeft}s</div>`;
+            }
+
+            html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>${timeWarningHtml}`;
 
             if (!isResolved) {
                 if (role !== 'display') {
@@ -989,3 +996,19 @@ style.innerHTML = `
 }
 `;
 document.head.appendChild(style);
+
+// Interval to update countdown timers every second
+setInterval(() => {
+    const timers = document.querySelectorAll('.countdown-timer');
+    timers.forEach(timer => {
+        const endTime = parseInt(timer.getAttribute('data-endtime'));
+        if (endTime) {
+            const remainingMs = Math.max(0, endTime - Date.now());
+            const secondsLeft = Math.ceil(remainingMs / 1000);
+            timer.textContent = `TIME REMAINING: ${secondsLeft}s`;
+            if (secondsLeft <= 0) {
+                timer.style.color = 'red';
+            }
+        }
+    });
+}, 1000);
