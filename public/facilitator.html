@@ -67,6 +67,9 @@
         .ai-active-dot {
             animation: ai-pulse 1.5s infinite;
         }
+        .scenario-item { cursor: pointer; transition: border-color 0.2s, background-color 0.2s; }
+        .scenario-item:hover { border-color: var(--border-color); background-color: var(--bg-secondary); }
+        .scenario-item.active { border-color: var(--accent-blue); background-color: var(--bg-tertiary); }
     </style>
 </head>
 <body>
@@ -95,10 +98,15 @@
         </div>
     </header>
 
-    <dialog id="facilitator-holding-screen" class="fac-dashboard-container">
+    <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content" style="max-width: 1200px; width: 90vw;">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
-        <div id="scenarios-list" class="fac-dashboard-grid">
-            <!-- Scenarios injected via JS -->
+        <div class="fac-dashboard-grid" style="grid-template-columns: 1fr 2fr; gap: var(--space-2xl); align-items: start; text-align: left;">
+            <div id="scenarios-list" class="fac-event-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
+                <!-- Scenario items injected via JS -->
+            </div>
+            <div id="scenario-details-panel" class="admin-card" style="min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <p class="text-secondary text-lg">Select a scenario to view details</p>
+            </div>
         </div>
     </dialog>
 
