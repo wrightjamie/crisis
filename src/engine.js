@@ -151,6 +151,7 @@ class GameEngine {
                 briefings: scenario.briefings || {},
                 variantBriefings: variantBriefings,
                 selectedVariantNames: selectedVariantNames,
+                scoreConfigs: scenario.scoreConfigs || {},
                 aiConfig: scenario.aiConfig,
                 stages: scenario.stages || []
             },
@@ -259,7 +260,7 @@ class GameEngine {
                         }
                     }
 
-                    this.gameState.decisionTasks.push({
+                    const task = {
                         id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                         eventId: newEvent.id,
                         role: assignedRole,
@@ -268,7 +269,15 @@ class GameEngine {
                         hiddenFrom: dec.hiddenFrom,
                         options: availableOptions,
                         status: 'pending'
-                    });
+                    };
+
+                    if (dec.timeLimitMs !== undefined) {
+                        task.timeLimitMs = dec.timeLimitMs;
+                        task.defaultOptionId = dec.defaultOptionId;
+                        task.startTime = Date.now();
+                    }
+
+                    this.gameState.decisionTasks.push(task);
                 }
             });
         }
@@ -289,6 +298,25 @@ class GameEngine {
                     this.gameState.scheduledEvents.splice(i, 1);
                     this.triggerScenarioEvent(se.templateId);
                     stateChanged = true;
+                }
+            }
+
+            for (const task of this.gameState.decisionTasks) {
+                if (task.status === 'pending' && task.timeLimitMs !== undefined) {
+                    if (now >= task.startTime + task.timeLimitMs) {
+                        console.log(`Task ${task.id} timed out. Applying default option ${task.defaultOptionId}`);
+                        this.resolveTask(task.id, task.defaultOptionId);
+
+                        this.gameState.events.push({
+                            id: `evt_timeout_${Date.now()}`,
+                            templateId: null,
+                            name: `Decision Time Expired`,
+                            location: null,
+                            description: `Time expired for a decision. A default action was taken.`,
+                            timestamp: Date.now()
+                        });
+                        stateChanged = true;
+                    }
                 }
             }
 
@@ -327,7 +355,12 @@ class GameEngine {
             for (const [scoreName, change] of Object.entries(effects.scores)) {
                 if (this.gameState.scores[scoreName] !== undefined) {
                     this.gameState.scores[scoreName] += change;
-                    this.gameState.scores[scoreName] = Math.max(1, Math.min(5, this.gameState.scores[scoreName]));
+
+                    const scoreConfig = this.gameState.scenarioConfig?.scoreConfigs?.[scoreName];
+                    const minVal = scoreConfig && scoreConfig.min !== undefined ? scoreConfig.min : 1;
+                    const maxVal = scoreConfig && scoreConfig.max !== undefined ? scoreConfig.max : 5;
+
+                    this.gameState.scores[scoreName] = Math.max(minVal, Math.min(maxVal, this.gameState.scores[scoreName]));
                 }
             }
         }
@@ -338,6 +371,16 @@ class GameEngine {
                     this.gameState.unlockedEvents.push(evtId);
                 }
             });
+        }
+
+        if (effects.assetStateChanges) {
+            for (const [assetId, newState] of Object.entries(effects.assetStateChanges)) {
+                const asset = this.gameState.assets.find(a => a.id === assetId);
+                if (asset) {
+                    asset.state = newState;
+                    console.log(`Asset state changed: ${assetId} -> ${newState}`);
+                }
+            }
         }
 
         if (effects.triggerEvents) {
