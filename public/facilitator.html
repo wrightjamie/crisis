@@ -73,9 +73,37 @@
     </style>
 </head>
 <body>
+    <div id="dashboard-view" style="display: none;">
+        <header class="top-bar">
+            <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
+        </header>
+        <div class="facilitator-container">
+            <div class="admin-card mb-2" style="max-width: 500px; margin: 0 auto;">
+                <h2 class="card-title text-primary">Create New Game</h2>
+                <div class="flex-column gap-1">
+                    <input type="text" id="new-game-id" class="form-control" placeholder="4-Digit Game ID" maxlength="4" style="text-transform: uppercase;">
+                    <input type="text" id="new-game-name" class="form-control" placeholder="Game Name (e.g., Session 1)">
+                    <button id="btn-create-game" class="btn btn-primary w-100">Create & Join Game</button>
+                    <div id="create-error" class="text-red mt-1" style="display:none;"></div>
+                </div>
+            </div>
+
+            <h2 class="mb-1 text-center">Active Games</h2>
+            <div id="games-list" class="fac-dashboard-grid">
+                <!-- Games injected by JS -->
+            </div>
+
+            <h2 class="mt-3 mb-1 text-center text-muted">Inactive Games (Dead Games)</h2>
+            <div id="dead-games-list" class="fac-dashboard-grid" style="opacity: 0.7;">
+                <!-- Dead Games injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="facilitator-view" style="display: none;">
     <header class="top-bar">
         <div class="role-badge flex-center gap-2">
-            FACILITATOR (ADMIN)
+            FACILITATOR (ADMIN) - Game: <span id="fac-game-id-display"></span>
             <div id="ai-status" title="AI Briefing Engine Status" class="fac-roles">
                 <span id="ai-status-dot" class="fac-badge"></span>
                 <span id="ai-status-text">AI Initializing...</span>
@@ -203,6 +231,9 @@
 
         </div>
     </div>
+
+        </div>
+    </div> <!-- End facilitator-view -->
 
     <!-- Facilitator Info Dialog -->
     <dialog class="info-dialog" id="fac-info-panel">

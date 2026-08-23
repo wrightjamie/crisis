@@ -44,13 +44,19 @@ function applyVariantsToScenario(scenario, selectedVariants, scores, assets, sel
 
 
 class GameEngine {
-    constructor() {
+    constructor(gameId = 'default', name = 'Default Game') {
+        this.gameId = gameId;
+        this.name = name;
+        this.lastActivityTimestamp = Date.now();
+        this.isPaused = false;
+
         this.scheduleLoopInterval = null;
         this.connectedClients = {}; // socket.id -> role
         this.pendingPlayers = {}; // socket.id -> role
 
         this.gameState = {
             status: 'holding',
+            isPaused: false,
             scenarioId: null,
             scores: {},
             events: [],
@@ -84,6 +90,78 @@ class GameEngine {
                 };
             })
         };
+    }
+
+    updateActivity() {
+        this.lastActivityTimestamp = Date.now();
+    }
+
+    hasFacilitator() {
+        return Object.values(this.connectedClients).includes('facilitator');
+    }
+
+    pauseGame() {
+        if (!this.isPaused && this.gameState.status === 'active') {
+            this.isPaused = true;
+            this.gameState.isPaused = true;
+            this.updateActivity();
+
+            // Pause all scheduled events
+            const now = Date.now();
+            this.gameState.scheduledEvents.forEach(se => {
+                if (!se.paused) {
+                    se.paused = true;
+                    se.timeRemainingMs = se.triggerTimeMs - now;
+                }
+            });
+
+            // Pause all timed decisions
+            if (this.gameState.decisionTasks) {
+                this.gameState.decisionTasks.forEach(task => {
+                    if (task.timeLimitMs && !task.paused) {
+                        task.paused = true;
+                        task.timeRemainingMs = (task.startTime + task.timeLimitMs) - now;
+                    }
+                });
+            }
+
+            console.log(`Game ${this.gameId} paused due to facilitator disconnect.`);
+        }
+    }
+
+    resumeGame() {
+        if (this.isPaused && this.gameState.status === 'active') {
+            this.isPaused = false;
+            this.gameState.isPaused = false;
+            this.updateActivity();
+
+            // Resume all scheduled events
+            const now = Date.now();
+            this.gameState.scheduledEvents.forEach(se => {
+                // Only resume if it was paused by the system (we don't have a specific system-pause flag,
+                // but resuming all paused events is the only sensible thing here, or we'd need to differentiate
+                // facilitator-paused events from system-paused events. The game has no manual event-pause feature for facilitator yet,
+                // except 'pause_scheduled_event' socket event, so resuming them all is fine for now).
+                if (se.paused && se.timeRemainingMs !== null) {
+                    se.paused = false;
+                    se.triggerTimeMs = now + se.timeRemainingMs;
+                    se.timeRemainingMs = null;
+                }
+            });
+
+            // Resume all timed decisions
+            if (this.gameState.decisionTasks) {
+                this.gameState.decisionTasks.forEach(task => {
+                    if (task.timeLimitMs && task.paused && task.timeRemainingMs !== null) {
+                        task.paused = false;
+                        task.startTime = now - (task.timeLimitMs - task.timeRemainingMs);
+                        task.timeRemainingMs = null;
+                    }
+                });
+            }
+
+            console.log(`Game ${this.gameId} resumed.`);
+        }
     }
 
     getActiveRoles() {
@@ -287,7 +365,7 @@ class GameEngine {
     startSchedulerLoop(onStateUpdate) {
         this.stopSchedulerLoop();
         this.scheduleLoopInterval = setInterval(() => {
-            if (this.gameState.status !== 'active') return;
+            if (this.gameState.status !== 'active' || this.isPaused) return;
 
             let stateChanged = false;
             const now = Date.now();
