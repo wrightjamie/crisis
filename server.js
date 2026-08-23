@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
-const GameEngine = require('./src/engine');
+const gameManager = require('./src/game-manager');
 
 const app = express();
 const server = http.createServer(app);
@@ -19,12 +19,10 @@ app.get('/ping', (req, res) => {
     res.send('pong');
 });
 
-const engine = new GameEngine();
-
 const setupSockets = require('./src/socket');
 
 // Setup sockets
-setupSockets(io, engine);
+setupSockets(io, gameManager);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
