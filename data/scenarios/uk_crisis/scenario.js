@@ -719,8 +719,8 @@ CRITICAL RULES:
                         role: 'defence',
                         text: 'Order for the remaining fleet?',
                         options: [
-                            { id: 'opt_ports_1', text: 'Emergency Sortie All Available Vessels', effects: { scores: { military_readiness: +1, civilian_stability: +1 } } },
-                            { id: 'opt_ports_2', text: 'Prioritize Base Firefighting and Rescue', effects: { scores: { military_readiness: -1, civilian_stability: +1 } } }
+                            { id: 'opt_ports_1', text: 'Emergency Sortie All Available Vessels (Save the Type 45)', effects: { scores: { military_readiness: +1, civilian_stability: +1 } } },
+                            { id: 'opt_ports_2', text: 'Prioritize Base Firefighting and Rescue', effects: { scores: { military_readiness: -1, civilian_stability: +1 }, assetStateChanges: { 'a_type45': 'damaged' } } }
                         ]
                     }
                 ]
@@ -811,17 +811,18 @@ CRITICAL RULES:
                 location: [55.0, 0.0],
                 description: 'Dozens of Russian strategic bombers have entered UK airspace from multiple vectors. They are not dropping bombs, but are actively probing and establishing air superiority over a depleted RAF.',
                 roleDescriptions: {
-                    defence: 'We do not have the airframes to intercept them all. They have functional air superiority over the UK mainland.',
+                    defence: 'We do not have the airframes to intercept them all. They have functional air superiority over the UK mainland. Our Type 45 Destroyers are critical for coastal air defense.',
                     home: 'Air raid sirens are sounding continuously across the country. The population is paralyzed.',
                     foreign: 'This is a demonstration of absolute dominance. They are waiting for our surrender.'
                 },
                 decisions: [
                     {
                         role: 'defence',
-                        text: 'Do we authorize SAM batteries to fire freely?',
+                        text: 'Do we authorize SAM and Naval batteries to fire freely?',
                         options: [
-                            { id: 'opt_air2_1', text: 'Weapons Free (Engage all targets)', effects: { scores: { military_escalation: +1, civilian_stability: +1 } } },
-                            { id: 'opt_air2_2', text: 'Hold Fire (Do not provoke kinetic bombardment)', effects: { scores: { civilian_stability: -2, military_readiness: -1 } } }
+                            { id: 'opt_air2_1', text: 'Weapons Free (Integrated Air/Sea Defense)', conditions: { assetStates: { 'a_type45': 'operational' } }, effects: { scores: { military_escalation: +1, civilian_stability: +1 } } },
+                            { id: 'opt_air2_2', text: 'Weapons Free (Land-Based Only - Less Effective)', conditions: { assetStates: { 'a_type45': 'damaged' } }, effects: { scores: { military_escalation: +1, civilian_stability: -1, military_readiness: -1 } } },
+                            { id: 'opt_air2_3', text: 'Hold Fire (Do not provoke kinetic bombardment)', effects: { scores: { civilian_stability: -2, military_readiness: -1 } } }
                         ]
                     }
                 ]
@@ -1142,18 +1143,21 @@ CRITICAL RULES:
                 repeatable: false,
                 location: [51.50, -0.12],
                 image: '/images/events/ev_protest_london.png',
-                description: 'Following the dispersal order, protests have turned violent. Suspected foreign instigators ("little green men") have been spotted clashing with police.',
+                description: 'Following the dispersal order, protests have turned violent. Suspected foreign instigators ("little green men") have been spotted clashing with police. The situation is rapidly deteriorating.',
                 roleDescriptions: {
-                    home: 'Multiple officers injured. Several arrests of individuals carrying forged documents.',
+                    home: 'Multiple officers injured. Several arrests of individuals carrying forged documents. We need an immediate decision before the line breaks.',
                     foreign: 'Russian media is broadcasting the clashes, accusing the UK of "brutal crackdowns on democracy".'
                 },
                 decisions: [
                     {
                         role: 'home',
-                        text: 'How to respond to the escalation?',
+                        text: 'How to respond to the escalation? (TIME CRITICAL)',
+                        timeLimitMs: 180000,
+                        defaultOptionId: 'opt_pv_timeout',
                         options: [
                             { id: 'opt_pv1', text: 'Deploy public order units and make mass arrests', effects: { scores: { civilian_stability: -2 } } },
-                            { id: 'opt_pv2', text: 'Targeted extraction of suspected foreign provocateurs', effects: { scores: { civilian_stability: -1, uk_russia: +1 } } }
+                            { id: 'opt_pv2', text: 'Targeted extraction of suspected foreign provocateurs', effects: { scores: { civilian_stability: -1, uk_russia: +1 } } },
+                            { id: 'opt_pv_timeout', text: 'Hesitate (Line Breaks, Riot Spreads)', effects: { scores: { civilian_stability: -3 } }, hiddenFrom: ['home', 'defence', 'foreign', 'media', 'cyber', 'PM', 'display'] }
                         ]
                     }
                 ]

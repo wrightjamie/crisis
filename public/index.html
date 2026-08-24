@@ -13,6 +13,26 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="view-map"> <!-- Default to map view on mobile -->
+    <dialog id="join-game-screen" class="client-holding-overlay">
+        <div class="holding-content text-center">
+            <h1 class="mb-2 text-primary">Join Crisis Game</h1>
+            <p class="text-secondary mb-3">Enter the 4-digit Game ID provided by your facilitator.</p>
+            <div class="flex-column gap-1 align-center">
+                <input type="text" id="join-game-id" class="form-control text-center text-lg" placeholder="e.g. 1234" maxlength="4" style="max-width: 200px; text-transform: uppercase;">
+                <button id="btn-join-game" class="btn btn-primary w-100" style="max-width: 200px;">Join Game</button>
+            </div>
+            <p id="join-error" class="text-red mt-2" style="display: none;"></p>
+        </div>
+    </dialog>
+
+    <dialog id="game-paused-screen" class="client-holding-overlay">
+        <div class="holding-content text-center">
+            <h1 class="mb-2 text-red">Game Paused</h1>
+            <p class="text-secondary">The facilitator has disconnected. The game is paused.</p>
+            <p class="text-muted mt-3">Waiting for facilitator to reconnect...</p>
+        </div>
+    </dialog>
+
     <dialog id="holding-screen" class="client-holding-overlay">
         <h1 class="mb-1">Waiting for Game to Start</h1>
         <p class="text-secondary">The facilitator is selecting a scenario...</p>

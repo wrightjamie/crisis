@@ -9,6 +9,7 @@ let previousScores = null;
 let previousAiBriefingTimestamp = null;
 let currentInfoView = null;
 let previousAvailableActions = [];
+let gameId = new URLSearchParams(window.location.search).get('game');
 
 // DOM Elements
 const appEl = document.getElementById('app');
@@ -18,8 +19,13 @@ const pendingApprovalScreen = document.getElementById('pending-approval-screen')
 const roleButtonsContainer = document.getElementById('role-buttons');
 const briefingScreen = document.getElementById('briefing-screen');
 const endgameScreen = document.getElementById('endgame-screen');
+const joinGameScreen = document.getElementById('join-game-screen');
+const gamePausedScreen = document.getElementById('game-paused-screen');
+const joinGameIdInput = document.getElementById('join-game-id');
+const btnJoinGame = document.getElementById('btn-join-game');
+const joinError = document.getElementById('join-error');
 
-[holdingScreen, roleSelectionScreen, pendingApprovalScreen, briefingScreen, endgameScreen].forEach(el => {
+[holdingScreen, roleSelectionScreen, pendingApprovalScreen, briefingScreen, endgameScreen, joinGameScreen, gamePausedScreen].forEach(el => {
     if (el) el.addEventListener('cancel', e => e.preventDefault());
 });
 
@@ -33,6 +39,38 @@ const btnWiki = document.getElementById('btn-wiki');
 const btnActions = document.getElementById('btn-actions');
 
 // Socket events for roles
+// Setup Connection
+if (gameId) {
+    socket.emit('join_game', gameId);
+} else {
+    switchView('join_game');
+}
+
+if (btnJoinGame) {
+    btnJoinGame.addEventListener('click', () => {
+        const id = joinGameIdInput.value.trim().toLowerCase();
+        if (id.length > 0) {
+            joinError.style.display = 'none';
+            socket.emit('join_game', id);
+        }
+    });
+}
+
+socket.on('game_joined', (joinedId) => {
+    gameId = joinedId;
+    window.history.replaceState({}, '', `?game=${joinedId}`);
+    if (localState) {
+        handleStateUpdate(localState);
+    }
+});
+
+socket.on('game_not_found', () => {
+    if (joinError) {
+        joinError.textContent = 'Game not found.';
+        joinError.style.display = 'block';
+    }
+});
+
 socket.on('active_roles', (roles) => {
     activeRolesList = roles;
     if (localState && (localState.status === 'active' || localState.status === 'lobby') && !role) {
@@ -47,10 +85,18 @@ function switchView(viewName) {
     if (pendingApprovalScreen && pendingApprovalScreen.open) pendingApprovalScreen.close();
     if (briefingScreen.open) briefingScreen.close();
     if (endgameScreen && endgameScreen.open) endgameScreen.close();
+    if (joinGameScreen && joinGameScreen.open) joinGameScreen.close();
+    if (gamePausedScreen && gamePausedScreen.open) gamePausedScreen.close();
     appEl.style.display = 'none';
 
     // Show requested
     switch (viewName) {
+        case 'join_game':
+            if (joinGameScreen && !joinGameScreen.open) joinGameScreen.showModal();
+            break;
+        case 'game_paused':
+            if (gamePausedScreen && !gamePausedScreen.open) gamePausedScreen.showModal();
+            break;
         case 'role_selection':
             if (!roleSelectionScreen.open) roleSelectionScreen.showModal();
             break;
@@ -612,6 +658,11 @@ function handleStateUpdate(state) {
         localState.decisionTasks = localState.decisionTasks.filter(task => window.canSee(task, role));
     }
 
+    if (state.isPaused) {
+        switchView('game_paused');
+        return;
+    }
+
     if (state.status === 'holding') {
         handleHoldingState();
     } else if (state.status === 'lobby') {
@@ -827,7 +878,14 @@ function buildEventPanelHtml(p) {
                 ? `<span class="text-status-1 text-sm float-right">RESOLVED</span>`
                 : `<span class="text-status-4 text-sm float-right">PENDING</span>`;
 
-            html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>`;
+            let timeWarningHtml = '';
+            if (!isResolved && task.timeLimitMs) {
+                const remainingMs = Math.max(0, (task.startTime + task.timeLimitMs) - Date.now());
+                const secondsLeft = Math.ceil(remainingMs / 1000);
+                timeWarningHtml = `<div class="mt-2 text-status-4 text-sm font-mono countdown-timer" data-endtime="${task.startTime + task.timeLimitMs}">TIME REMAINING: ${secondsLeft}s</div>`;
+            }
+
+            html += `<div class="card task-card">${statusBadge}<div class="task-text">${p(task.text)}</div>${timeWarningHtml}`;
 
             if (!isResolved) {
                 if (role !== 'display') {
@@ -989,3 +1047,19 @@ style.innerHTML = `
 }
 `;
 document.head.appendChild(style);
+
+// Interval to update countdown timers every second
+setInterval(() => {
+    const timers = document.querySelectorAll('.countdown-timer');
+    timers.forEach(timer => {
+        const endTime = parseInt(timer.getAttribute('data-endtime'));
+        if (endTime) {
+            const remainingMs = Math.max(0, endTime - Date.now());
+            const secondsLeft = Math.ceil(remainingMs / 1000);
+            timer.textContent = `TIME REMAINING: ${secondsLeft}s`;
+            if (secondsLeft <= 0) {
+                timer.style.color = 'red';
+            }
+        }
+    });
+}, 1000);

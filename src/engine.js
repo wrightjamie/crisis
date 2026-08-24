@@ -44,13 +44,19 @@ function applyVariantsToScenario(scenario, selectedVariants, scores, assets, sel
 
 
 class GameEngine {
-    constructor() {
+    constructor(gameId = 'default', name = 'Default Game') {
+        this.gameId = gameId;
+        this.name = name;
+        this.lastActivityTimestamp = Date.now();
+        this.isPaused = false;
+
         this.scheduleLoopInterval = null;
         this.connectedClients = {}; // socket.id -> role
         this.pendingPlayers = {}; // socket.id -> role
 
         this.gameState = {
             status: 'holding',
+            isPaused: false,
             scenarioId: null,
             scores: {},
             events: [],
@@ -84,6 +90,78 @@ class GameEngine {
                 };
             })
         };
+    }
+
+    updateActivity() {
+        this.lastActivityTimestamp = Date.now();
+    }
+
+    hasFacilitator() {
+        return Object.values(this.connectedClients).includes('facilitator');
+    }
+
+    pauseGame() {
+        if (!this.isPaused && this.gameState.status === 'active') {
+            this.isPaused = true;
+            this.gameState.isPaused = true;
+            this.updateActivity();
+
+            // Pause all scheduled events
+            const now = Date.now();
+            this.gameState.scheduledEvents.forEach(se => {
+                if (!se.paused) {
+                    se.paused = true;
+                    se.timeRemainingMs = se.triggerTimeMs - now;
+                }
+            });
+
+            // Pause all timed decisions
+            if (this.gameState.decisionTasks) {
+                this.gameState.decisionTasks.forEach(task => {
+                    if (task.timeLimitMs && !task.paused) {
+                        task.paused = true;
+                        task.timeRemainingMs = (task.startTime + task.timeLimitMs) - now;
+                    }
+                });
+            }
+
+            console.log(`Game ${this.gameId} paused due to facilitator disconnect.`);
+        }
+    }
+
+    resumeGame() {
+        if (this.isPaused && this.gameState.status === 'active') {
+            this.isPaused = false;
+            this.gameState.isPaused = false;
+            this.updateActivity();
+
+            // Resume all scheduled events
+            const now = Date.now();
+            this.gameState.scheduledEvents.forEach(se => {
+                // Only resume if it was paused by the system (we don't have a specific system-pause flag,
+                // but resuming all paused events is the only sensible thing here, or we'd need to differentiate
+                // facilitator-paused events from system-paused events. The game has no manual event-pause feature for facilitator yet,
+                // except 'pause_scheduled_event' socket event, so resuming them all is fine for now).
+                if (se.paused && se.timeRemainingMs !== null) {
+                    se.paused = false;
+                    se.triggerTimeMs = now + se.timeRemainingMs;
+                    se.timeRemainingMs = null;
+                }
+            });
+
+            // Resume all timed decisions
+            if (this.gameState.decisionTasks) {
+                this.gameState.decisionTasks.forEach(task => {
+                    if (task.timeLimitMs && task.paused && task.timeRemainingMs !== null) {
+                        task.paused = false;
+                        task.startTime = now - (task.timeLimitMs - task.timeRemainingMs);
+                        task.timeRemainingMs = null;
+                    }
+                });
+            }
+
+            console.log(`Game ${this.gameId} resumed.`);
+        }
     }
 
     getActiveRoles() {
@@ -151,6 +229,7 @@ class GameEngine {
                 briefings: scenario.briefings || {},
                 variantBriefings: variantBriefings,
                 selectedVariantNames: selectedVariantNames,
+                scoreConfigs: scenario.scoreConfigs || {},
                 aiConfig: scenario.aiConfig,
                 stages: scenario.stages || []
             },
@@ -259,7 +338,7 @@ class GameEngine {
                         }
                     }
 
-                    this.gameState.decisionTasks.push({
+                    const task = {
                         id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                         eventId: newEvent.id,
                         role: assignedRole,
@@ -268,7 +347,15 @@ class GameEngine {
                         hiddenFrom: dec.hiddenFrom,
                         options: availableOptions,
                         status: 'pending'
-                    });
+                    };
+
+                    if (dec.timeLimitMs !== undefined) {
+                        task.timeLimitMs = dec.timeLimitMs;
+                        task.defaultOptionId = dec.defaultOptionId;
+                        task.startTime = Date.now();
+                    }
+
+                    this.gameState.decisionTasks.push(task);
                 }
             });
         }
@@ -278,7 +365,7 @@ class GameEngine {
     startSchedulerLoop(onStateUpdate) {
         this.stopSchedulerLoop();
         this.scheduleLoopInterval = setInterval(() => {
-            if (this.gameState.status !== 'active') return;
+            if (this.gameState.status !== 'active' || this.isPaused) return;
 
             let stateChanged = false;
             const now = Date.now();
@@ -289,6 +376,25 @@ class GameEngine {
                     this.gameState.scheduledEvents.splice(i, 1);
                     this.triggerScenarioEvent(se.templateId);
                     stateChanged = true;
+                }
+            }
+
+            for (const task of this.gameState.decisionTasks) {
+                if (task.status === 'pending' && task.timeLimitMs !== undefined) {
+                    if (now >= task.startTime + task.timeLimitMs) {
+                        console.log(`Task ${task.id} timed out. Applying default option ${task.defaultOptionId}`);
+                        this.resolveTask(task.id, task.defaultOptionId);
+
+                        this.gameState.events.push({
+                            id: `evt_timeout_${Date.now()}`,
+                            templateId: null,
+                            name: `Decision Time Expired`,
+                            location: null,
+                            description: `Time expired for a decision. A default action was taken.`,
+                            timestamp: Date.now()
+                        });
+                        stateChanged = true;
+                    }
                 }
             }
 
@@ -323,54 +429,80 @@ class GameEngine {
     applyEffects(effects) {
         if (!effects) return;
         
-        if (effects.scores) {
-            for (const [scoreName, change] of Object.entries(effects.scores)) {
-                if (this.gameState.scores[scoreName] !== undefined) {
-                    this.gameState.scores[scoreName] += change;
-                    this.gameState.scores[scoreName] = Math.max(1, Math.min(5, this.gameState.scores[scoreName]));
-                }
+        this._applyScoreEffects(effects.scores);
+        this._applyUnlockEffects(effects.unlockEvents);
+        this._applyAssetStateChanges(effects.assetStateChanges);
+        this._applyTriggerEvents(effects.triggerEvents);
+        this._applyRandomEvents(effects.randomEvents);
+    }
+
+    _applyScoreEffects(scores) {
+        if (!scores) return;
+        for (const [scoreName, change] of Object.entries(scores)) {
+            if (this.gameState.scores[scoreName] !== undefined) {
+                this.gameState.scores[scoreName] += change;
+
+                const scoreConfig = this.gameState.scenarioConfig?.scoreConfigs?.[scoreName];
+                const minVal = scoreConfig && scoreConfig.min !== undefined ? scoreConfig.min : 1;
+                const maxVal = scoreConfig && scoreConfig.max !== undefined ? scoreConfig.max : 5;
+
+                this.gameState.scores[scoreName] = Math.max(minVal, Math.min(maxVal, this.gameState.scores[scoreName]));
             }
         }
+    }
 
-        if (effects.unlockEvents) {
-            effects.unlockEvents.forEach(evtId => {
-                if (!this.gameState.unlockedEvents.includes(evtId)) {
-                    this.gameState.unlockedEvents.push(evtId);
-                }
-            });
-        }
-
-        if (effects.triggerEvents) {
-            effects.triggerEvents.forEach(te => {
-                const roll = Math.random();
-                if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
-                    this.gameState.scheduledEvents.push({
-                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                        templateId: te.id,
-                        triggerTimeMs: Date.now() + (te.delayMs || 0),
-                        paused: false,
-                        timeRemainingMs: null
-                    });
-                }
-            });
-        }
-
-        if (effects.randomEvents) {
-            const totalWeight = effects.randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
-            let roll = Math.random() * totalWeight;
-            for (const re of effects.randomEvents) {
-                if (roll < (re.weight || 1)) {
-                    this.gameState.scheduledEvents.push({
-                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                        templateId: re.id,
-                        triggerTimeMs: Date.now() + (re.delayMs || 0),
-                        paused: false,
-                        timeRemainingMs: null
-                    });
-                    break;
-                }
-                roll -= (re.weight || 1);
+    _applyUnlockEffects(unlockEvents) {
+        if (!unlockEvents) return;
+        unlockEvents.forEach(evtId => {
+            if (!this.gameState.unlockedEvents.includes(evtId)) {
+                this.gameState.unlockedEvents.push(evtId);
             }
+        });
+    }
+
+    _applyAssetStateChanges(assetStateChanges) {
+        if (!assetStateChanges) return;
+        for (const [assetId, newState] of Object.entries(assetStateChanges)) {
+            const asset = this.gameState.assets.find(a => a.id === assetId);
+            if (asset) {
+                asset.state = newState;
+                console.log(`Asset state changed: ${assetId} -> ${newState}`);
+            }
+        }
+    }
+
+    _applyTriggerEvents(triggerEvents) {
+        if (!triggerEvents) return;
+        triggerEvents.forEach(te => {
+            const roll = Math.random();
+            if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
+                this.gameState.scheduledEvents.push({
+                    uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    templateId: te.id,
+                    triggerTimeMs: Date.now() + (te.delayMs || 0),
+                    paused: false,
+                    timeRemainingMs: null
+                });
+            }
+        });
+    }
+
+    _applyRandomEvents(randomEvents) {
+        if (!randomEvents) return;
+        const totalWeight = randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
+        let roll = Math.random() * totalWeight;
+        for (const re of randomEvents) {
+            if (roll < (re.weight || 1)) {
+                this.gameState.scheduledEvents.push({
+                    uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    templateId: re.id,
+                    triggerTimeMs: Date.now() + (re.delayMs || 0),
+                    paused: false,
+                    timeRemainingMs: null
+                });
+                break;
+            }
+            roll -= (re.weight || 1);
         }
     }
 

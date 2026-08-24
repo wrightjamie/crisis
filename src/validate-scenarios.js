@@ -38,6 +38,41 @@ function validateInitialScores(scenario, errors) {
     }
 }
 
+function validateSingleScoreConfig(key, config, errors) {
+    if (typeof config !== 'object') {
+        errors.push(`'scoreConfigs.${key}' must be an object`);
+        return;
+    }
+    if (config.min !== undefined && typeof config.min !== 'number') {
+        errors.push(`'scoreConfigs.${key}.min' must be a number`);
+    }
+    if (config.max !== undefined && typeof config.max !== 'number') {
+        errors.push(`'scoreConfigs.${key}.max' must be a number`);
+    }
+    if (config.unit !== undefined && typeof config.unit !== 'string') {
+        errors.push(`'scoreConfigs.${key}.unit' must be a string`);
+    }
+    if (config.visibleToPlayers !== undefined && typeof config.visibleToPlayers !== 'boolean') {
+        errors.push(`'scoreConfigs.${key}.visibleToPlayers' must be a boolean`);
+    }
+    if (config.promptAI !== undefined && typeof config.promptAI !== 'boolean') {
+        errors.push(`'scoreConfigs.${key}.promptAI' must be a boolean`);
+    }
+}
+
+function validateScoreConfigs(scenario, errors) {
+    if (!scenario.scoreConfigs) return;
+
+    if (typeof scenario.scoreConfigs !== 'object') {
+        errors.push("'scoreConfigs' must be an object");
+        return;
+    }
+
+    for (const [key, config] of Object.entries(scenario.scoreConfigs)) {
+        validateSingleScoreConfig(key, config, errors);
+    }
+}
+
 function validateConditions(conditions, path, errors) {
     if (!conditions) return;
     if (typeof conditions !== 'object') {
@@ -49,6 +84,38 @@ function validateConditions(conditions, path, errors) {
     }
     if (conditions.anyActiveRoles && !Array.isArray(conditions.anyActiveRoles)) {
         errors.push(`${path}.conditions 'anyActiveRoles' must be an array`);
+    }
+}
+
+function validateDecisionConfig(dec, decPath, errors) {
+    if (dec.visibleTo && !Array.isArray(dec.visibleTo)) {
+        errors.push(`${decPath} 'visibleTo' must be an array`);
+    }
+    if (dec.hiddenFrom && !Array.isArray(dec.hiddenFrom)) {
+        errors.push(`${decPath} 'hiddenFrom' must be an array`);
+    }
+    if (dec.timeLimitMs !== undefined) {
+        if (typeof dec.timeLimitMs !== 'number') {
+            errors.push(`${decPath} 'timeLimitMs' must be a number`);
+        }
+        if (dec.defaultOptionId === undefined || typeof dec.defaultOptionId !== 'string') {
+            errors.push(`${decPath} 'defaultOptionId' is missing or invalid, required when 'timeLimitMs' is provided`);
+        }
+    }
+
+    if (dec.options && Array.isArray(dec.options)) {
+        let hasDefaultOption = false;
+        dec.options.forEach((opt, optIndex) => {
+            if (opt.id === dec.defaultOptionId) {
+                hasDefaultOption = true;
+            }
+            if (opt.conditions) {
+                validateConditions(opt.conditions, `${decPath}.options[${optIndex}]`, errors);
+            }
+        });
+        if (dec.timeLimitMs !== undefined && !hasDefaultOption) {
+            errors.push(`${decPath} 'defaultOptionId' "${dec.defaultOptionId}" not found in options`);
+        }
     }
 }
 
@@ -77,19 +144,7 @@ function validateEventTemplates(scenario, errors) {
             } else if (event.decisions) {
                 event.decisions.forEach((dec, decIndex) => {
                     const decPath = `${eventPath}.decisions[${decIndex}]`;
-                    if (dec.visibleTo && !Array.isArray(dec.visibleTo)) {
-                        errors.push(`${decPath} 'visibleTo' must be an array`);
-                    }
-                    if (dec.hiddenFrom && !Array.isArray(dec.hiddenFrom)) {
-                        errors.push(`${decPath} 'hiddenFrom' must be an array`);
-                    }
-                    if (dec.options && Array.isArray(dec.options)) {
-                        dec.options.forEach((opt, optIndex) => {
-                            if (opt.conditions) {
-                                validateConditions(opt.conditions, `${decPath}.options[${optIndex}]`, errors);
-                            }
-                        });
-                    }
+                    validateDecisionConfig(dec, decPath, errors);
                 });
             }
         });
@@ -160,6 +215,7 @@ function validateScenario(scenario) {
     validateMapConfig(scenario, errors);
     validateRoles(scenario, errors);
     validateInitialScores(scenario, errors);
+    validateScoreConfigs(scenario, errors);
     validateEventTemplates(scenario, errors);
     validateVariantAxes(scenario, errors);
     validateManualActions(scenario, errors);
@@ -171,4 +227,4 @@ function validateScenario(scenario) {
     };
 }
 
-module.exports = { validateScenario, validateBasicStructure, validateRoles, validateEventTemplates, validateManualActions, validateAiConfig };
+module.exports = { validateScenario, validateBasicStructure, validateRoles, validateEventTemplates, validateManualActions, validateAiConfig, validateScoreConfigs };
