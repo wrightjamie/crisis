@@ -195,6 +195,10 @@
 
     <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content modal-lg">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
+        <div class="mb-2 flex-center gap-1 admin-card max-w-500 mx-auto p-1">
+            <input type="checkbox" id="ai-enabled-toggle" checked style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+            <label for="ai-enabled-toggle" class="text-base text-bold text-secondary cursor-pointer">Enable AI Briefing Generator</label>
+        </div>
         <div class="mb-2 text-center">
             <label for="player-filter-slider" id="player-filter-label" class="text-secondary text-base text-bold mb-1 d-block">Players: Any</label>
             <input type="range" id="player-filter-slider" min="0" max="10" value="0" class="fac-slider">

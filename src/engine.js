@@ -205,7 +205,7 @@ class GameEngine {
         return { valid: true };
     }
 
-    createLobby(scenarioId, selectedVariants) {
+    createLobby(scenarioId, selectedVariants, aiEnabled = true) {
         const scenario = scenarios.find(s => s.id === scenarioId);
         if (!scenario) return null;
 
@@ -249,7 +249,8 @@ class GameEngine {
             aiBriefings: {},
             aiScenarioSummaries: {},
             debugAi: process.env.DEBUG_AI === 'true',
-            currentStageIndex: 0
+            currentStageIndex: 0,
+            aiEnabled: aiEnabled
         };
 
         this.connectedClients = {}; // reset roles
