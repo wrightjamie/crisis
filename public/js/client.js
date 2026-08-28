@@ -307,7 +307,7 @@ function showBriefing() {
             
             const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
             
-            aiSummaryText.innerHTML = `<div class="text-accent-orange mb-1 text-sm"><em>(AI generation timed out. Showing raw briefing data.)</em></div><div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
+            aiSummaryText.innerHTML = `<div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
         }
     }, 45000);
 }
@@ -651,11 +651,24 @@ function updateUI() {
         const aiSummaryText = document.getElementById('briefing-ai-summary-text');
         if (aiSummaryText && (aiSummaryText.innerHTML.includes('Writing') || aiSummaryText.innerHTML.includes('raw briefing data'))) {
             const summaryData = localState.aiScenarioSummaries[role];
-            let processedText = p(summaryData.text);
-            let html = window.marked && window.DOMPurify 
-                ? DOMPurify.sanitize(marked.parse(processedText))
-                : processedText.replace(/\n/g, '<br>');
-            aiSummaryText.innerHTML = html;
+            if (summaryData.text) {
+                let processedText = p(summaryData.text);
+                let html = window.marked && window.DOMPurify
+                    ? DOMPurify.sanitize(marked.parse(processedText))
+                    : processedText.replace(/\n/g, '<br>');
+                aiSummaryText.innerHTML = html;
+            } else if (localState.aiEnabled === false) {
+                const config = localState.scenarioConfig;
+                const general = config.briefings._general || '';
+                const roleSpecific = config.briefings[role] || '';
+                const variants = (config.variantBriefings || []).map(vb => {
+                    const genVar = vb.briefingText || '';
+                    const roleVar = (vb.roleBriefings && vb.roleBriefings[role]) ? vb.roleBriefings[role] : '';
+                    return (genVar + '\n' + roleVar).trim();
+                }).filter(t => t).join('\n\n');
+                const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
+                aiSummaryText.innerHTML = `<div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
+            }
         }
     }
 
@@ -777,12 +790,12 @@ function buildAiPanelHtml(p) {
         <div class="mb-3">
             ${aiBriefing && aiBriefing.text 
                 ? `<div class="text-base lh-16">${window.marked && window.DOMPurify ? DOMPurify.sanitize(marked.parse(p(aiBriefing.text))) : p(aiBriefing.text).replace(/\n/g, '<br>')}</div>` 
-                : '<p class="text-muted">Briefing is currently unavailable.</p>'}
+                : (localState.aiEnabled === false ? '' : '<p class="text-muted">Briefing is currently unavailable.</p>')}
         </div>
     `;
 
     if (aiBriefing && aiBriefing.seeds && aiBriefing.seeds.length > 0) {
-        html += `<h4 class="mb-sm text-secondary">Score Changes</h4>
+        html += `<h4 class="mb-sm text-secondary">Intelligence Updates</h4>
                  <ul class="list-none p-0 m-0 text-sm text-muted">`;
         aiBriefing.seeds.forEach(seed => {
             html += `<li class="mb-05">• ${p(seed.text)}</li>`;
