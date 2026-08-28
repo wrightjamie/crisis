@@ -16,9 +16,10 @@ module.exports = function setupSockets(io, engine) {
         socket.on('open_lobby', (data) => {
             const scenarioId = typeof data === 'string' ? data : data.scenarioId;
             const selectedVariants = typeof data === 'object' ? data.selectedVariants : null;
+            const aiEnabled = typeof data === 'object' ? data.aiEnabled : true;
 
-            console.log(`Opening lobby for scenario: ${scenarioId}`);
-            engine.createLobby(scenarioId, selectedVariants);
+            console.log(`Opening lobby for scenario: ${scenarioId} (AI Enabled: ${aiEnabled})`);
+            engine.createLobby(scenarioId, selectedVariants, aiEnabled);
 
             io.emit('state_update', engine.gameState);
             io.emit('active_roles', engine.getActiveRoles());

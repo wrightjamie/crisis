@@ -49,6 +49,44 @@ socket.on('generate_ai_briefing', (data) => {
     if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.aiConfig) return;
     if (data.role === 'display' || data.role === 'facilitator') return;
     
+    if (currentState.aiEnabled === false) {
+        // Fallback for missing AI - just emit raw updates so the client knows it completed
+        if (data.includeSummary) {
+            socket.emit('submit_ai_scenario_summary', { role: data.role, text: "", timestamp: Date.now() });
+        }
+
+        let baseline = data.mode === 'initial' ? null : (aiBaselineScores[data.role] || null);
+        const currentScores = currentState.scores;
+        if (!baseline) {
+            baseline = currentState.scenarioConfig.initialScores || currentScores;
+        }
+
+        const config = currentState.scenarioConfig.aiConfig;
+        let fallbackSeeds = [];
+        for (const [key, currentVal] of Object.entries(currentScores)) {
+            const prevVal = baseline[key];
+            if (prevVal !== undefined && prevVal !== currentVal && config.scores[key] && config.scores[key].roles.includes(data.role)) {
+                const labelLower = config.scoreLabels[currentVal].toLowerCase();
+                const diff = currentVal - prevVal;
+                fallbackSeeds.push({
+                    type: 'score_change',
+                    scoreId: key,
+                    text: `The ${config.scores[key].label} score has ${diff > 0 ? 'improved' : 'worsened'} to '${labelLower}' (was '${config.scoreLabels[prevVal].toLowerCase()}').`
+                });
+            }
+        }
+
+        socket.emit('submit_ai_briefing', {
+            role: data.role,
+            text: "",
+            seeds: fallbackSeeds,
+            timestamp: Date.now()
+        });
+
+        aiBaselineScores[data.role] = JSON.parse(JSON.stringify(currentScores));
+        return;
+    }
+
     if (data.includeSummary) {
         const r = data.role;
         const config = currentState.scenarioConfig;
@@ -70,6 +108,42 @@ socket.on('generate_ai_briefing_all', (data) => {
     if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.aiConfig) return;
     
     const context = data ? data.context : null;
+
+    if (currentState.aiEnabled === false) {
+        currentActiveRoles
+            .filter(r => r !== 'display' && r !== 'facilitator')
+            .forEach(r => {
+                let baseline = aiBaselineScores[r] || currentState.scenarioConfig.initialScores || currentState.scores;
+                const currentScores = currentState.scores;
+                const config = currentState.scenarioConfig.aiConfig;
+                let fallbackSeeds = [];
+                if (context) fallbackSeeds.push({ type: 'context', text: context });
+
+                for (const [key, currentVal] of Object.entries(currentScores)) {
+                    const prevVal = baseline[key];
+                    if (prevVal !== undefined && prevVal !== currentVal && config.scores[key] && config.scores[key].roles.includes(r)) {
+                        const labelLower = config.scoreLabels[currentVal].toLowerCase();
+                        const diff = currentVal - prevVal;
+                        fallbackSeeds.push({
+                            type: 'score_change',
+                            scoreId: key,
+                            text: `The ${config.scores[key].label} score has ${diff > 0 ? 'improved' : 'worsened'} to '${labelLower}' (was '${config.scoreLabels[prevVal].toLowerCase()}').`
+                        });
+                    }
+                }
+
+                socket.emit('submit_ai_briefing', {
+                    role: r,
+                    text: "",
+                    seeds: fallbackSeeds,
+                    timestamp: Date.now()
+                });
+
+                aiBaselineScores[r] = JSON.parse(JSON.stringify(currentScores));
+            });
+        return;
+    }
+
     currentActiveRoles
         .filter(r => r !== 'display' && r !== 'facilitator')
         .forEach(r => queueAiGeneration(r, false, context));
@@ -416,7 +490,9 @@ window.randomiseVariants = function(scenarioId) {
 
 window.openLobby = function(id) {
     const selectedVariants = variantSelections[id] || {};
-    socket.emit('open_lobby', { scenarioId: id, selectedVariants });
+    const aiToggle = document.getElementById('ai-enabled-toggle');
+    const aiEnabled = aiToggle ? aiToggle.checked : true;
+    socket.emit('open_lobby', { scenarioId: id, selectedVariants, aiEnabled });
 };
 
 window.startScenario = function() {
