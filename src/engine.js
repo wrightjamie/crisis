@@ -61,6 +61,7 @@ class GameEngine {
             scheduledEvents: [],
             aiBriefings: {},
             aiScenarioSummaries: {},
+            debugAi: process.env.DEBUG_AI === 'true',
             currentStageIndex: 0
         };
     }
@@ -163,6 +164,7 @@ class GameEngine {
             scheduledEvents: [],
             aiBriefings: {},
             aiScenarioSummaries: {},
+            debugAi: process.env.DEBUG_AI === 'true',
             currentStageIndex: 0
         };
 

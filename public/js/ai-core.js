@@ -18,7 +18,8 @@ window.AICore = {
         if (this.engine) return;
         try {
             this.engine = await CreateMLCEngine(MODEL_ID, {
-                initProgressCallback: progressCallback
+                initProgressCallback: progressCallback,
+                context_window_size: 2048
             });
             this.isReady = true;
             console.log("AI Engine loaded successfully.");
@@ -28,7 +29,7 @@ window.AICore = {
         }
     },
 
-    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null) {
+    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null, strategy = "iterative") {
         if (!this.engine) throw new Error("AI Engine not initialized");
 
         const mode = baselineScores ? 'update' : 'initial';
@@ -40,6 +41,16 @@ window.AICore = {
         const relevantMetrics = Object.entries(currentScores).filter(([key, val]) => {
             return aiConfig.scores[key] && aiConfig.scores[key].roles.includes(roleId);
         });
+
+        const promptsUsed = [];
+        if (strategy === 'noai') {
+             let text = "Raw Metrics Data:\n";
+             for (const [key, val] of relevantMetrics) {
+                 const scoreObj = aiConfig.scores[key];
+                 text += `- ${scoreObj.name || scoreObj.label}: ${aiConfig.scoreLabels[val] || val}\n`;
+             }
+             return { text, seeds: [], generated: false, prompts: [] };
+        }
 
         let sentences = [];
         for (const [key, currentVal] of relevantMetrics) {
@@ -74,28 +85,69 @@ window.AICore = {
         }
 
         let summaryContext = sentences.map(s => `- ${s.text}`).join("\n");
-        let summaryPrompt = mode === 'initial' 
-            ? `Context:\n${summaryContext}\nTask: Synthesize these facts into exactly ONE fluid paragraph that describes the overall operational picture based on the Focus area.`
-            : `Context:\n${summaryContext}\nTask: Synthesize these facts into exactly ONE fluid paragraph that focuses on highlighting the recent changes and their impact based on the Focus area.`;
+        let combinedText = "";
 
-        if (mode === 'update' && actionContext) {
-            summaryPrompt += `\n\nRecent Action: ${actionContext}\nEnsure the summary frames the score changes as the resulting impact of this recent action.`;
+        if (strategy === 'iterative') {
+            for (const s of sentences) {
+                 const p = `Context: ${s.text}. Task: Write one short immersive sentence describing this operational state.`;
+                 promptsUsed.push(p);
+                 try {
+                     const reply = await withTimeout(this.engine.chat.completions.create({
+                          messages: [
+                              { role: "system", content: systemPrompt },
+                              { role: "user", content: p }
+                          ],
+                          max_tokens: 50,
+                          temperature: 0.7
+                      }), 10000);
+                      combinedText += `- ${reply.choices[0].message.content.trim()}\n`;
+                 } catch(e) {
+                     combinedText += `- ${s.text}\n`;
+                 }
+            }
+            return { text: combinedText, seeds: sentences, generated: true, prompts: promptsUsed };
+        } else {
+            let summaryPrompt = mode === 'initial'
+                ? `Context:\n${summaryContext}\nTask: Synthesize these facts into exactly ONE fluid paragraph that describes the overall operational picture based on the Focus area.`
+                : `Context:\n${summaryContext}\nTask: Synthesize these facts into exactly ONE fluid paragraph that focuses on highlighting the recent changes and their impact based on the Focus area.`;
+
+            if (mode === 'update' && actionContext) {
+                summaryPrompt += `\n\nRecent Action: ${actionContext}\nEnsure the summary frames the score changes as the resulting impact of this recent action.`;
+            }
+
+            if (strategy === 'fewshot') {
+                 summaryPrompt += `\nExamples:
+Context:
+- Public Approval has changed from medium to high.
+- Budget has changed from medium to low.
+Summary: Public support remains strong following recent operations, but our financial reserves are critically depleted.`;
+            } else if (strategy === 'combined') {
+                 summaryPrompt += `\nTask: Synthesize this into a cohesive paragraph focusing only on actionable changes.`;
+            }
+
+            promptsUsed.push(summaryPrompt);
+
+            try {
+                const summaryReply = await withTimeout(this.engine.chat.completions.create({
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: summaryPrompt }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 250
+                }), 45000); // 45 second timeout
+
+                return {
+                    text: summaryReply.choices[0].message.content.trim(),
+                    seeds: sentences,
+                    generated: true,
+                    prompts: promptsUsed
+                };
+            } catch (error) {
+                console.error("AI Briefing generation failed or timed out:", error);
+                return { text: summaryContext, seeds: sentences, generated: false, prompts: promptsUsed };
+            }
         }
-
-        const summaryReply = await withTimeout(this.engine.chat.completions.create({
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: summaryPrompt }
-            ],
-            temperature: 0.7,
-            max_tokens: 250
-        }), 45000); // 45 second timeout
-
-        return {
-            text: summaryReply.choices[0].message.content.trim(),
-            seeds: sentences,
-            generated: true
-        };
     },
 
     async generateScenarioSummary(aiConfig, roleId, combinedText) {
