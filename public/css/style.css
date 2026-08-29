@@ -595,14 +595,14 @@ body:has(dialog[open]) {
   text-align: center;
 }
 .fac-dashboard-container[open] { display: block; }
-.fac-dashboard-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+.fac-dashboard-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr)); }
 .fac-event-list { overflow-y: auto; overflow-x: auto; max-height: max(75vh, 400px); padding-right: var(--space-sm); }
 .fac-roles { font-size: var(--text-xs); display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); border-left: 1px solid var(--border-color); padding-left: var(--space-md); margin-left: var(--space-sm); }
 
 /* Station Badge Styles */
 .station-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
     gap: var(--space-xs);
 }
 
@@ -671,7 +671,7 @@ body:has(dialog[open]) {
   background: var(--bg-primary); color: var(--text-primary); flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: var(--space-xl); 
 }
 .client-holding-overlay[open], .client-holding-hidden[open] { display: flex; }
-.client-role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); width: 100%; max-width: 800px; }
+.client-role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: var(--space-md); width: 100%; max-width: 800px; }
 .client-btn-taken { background-color: var(--bg-tertiary); color: var(--text-muted); border: 1px solid var(--border-color); font-weight: var(--font-bold); cursor: not-allowed; padding: var(--space-lg); font-size: var(--text-md); }
 .client-btn-free { background-color: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--accent-blue); font-weight: var(--font-bold); cursor: pointer; padding: var(--space-lg); font-size: var(--text-md); }
 
