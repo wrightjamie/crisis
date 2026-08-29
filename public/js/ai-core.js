@@ -28,7 +28,7 @@ window.AICore = {
         }
     },
 
-    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null) {
+    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null, scoreConfigs = {}) {
         if (!this.engine) throw new Error("AI Engine not initialized");
 
         const mode = baselineScores ? 'update' : 'initial';
@@ -38,6 +38,8 @@ window.AICore = {
         const systemPrompt = `You are an automated intelligence reporting system.\n${roleContext}\n\n${aiConfig.systemPrompt}`;
         
         const relevantMetrics = Object.entries(currentScores).filter(([key, val]) => {
+            const config = scoreConfigs[key];
+            if (config && config.promptAI === false) return false;
             return aiConfig.scores[key] && aiConfig.scores[key].roles.includes(roleId);
         });
 
@@ -45,12 +47,32 @@ window.AICore = {
         for (const [key, currentVal] of relevantMetrics) {
             let sentence = "";
             const scoreObj = aiConfig.scores[key];
+            const config = scoreConfigs[key];
+
             const subject = scoreObj.subject || scoreObj.label;
             const is = scoreObj.isPlural ? "are" : "is";
             const has = scoreObj.isPlural ? "have" : "has";
-
             const capitalizedSubject = subject.charAt(0).toUpperCase() + subject.slice(1);
-            const labelLower = aiConfig.scoreLabels[currentVal].toLowerCase();
+
+            let labelLower = "";
+            let prevLabelLower = "";
+            let displayVal = currentVal;
+            let displayPrevVal = baselineScores ? baselineScores[key] : null;
+
+            if (config && config.unit) {
+                labelLower = `at ${displayVal} ${config.unit}`;
+                if (displayPrevVal !== null) {
+                    prevLabelLower = `at ${displayPrevVal} ${config.unit}`;
+                }
+            } else if (aiConfig.scoreLabels && aiConfig.scoreLabels[currentVal]) {
+                labelLower = aiConfig.scoreLabels[currentVal].toLowerCase();
+                if (displayPrevVal !== null && aiConfig.scoreLabels[displayPrevVal]) {
+                    prevLabelLower = aiConfig.scoreLabels[displayPrevVal].toLowerCase();
+                }
+            } else {
+                 labelLower = `at ${displayVal}`;
+                 if (displayPrevVal !== null) prevLabelLower = `at ${displayPrevVal}`;
+            }
 
             if (mode === 'initial') {
                 sentence = `${capitalizedSubject} ${is} currently ${labelLower}.`;
@@ -58,7 +80,6 @@ window.AICore = {
             } else if (mode === 'update') {
                 const prevVal = baselineScores[key];
                 if (currentVal !== prevVal) {
-                    const prevLabelLower = aiConfig.scoreLabels[prevVal].toLowerCase();
                     sentence = `${capitalizedSubject} ${has} changed from ${prevLabelLower} to ${labelLower}.`;
                     sentences.push({ label: scoreObj.label, text: sentence, changed: true, prevVal, newVal: currentVal });
                 }

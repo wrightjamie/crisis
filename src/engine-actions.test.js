@@ -50,7 +50,10 @@ const testScenario = {
             conditions: { anyActiveRoles: ['defence', 'foreign'] },
             effects: { scores: { uk_us: 1 } }
         }
-    ]
+    ],
+    scoreConfigs: {
+        budget: { min: 0, max: 1000, unit: 'm', initial: 100 }
+    }
 };
 
 // Temporarily inject our test scenario
@@ -60,9 +63,10 @@ function resetEngine() {
     engine.gameState = {
         status: 'active',
         scenarioId: 'test_scenario',
+        scenarioConfig: testScenario,
         roles: ['home', 'defence', 'foreign'],
-        scores: { uk_us: 3, military_readiness: 3 },
-        assets: [],
+        scores: { uk_us: 3, military_readiness: 3, budget: 100 },
+        assets: [{ id: 'test_asset', name: 'Test Asset', location: [0,0], state: 'operational', tags: [] }],
         events: [],
         decisionTasks: [],
         unlockedEvents: [],
@@ -144,6 +148,73 @@ engine.gameState.status = 'ended';
 stageResult = engine.setStage(0);
 assert.strictEqual(stageResult, false, "Should fail if not in active or lobby state");
 console.log("✅ setStage tests passed.");
+
+// --- New Tests for Asset States and Custom Scores ---
+console.log("Testing new asset state and score features...");
+resetEngine();
+engine.applyEffects({
+    assetStateChanges: { 'test_asset': 'damaged' },
+    scores: { uk_us: 10, budget: 1500 }
+});
+assert.strictEqual(engine.gameState.assets[0].state, 'damaged', "Asset state should change to 'damaged'");
+assert.strictEqual(engine.gameState.scores.uk_us, 5, "Legacy score without config should clamp to 5");
+assert.strictEqual(engine.gameState.scores.budget, 1000, "Custom score should clamp to max from config");
+
+engine.applyEffects({
+    scores: { uk_us: -10, budget: -1500 }
+});
+assert.strictEqual(engine.gameState.scores.uk_us, 1, "Legacy score should clamp to 1");
+assert.strictEqual(engine.gameState.scores.budget, 0, "Custom score should clamp to min from config");
+console.log("✅ Asset state and custom score tests passed.");
+
+// --- New Tests for Timed Decisions ---
+console.log("Testing timed decisions...");
+resetEngine();
+const decTask = {
+    role: 'home',
+    text: 'Decide quickly',
+    timeLimitMs: 500, // 500ms
+    defaultOptionId: 'opt2',
+    options: [
+        { id: 'opt1', text: 'Option 1' },
+        { id: 'opt2', text: 'Default Option', effects: { scores: { uk_us: 1 } } }
+    ]
+};
+
+// Mock the trigger to inject the task
+const mockEvent = { id: 'evt_1', templateId: 't1' };
+engine.gameState.events.push(mockEvent);
+const task = {
+    id: `task_timed_1`,
+    eventId: mockEvent.id,
+    role: decTask.role,
+    text: decTask.text,
+    options: decTask.options,
+    status: 'pending',
+    timeLimitMs: decTask.timeLimitMs,
+    defaultOptionId: decTask.defaultOptionId,
+    startTime: Date.now() - 600 // Simulate time expired
+};
+engine.gameState.decisionTasks.push(task);
+
+let stateUpdated = false;
+engine.startSchedulerLoop(() => { stateUpdated = true; });
+
+// Wait a bit for scheduler to run (it runs every 1000ms, but we can manually force it here for sync testing)
+engine.stopSchedulerLoop(); // stop it right away so we don't hang
+const now = Date.now();
+for (const t of engine.gameState.decisionTasks) {
+    if (t.status === 'pending' && t.timeLimitMs !== undefined) {
+        if (now >= t.startTime + t.timeLimitMs) {
+            engine.resolveTask(t.id, t.defaultOptionId);
+        }
+    }
+}
+
+assert.strictEqual(task.status, 'resolved', "Timed task should be resolved");
+assert.strictEqual(task.selectedOption, 'opt2', "Timed task should use default option");
+assert.strictEqual(engine.gameState.scores.uk_us, 4, "Default option effects should be applied");
+console.log("✅ Timed decisions tests passed.");
 
 // --- New Tests for activeRoles and anyActiveRoles ---
 console.log("Testing activeRoles conditions...");
