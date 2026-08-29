@@ -184,6 +184,13 @@ class GameEngine {
     startGame() {
         if (this.gameState.status !== 'lobby') return false;
         this.gameState.status = 'active';
+
+        // Auto-trigger an initial event if the scenario defines an autoStartEvent
+        const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+        if (scenario && scenario.autoStartEvent) {
+             this.triggerScenarioEvent(scenario.autoStartEvent);
+        }
+
         return true;
     }
 

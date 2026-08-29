@@ -11,6 +11,7 @@ module.exports = {
         uk_commander: 'UK Task Force Commander'
     },
     minUsers: 1,
+    autoStartEvent: 'ev_start',
     mandatoryRoles: ['uk_commander'],
     initialScores: {
         uk_public_support: 3,
@@ -63,6 +64,11 @@ module.exports = {
                 roles: ["uk_commander"]
             }
         }
+    },
+
+    scoreConfigs: {
+        military_readiness: { min: 1, max: 5 },
+        international_pressure: { min: 1, max: 5 }
     },
     assets: [
         {
@@ -253,7 +259,11 @@ module.exports = {
             ]
         }
     ],
-    stages: [],
+
+
+    stages: [
+        { id: 'stage_1', name: 'Initial Crisis' }
+    ],
     eventTemplates: [
         {
             id: 'ev_start',
@@ -267,6 +277,8 @@ module.exports = {
                 {
                     role: 'uk_commander',
                     text: 'How do we posture our forces in response to this political crisis?',
+                    timeLimitMs: 60000,
+                    defaultOptionId: 'opt_covert_investigation',
                     options: [
                         {
                             id: 'opt_lockdown',
@@ -320,6 +332,7 @@ module.exports = {
                             id: 'opt_scramble',
                             text: 'Scramble 1435 Flight Typhoons to intercept.',
                             effects: {
+                                assetStateChanges: { falklands_typhoons: 'intercepting' },
                                 scores: { military_readiness: 1, argentina_aggression: 1 },
                                 triggerEvents: [
                                     { id: 'ev_naval_skirmish', delayMs: 90000, probability: 1.0 },
@@ -441,6 +454,7 @@ module.exports = {
                             text: 'Withdraw from the combat zone.',
                             effects: {
                                 scores: { uk_public_support: -1, military_readiness: -1 },
+                                assetStateChanges: { hms_defender: 'withdrawing' },
                                 triggerEvents: [
                                     { id: 'ev_naval_defeat', delayMs: 110000, probability: 0.9 }
                                 ]
@@ -451,6 +465,7 @@ module.exports = {
                             text: 'Maintain station and provide radar coverage.',
                             effects: {
                                 scores: { military_readiness: 1, uk_public_support: 1 },
+                                assetStateChanges: { hms_defender: 'damaged_but_fighting' },
                                 triggerEvents: [
                                     { id: 'ev_naval_victory', delayMs: 110000, probability: 0.4 }
                                 ]
@@ -789,6 +804,10 @@ module.exports = {
             name: 'SAS Operation Successful',
             description: 'Covert operations on the mainland have successfully destroyed several aircraft on the ground.',
             location: [-51.609, -69.289],
+            autoEffects: {
+                scores: { argentina_aggression: -1, military_readiness: 1 },
+                assetStateChanges: { rio_gallegos: 'damaged' }
+            },
             roleDescriptions: {
                 uk_commander: 'The lads did it. Huge blow to their air capabilities.'
             },
@@ -807,6 +826,10 @@ module.exports = {
             name: 'SAS Team Compromised',
             description: 'A covert UK team has been captured on Argentine soil, causing an international incident.',
             location: [-53.777, -67.755],
+            autoEffects: {
+                scores: { uk_public_support: -1, international_pressure: 1 },
+                assetStateChanges: { falklands_typhoons: 'deployed' }
+            },
             roleDescriptions: {
                 uk_commander: 'They are parading our men on television. It is a disaster.'
             },
@@ -983,18 +1006,6 @@ module.exports = {
     ],
     manualActions: [
         {
-            id: 'act_start_scenario',
-            name: 'COMMENCE SCENARIO',
-            description: 'Triggers the initial intelligence reports and begins the scenario.',
-            initiator: ['facilitator'],
-            conditions: {},
-            effects: {
-                triggerEvents: [
-                    { id: 'ev_start', delayMs: 1000, probability: 1.0 }
-                ]
-            }
-        },
-        {
             id: 'act_sf_mainland',
             name: 'Deploy Special Forces to Mainland',
             description: 'Authorize a covert SAS operation on the Argentine mainland to sabotage airbases and disrupt their supply chain. High risk of international condemnation if discovered.',
@@ -1005,8 +1016,8 @@ module.exports = {
             effects: {
                 scores: { international_pressure: 1 },
                 randomEvents: [
-                    { id: 'ev_sf_success', weight: 60, effects: { scores: { argentina_aggression: -1, military_readiness: 1 } } },
-                    { id: 'ev_sf_failure', weight: 40, effects: { scores: { uk_public_support: -1, international_pressure: 1 } } }
+                    { id: 'ev_sf_success', weight: 60 },
+                    { id: 'ev_sf_failure', weight: 40 }
                 ]
             }
         },
