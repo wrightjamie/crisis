@@ -257,8 +257,56 @@ module.exports = {
     eventTemplates: [
         {
             id: 'ev_start',
+            name: 'Shock Election Result in Stanley',
+            description: 'A fiercely contested local election in Port Stanley has resulted in a surprise victory for a candidate openly sympathetic to Argentine sovereignty. MI6 reports circumstantial evidence of foreign electoral interference and vote buying, but lacks concrete proof. The international community is watching closely.',
+            location: [-51.692, -57.858],
+            roleDescriptions: {
+                uk_commander: 'Sir, the political situation on the ground is volatile. The new "Mayor-elect" is demanding the immediate withdrawal of UK forces. The PM needs your assessment on our security posture.'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'How do we posture our forces in response to this political crisis?',
+                    options: [
+                        {
+                            id: 'opt_lockdown',
+                            text: 'Lock down military installations and prepare for civil unrest.',
+                            effects: {
+                                scores: { military_readiness: 1, uk_public_support: -1 },
+                                triggerEvents: [
+                                    { id: 'ev_military_incursion', delayMs: 120000, probability: 1.0 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'opt_public_denial',
+                            text: 'Publicly denounce the election as fraudulent and detain the candidate.',
+                            effects: {
+                                scores: { international_pressure: 2, argentina_aggression: 1, military_readiness: 1 },
+                                triggerEvents: [
+                                    { id: 'ev_military_incursion', delayMs: 60000, probability: 1.0 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'opt_covert_investigation',
+                            text: 'Maintain normal posture to avoid provoking them while MI6 investigates covertly.',
+                            effects: {
+                                scores: { international_pressure: -1, military_readiness: -1 },
+                                triggerEvents: [
+                                    { id: 'ev_military_incursion', delayMs: 180000, probability: 1.0 }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            id: 'ev_military_incursion',
             name: 'Initial Reports of Aggression',
-            description: 'Multiple reports indicate Argentine naval elements and aircraft have crossed into the exclusion zone.',
+            description: 'Claiming they are acting to "protect the legitimate administration" following the election unrest, Argentine naval elements and aircraft have crossed into the exclusion zone.',
             location: [-51.5, -59.0],
             roleDescriptions: {
                 uk_commander: 'Sir, early warning systems confirm multiple bogeys inbound. We have a rapidly developing situation on our hands.'
