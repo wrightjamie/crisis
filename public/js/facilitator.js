@@ -261,6 +261,20 @@ const scenariosListEl = document.getElementById('scenarios-list');
 
 document.addEventListener('DOMContentLoaded', () => {
     const lobbyEl = document.getElementById('facilitator-lobby-screen');
+
+    // Setup filter slider
+    const sliderEl = document.getElementById('player-filter-slider');
+    const labelEl = document.getElementById('player-filter-label');
+    if (sliderEl && labelEl) {
+        sliderEl.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            labelEl.textContent = val === 0 ? 'Players: Any' : `Players: ${val}`;
+            if (availableScenarios && availableScenarios.length > 0) {
+                renderHoldingScreen();
+            }
+        });
+    }
+
     [holdingEl, lobbyEl].forEach(el => {
         if (el) el.addEventListener('cancel', e => e.preventDefault());
     });
@@ -443,10 +457,24 @@ function renderLobbyScreen() {
 let variantSelections = {}; // { scenarioId: { axisId: optionId } }
 
 function renderHoldingScreen() {
+    const detailsPanel = document.getElementById('scenario-details-panel');
+    const sliderEl = document.getElementById('player-filter-slider');
+    const filterValue = sliderEl ? parseInt(sliderEl.value) : 0;
+
+    // First time init
+    if (sliderEl && !sliderEl.hasAttribute('data-initialized')) {
+        let maxGlobalPlayers = 0;
+        availableScenarios.forEach(s => {
+            const maxP = s.roles ? s.roles.filter(r => r !== 'display' && r !== 'facilitator').length : 0;
+            if (maxP > maxGlobalPlayers) maxGlobalPlayers = maxP;
+        });
+        sliderEl.max = maxGlobalPlayers > 0 ? maxGlobalPlayers : 10;
+        sliderEl.setAttribute('data-initialized', 'true');
+    }
+
     scenariosListEl.innerHTML = '';
 
     // Reset details panel
-    const detailsPanel = document.getElementById('scenario-details-panel');
     if (detailsPanel) {
         detailsPanel.innerHTML = '<p class="text-secondary text-lg">Select a scenario to view details</p>';
         detailsPanel.style.display = 'flex';
@@ -457,7 +485,18 @@ function renderHoldingScreen() {
         detailsPanel.className = 'admin-card';
     }
 
+    let visibleCount = 0;
+
     availableScenarios.forEach(s => {
+        const minP = s.minUsers || 1;
+        const maxP = s.roles ? s.roles.filter(r => r !== 'display' && r !== 'facilitator').length : minP;
+
+        if (filterValue > 0) {
+            if (filterValue < minP || filterValue > maxP) return;
+        }
+
+        visibleCount++;
+
         // Init default variants regardless of selection so they're ready if needed
         variantSelections[s.id] = {};
         if (s.variantAxes && s.variantAxes.length > 0) {
@@ -483,6 +522,7 @@ function renderHoldingScreen() {
         div.innerHTML = `
             <h3 class="text-primary m-0 mb-xs">${p(s.name)}</h3>
             <p class="text-secondary text-sm m-0">${shortDesc}</p>
+            <div class="text-xs text-muted mt-1">${minP}-${maxP} Players</div>
         `;
 
         div.onclick = () => {
@@ -497,6 +537,10 @@ function renderHoldingScreen() {
 
         scenariosListEl.appendChild(div);
     });
+
+    if (visibleCount === 0) {
+        scenariosListEl.innerHTML = '<p class="text-secondary text-center p-2">No scenarios match your filter criteria.</p>';
+    }
 }
 
 function renderScenarioDetails(scenarioId) {

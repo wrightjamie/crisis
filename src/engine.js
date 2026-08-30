@@ -80,6 +80,8 @@ class GameEngine {
                     id: s.id,
                     name: s.name,
                     description: s.description,
+                    minUsers: s.minUsers,
+                    roles: s.roles,
                     isValid: validation.isValid,
                     validationErrors: validation.errors,
                     variantAxes: (s.variantAxes || []).map(axis => ({

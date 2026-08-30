@@ -130,6 +130,10 @@
 
     <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content" style="max-width: 1200px; width: 90vw;">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
+        <div class="mb-2 text-center">
+            <label for="player-filter-slider" id="player-filter-label" class="text-secondary text-base text-bold mb-1 d-block">Players: Any</label>
+            <input type="range" id="player-filter-slider" min="0" max="10" value="0" style="width: 100%; max-width: 300px; accent-color: var(--accent-blue);">
+        </div>
         <div style="display: flex; flex-wrap: wrap; gap: var(--space-2xl); align-items: start; text-align: left;">
             <div id="scenarios-list" class="fac-event-list" style="flex: 1 1 min(250px, 100%); display: flex; flex-direction: column; gap: var(--space-md);">
                 <!-- Scenario items injected via JS -->
