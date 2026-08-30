@@ -125,7 +125,25 @@ module.exports = function setupSockets(io, gameManager) {
             console.log('Scenario ended');
             engine.stopSchedulerLoop();
             engine.gameState = { status: 'holding', scenarioId: null };
-            engine.connectedClients = {};
+
+            // Keep facilitator and display clients, remove all other roles
+            const newConnectedClients = {};
+            for (const [id, role] of Object.entries(engine.connectedClients)) {
+                if (role === 'facilitator' || role === 'display') {
+                    newConnectedClients[id] = role;
+                } else {
+                    // Tell the client they are no longer in a role (they go back to lobby/holding screen waiting)
+                    io.to(id).emit('role_registered', null);
+                }
+            }
+            engine.connectedClients = newConnectedClients;
+
+            // Also clear any pending players
+            for (const id of Object.keys(engine.pendingPlayers)) {
+                io.to(id).emit('role_rejected');
+            }
+            engine.pendingPlayers = {};
+
             io.to(gameId).emit('state_update', engine.getHoldingState());
             io.to(gameId).emit('active_roles', engine.getActiveRoles());
         });
