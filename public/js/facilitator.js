@@ -1,4 +1,5 @@
 const socket = io();
+let gameId = new URLSearchParams(window.location.search).get('game');
 
 const scoreAdjustContainer = document.getElementById('score-adjust-container');
 const eventsList = document.getElementById('facilitator-events-list');
@@ -19,6 +20,103 @@ let aiQueue = [];
 let isGeneratingAi = false;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Dashboard Logic
+    const dashboardView = document.getElementById('dashboard-view');
+    const facilitatorView = document.getElementById('facilitator-view');
+
+    if (gameId) {
+        dashboardView.style.display = 'none';
+        facilitatorView.style.display = 'block';
+        document.getElementById('fac-game-id-display').textContent = gameId;
+        socket.emit('join_game', gameId);
+
+        socket.emit('register_role', 'facilitator');
+    } else {
+        dashboardView.style.display = 'block';
+        facilitatorView.style.display = 'none';
+        socket.emit('request_dashboard_data');
+    }
+
+    const btnCreateGame = document.getElementById('btn-create-game');
+    if (btnCreateGame) {
+        btnCreateGame.addEventListener('click', () => {
+            const id = document.getElementById('new-game-id').value.trim().toLowerCase();
+            const name = document.getElementById('new-game-name').value.trim();
+            if (id.length > 0 && name.length > 0) {
+                document.getElementById('create-error').style.display = 'none';
+                socket.emit('create_game', { gameId: id, name });
+            } else {
+                document.getElementById('create-error').textContent = 'Please enter both ID and Name';
+                document.getElementById('create-error').style.display = 'block';
+            }
+        });
+    }
+
+    socket.on('game_created', (newId) => {
+        window.location.href = `?game=${newId}`;
+    });
+
+    socket.on('dashboard_error', (msg) => {
+        if (document.getElementById('create-error')) {
+            document.getElementById('create-error').textContent = msg;
+            document.getElementById('create-error').style.display = 'block';
+        }
+    });
+
+    socket.on('dashboard_data', (games) => {
+        if (gameId) return; // Ignore if in a game
+
+        const activeList = document.getElementById('games-list');
+        const deadList = document.getElementById('dead-games-list');
+        if (!activeList || !deadList) return;
+
+        activeList.innerHTML = '';
+        deadList.innerHTML = '';
+
+        const now = Date.now();
+        const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+        games.forEach(g => {
+            const isDead = (now - g.lastActivity) > ONE_WEEK_MS;
+            const card = document.createElement('div');
+            card.className = 'admin-card';
+
+            const stateText = g.status === 'holding' ? 'Lobby/Holding' : 'Active Scenario';
+            const facBadge = g.hasFacilitator ? '<span class="role-badge" style="background-color: var(--status-1); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Online</span>' : '<span class="role-badge" style="background-color: var(--accent-orange); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Offline</span>';
+            const dateStr = new Date(g.lastActivity).toLocaleDateString();
+
+            card.innerHTML = `
+                <h3 class="card-title" style="color: var(--text-primary);"></h3>
+                <p class="text-sm text-secondary mb-1">Status: ${stateText}<br>Last Active: ${dateStr}</p>
+                <div class="mb-1">${facBadge}</div>
+                <div class="flex-column gap-05">
+                    <button class="btn btn-primary w-100 join-btn">Join Game</button>
+                    ${isDead ? `<button class="btn btn-secondary w-100 text-red delete-btn">Delete Game</button>` : ''}
+                </div>
+            `;
+            card.querySelector('.card-title').textContent = `${g.name} (ID: ${g.id.toUpperCase()})`;
+            card.querySelector('.join-btn').addEventListener('click', () => { window.location.href = `?game=${g.id}`; });
+            if (isDead) {
+                card.querySelector('.delete-btn').addEventListener('click', () => { deleteGame(g.id); });
+            }
+
+            if (isDead) {
+                deadList.appendChild(card);
+            } else {
+                activeList.appendChild(card);
+            }
+        });
+
+        if (activeList.children.length === 0) activeList.innerHTML = '<p class="text-muted p-1">No active games.</p>';
+        if (deadList.children.length === 0) deadList.innerHTML = '<p class="text-muted p-1">No dead games.</p>';
+    });
+
+    window.deleteGame = function(id) {
+        if (confirm(`Are you sure you want to permanently delete game ${id}?`)) {
+            socket.emit('delete_game', id);
+        }
+    };
+
     const aiStatusDot = document.getElementById('ai-status-dot');
     const aiStatusText = document.getElementById('ai-status-text');
 
@@ -110,7 +208,7 @@ async function processAiQueue() {
             const currentScores = currentState.scores;
             let baseline = task.forceInitial ? null : (aiBaselineScores[task.role] || null);
             
-            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context);
+            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context, currentState.scenarioConfig?.scoreConfigs || {});
             
             if (result.generated) {
                 aiBaselineScores[task.role] = JSON.parse(JSON.stringify(currentScores));
@@ -325,54 +423,111 @@ let variantSelections = {}; // { scenarioId: { axisId: optionId } }
 
 function renderHoldingScreen() {
     scenariosListEl.innerHTML = '';
+
+    // Reset details panel
+    const detailsPanel = document.getElementById('scenario-details-panel');
+    if (detailsPanel) {
+        detailsPanel.innerHTML = '<p class="text-secondary text-lg">Select a scenario to view details</p>';
+        detailsPanel.style.display = 'flex';
+        detailsPanel.style.flexDirection = 'column';
+        detailsPanel.style.justifyContent = 'center';
+        detailsPanel.style.alignItems = 'center';
+        detailsPanel.style.textAlign = 'center';
+        detailsPanel.className = 'admin-card';
+    }
+
     availableScenarios.forEach(s => {
+        // Init default variants regardless of selection so they're ready if needed
         variantSelections[s.id] = {};
-
-        const div = document.createElement('div');
-        div.className = 'admin-card';
-        div.style.textAlign = 'left';
-
-        let axesHtml = '';
         if (s.variantAxes && s.variantAxes.length > 0) {
-            axesHtml += '<div class="mt-2 pt-1 border-top">';
-            axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
-            
             s.variantAxes.forEach(axis => {
-                axesHtml += `<div class="mb-lg">`;
-                axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
-                axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
-                axis.options.forEach((opt, idx) => {
-                    axesHtml += `<button class="btn variant-opt ${idx === 0 ? 'btn-primary' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
-                });
-                axesHtml += '</div></div>';
-                // Default to first option
                 variantSelections[s.id][axis.id] = axis.options[0].id;
             });
-
-            axesHtml += `<button class="btn btn-ghost text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
-            axesHtml += '</div>';
         }
 
         const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
-        let validationHtml = '';
-        if (s.isValid === false) {
-            validationHtml = `<div class="mb-1 p-1 border-red bg-red-faded text-red text-sm radius-sm">
-                <strong>⚠️ Scenario configuration invalid:</strong>
-                <ul class="mt-1 ml-2 p-0">
-                    ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
-                </ul>
-            </div>`;
-        }
         
+        const div = document.createElement('div');
+        div.className = 'admin-card scenario-item';
+
+        // One liner description (just take the first sentence or truncate)
+        let shortDesc = p(s.description || '');
+        const firstSentenceMatch = shortDesc.match(/^.*?[.!?](?:\s|$)/);
+        if (firstSentenceMatch) {
+            shortDesc = firstSentenceMatch[0].trim();
+        } else if (shortDesc.length > 80) {
+            shortDesc = shortDesc.substring(0, 80) + '...';
+        }
+
         div.innerHTML = `
-            <h2>${p(s.name)}</h2>
-            <p class="text-secondary mb-1">${p(s.description)}</p>
-            ${validationHtml}
-            ${axesHtml}
-            <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
+            <h3 class="text-primary m-0 mb-xs">${p(s.name)}</h3>
+            <p class="text-secondary text-sm m-0">${shortDesc}</p>
         `;
+
+        div.onclick = () => {
+            // Highlight selected
+            document.querySelectorAll('#scenarios-list .scenario-item').forEach(card => {
+                card.classList.remove('active');
+            });
+            div.classList.add('active');
+
+            renderScenarioDetails(s.id);
+        };
+
         scenariosListEl.appendChild(div);
     });
+}
+
+function renderScenarioDetails(scenarioId) {
+    const detailsPanel = document.getElementById('scenario-details-panel');
+    if (!detailsPanel) return;
+
+    const s = availableScenarios.find(x => x.id === scenarioId);
+    if (!s) return;
+
+    detailsPanel.style.display = 'block';
+    detailsPanel.style.textAlign = 'left';
+
+    let axesHtml = '';
+    if (s.variantAxes && s.variantAxes.length > 0) {
+        axesHtml += '<div class="mt-2 pt-1 border-top">';
+        axesHtml += '<h3 class="text-sm text-muted uppercase mb-1">Opening Conditions</h3>';
+
+        s.variantAxes.forEach(axis => {
+            axesHtml += `<div class="mb-lg">`;
+            axesHtml += `<label class="text-base text-bold text-secondary mb-md d-block">${axis.name}</label>`;
+            axesHtml += `<div class="btn-group inline mb-md" id="axis-${s.id}-${axis.id}">`;
+            axis.options.forEach((opt, idx) => {
+                const isSelected = variantSelections[s.id][axis.id] === opt.id;
+                axesHtml += `<button class="btn variant-opt ${isSelected ? 'btn-primary' : 'btn-secondary'} text-sm" data-scenario="${s.id}" data-axis="${axis.id}" data-option="${opt.id}" onclick="selectVariant('${s.id}', '${axis.id}', '${opt.id}', this)">${opt.name}</button>`;
+            });
+            axesHtml += '</div></div>';
+        });
+
+        axesHtml += `<button class="btn btn-ghost text-sm" onclick="randomiseVariants('${s.id}')">🎲 Randomise All</button>`;
+        axesHtml += '</div>';
+    }
+
+    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+    let validationHtml = '';
+    if (s.isValid === false) {
+        validationHtml = `<div class="mb-1 p-1 border-red bg-red-faded text-red text-sm radius-sm">
+            <strong>⚠️ Scenario configuration invalid:</strong>
+            <ul class="mt-1 ml-2 p-0">
+                ${s.validationErrors.map(e => `<li>${e}</li>`).join('')}
+            </ul>
+        </div>`;
+    }
+
+    detailsPanel.innerHTML = `
+        <h2 style="color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">${p(s.name)}</h2>
+        <p class="text-secondary mb-2" style="white-space: pre-wrap;">${p(s.description)}</p>
+        ${validationHtml}
+        ${axesHtml}
+        <div style="margin-top: auto; padding-top: 1rem;">
+            <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
+        </div>
+    `;
 }
 
 window.selectVariant = function(scenarioId, axisId, optionId, btnEl) {
@@ -564,25 +719,31 @@ function renderScoreAdjust() {
             row.style.padding = '0.2rem';
         }
 
+        const config = currentState.scenarioConfig?.scoreConfigs?.[key];
+
         const label = document.createElement('span');
-        label.textContent = formatName(key);
+        let labelText = formatName(key);
+        if (config && config.visibleToPlayers === false) {
+             labelText += ' 🔒';
+        }
+        label.textContent = labelText;
         
         const input = document.createElement('input');
         input.type = 'range';
-        input.min = 1;
-        input.max = 5;
+        input.min = config && config.min !== undefined ? config.min : 1;
+        input.max = config && config.max !== undefined ? config.max : 5;
         input.value = value;
         input.style.width = '100%';
         input.style.accentColor = 'var(--accent-blue)';
         
         const valueDisplay = document.createElement('span');
-        valueDisplay.textContent = value;
+        valueDisplay.textContent = config && config.unit ? `${value} ${config.unit}` : value;
         valueDisplay.style.fontWeight = 'bold';
         valueDisplay.style.minWidth = '20px';
         valueDisplay.style.textAlign = 'right';
         
         input.oninput = (e) => {
-            valueDisplay.textContent = e.target.value;
+            valueDisplay.textContent = config && config.unit ? `${e.target.value} ${config.unit}` : e.target.value;
         };
         
         currentInputs[key] = input;

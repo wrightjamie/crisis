@@ -338,6 +338,7 @@ module.exports = {
                                     { id: 'ev_naval_skirmish', delayMs: 90000, probability: 1.0 },
                                     { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
+                                    { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
                                     { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
                                     { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
                                 ]
@@ -352,6 +353,7 @@ module.exports = {
                                     { id: 'ev_naval_skirmish', delayMs: 90000, probability: 1.0 },
                                     { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
+                                    { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
                                     { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
                                     { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
                                 ]
@@ -932,6 +934,81 @@ module.exports = {
             location: [-51.5, -59.0],
             roleDescriptions: {
                 uk_commander: 'Neither a win nor a loss. The political ramifications will be significant.'
+            },
+            decisions: []
+        },
+
+        {
+            id: 'ev_resistance_contact',
+            name: 'FIDF Resistance Mobilizes',
+            description: 'Members of the Falkland Islands Defence Force (FIDF) and local civilians have formed a resistance network in the hills.',
+            location: [-51.75, -58.0],
+            roleDescriptions: {
+                uk_commander: 'Sir, we have encrypted comms from a local resistance cell. They are requesting a covert airdrop of anti-armor weapons to harass the enemy supply lines.'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'How should we handle the local resistance?',
+                    options: [
+                        {
+                            id: 'opt_arm_resistance',
+                            text: 'Airdrop weapons. We need them in the fight.',
+                            effects: {
+                                scores: { military_readiness: 1, uk_public_support: 1 },
+                                triggerEvents: [
+                                    { id: 'ev_resistance_success', delayMs: 180000, probability: 0.6 },
+                                    { id: 'ev_resistance_reprisal', delayMs: 180000, probability: 0.4 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'opt_stand_down_fidf',
+                            text: 'Order them to stand down and gather intel only. It is too dangerous.',
+                            effects: {
+                                scores: { military_readiness: -1 },
+                                triggerEvents: [
+                                    { id: 'ev_resistance_intel', delayMs: 150000, probability: 1.0 }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'ev_resistance_success',
+            name: 'Resistance Sabotage Success',
+            description: 'The local resistance has successfully ambushed an Argentine supply convoy.',
+            location: [-51.75, -58.0],
+            roleDescriptions: {
+                uk_commander: 'The FIDF cell hit them hard. Enemy logistics are suffering.'
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_resistance_reprisal',
+            name: 'Civilian Reprisals',
+            description: 'Following resistance activity, Argentine forces have begun harsh crackdowns on the civilian population.',
+            location: [-51.692, -57.858],
+            roleDescriptions: {
+                uk_commander: 'This is bad. The international press is getting wind of civilian casualties resulting from our armed proxies.'
+            },
+            autoEffects: {
+                scores: { uk_public_support: -2, international_pressure: 1 }
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_resistance_intel',
+            name: 'Critical Resistance Intel',
+            description: 'The local resistance network has provided invaluable intelligence on enemy troop movements.',
+            location: [-51.75, -58.0],
+            roleDescriptions: {
+                uk_commander: 'Their intel has identified a gap in the enemy air defense network. We can exploit this.'
+            },
+            autoEffects: {
+                scores: { military_readiness: 2 }
             },
             decisions: []
         },
