@@ -81,8 +81,10 @@
             <div class="admin-card mb-2" style="max-width: 500px; margin: 0 auto;">
                 <h2 class="card-title text-primary">Create New Game</h2>
                 <div class="flex-column gap-1">
-                    <input type="text" id="new-game-id" class="form-control" placeholder="4-Digit Game ID" maxlength="4" style="text-transform: uppercase;">
-                    <input type="text" id="new-game-name" class="form-control" placeholder="Game Name (e.g., Session 1)">
+                    <div class="flex-row gap-1 items-center">
+                        <input type="text" id="new-game-name" class="form-control flex-1" placeholder="Game Name (e.g., Session 1)">
+                        <button id="btn-random-name" class="btn btn-secondary" title="Random Name" style="padding: 0.5rem; display: flex; align-items: center; justify-content: center;">🔄</button>
+                    </div>
                     <button id="btn-create-game" class="btn btn-primary w-100">Create & Join Game</button>
                     <div id="create-error" class="text-red mt-1" style="display:none;"></div>
                 </div>
