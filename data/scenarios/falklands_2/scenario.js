@@ -339,6 +339,10 @@ module.exports = {
                                     { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
                                     { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
+                                    { id: 'ev_cyber_attack', delayMs: 240000, probability: 0.9 },
+                                    { id: 'ev_sub_detected', delayMs: 150000, probability: 0.8 },
+                                    { id: 'ev_supply_shortage', delayMs: 300000, probability: 0.85 },
+                                    { id: 'ev_pm_ultimatum', delayMs: 360000, probability: 1.0 },
                                     { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
                                     { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
                                 ]
@@ -354,6 +358,10 @@ module.exports = {
                                     { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
                                     { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
+                                    { id: 'ev_cyber_attack', delayMs: 240000, probability: 0.9 },
+                                    { id: 'ev_sub_detected', delayMs: 150000, probability: 0.8 },
+                                    { id: 'ev_supply_shortage', delayMs: 300000, probability: 0.85 },
+                                    { id: 'ev_pm_ultimatum', delayMs: 360000, probability: 1.0 },
                                     { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
                                     { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
                                 ]
@@ -1011,6 +1019,207 @@ module.exports = {
                 scores: { military_readiness: 2 }
             },
             decisions: []
+        },
+
+        {
+            id: 'ev_cyber_attack',
+            name: 'Severe Cyber Disruption',
+            description: 'GCHQ reports a massive, coordinated cyber attack targeting military logistics databases and satellite communications linking the Task Force to London.',
+            location: [-51.5, -59.0],
+            roleDescriptions: {
+                uk_commander: 'Sir, we are losing bandwidth. If they cripple our comms, we cannot coordinate the air defense network.'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'How should we allocate our cyber defense teams?',
+                    timeLimitMs: 45000,
+                    defaultOptionId: 'opt_cyber_defend',
+                    options: [
+                        {
+                            id: 'opt_cyber_defend',
+                            text: 'Prioritize defense. Shield the C2 networks at all costs.',
+                            effects: {
+                                scores: { military_readiness: 1, supply_lines: -1 }
+                            }
+                        },
+                        {
+                            id: 'opt_cyber_counter',
+                            text: 'Launch a counter-hack against their mainland grid to force them to back off.',
+                            effects: {
+                                scores: { international_pressure: 1, argentina_aggression: -1 },
+                                triggerEvents: [
+                                    { id: 'ev_cyber_blowback', delayMs: 90000, probability: 0.5 }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'ev_cyber_blowback',
+            name: 'Cyber Counter-Attack Fails',
+            description: 'The offensive cyber operation was traced back to UK assets, causing severe international diplomatic blowback.',
+            location: [-51.5, -59.0],
+            autoEffects: {
+                scores: { uk_public_support: -1, international_pressure: 2 }
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_sub_detected',
+            name: 'Unidentified Submarine Detected',
+            description: 'Sonar operators on HMS Defender have detected a faint acoustic signature matching a diesel-electric submarine operating inside the exclusion zone.',
+            location: [-51.0, -58.0],
+            roleDescriptions: {
+                uk_commander: 'It could be the ARA Salta. If they get a torpedo off, we lose a major surface asset. Do we engage?'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'What are the rules of engagement regarding the subsurface contact?',
+                    options: [
+                        {
+                            id: 'opt_sub_hunt',
+                            text: 'Declare it hostile. Prosecute and sink.',
+                            effects: {
+                                scores: { argentina_aggression: -1, international_pressure: 1 },
+                                triggerEvents: [
+                                    { id: 'ev_sub_sunk', delayMs: 120000, probability: 0.7 },
+                                    { id: 'ev_sub_evades', delayMs: 120000, probability: 0.3 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'opt_sub_shadow',
+                            text: 'Shadow the contact. Do not fire unless fired upon.',
+                            effects: {
+                                scores: { military_readiness: -1 },
+                                triggerEvents: [
+                                    { id: 'ev_sub_attacks', delayMs: 150000, probability: 0.4 }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'ev_sub_sunk',
+            name: 'Submarine Destroyed',
+            description: 'An ASW helicopter has successfully engaged and destroyed the hostile submarine.',
+            location: [-51.0, -58.0],
+            autoEffects: {
+                scores: { uk_public_support: 1, military_readiness: 1 }
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_sub_evades',
+            name: 'Submarine Contact Lost',
+            description: 'The unidentified submarine has slipped the sonar net and remains a threat in the sector.',
+            location: [-51.0, -58.0],
+            autoEffects: {
+                scores: { military_readiness: -1, uk_public_support: -1 } // Using existing scores
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_sub_attacks',
+            name: 'Submarine Launches Torpedoes',
+            description: 'The shadowed submarine has fired wire-guided torpedoes at the UK Task Force.',
+            location: [-51.0, -58.0],
+            roleDescriptions: {
+                uk_commander: 'Incoming torpedoes! We hesitated and now we are paying the price.'
+            },
+            autoEffects: {
+                scores: { military_readiness: -2, uk_public_support: -1 },
+                assetStateChanges: { hms_defender: 'damaged' }
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_supply_shortage',
+            name: 'Critical Supply Shortage',
+            description: 'Ammunition and medical supplies for the ground forces are running critically low.',
+            location: [-51.692, -57.858],
+            roleDescriptions: {
+                uk_commander: 'Sir, we cannot hold Stanley if we run out of bullets. We need a resupply now.'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'How do we deliver the emergency supplies?',
+                    options: [
+                        {
+                            id: 'opt_supply_sea',
+                            text: 'Send a surface convoy. It will be vulnerable to anti-ship missiles.',
+                            effects: {
+                                scores: { supply_lines: 1 },
+                                triggerEvents: [
+                                    { id: 'ev_convoy_hit', delayMs: 100000, probability: 0.4 }
+                                ]
+                            }
+                        },
+                        {
+                            id: 'opt_supply_air',
+                            text: 'Attempt a low-level airdrop using the A400M from Ascension.',
+                            conditions: {
+                                assets: { ascension_island: 'operational' }
+                            },
+                            effects: {
+                                scores: { supply_lines: 1, military_readiness: 1 },
+                                assetStateChanges: { falklands_a400m: 'deployed' }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'ev_convoy_hit',
+            name: 'Supply Convoy Ambushed',
+            description: 'The surface supply convoy was struck by Exocet missiles, resulting in heavy casualties and loss of materiel.',
+            location: [-51.5, -57.0],
+            autoEffects: {
+                scores: { uk_public_support: -2, supply_lines: -2 }
+            },
+            decisions: []
+        },
+        {
+            id: 'ev_pm_ultimatum',
+            name: 'Downing Street Ultimatum',
+            description: 'Due to catastrophic public backlash and mounting military failures, the Prime Minister has issued an ultimatum.',
+            location: [-51.5, -59.0],
+            conditions: {
+                maxScores: { uk_public_support: 1 }
+            },
+            roleDescriptions: {
+                uk_commander: 'The PM is threatening to relieve you of command and sue for peace if you cannot demonstrate immediate progress.'
+            },
+            decisions: [
+                {
+                    role: 'uk_commander',
+                    text: 'The political situation is untenable. What is your response?',
+                    options: [
+                        {
+                            id: 'opt_pm_resign',
+                            text: 'Offer my resignation. I cannot win under these political constraints.',
+                            effects: {
+                                triggerEvents: [ { id: 'ev_end_defeat', delayMs: 5000, probability: 1.0 } ]
+                            }
+                        },
+                        {
+                            id: 'opt_pm_push',
+                            text: 'Promise a decisive victory within 24 hours. (All or nothing).',
+                            effects: {
+                                scores: { military_readiness: 2, international_pressure: 2 }
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         {
             id: 'ev_us_support',
