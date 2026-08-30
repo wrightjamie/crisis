@@ -38,15 +38,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnCreateGame = document.getElementById('btn-create-game');
+    const operationAdjectives = ['Silent', 'Crimson', 'Iron', 'Swift', 'Phantom', 'Cobalt', 'Fallen', 'Hidden', 'Midnight', 'Shattered', 'Silver', 'Golden', 'Radiant', 'Black', 'White'];
+    const operationNouns = ['Smoke', 'Shield', 'Vanguard', 'Strike', 'Eagle', 'Serpent', 'Dawn', 'Storm', 'Horizon', 'Thunder', 'Shadow', 'Arrow', 'Spear', 'Crown', 'Sword'];
+
+    function getRandomOperationName() {
+        const adj = operationAdjectives[Math.floor(Math.random() * operationAdjectives.length)];
+        const noun = operationNouns[Math.floor(Math.random() * operationNouns.length)];
+        return `Operation ${adj} ${noun}`;
+    }
+
+    const nameInput = document.getElementById('new-game-name');
+    const btnRandomName = document.getElementById('btn-random-name');
+
+    if (nameInput) {
+        nameInput.value = getRandomOperationName();
+    }
+
+    if (btnRandomName && nameInput) {
+        btnRandomName.addEventListener('click', () => {
+            nameInput.value = getRandomOperationName();
+        });
+    }
+
     if (btnCreateGame) {
         btnCreateGame.addEventListener('click', () => {
-            const id = document.getElementById('new-game-id').value.trim().toLowerCase();
             const name = document.getElementById('new-game-name').value.trim();
-            if (id.length > 0 && name.length > 0) {
+            if (name.length > 0) {
                 document.getElementById('create-error').style.display = 'none';
-                socket.emit('create_game', { gameId: id, name });
+                socket.emit('create_game', { name });
             } else {
-                document.getElementById('create-error').textContent = 'Please enter both ID and Name';
+                document.getElementById('create-error').textContent = 'Please enter a Game Name';
                 document.getElementById('create-error').style.display = 'block';
             }
         });

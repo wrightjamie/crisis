@@ -64,7 +64,7 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 400px;
+  width: min(400px, 100%);
   height: 100%;
   background-color: var(--bg-secondary);
   border-left: 1px solid var(--border-color);
@@ -411,7 +411,7 @@ body:has(dialog[open]) {
   margin-left: auto;
   height: 100vh;
   max-height: 100vh;
-  width: 400px;
+  width: min(400px, 100%);
   max-width: 90vw;
   border: none;
   border-left: 1px solid var(--border-color);
@@ -595,14 +595,14 @@ body:has(dialog[open]) {
   text-align: center;
 }
 .fac-dashboard-container[open] { display: block; }
-.fac-dashboard-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+.fac-dashboard-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr)); }
 .fac-event-list { overflow-y: auto; overflow-x: auto; max-height: max(75vh, 400px); padding-right: var(--space-sm); }
 .fac-roles { font-size: var(--text-xs); display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); border-left: 1px solid var(--border-color); padding-left: var(--space-md); margin-left: var(--space-sm); }
 
 /* Station Badge Styles */
 .station-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
     gap: var(--space-xs);
 }
 
@@ -671,7 +671,7 @@ body:has(dialog[open]) {
   background: var(--bg-primary); color: var(--text-primary); flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: var(--space-xl); 
 }
 .client-holding-overlay[open], .client-holding-hidden[open] { display: flex; }
-.client-role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); width: 100%; max-width: 800px; }
+.client-role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: var(--space-md); width: 100%; max-width: 800px; }
 .client-btn-taken { background-color: var(--bg-tertiary); color: var(--text-muted); border: 1px solid var(--border-color); font-weight: var(--font-bold); cursor: not-allowed; padding: var(--space-lg); font-size: var(--text-md); }
 .client-btn-free { background-color: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--accent-blue); font-weight: var(--font-bold); cursor: pointer; padding: var(--space-lg); font-size: var(--text-md); }
 
@@ -838,13 +838,13 @@ body:has(dialog[open]) {
 .pb-xs { padding-bottom: var(--space-xs); }
 .border-bottom { border-bottom: 1px solid var(--border-color); }
 .scenario-tree-toggle { position: absolute; left: -30px; top: 15px; width: 22px; height: 22px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: var(--z-base); font-family: monospace; font-size: var(--text-base); font-weight: var(--font-bold); line-height: 1; }
-.scenario-tree-node { background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--border-color); padding: var(--space-sm); border-radius: var(--radius-sm); width: 300px; }
+.scenario-tree-node { background: var(--bg-secondary); border: 1px solid var(--border-color); border-left: 4px solid var(--border-color); padding: var(--space-sm); border-radius: var(--radius-sm); width: min(300px, 100%); }
 .scenario-tree-node.clickable { cursor: pointer; transition: transform var(--transition-fast), border-left-width var(--transition-fast); }
 .scenario-tree-node.clickable:hover { transform: translateX(4px); border-left-width: 8px; }
 .scenario-node-title { color: var(--text-primary); font-weight: var(--font-bold); margin-bottom: var(--space-xs); font-size: var(--text-base); line-height: 1.2; }
 .scenario-node-status { font-size: var(--space-sm); font-weight: var(--font-bold); letter-spacing: 0.5px; }
 .scenario-node-reqs { font-size: var(--space-sm); color: var(--text-muted); margin-top: var(--space-sm); border-top: 1px solid var(--border-color); padding-top: var(--space-xs); }
-.scenario-explorer-container { padding: var(--space-md); background: var(--bg-primary); border-radius: 8px; min-width: 600px; overflow-x: auto; }
+.scenario-explorer-container { padding: var(--space-md); background: var(--bg-primary); border-radius: 8px; min-width: 100%; overflow-x: auto; }
 .pl-lg { padding-left: var(--space-xl); }
 .pl-md { padding-left: var(--space-lg); }
 .scenario-stage-group { margin-bottom: var(--space-md); border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden; }
