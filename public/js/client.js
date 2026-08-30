@@ -396,11 +396,10 @@ const map = L.map('map', {
     zoomControl: false // custom placement or styling if needed
 }).setView([54.5, -2.5], 6); // Default view, overridden when role registered
 
-// Add dark map tiles (CartoDB Dark Matter is great for this aesthetic)
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; CartoDB',
-    subdomains: 'abcd',
-    maxZoom: 19
+// Add dark map tiles (Esri World Dark Gray Base)
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    maxZoom: 16
 }).addTo(map);
 
 // Keep track of markers to update/remove them
