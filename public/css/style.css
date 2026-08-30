@@ -238,7 +238,7 @@ body {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 0 var(--space-xs);
+  padding: var(--space-sm);
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
@@ -490,7 +490,7 @@ body:has(dialog[open]) {
   background: none;
   border: none;
   color: var(--text-primary);
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-md) var(--space-md);
   font-size: var(--text-base);
   cursor: pointer;
   border-bottom: 1px solid var(--border-color);
