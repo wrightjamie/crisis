@@ -67,12 +67,45 @@
         .ai-active-dot {
             animation: ai-pulse 1.5s infinite;
         }
+        .scenario-item { cursor: pointer; transition: border-color 0.2s, background-color 0.2s; }
+        .scenario-item:hover { border-color: var(--border-color); background-color: var(--bg-secondary); }
+        .scenario-item.active { border-color: var(--accent-blue); background-color: var(--bg-tertiary); }
     </style>
 </head>
 <body>
+    <div id="dashboard-view" style="display: none;">
+        <header class="top-bar">
+            <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
+        </header>
+        <div class="facilitator-container">
+            <div class="admin-card mb-2" style="max-width: 500px; margin: 0 auto;">
+                <h2 class="card-title text-primary">Create New Game</h2>
+                <div class="flex-column gap-1">
+                    <div class="flex-row gap-1 items-center">
+                        <input type="text" id="new-game-name" class="form-control flex-1" placeholder="Game Name (e.g., Session 1)">
+                        <button id="btn-random-name" class="btn btn-secondary" title="Random Name" style="padding: 0.5rem; display: flex; align-items: center; justify-content: center;">🔄</button>
+                    </div>
+                    <button id="btn-create-game" class="btn btn-primary w-100">Create & Join Game</button>
+                    <div id="create-error" class="text-red mt-1" style="display:none;"></div>
+                </div>
+            </div>
+
+            <h2 class="mb-1 text-center">Active Games</h2>
+            <div id="games-list" class="fac-dashboard-grid">
+                <!-- Games injected by JS -->
+            </div>
+
+            <h2 class="mt-3 mb-1 text-center text-muted">Inactive Games (Dead Games)</h2>
+            <div id="dead-games-list" class="fac-dashboard-grid" style="opacity: 0.7;">
+                <!-- Dead Games injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div id="facilitator-view" style="display: none;">
     <header class="top-bar">
         <div class="role-badge flex-center gap-2">
-            FACILITATOR (ADMIN)
+            FACILITATOR (ADMIN) - Game: <span id="fac-game-id-display"></span>
             <div id="ai-status" title="AI Briefing Engine Status" class="fac-roles">
                 <span id="ai-status-dot" class="fac-badge"></span>
                 <span id="ai-status-text">AI Initializing...</span>
@@ -95,17 +128,22 @@
         </div>
     </header>
 
-    <dialog id="facilitator-holding-screen" class="fac-dashboard-container">
+    <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content" style="max-width: 1200px; width: 90vw;">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
-
         <div class="mb-2 text-center" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); max-width: 400px; margin: 0 auto 1.5rem auto;">
             <input type="checkbox" id="ai-enabled-toggle" checked style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
             <label for="ai-enabled-toggle" class="text-base text-bold text-secondary" style="cursor: pointer;">Enable AI Briefing Generator</label>
         </div>
 
-        <div id="scenarios-list" class="fac-dashboard-grid">
-            <!-- Scenarios injected via JS -->
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2xl); align-items: start; text-align: left;">
+            <div id="scenarios-list" class="fac-event-list" style="flex: 1 1 min(250px, 100%); display: flex; flex-direction: column; gap: var(--space-md);">
+                <!-- Scenario items injected via JS -->
+            </div>
+            <div id="scenario-details-panel" class="admin-card" style="flex: 2 1 min(300px, 100%); min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <p class="text-secondary text-lg">Select a scenario to view details</p>
+            </div>
         </div>
+
     </dialog>
 
     <!-- Lobby Screen -->
@@ -201,6 +239,9 @@
 
         </div>
     </div>
+
+        </div>
+    </div> <!-- End facilitator-view -->
 
     <!-- Facilitator Info Dialog -->
     <dialog class="info-dialog" id="fac-info-panel">
