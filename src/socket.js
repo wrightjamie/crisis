@@ -9,13 +9,43 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('create_game', (data) => {
-            if (!data.gameId || !data.name) return;
-            const engine = gameManager.createGame(data.gameId, data.name);
+            if (!data.name) return;
+
+            // Generate a unique 4-digit numeric ID
+            let gameId;
+            let attempts = 0;
+            do {
+                gameId = Math.floor(1000 + Math.random() * 9000).toString(); // 1000 to 9999
+                attempts++;
+                if (attempts > 100) {
+                    socket.emit('dashboard_error', 'Failed to generate a unique Game ID.');
+                    return;
+                }
+            } while (gameManager.games.has(gameId));
+
+            // Ensure name is unique among active games
+            let finalName = data.name;
+            let counter = 2;
+            let nameExists = false;
+
+            do {
+                nameExists = false;
+                for (const [_, engine] of gameManager.games.entries()) {
+                    if (engine.name.toLowerCase() === finalName.toLowerCase()) {
+                        nameExists = true;
+                        finalName = `${data.name} ${counter}`;
+                        counter++;
+                        break;
+                    }
+                }
+            } while (nameExists);
+
+            const engine = gameManager.createGame(gameId, finalName);
             if (engine) {
-                socket.emit('game_created', data.gameId);
+                socket.emit('game_created', gameId);
                 io.emit('dashboard_data', gameManager.getAllGamesInfo());
             } else {
-                socket.emit('dashboard_error', 'Game ID already exists.');
+                socket.emit('dashboard_error', 'Failed to create game.');
             }
         });
 
