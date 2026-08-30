@@ -20,7 +20,7 @@
             .grid {
                 display: grid;
                 display: grid-lanes;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
                 align-items: start;
                 gap: 2rem;
             }
@@ -30,7 +30,7 @@
         @supports not (display: grid-lanes) {
             .grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
                 align-items: start;
                 gap: 2rem;
             }
@@ -273,7 +273,8 @@
                     const colWidth = sizer.offsetWidth;
                     document.querySelectorAll('.grid .admin-card').forEach(card => {
                         if (card.classList.contains('span-2')) {
-                            card.style.width = `calc(${colWidth * 2}px + 2rem)`;
+                            // Don't expand beyond 100% of the grid container width
+                            card.style.width = `min(calc(${colWidth * 2}px + 2rem), 100%)`;
                         } else {
                             card.style.width = `${colWidth}px`;
                         }
