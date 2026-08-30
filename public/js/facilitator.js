@@ -288,7 +288,7 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     let actionHtml = '';
     if (pendingSocketId) {
         actionHtml = `
-            <div style="display:flex; gap: 2px; margin-left: auto;">
+            <div style="display:flex; gap: 8px; margin-left: auto;">
                 <button class="btn-icon action-approve" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
                 <button class="btn-icon action-reject" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
             </div>
