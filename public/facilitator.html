@@ -130,11 +130,11 @@
 
     <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content" style="max-width: 1200px; width: 90vw;">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
-        <div class="fac-dashboard-grid" style="grid-template-columns: 1fr 2fr; gap: var(--space-2xl); align-items: start; text-align: left;">
-            <div id="scenarios-list" class="fac-event-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2xl); align-items: start; text-align: left;">
+            <div id="scenarios-list" class="fac-event-list" style="flex: 1 1 min(250px, 100%); display: flex; flex-direction: column; gap: var(--space-md);">
                 <!-- Scenario items injected via JS -->
             </div>
-            <div id="scenario-details-panel" class="admin-card" style="min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div id="scenario-details-panel" class="admin-card" style="flex: 2 1 min(300px, 100%); min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
                 <p class="text-secondary text-lg">Select a scenario to view details</p>
             </div>
         </div>
