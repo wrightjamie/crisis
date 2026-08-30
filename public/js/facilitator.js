@@ -452,6 +452,11 @@ function renderLobbyScreen() {
     document.getElementById('lobby-scenario-title').innerHTML = window.parseAcronyms ? window.parseAcronyms(config.name) : config.name;
     document.getElementById('lobby-scenario-desc').innerHTML = window.parseAcronyms ? window.parseAcronyms(config.description) : config.description;
     document.getElementById('lobby-error-msg').textContent = '';
+
+    const gameIdDisplay = document.getElementById('lobby-game-id-display');
+    if (gameIdDisplay) {
+        gameIdDisplay.textContent = gameId || 'N/A';
+    }
 }
 
 let variantSelections = {}; // { scenarioId: { axisId: optionId } }
