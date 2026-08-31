@@ -68,16 +68,16 @@ function renderScenarioExplorer() {
         let toggleHtml = '';
         if (hasChildren) {
             const btnText = isTriggered ? '[-]' : '[+]';
-            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.style.display==='none'){ul.style.display='block';this.textContent='[-]'}else{ul.style.display='none';this.textContent='[+]'};" class="scenario-tree-toggle" title="Toggle branch">${btnText}</button>`;
+            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.classList.contains('d-none')){ul.classList.remove('d-none');this.textContent='[-]'}else{ul.classList.add('d-none');this.textContent='[+]'};" class="scenario-tree-toggle" title="Toggle branch">${btnText}</button>`;
         }
 
         // Semantic list item structure with CSS variables for dynamic branch coloring
         let nodeHtml = `
-            <li style="--branch-color: ${borderColor}; position: relative;">
+            <li class="relative" style="--branch-color: ${borderColor};">
                 ${toggleHtml}
-                <div ${clickHandler} class="scenario-tree-node ${interactivity ? 'clickable' : ''}" style="border-left-color: ${borderColor};" class="explorer-node">
+                <div ${clickHandler} class="scenario-tree-node explorer-node border-color-dynamic ${interactivity ? 'clickable' : ''}" style="--branch-color: ${borderColor};">
                     <div class="scenario-node-title">${template.name}</div>
-                    <div class="scenario-node-status" style="color: ${statusColor};">${statusText}</div>
+                    <div class="scenario-node-status status-color" style="--status-color: ${statusColor};">${statusText}</div>
         `;
         
         if (template.conditions) {
@@ -96,7 +96,7 @@ function renderScenarioExplorer() {
         if (hasChildren) {
             const displayStyle = isTriggered ? 'block' : 'none';
             // Nested ul
-            nodeHtml += `<ul style="display: ${displayStyle};">`;
+            nodeHtml += `<ul class="${isTriggered ? '' : 'd-none'}">`;
             children.forEach(child => {
                 nodeHtml += renderNode(child.id, false);
             });
@@ -131,11 +131,11 @@ function renderScenarioExplorer() {
             
             html += `
                 <div class="scenario-stage-group">
-                    <div onclick="const ul = this.nextElementSibling; if(ul.style.display==='none'){ul.style.display='block';this.querySelector('.toggle').textContent='[-]'}else{ul.style.display='none';this.querySelector('.toggle').textContent='[+]'}" class="scenario-stage-header">
+                    <div onclick="const ul = this.nextElementSibling; if(ul.classList.contains('d-none')){ul.classList.remove('d-none');this.querySelector('.toggle').textContent='[-]'}else{ul.classList.add('d-none');this.querySelector('.toggle').textContent='[+]'}" class="scenario-stage-header">
                         <span class="text-bold text-accent-blue">Stage ${i + 1}: ${stage.name}</span>
                         <span class="toggle" class="font-mono">${toggleText}</span>
                     </div>
-                    <div class="scenario-stage-content" style="display: ${displayStyle};">
+                    <div class="scenario-stage-content ${stage.triggered ? '' : 'd-none'}">
                         <ul class="scenario-tree" class="pl-md">
             `;
             

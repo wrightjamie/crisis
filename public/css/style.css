@@ -41,8 +41,6 @@ body {
   letter-spacing: 0.05em;
 }
 
-
-
 /* Main Content Area */
 .main-content {
   display: block;
@@ -271,7 +269,6 @@ body {
      Let's do a different layout: Map takes 70%, Event feed takes 30% */
   grid-template-columns: 1fr 30%;
 }
-
 
 /* Leaflet Overrides for Dark Mode */
 .leaflet-layer,
@@ -508,7 +505,6 @@ body:has(dialog[open]) {
 .text-danger {
   color: var(--accent-red) !important;
 }
-
 
 /* Acronym Hover State */
 .acronym-hover {
@@ -856,3 +852,117 @@ body:has(dialog[open]) {
 .d-block { display: block !important; }
 .d-none { display: none !important; }
 .d-flex { display: flex !important; }
+
+/* Utility Classes */
+.d-none { display: none !important; }
+.d-flex { display: flex; }
+.d-flex-col { display: flex; flex-direction: column; }
+.align-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+.w-100 { width: 100%; }
+.max-w-200 { max-width: 200px; }
+.max-w-300 { max-width: 300px; }
+.max-w-500 { max-width: 500px; }
+.max-w-600 { max-width: 600px; }
+.ml-auto { margin-left: auto; }
+.mt-auto { margin-top: auto; }
+.pt-md { padding-top: var(--space-md); }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+.flex-wrap { flex-wrap: wrap; }
+.items-start { align-items: start; }
+.text-left { text-align: left; }
+.line-height-15 { line-height: 1.5; }
+.overflow-y-auto { overflow-y: auto; }
+.relative { position: relative; }
+.uppercase { text-transform: uppercase; }
+.font-bold { font-weight: bold; }
+.opacity-50 { opacity: 0.5; }
+.opacity-60 { opacity: 0.6; }
+.opacity-70 { opacity: 0.7; }
+.grayscale { filter: grayscale(1); }
+.cursor-not-allowed { cursor: not-allowed; }
+.white-space-pre-wrap { white-space: pre-wrap; }
+
+/* Scenario Explorer Overrides */
+.scenario-tree-node {
+  /* Retain for semantic styling overrides if needed */
+}
+
+/* Modals */
+.modal-lg { max-width: 1200px; width: 90vw; }
+
+/* Facilitator Holding Screen Components */
+.fac-holding-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xl);
+  align-items: start;
+  text-align: left;
+}
+
+.fac-holding-list {
+  flex: 1 1 min(250px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.fac-holding-details {
+  flex: 2 1 min(300px, 100%);
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.fac-slider {
+  width: 100%;
+  max-width: 300px;
+  accent-color: var(--accent-blue);
+}
+
+/* Facilitator Scenario Header */
+.fac-scenario-title {
+  color: var(--accent-blue);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Additional Utility Classes */
+.text-center { text-align: center; }
+.text-lg { font-size: var(--text-lg); }
+.text-primary { color: var(--text-primary); }
+.bg-status-1 { background-color: var(--status-1); }
+.bg-accent-orange { background-color: var(--accent-orange); }
+.role-badge-small { font-size: 0.8em; padding: 2px 6px; }
+.ml-sm { margin-left: var(--space-sm); }
+.mr-sm { margin-right: var(--space-sm); }
+.p-05 { padding: 0.5rem; }
+.mb-1 { margin-bottom: 1rem; }
+.ml-auto { margin-left: auto; }
+
+/* Status and State Classes */
+.status-color { color: var(--status-color, var(--text-primary)); }
+.status-color-success { color: var(--status-1); }
+.status-color-fail { color: var(--accent-red); }
+.status-color-warning { color: var(--accent-orange); }
+.status-color-offline { color: var(--accent-orange); }
+
+.bg-status-success { background-color: var(--status-1); }
+.bg-status-fail { background-color: var(--accent-red); }
+.bg-status-warning { background-color: var(--accent-orange); }
+.bg-status-offline { background-color: var(--accent-orange); }
+
+.border-color-dynamic { border-left-color: var(--branch-color, var(--border-color)); }
+
+/* Secret Badge Overrides */
+.secret-badge-left { margin-left: 8px; }
+.secret-badge-right { margin-right: 8px; }
+.mx-auto { margin-left: auto; margin-right: auto; }
