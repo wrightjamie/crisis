@@ -479,6 +479,11 @@ function updateEdgeMarkers() {
 
 map.on('move', updateEdgeMarkers);
 map.on('zoom', updateEdgeMarkers);
+map.on('zoomend', () => {
+    if (localState && localState.events && localState.assets) {
+        renderMap(localState.events, localState.assets);
+    }
+});
 map.on('resize', updateEdgeMarkers);
 
 socket.on('decision_made', (data) => {
@@ -759,6 +764,8 @@ function updateUI() {
     refreshInfoPanel();
 }
 
+window.activeCluster = null;
+
 function renderMap(events, assets) {
     // Clear old markers
     for (let id in mapMarkers) {
@@ -766,26 +773,11 @@ function renderMap(events, assets) {
     }
     mapMarkers = {};
 
-    // Add assets
-    assets.forEach(asset => {
-        const iconHtml = `<div class="map-marker map-marker-asset"></div>`;
-        const icon = L.divIcon({ html: iconHtml, className: '' });
-        const marker = L.marker(asset.location, { icon });
+    // Merge items
+    let items = [];
 
-        marker.on('click', () => {
-            currentInfoView = { type: 'asset', id: asset.id };
-            openPanel('Asset Details');
-            refreshInfoPanel();
-        });
-
-        marker.addTo(map);
-        mapMarkers[asset.id] = marker;
-    });
-
-    // Add events
+    // Process Events
     events.forEach(evt => {
-
-        // Determine if this event is "resolved"
         const eventTasks = localState.decisionTasks.filter(t => t.eventId === evt.id);
         const hasTasks = eventTasks.length > 0;
         
@@ -796,23 +788,117 @@ function renderMap(events, assets) {
             isResolved = viewedEvents.has(evt.id);
         }
         
-        const markerClass = isResolved ? 'map-marker-event-resolved' : 'map-marker-event';
-        
-        const iconHtml = `<div class="map-marker ${markerClass}"></div>`;
-        const icon = L.divIcon({ html: iconHtml, className: '' });
-        const marker = L.marker(evt.location, { icon });
+        items.push({
+            type: 'event',
+            id: evt.id,
+            location: evt.location,
+            isResolved: isResolved,
+            priority: isResolved ? 3 : 1,
+            data: evt
+        });
+    });
 
-        // Open info panel on click
+    // Process Assets
+    assets.forEach(asset => {
+        items.push({
+            type: 'asset',
+            id: asset.id,
+            location: asset.location,
+            priority: 2,
+            data: asset
+        });
+    });
+
+    // Cluster Items
+    const clusters = [];
+    const pixelDistThreshold = 30;
+
+    items.forEach(item => {
+        const pt = map.latLngToContainerPoint(L.latLng(item.location));
+
+        let foundCluster = null;
+        for (let cluster of clusters) {
+            const clusterPt = map.latLngToContainerPoint(L.latLng(cluster.location));
+            const dx = pt.x - clusterPt.x;
+            const dy = pt.y - clusterPt.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist <= pixelDistThreshold) {
+                foundCluster = cluster;
+                break;
+            }
+        }
+
+        if (foundCluster) {
+            foundCluster.items.push(item);
+            // Re-evaluate highest priority item in the cluster
+            if (item.priority < foundCluster.highestPriorityItem.priority) {
+                foundCluster.highestPriorityItem = item;
+            }
+        } else {
+            clusters.push({
+                location: item.location,
+                items: [item],
+                highestPriorityItem: item
+            });
+        }
+    });
+
+    // Render Clusters
+    clusters.forEach((cluster, index) => {
+        const clusterId = `cluster_${index}`;
+        const mainItem = cluster.highestPriorityItem;
+
+        let markerClass = '';
+        if (mainItem.type === 'event') {
+            markerClass = mainItem.isResolved ? 'map-marker-event-resolved' : 'map-marker-event';
+        } else {
+            markerClass = 'map-marker-asset';
+        }
+
+        let badgeHtml = '';
+        if (cluster.items.length > 1) {
+            badgeHtml = `<div class="cluster-badge">${cluster.items.length}</div>`;
+        }
+        
+        const iconHtml = `<div class="map-marker ${markerClass}">${badgeHtml}</div>`;
+        const icon = L.divIcon({ html: iconHtml, className: '' });
+        const marker = L.marker(cluster.location, { icon });
+
         marker.on('click', () => {
-            viewedEvents.add(evt.id);
-            currentInfoView = { type: 'event', id: evt.id };
-            openPanel('Event Details');
-            refreshInfoPanel();
-            renderMap(localState.events, localState.assets); // Re-render to update marker color
+            if (cluster.items.length > 1) {
+                if (!window.activeCluster || window.activeCluster.clusterId !== clusterId) {
+                    window.activeCluster = {
+                        clusterId: clusterId,
+                        items: cluster.items,
+                        currentIndex: 0
+                    };
+                } else {
+                    window.activeCluster.currentIndex = (window.activeCluster.currentIndex + 1) % cluster.items.length;
+                }
+                const activeItem = window.activeCluster.items[window.activeCluster.currentIndex];
+                if (activeItem.type === 'event') {
+                    viewedEvents.add(activeItem.id);
+                }
+                currentInfoView = { type: activeItem.type, id: activeItem.id };
+                openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
+                refreshInfoPanel();
+                renderMap(localState.events, localState.assets); // Re-render to update marker color
+            } else {
+                window.activeCluster = null;
+                const activeItem = cluster.items[0];
+                if (activeItem.type === 'event') {
+                    viewedEvents.add(activeItem.id);
+                }
+                currentInfoView = { type: activeItem.type, id: activeItem.id };
+                openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
+                refreshInfoPanel();
+                renderMap(localState.events, localState.assets);
+            }
         });
 
         marker.addTo(map);
-        mapMarkers[evt.id] = marker;
+        mapMarkers[clusterId] = marker;
     });
 
     updateEdgeMarkers();
@@ -1000,37 +1086,72 @@ function buildActionsPanelHtml(p) {
     return html;
 }
 
+window.cycleCluster = function(delta) {
+    if (!window.activeCluster) return;
+    const len = window.activeCluster.items.length;
+    window.activeCluster.currentIndex = (window.activeCluster.currentIndex + delta + len) % len;
+
+    const activeItem = window.activeCluster.items[window.activeCluster.currentIndex];
+    if (activeItem.type === 'event') {
+        viewedEvents.add(activeItem.id);
+    }
+
+    currentInfoView = { type: activeItem.type, id: activeItem.id };
+    openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
+    refreshInfoPanel();
+
+    // Re-render map to update event markers if they were unread
+    renderMap(localState.events, localState.assets);
+};
+
 function refreshInfoPanel() {
     if (!currentInfoView || !localState) return;
 
     const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
 
+    let contentHtml = '';
+
     if (currentInfoView.type === 'ai') {
-        infoContent.innerHTML = buildAiPanelHtml(p);
-        document.getElementById('btn-request-ai-briefing').onclick = (e) => {
-            socket.emit('request_ai_briefing', role);
-            e.target.textContent = 'Requesting...';
-            e.target.disabled = true;
-            e.target.style.opacity = '0.5';
-        };
+        contentHtml = buildAiPanelHtml(p);
     } else if (currentInfoView.type === 'event') {
-        const html = buildEventPanelHtml(p);
-        if (html === null) {
+        contentHtml = buildEventPanelHtml(p);
+        if (contentHtml === null) {
             closePanel();
-        } else {
-            infoContent.innerHTML = html;
+            return;
         }
     } else if (currentInfoView.type === 'asset') {
-        const html = buildAssetPanelHtml(p);
-        if (html === null) {
+        contentHtml = buildAssetPanelHtml(p);
+        if (contentHtml === null) {
             closePanel();
-        } else {
-            infoContent.innerHTML = html;
+            return;
         }
     } else if (currentInfoView.type === 'wiki') {
-        infoContent.innerHTML = window.generateWikiHtml(localState, currentInfoView.category, currentInfoView.itemId);
+        contentHtml = window.generateWikiHtml(localState, currentInfoView.category, currentInfoView.itemId);
     } else if (currentInfoView.type === 'actions') {
-        infoContent.innerHTML = buildActionsPanelHtml(p);
+        contentHtml = buildActionsPanelHtml(p);
+    }
+
+    if (contentHtml) {
+        let headerHtml = '';
+        if (window.activeCluster && window.activeCluster.items.length > 1 && (currentInfoView.type === 'event' || currentInfoView.type === 'asset')) {
+            headerHtml = `
+                <div class="flex-between mb-2 bg-secondary p-1 radius-sm border-color" style="border: 1px solid var(--border-color);">
+                    <button class="btn btn-secondary text-sm" onclick="window.cycleCluster(-1)">&larr; Prev</button>
+                    <div class="text-sm text-bold">Item ${window.activeCluster.currentIndex + 1} of ${window.activeCluster.items.length} at Location</div>
+                    <button class="btn btn-secondary text-sm" onclick="window.cycleCluster(1)">Next &rarr;</button>
+                </div>
+            `;
+        }
+        infoContent.innerHTML = headerHtml + contentHtml;
+
+        if (currentInfoView.type === 'ai') {
+            document.getElementById('btn-request-ai-briefing').onclick = (e) => {
+                socket.emit('request_ai_briefing', role);
+                e.target.textContent = 'Requesting...';
+                e.target.disabled = true;
+                e.target.style.opacity = '0.5';
+            };
+        }
     }
 }
 

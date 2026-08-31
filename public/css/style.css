@@ -690,8 +690,24 @@ body:has(dialog[open]) {
 }
 
 /* Map Markers */
-.map-marker { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-white); }
+.map-marker { position: relative; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-white); }
 .map-marker-asset { background-color: var(--accent-blue); }
+.cluster-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-size: 10px;
+    font-weight: bold;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+}
 .map-marker-event { background-color: var(--accent-red); animation: marker-pulse 2s infinite; }
 .map-marker-event-resolved { background-color: var(--text-muted); }
 .map-marker-edge { position: absolute; background-color: var(--accent-orange); transform: translate(-50%, -50%); cursor: pointer; pointer-events: auto; animation: marker-pulse 2s infinite; }
