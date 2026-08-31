@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const stateText = g.status === 'holding' ? 'Lobby/Holding' : 'Active Scenario';
             const facBadgeClass = g.hasFacilitator ? 'fac-badge-online' : 'fac-badge-offline';
             const facBadgeText = g.hasFacilitator ? 'Facilitator Online' : 'Facilitator Offline';
-            const facBadge = `<span class="role-badge ${facBadgeClass}">${facBadgeText}</span>`;
+            const facBadge = `<span class="role-badge ${facBadgeClass} role-badge-small">${facBadgeText}</span>`;
             const dateStr = new Date(g.lastActivity).toLocaleDateString();
 
             card.innerHTML = `
@@ -304,7 +304,7 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     let actionHtml = '';
     if (pendingSocketId) {
         actionHtml = `
-            <div style="display:flex; gap: 8px; margin-left: auto;">
+            <div class="d-flex gap-sm ml-auto">
                 <button class="btn-icon action-approve" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
                 <button class="btn-icon action-reject" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
             </div>
@@ -314,7 +314,7 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     }
     
     return `
-        <div class="station-badge ${badgeModeClass} ${statusClass}" style="display: flex; align-items: center;">
+        <div class="station-badge ${badgeModeClass} ${statusClass} d-flex align-center">
             <div class="station-indicator ${badgeModeClass} ${statusClass}"></div>
             <span>${role.toUpperCase()}${mandatoryHtml}</span>
             ${actionHtml}
@@ -619,12 +619,12 @@ function renderScenarioDetails(scenarioId) {
     }
 
     detailsPanel.innerHTML = `
-        <h2 style="color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">${p(s.name)}</h2>
-        <p class="text-secondary mb-2" style="white-space: pre-wrap;">${p(s.description)}</p>
+        <h2 class="fac-scenario-title">${p(s.name)}</h2>
+        <p class="text-secondary mb-2 white-space-pre-wrap">${p(s.description)}</p>
         ${guideHtml}
         ${validationHtml}
         ${axesHtml}
-        <div style="margin-top: auto; padding-top: 1rem;">
+        <div class="mt-auto pt-md">
             <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
         </div>
     `;
@@ -752,7 +752,7 @@ function renderGlobalView() {
     recentEvents.forEach(evt => {
         let secretBadge = '';
         if (evt.visibleTo || evt.hiddenFrom) {
-            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-left: 8px;">Secret</span>`;
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase secret-badge-left">Secret</span>`;
         }
         eventsList.innerHTML += `
             <div class="card mb-1 p-1">
@@ -781,7 +781,7 @@ function renderGlobalView() {
 
         let secretBadge = '';
         if (task.visibleTo || task.hiddenFrom) {
-            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-right: 8px;">Secret</span>`;
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase secret-badge-right">Secret</span>`;
         }
 
         tasksList.innerHTML += `

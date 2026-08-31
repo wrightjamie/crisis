@@ -74,7 +74,7 @@
     </style>
 </head>
 <body>
-    <div id="dashboard-view" style="display: none;">
+    <div id="dashboard-view" class="d-none">
         <header class="top-bar">
             <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
         </header>
@@ -94,7 +94,7 @@
                         </button>
                     </div>
                     <button id="btn-create-game" class="btn btn-primary w-100">Create & Join Game</button>
-                    <div id="create-error" class="text-red mt-1" style="display:none;"></div>
+                    <div id="create-error" class="text-red mt-1 d-none"></div>
                 </div>
             </div>
 
@@ -160,7 +160,7 @@
         </div>
     </div>
 
-    <div id="facilitator-view" style="display: none;">
+    <div id="facilitator-view" class="d-none">
     <header class="top-bar">
         <div class="role-badge flex-center gap-2">
             FACILITATOR (ADMIN) - Game: <span id="fac-game-id-display"></span>
@@ -193,17 +193,17 @@
         </div>
     </header>
 
-    <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content" style="max-width: 1200px; width: 90vw;">
+    <dialog id="facilitator-holding-screen" class="facilitator-container fac-modal-content modal-lg">
         <h1 class="mb-2 text-center text-primary">Select Scenario</h1>
         <div class="mb-2 text-center">
             <label for="player-filter-slider" id="player-filter-label" class="text-secondary text-base text-bold mb-1 d-block">Players: Any</label>
-            <input type="range" id="player-filter-slider" min="0" max="10" value="0" style="width: 100%; max-width: 300px; accent-color: var(--accent-blue);">
+            <input type="range" id="player-filter-slider" min="0" max="10" value="0" class="fac-slider">
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: var(--space-2xl); align-items: start; text-align: left;">
-            <div id="scenarios-list" class="fac-event-list" style="flex: 1 1 min(250px, 100%); display: flex; flex-direction: column; gap: var(--space-md);">
+        <div class="fac-holding-grid">
+            <div id="scenarios-list" class="fac-event-list fac-holding-list">
                 <!-- Scenario items injected via JS -->
             </div>
-            <div id="scenario-details-panel" class="admin-card" style="flex: 2 1 min(300px, 100%); min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div id="scenario-details-panel" class="admin-card fac-holding-details">
                 <p class="text-secondary text-lg">Select a scenario to view details</p>
             </div>
         </div>
@@ -313,7 +313,7 @@
             <h2 id="fac-info-title" class="m-0">Event Info</h2>
             <button class="btn-icon action-reject" onclick="closeFacilitatorPanel()">&times;</button>
         </div>
-        <div class="panel-content p-md flex-1" id="fac-info-content" style="overflow-y: auto;">
+        <div class="panel-content p-md flex-1 overflow-y-auto" id="fac-info-content">
             <!-- Content injected via JS -->
         </div>
     </dialog>
