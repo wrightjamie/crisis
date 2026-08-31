@@ -18,10 +18,10 @@
             <h1 class="mb-2 text-primary">Join Crisis Game</h1>
             <p class="text-secondary mb-3">Enter the 4-digit Game ID provided by your facilitator.</p>
             <div class="flex-column gap-1 align-center">
-                <input type="text" id="join-game-id" class="form-control text-center text-lg" placeholder="e.g. 1234" maxlength="4" style="max-width: 200px; text-transform: uppercase;">
-                <button id="btn-join-game" class="btn btn-primary w-100" style="max-width: 200px;">Join Game</button>
+                <input type="text" id="join-game-id" class="form-control text-center text-lg max-w-200 uppercase" placeholder="e.g. 1234" maxlength="4">
+                <button id="btn-join-game" class="btn btn-primary w-100 max-w-200">Join Game</button>
             </div>
-            <p id="join-error" class="text-red mt-2" style="display: none;"></p>
+            <p id="join-error" class="text-red mt-2 d-none"></p>
         </div>
     </dialog>
 
@@ -40,7 +40,7 @@
 
     <dialog id="role-selection-screen" class="client-holding-hidden">
         <h1 class="mb-2 text-center text-primary">Select Your Station</h1>
-        <div class="text-center text-secondary mb-2" style="max-width: 600px; line-height: 1.5;">
+        <div class="text-center text-secondary mb-2 max-w-600 line-height-15">
             <p class="mb-1">Welcome to the Crisis Wargame.</p>
             <p class="mb-1">In this simulation, you and your team will face a significant, unfolding national challenge. Choose your role below and work together to manage the crisis, allocate resources, and mitigate the impact.</p>
             <p>Different roles will be given different challenges throughout the crisis. Your decisions will have positive and negative impacts.</p>
@@ -66,12 +66,12 @@
         </div>
     </dialog>
 
-    <div id="app" style="display: none;">
+    <div id="app" class="d-none">
         <!-- Top Bar -->
         <header class="top-bar">
             <div id="role-display" class="role-badge">Loading...</div>
             <div class="flex-center gap-1">
-                <button id="btn-actions" class="btn btn-secondary relative">Actions<span id="actions-badge" class="nav-badge" style="display:none">!</span></button>
+                <button id="btn-actions" class="btn btn-secondary relative">Actions<span id="actions-badge" class="nav-badge d-none">!</span></button>
                 <button id="btn-wiki" class="btn btn-secondary">Wiki</button>
                 <button id="btn-ai-briefing" class="btn btn-primary client-scenario-btn">
                     <span class="icon">✨</span> Intelligence Briefing

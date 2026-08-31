@@ -959,7 +959,7 @@ function buildActionsPanelHtml(p) {
         if (isMet) {
             html += `<div class="card wiki-card-blue mb-2">`;
         } else {
-            html += `<div class="card wiki-card-blue mb-2" style="opacity: 0.6; filter: grayscale(1);">`;
+            html += `<div class="card wiki-card-blue mb-2 opacity-60 grayscale">`;
         }
         
         if (action.image) {
@@ -980,14 +980,14 @@ function buildActionsPanelHtml(p) {
         if (approvers) {
             html += `<div class="card-meta mt-1 text-status-4" class="text-bold">Requires approval from: ${approvers.toUpperCase()}</div>`;
         } else {
-            html += `<div class="card-meta mt-1 text-status-1" style="font-weight:bold;">Immediate Execution</div>`;
+            html += `<div class="card-meta mt-1 text-status-1 font-bold">Immediate Execution</div>`;
         }
 
         if (isMet) {
             html += `<button class="btn btn-primary mt-sm w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
         } else {
             html += `<div class="mt-2 text-status-4 text-xs font-mono">🔒 REQUIREMENTS NOT MET</div>`;
-            html += `<button class="btn btn-primary mt-sm w-100" disabled style="opacity: 0.5; cursor: not-allowed;">Initiate Action</button>`;
+            html += `<button class="btn btn-primary mt-sm w-100 opacity-50 cursor-not-allowed" disabled>Initiate Action</button>`;
         }
         html += `</div>`;
     });

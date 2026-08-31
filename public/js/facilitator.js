@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'admin-card';
 
             const stateText = g.status === 'holding' ? 'Lobby/Holding' : 'Active Scenario';
-            const facBadge = g.hasFacilitator ? '<span class="role-badge" style="background-color: var(--status-1); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Online</span>' : '<span class="role-badge" style="background-color: var(--accent-orange); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Offline</span>';
+            const facBadge = g.hasFacilitator ? '<span class="role-badge bg-status-success text-primary role-badge-small">Facilitator Online</span>' : '<span class="role-badge bg-status-offline text-primary role-badge-small">Facilitator Offline</span>';
             const dateStr = new Date(g.lastActivity).toLocaleDateString();
 
             card.innerHTML = `
-                <h3 class="card-title" style="color: var(--text-primary);"></h3>
+                <h3 class="card-title text-primary"></h3>
                 <p class="text-sm text-secondary mb-1">Status: ${stateText}<br>Last Active: ${dateStr}</p>
                 <div class="mb-1">${facBadge}</div>
                 <div class="flex-column gap-05">
@@ -302,7 +302,7 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     let actionHtml = '';
     if (pendingSocketId) {
         actionHtml = `
-            <div style="display:flex; gap: 8px; margin-left: auto;">
+            <div class="d-flex gap-sm ml-auto">
                 <button class="btn-icon action-approve" onclick="approvePlayer('${pendingSocketId}')" title="Approve Player">✓</button>
                 <button class="btn-icon action-reject" onclick="rejectPlayer('${pendingSocketId}')" title="Reject Player">&times;</button>
             </div>
@@ -312,7 +312,7 @@ function createStationBadgeHtml(role, isOnline, pendingSocketId, mode, isMandato
     }
     
     return `
-        <div class="station-badge ${badgeModeClass} ${statusClass}" style="display: flex; align-items: center;">
+        <div class="station-badge ${badgeModeClass} ${statusClass} d-flex align-center">
             <div class="station-indicator ${badgeModeClass} ${statusClass}"></div>
             <span>${role.toUpperCase()}${mandatoryHtml}</span>
             ${actionHtml}
@@ -590,11 +590,11 @@ function renderScenarioDetails(scenarioId) {
     }
 
     detailsPanel.innerHTML = `
-        <h2 style="color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">${p(s.name)}</h2>
-        <p class="text-secondary mb-2" style="white-space: pre-wrap;">${p(s.description)}</p>
+        <h2 class="fac-scenario-title">${p(s.name)}</h2>
+        <p class="text-secondary mb-2 white-space-pre-wrap">${p(s.description)}</p>
         ${validationHtml}
         ${axesHtml}
-        <div style="margin-top: auto; padding-top: 1rem;">
+        <div class="mt-auto pt-md">
             <button class="btn btn-primary w-100 mt-1" onclick="openLobby('${s.id}')" ${s.isValid === false ? 'disabled' : ''}>Open Lobby</button>
         </div>
     `;
@@ -722,7 +722,7 @@ function renderGlobalView() {
     recentEvents.forEach(evt => {
         let secretBadge = '';
         if (evt.visibleTo || evt.hiddenFrom) {
-            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-left: 8px;">Secret</span>`;
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase secret-badge-left">Secret</span>`;
         }
         eventsList.innerHTML += `
             <div class="card mb-1 p-1">
@@ -751,7 +751,7 @@ function renderGlobalView() {
 
         let secretBadge = '';
         if (task.visibleTo || task.hiddenFrom) {
-            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase" style="margin-right: 8px;">Secret</span>`;
+            secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase secret-badge-right">Secret</span>`;
         }
 
         tasksList.innerHTML += `
