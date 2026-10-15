@@ -117,24 +117,24 @@
 
 ### UK Crisis: Russian Tensions (uk_crisis)
 - [x] Event: "Russian Submarine Surfaces in the Channel" (ev_sub_surfaces) needs an image
-- [ ] Event: "Severing of Undersea Internet Cables" (ev_undersea_cables) needs an image
-- [ ] Event: "UK Forces Casualty Leaks to Press" (ev_uk_casualty_leak) needs an image
-- [ ] Event: "Attempted Chemical Attack on UK Soil" (ev_chemical_attempt) needs an image
-- [ ] Event: "US Declares European Neutrality" (ev_us_neutrality) needs an image
+- [x] Event: "Severing of Undersea Internet Cables" (ev_undersea_cables) needs an image
+- [x] Event: "UK Forces Casualty Leaks to Press" (ev_uk_casualty_leak) needs an image
+- [x] Event: "Attempted Chemical Attack on UK Soil" (ev_chemical_attempt) needs an image
+- [x] Event: "US Declares European Neutrality" (ev_us_neutrality) needs an image
 - [x] Event: "Hypersonic Strike on RAF Akrotiri" (ev_akrotiri_strike) needs an image
-- [ ] Event: "NATO Article 5 Ambiguity" (ev_article5_ambiguity) needs an image
-- [ ] Event: "Coordinated Strikes on RAF Bases" (ev_raf_bases_strike) needs an image
-- [ ] Event: "Strike on HMNB Portsmouth" (ev_portsmouth_strike) needs an image
-- [ ] Event: "First Strike on HMNB Clyde (Faslane)" (ev_faslane_strike_1) needs an image
-- [ ] Event: "Second Strike on HMNB Clyde" (ev_faslane_strike_2) needs an image
+- [x] Event: "NATO Article 5 Ambiguity" (ev_article5_ambiguity) needs an image
+- [x] Event: "Coordinated Strikes on RAF Bases" (ev_raf_bases_strike) needs an image
+- [x] Event: "Strike on HMNB Portsmouth" (ev_portsmouth_strike) needs an image
+- [x] Event: "First Strike on HMNB Clyde (Faslane)" (ev_faslane_strike_1) needs an image
+- [x] Event: "Second Strike on HMNB Clyde" (ev_faslane_strike_2) needs an image
 - [x] Event: "Targeted Strike on UK Power Grid" (ev_power_grid_strike) needs an image
 - [x] Event: "Total Airspace Incursion" (ev_airspace_incursion) needs an image
-- [ ] Event: "Imminent Nuclear Readiness Detected" (ev_nuclear_readiness) needs an image
-- [ ] Event: "CABINET DECISION: Final Authorization" (ev_final_authorization) needs an image
+- [x] Event: "Imminent Nuclear Readiness Detected" (ev_nuclear_readiness) needs an image
+- [x] Event: "CABINET DECISION: Final Authorization" (ev_final_authorization) needs an image
 - [ ] Event: "US Authorizes Logistics Support" (ev_us_support_success) needs an image
-- [ ] Event: "US Declines Immediate Logistics Support" (ev_us_support_fail) needs an image
+- [x] Event: "US Declines Immediate Logistics Support" (ev_us_support_fail) needs an image
 - [ ] Event: "Backchannel Success: Russia Agrees to Pause" (ev_russia_deescalate) needs an image
-- [ ] Event: "Backchannel Failure: Russia Leaks Call" (ev_russia_leak) needs an image
+- [x] Event: "Backchannel Failure: Russia Leaks Call" (ev_russia_leak) needs an image
 - [ ] Event: "Covert Cyber Offensive Successful" (ev_cyber_success) needs an image
 - [ ] Event: "Covert Cyber Offensive Thwarted" (ev_cyber_fail) needs an image
 - [ ] Event: "Special Forces Operation Success" (ev_sf_success) needs an image
