@@ -146,7 +146,7 @@
 - [x] Event: "END GAME: Diplomatic Breakthrough" (ev_endgame_diplomatic) needs an image
 - [x] Event: "END GAME: Domestic Collapse" (ev_endgame_domestic) needs an image
 - [ ] Event: "END GAME: European Defence Pact" (ev_endgame_eu_defense) needs an image
-- [ ] Event: "Strike Planning Leaked" (ev_strike_options_leak) needs an image
+- [x] Event: "Strike Planning Leaked" (ev_strike_options_leak) needs an image
 - [ ] Event: "Strike Planning Secured" (ev_strike_options_secured) needs an image
 - [ ] Event: "Strike Options Ready" (ev_strike_options_ready) needs an image
 - [ ] Action: "Request Deep Strike Options" (act_request_strike_options) needs an image

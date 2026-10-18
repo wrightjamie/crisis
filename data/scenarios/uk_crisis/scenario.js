@@ -1102,6 +1102,7 @@ CRITICAL RULES:
                 id: 'ev_strike_options_leak',
                 stage: 'stage_4',
                 name: 'Strike Planning Leaked',
+                image: '/images/events/ev_strike_options_leak.jpg',
                 hidden: true,
                 description: 'Intelligence regarding our requests for deep strike target packages has leaked. Russia is infuriated, and some European allies are questioning our escalation control.',
                 location: [51.5033, -0.1276],
