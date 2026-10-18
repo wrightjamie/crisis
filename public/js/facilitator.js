@@ -453,6 +453,22 @@ function renderLobbyScreen() {
     document.getElementById('lobby-scenario-desc').innerHTML = window.parseAcronyms ? window.parseAcronyms(config.description) : config.description;
     document.getElementById('lobby-error-msg').textContent = '';
 
+    let lobbyGuideEl = document.getElementById('lobby-guide-link-container');
+    if (config.guideUrl) {
+        if (!lobbyGuideEl) {
+            lobbyGuideEl = document.createElement('div');
+            lobbyGuideEl.id = 'lobby-guide-link-container';
+            lobbyGuideEl.className = 'mb-2';
+            const descEl = document.getElementById('lobby-scenario-desc');
+            if (descEl && descEl.parentNode) {
+                descEl.parentNode.insertBefore(lobbyGuideEl, descEl.nextSibling);
+            }
+        }
+        lobbyGuideEl.innerHTML = `<a href="${config.guideUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary text-sm">📄 Open Instructor & Player Guide (Print Pack)</a>`;
+    } else if (lobbyGuideEl) {
+        lobbyGuideEl.innerHTML = '';
+    }
+
     const gameIdDisplay = document.getElementById('lobby-game-id-display');
     if (gameIdDisplay) {
         gameIdDisplay.textContent = gameId || 'N/A';
@@ -527,7 +543,7 @@ function renderHoldingScreen() {
         div.innerHTML = `
             <h3 class="text-primary m-0 mb-xs">${p(s.name)}</h3>
             <p class="text-secondary text-sm m-0">${shortDesc}</p>
-            <div class="text-xs text-muted mt-1">${minP}-${maxP} Players</div>
+            <div class="text-xs text-muted mt-1">${minP}-${maxP} Players${s.guideUrl ? ' • 📄 Guide Available' : ''}</div>
         `;
 
         div.onclick = () => {
@@ -557,6 +573,17 @@ function renderScenarioDetails(scenarioId) {
 
     detailsPanel.style.display = 'block';
     detailsPanel.style.textAlign = 'left';
+
+    let guideHtml = '';
+    if (s.guideUrl) {
+        guideHtml = `
+            <div class="mb-2">
+                <a href="${s.guideUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary text-sm" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                    <span>📄</span> Open Instructor & Player Guide (Print Pack)
+                </a>
+            </div>
+        `;
+    }
 
     let axesHtml = '';
     if (s.variantAxes && s.variantAxes.length > 0) {
@@ -592,6 +619,7 @@ function renderScenarioDetails(scenarioId) {
     detailsPanel.innerHTML = `
         <h2 style="color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">${p(s.name)}</h2>
         <p class="text-secondary mb-2" style="white-space: pre-wrap;">${p(s.description)}</p>
+        ${guideHtml}
         ${validationHtml}
         ${axesHtml}
         <div style="margin-top: auto; padding-top: 1rem;">

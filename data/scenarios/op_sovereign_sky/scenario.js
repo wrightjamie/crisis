@@ -2,6 +2,7 @@ module.exports = {
     id: 'op_sovereign_sky',
     name: 'Op Sovereign Sky: Air Power Doctrine',
     description: 'Command the UK Joint Force Air Component (JFAC) through a comprehensive expeditionary crisis, applying RAFAC Senior and Master Air Cadet Air Power doctrine across all domains.',
+    guideUrl: '/scenarios/op_sovereign_sky/guide.html',
     mapConfig: { center: [35.0, 33.5], zoom: 6 },
     roles: ['jfac', 'control', 'strike', 'isr', 'mobility', 'joint', 'display'],
     roleNames: {
