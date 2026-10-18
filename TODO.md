@@ -153,3 +153,20 @@
 - [ ] Action: "Strike Russian Airbase (F-35)" (act_strike_airbase) needs an image
 - [ ] Action: "Strike Russian C2 Node (F-35)" (act_strike_c2) needs an image
 - [ ] Action: "European Coalition Building" (act_eu_coalition) needs an image
+
+### Op Sovereign Sky: Air Power Doctrine (op_sovereign_sky)
+- [ ] Asset: "RAF Brize Norton (UK Hub)" (a_brize) needs an image
+- [ ] Asset: "RAF Waddington (ISR Hub)" (a_waddington) needs an image
+- [ ] Asset: "RAF Akrotiri (Forward Spoke)" (a_akrotiri) needs an image
+- [ ] Asset: "P-8A Poseidon MRA1" (a_poseidon) needs an image
+- [ ] Asset: "RC-135W Rivet Joint" (a_rivetjoint) needs an image
+- [ ] Asset: "Chinook & Puma JHC Detachment" (a_chinook) needs an image
+- [ ] Event: "2.2 Asymmetric Warfare: Insurgent Drone Swarm on Perimeter" (ev_7_asymmetric_swarm) needs an image
+- [ ] Event: "3.3 Limitations of Air Attack: Weather & Limited Payload" (ev_13_weather_payload) needs an image
+- [ ] Event: "3.5 Information Activities: Non-Kinetic Attack (EW & PsyOps)" (ev_15_urban_roe) needs an image
+- [ ] Event: "4.1 Airborne Operations: Air-Drop vs Air-Land" (ev_16_airborne_ops) needs an image
+- [ ] Event: "4.3 Intra-Theatre Mobility: Joint Helicopter Command (Chinook & Puma)" (ev_18_littoral_jhc) needs an image
+- [ ] Event: "4.4 Personnel Recovery (Combat Recovery) & 3-Tier Medevac" (ev_19_csar_medevac) needs an image
+- [ ] Event: "ENDGAME B: Logistical Culmination & Independent Air Fallacy" (ev_endgame_culmination) needs an image
+- [ ] Event: "Information Activities: Psychological Operations Broadcast" (ev_psyops_broadcast) needs an image
+
