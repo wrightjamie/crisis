@@ -1,0 +1,134 @@
+{
+    "JFAC": {
+        "definition": "Joint Force Air Component",
+        "wiki": "The UK Joint Force Air Component (UK JFAC), headquartered within 11 Group at RAF High Wycombe, provides scalable and deployable operational-level Command and Control (C2) for UK and coalition air operations."
+    },
+    "C2": {
+        "definition": "Command and Control",
+        "wiki": "The exercise of authority and direction by a designated commander over assigned forces across the Strategic, Operational, and Tactical levels of warfare."
+    },
+    "A2AD": {
+        "definition": "Anti-Access / Area Denial",
+        "wiki": "Adversary integrated air defence systems (long-range Surface-to-Air Missiles, coastal defence cruise missiles, and electronic warfare) designed to prevent friendly forces from entering or operating freely within a theatre."
+    },
+    "OCA": {
+        "definition": "Offensive Counter-Air",
+        "wiki": "Proactive operations conducted to destroy, disrupt, or degrade enemy air and missile capabilities (aircraft, runways, radar sites, SAMs) as close to their source as possible."
+    },
+    "DCA": {
+        "definition": "Defensive Counter-Air",
+        "wiki": "All defensive measures designed to detect, identify, intercept, and destroy or negate enemy forces attempting to attack friendly airbases and forces. Divided into Active DCA (fighters and SAMs) and Passive DCA (Hardening, Dispersal, Camouflage, Concealment, and Deception)."
+    },
+    "QRA": {
+        "definition": "Quick Reaction Alert",
+        "wiki": "High-readiness Typhoon FGR4 fighter aircraft held at immediate readiness 24/7 to scramble and intercept unidentified or hostile aircraft approaching friendly airspace."
+    },
+    "CAP": {
+        "definition": "Combat Air Patrol",
+        "wiki": "An aircraft patrol provided over an objective area, the force protected, the critical area of a combat zone, or in an air defence area, for the purpose of intercepting and destroying hostile aircraft before they reach their targets."
+    },
+    "CAS": {
+        "definition": "Close Air Support",
+        "wiki": "A Counter-Land air attack operation against hostile targets in close proximity to friendly ground forces, requiring detailed Air-Land Integration (ALI) and de-confliction via Joint Terminal Attack Controllers (JTACs)."
+    },
+    "AI": {
+        "definition": "Air Interdiction",
+        "wiki": "A Counter-Land air attack operation conducted at significant distances behind enemy lines to divert, disrupt, delay, or destroy the enemy's military potential before it can be brought to bear effectively against friendly forces."
+    },
+    "SCAR": {
+        "definition": "Strike, Coordination and Reconnaissance",
+        "wiki": "A hybrid Counter-Land mission combining Air Interdiction, Close Air Support, and ISR where combat aircraft fly into a defined area to detect, coordinate reconnaissance on, and attack targets."
+    },
+    "BAI": {
+        "definition": "Battlefield Air Interdiction",
+        "wiki": "Air Interdiction against hostile surface targets which are in a position to directly affect friendly forces in the near term, including anti-surface operations to neutralize mobile SAM resupply convoys."
+    },
+    "ASW": {
+        "definition": "Anti-Submarine Warfare",
+        "wiki": "A Counter-Sea operation using maritime patrol aircraft (such as the P-8A Poseidon) and helicopters equipped with acoustic sensors (sonobuoys), radar, and torpedoes to locate, track, and attack enemy submarines."
+    },
+    "ASuW": {
+        "definition": "Anti-Surface Warfare",
+        "wiki": "A Counter-Sea operation conducted to detect, track, and engage enemy surface warships and fast attack craft in coordination with maritime forces."
+    },
+    "EW": {
+        "definition": "Electronic Warfare",
+        "wiki": "Military action under Information Activities involving the use of electromagnetic energy to deny the opponent freedom of access across the electromagnetic spectrum (jamming radars and communications) while protecting friendly access."
+    },
+    "ISR": {
+        "definition": "Intelligence, Surveillance and Reconnaissance",
+        "wiki": "One of the four fundamental roles of Air Power. Coordinates the acquisition, processing, and dissemination of timely, accurate battlespace information across the 9-step ISR cycle."
+    },
+    "SIGINT": {
+        "definition": "Signals Intelligence",
+        "wiki": "Intelligence derived from intercepting adversary communications and electronic signals (collected by platforms such as the RC-135W Rivet Joint)."
+    },
+    "MASINT": {
+        "definition": "Measurement and Signature Intelligence",
+        "wiki": "Scientific and technical intelligence obtained by quantitative and qualitative analysis of nuclear, optical, radiofrequency, acoustic, seismic, or materials data."
+    },
+    "GEOINT": {
+        "definition": "Geospatial Intelligence",
+        "wiki": "Intelligence derived from the exploitation and analysis of overhead imagery and geospatial mapping data regarding terrain and features."
+    },
+    "OSINT": {
+        "definition": "Open-Source Intelligence",
+        "wiki": "Intelligence collected from publicly available sources such as the internet, social media, commercial shipping data, news media, and academic publications."
+    },
+    "TECHINT": {
+        "definition": "Technical Intelligence",
+        "wiki": "Intelligence derived from the collection, processing, analysis, and exploitation of captured foreign military equipment, weapons, and hardware."
+    },
+    "HUMINT": {
+        "definition": "Human Intelligence",
+        "wiki": "Intelligence gathered directly from human sources, informants, diplomatic reporting, and interrogations."
+    },
+    "FININT": {
+        "definition": "Financial Intelligence",
+        "wiki": "Intelligence gathered from the analysis of monetary transactions, banking flows, and financial networks used by state or non-state actors."
+    },
+    "NEC": {
+        "definition": "Network Enabled Capability",
+        "wiki": "The coherent integration of sensors, decision-makers, effectors, and support capabilities via data links (such as Link-16) to deliver the right information to the right place at the right time."
+    },
+    "AAR": {
+        "definition": "Air-to-Air Refuelling",
+        "wiki": "The in-flight transfer of fuel from a tanker aircraft (such as the RAF Voyager) to receiver aircraft, overcoming Air Power's limitation of impermanence and increasing Reach, Endurance, and Flexibility."
+    },
+    "JHC": {
+        "definition": "Joint Helicopter Command",
+        "wiki": "The tri-service organisation uniting battlefield helicopters (such as RAF Chinook and Puma HC2) for Intra-Theatre air mobility, troop movement, underslung loads, and Combat Recovery."
+    },
+    "MERT": {
+        "definition": "Medical Emergency Response Team",
+        "wiki": "Specialist airborne medical team embarked on support helicopters (Chinook/Puma) to provide advanced resuscitation during Forward Aeromedical Evacuation from the point of wounding."
+    },
+    "ALI": {
+        "definition": "Air-Land Integration",
+        "wiki": "The processes, structures, and procedures used to plan, coordinate, control, and de-conflict air and land operations in a shared battlespace."
+    },
+    "AMI": {
+        "definition": "Air-Maritime Integration",
+        "wiki": "The coordination of combat air, maritime patrol aircraft (P-8A Poseidon), and naval surface/sub-surface forces (Type 45 Destroyers, Queen Elizabeth-class Carriers) across the maritime domain."
+    },
+    "PNT": {
+        "definition": "Positioning, Navigation and Timing",
+        "wiki": "Space-enabled satellite capabilities (such as GPS) essential for modern aircraft navigation, sensor synchronization, and precision-guided munitions."
+    },
+    "RPAS": {
+        "definition": "Remotely Piloted Air System",
+        "wiki": "Uncrewed aircraft controlled remotely by a pilot on the ground (such as the MQ-9A Reaper and Protector RG Mk1), providing persistent MALE surveillance and precision strike."
+    },
+    "HAPS": {
+        "definition": "High-Altitude Pseudo-Satellite",
+        "wiki": "Solar-powered stratospheric uncrewed platforms (such as the Zephyr) operating at ~70,000ft to exploit Height and Perspective for weeks of persistent surveillance."
+    },
+    "JTAC": {
+        "definition": "Joint Terminal Attack Controller",
+        "wiki": "A qualified service member on the ground who directs the action of combat aircraft engaged in Close Air Support (CAS) and other offensive air operations to ensure target accuracy and prevent friendly fire."
+    },
+    "SAM": {
+        "definition": "Surface-to-Air Missile",
+        "wiki": "Ground- or ship-launched guided missile designed to destroy aircraft or other missiles."
+    }
+}
