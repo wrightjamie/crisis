@@ -2,6 +2,7 @@
 // Shared code between Client, Facilitator, and Server
 
 function checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEvents = [], activeRoles = []) {
+    if (obj.requiresUnlock && !unlockedEvents.includes(obj.id)) return false;
     const c = obj.conditions;
     if (!c) return true;
     if (c.minScores && !Object.entries(c.minScores).every(([k, v]) => (scores[k] || 0) >= v)) return false;

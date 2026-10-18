@@ -910,6 +910,9 @@ function _checkAssetWarnings(assetReqs, currentState) {
 
 function buildFacilitatorEventConditionsWarning(template, currentState) {
     let reasonHtml = '';
+    if (template.requiresUnlock && !(currentState.unlockedEvents || []).includes(template.id)) {
+        reasonHtml += `<div>• Event must be unlocked by a prior decision</div>`;
+    }
     if (template.conditions) {
         if (template.conditions.minScores) reasonHtml += _checkMinScoreWarnings(template.conditions.minScores, currentState);
         if (template.conditions.maxScores) reasonHtml += _checkMaxScoreWarnings(template.conditions.maxScores, currentState);
