@@ -145,14 +145,14 @@
 - [x] Event: "European Coalition Fails" (ev_eu_fail) needs an image
 - [x] Event: "END GAME: Diplomatic Breakthrough" (ev_endgame_diplomatic) needs an image
 - [x] Event: "END GAME: Domestic Collapse" (ev_endgame_domestic) needs an image
-- [ ] Event: "END GAME: European Defence Pact" (ev_endgame_eu_defense) needs an image
+- [x] Event: "END GAME: European Defence Pact" (ev_endgame_eu_defense) needs an image
 - [x] Event: "Strike Planning Leaked" (ev_strike_options_leak) needs an image
-- [ ] Event: "Strike Planning Secured" (ev_strike_options_secured) needs an image
-- [ ] Event: "Strike Options Ready" (ev_strike_options_ready) needs an image
-- [ ] Action: "Request Deep Strike Options" (act_request_strike_options) needs an image
-- [ ] Action: "Strike Russian Airbase (F-35)" (act_strike_airbase) needs an image
-- [ ] Action: "Strike Russian C2 Node (F-35)" (act_strike_c2) needs an image
-- [ ] Action: "European Coalition Building" (act_eu_coalition) needs an image
+- [x] Event: "Strike Planning Secured" (ev_strike_options_secured) needs an image
+- [x] Event: "Strike Options Ready" (ev_strike_options_ready) needs an image
+- [x] Action: "Request Deep Strike Options" (act_request_strike_options) needs an image
+- [x] Action: "Strike Russian Airbase (F-35)" (act_strike_airbase) needs an image
+- [x] Action: "Strike Russian C2 Node (F-35)" (act_strike_c2) needs an image
+- [x] Action: "European Coalition Building" (act_eu_coalition) needs an image
 
 ### Op Sovereign Sky: Air Power Doctrine (op_sovereign_sky)
 - [ ] Asset: "RAF Brize Norton (UK Hub)" (a_brize) needs an image
