@@ -139,12 +139,12 @@
 - [x] Event: "Covert Cyber Offensive Thwarted" (ev_cyber_fail) needs an image
 - [x] Event: "Special Forces Operation Success" (ev_sf_success) needs an image
 - [x] Event: "Special Forces Operation Compromised" (ev_sf_fail) needs an image
-- [ ] Event: "Deep Strike Success" (ev_f35_success) needs an image
-- [ ] Event: "Deep Strike Failure" (ev_f35_fail) needs an image
-- [ ] Event: "European Coalition Formed" (ev_eu_success) needs an image
-- [ ] Event: "European Coalition Fails" (ev_eu_fail) needs an image
-- [ ] Event: "END GAME: Diplomatic Breakthrough" (ev_endgame_diplomatic) needs an image
-- [ ] Event: "END GAME: Domestic Collapse" (ev_endgame_domestic) needs an image
+- [x] Event: "Deep Strike Success" (ev_f35_success) needs an image
+- [x] Event: "Deep Strike Failure" (ev_f35_fail) needs an image
+- [x] Event: "European Coalition Formed" (ev_eu_success) needs an image
+- [x] Event: "European Coalition Fails" (ev_eu_fail) needs an image
+- [x] Event: "END GAME: Diplomatic Breakthrough" (ev_endgame_diplomatic) needs an image
+- [x] Event: "END GAME: Domestic Collapse" (ev_endgame_domestic) needs an image
 - [ ] Event: "END GAME: European Defence Pact" (ev_endgame_eu_defense) needs an image
 - [ ] Event: "Strike Planning Leaked" (ev_strike_options_leak) needs an image
 - [ ] Event: "Strike Planning Secured" (ev_strike_options_secured) needs an image
