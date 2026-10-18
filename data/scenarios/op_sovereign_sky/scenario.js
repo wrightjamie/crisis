@@ -151,7 +151,7 @@ CRITICAL RULES:
         { id: 'a_voyager', name: 'Voyager KC2/KC3 Tanker', location: [34.60, 33.01], state: 'operational', tags: ['air', 'mobility', 'aar'], image: '/images/assets/voyager_refueler.png', briefing: 'Air-to-Air Refuelling and strategic transport aircraft, vital for overcoming Air Power\'s limitation of impermanence.' },
         { id: 'a_poseidon', name: 'P-8A Poseidon MRA1', location: [35.20, 32.50], state: 'operational', tags: ['air', 'isr', 'maritime'], briefing: 'Multi-role maritime patrol aircraft from RAF Lossiemouth, equipped with acoustic sensors and high-resolution radar for ASW and ASuW.' },
         { id: 'a_rivetjoint', name: 'RC-135W Rivet Joint', location: [35.50, 34.00], state: 'operational', tags: ['air', 'isr'], briefing: 'Dedicated electronic surveillance aircraft surveying the electromagnetic spectrum for SIGINT and MASINT.' },
-        { id: 'a_chinook', name: 'Chinook & Puma JHC Detachment', location: [34.65, 33.10], state: 'operational', tags: ['air', 'mobility', 'rotary'], briefing: 'Joint Helicopter Command support helicopters for intra-theatre tactical mobility, CASEVAC, and Combat Recovery.' },
+        { id: 'a_chinook', name: 'Chinook & Puma JHC Detachment', location: [34.65, 33.10], state: 'operational', tags: ['air', 'mobility', 'rotary'], image: '/images/assets/raf_chinook.jpg', briefing: 'Joint Helicopter Command support helicopters for intra-theatre tactical mobility, CASEVAC, and Combat Recovery.' },
         { id: 'a_type45', name: 'HMS Duncan (Type 45) & Wildcat', location: [34.20, 33.80], state: 'operational', tags: ['maritime', 'air'], image: '/images/assets/type_45_destroyer.png', briefing: 'Royal Navy Air Defence Destroyer with embarked Wildcat helicopter for Air-Maritime Integration (AMI) and Counter-Sea ops.' }
     ],
     stages: [
@@ -512,6 +512,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.62, 32.95],
+            image: '/images/events/ev_drone_swarm_perimeter.jpg',
             description: 'Minutes after the conventional raid, Non-State insurgents hiding in civilian vans outside the RAF Akrotiri perimeter fence launch a swarm of 15 low-flying commercial quadcopters rigged with explosives toward the fuel farm.',
             facilitatorNotes: 'Covers LO1 P1/P2 (Task 2, 4, 7): Asymmetrical Warfare, Vulnerability of Air Bases, Protect Enabler (RAF Regiment), and Electronic Warfare.',
             roleDescriptions: {
@@ -1109,6 +1110,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.42, 36.12],
+            image: '/images/events/ev_chinook_underslung_mountain.jpg',
             description: 'The paratroopers at Objective Talon urgently need artillery guns, ammunition pallets, and tactical troop movement across rugged mountain ridges where fixed-wing aircraft cannot land.',
             facilitatorNotes: 'Covers LO1 P1 (Task 3: Agility of Chinook) and LO2 P4/P6 (Task 18, 22, 23: Helicopters—Chinook & Puma HC2, Joint Helicopter Command, Intra-Theatre Air Mobility).',
             roleDescriptions: {
@@ -1147,6 +1149,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.45, 36.28],
+            image: '/images/events/ev_combat_recovery_medevac.jpg',
             description: 'FLASH OVERRIDE: An allied strike jet has suffered mechanical failure and the pilot has ejected into contested territory. Simultaneously, four British soldiers have sustained severe injuries in a mortar attack and require urgent evacuation from the battlefield all the way back to Queen Elizabeth Hospital Birmingham.',
             facilitatorNotes: 'Covers LO2 P6 (Task 22 & 23): Personnel Recovery (Combat Recovery vs Peacetime Recovery; Case Study: Exercise Volfa) and Aeromedical Evacuation (Forward, Tactical, and Strategic Medevac).',
             roleDescriptions: {
