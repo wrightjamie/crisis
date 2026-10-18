@@ -131,14 +131,14 @@
 - [x] Event: "Total Airspace Incursion" (ev_airspace_incursion) needs an image
 - [x] Event: "Imminent Nuclear Readiness Detected" (ev_nuclear_readiness) needs an image
 - [x] Event: "CABINET DECISION: Final Authorization" (ev_final_authorization) needs an image
-- [ ] Event: "US Authorizes Logistics Support" (ev_us_support_success) needs an image
+- [x] Event: "US Authorizes Logistics Support" (ev_us_support_success) needs an image
 - [x] Event: "US Declines Immediate Logistics Support" (ev_us_support_fail) needs an image
-- [ ] Event: "Backchannel Success: Russia Agrees to Pause" (ev_russia_deescalate) needs an image
+- [x] Event: "Backchannel Success: Russia Agrees to Pause" (ev_russia_deescalate) needs an image
 - [x] Event: "Backchannel Failure: Russia Leaks Call" (ev_russia_leak) needs an image
-- [ ] Event: "Covert Cyber Offensive Successful" (ev_cyber_success) needs an image
-- [ ] Event: "Covert Cyber Offensive Thwarted" (ev_cyber_fail) needs an image
-- [ ] Event: "Special Forces Operation Success" (ev_sf_success) needs an image
-- [ ] Event: "Special Forces Operation Compromised" (ev_sf_fail) needs an image
+- [x] Event: "Covert Cyber Offensive Successful" (ev_cyber_success) needs an image
+- [x] Event: "Covert Cyber Offensive Thwarted" (ev_cyber_fail) needs an image
+- [x] Event: "Special Forces Operation Success" (ev_sf_success) needs an image
+- [x] Event: "Special Forces Operation Compromised" (ev_sf_fail) needs an image
 - [ ] Event: "Deep Strike Success" (ev_f35_success) needs an image
 - [ ] Event: "Deep Strike Failure" (ev_f35_fail) needs an image
 - [ ] Event: "European Coalition Formed" (ev_eu_success) needs an image
