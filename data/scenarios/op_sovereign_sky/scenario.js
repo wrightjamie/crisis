@@ -143,14 +143,14 @@ CRITICAL RULES:
         }
     ],
     assets: [
-        { id: 'a_brize', name: 'RAF Brize Norton (UK Hub)', location: [51.75, -1.58], state: 'operational', tags: ['hub', 'mobility'], briefing: 'Primary UK Main Operating Base (Hub) for Strategic Transport (C-17 Globemaster), Tactical Transport (A400M Atlas), and Tankers (Voyager).' },
-        { id: 'a_waddington', name: 'RAF Waddington (ISR Hub)', location: [53.16, -0.52], state: 'operational', tags: ['hub', 'isr'], briefing: 'Home of No 1 ISR Wing: RC-135W Rivet Joint (SIGINT), Shadow R1, and remotely piloted Reaper/Protector RPAS.' },
-        { id: 'a_akrotiri', name: 'RAF Akrotiri (Forward Spoke)', location: [34.58, 32.98], state: 'operational', tags: ['spoke', 'airfield'], briefing: 'Forward Mounting Base (Spoke) in Cyprus. Enables Agility and Reach into theatre, protected by the RAF Regiment.' },
+        { id: 'a_brize', name: 'RAF Brize Norton (UK Hub)', location: [51.75, -1.58], state: 'operational', tags: ['hub', 'mobility'], image: '/images/assets/raf_brize_norton.jpg', briefing: 'Primary UK Main Operating Base (Hub) for Strategic Transport (C-17 Globemaster), Tactical Transport (A400M Atlas), and Tankers (Voyager).' },
+        { id: 'a_waddington', name: 'RAF Waddington (ISR Hub)', location: [53.16, -0.52], state: 'operational', tags: ['hub', 'isr'], image: '/images/assets/raf_waddington.jpg', briefing: 'Home of No 1 ISR Wing: RC-135W Rivet Joint (SIGINT), Shadow R1, and remotely piloted Reaper/Protector RPAS.' },
+        { id: 'a_akrotiri', name: 'RAF Akrotiri (Forward Spoke)', location: [34.58, 32.98], state: 'operational', tags: ['spoke', 'airfield'], image: '/images/assets/raf_akrotiri.jpg', briefing: 'Forward Mounting Base (Spoke) in Cyprus. Enables Agility and Reach into theatre, protected by the RAF Regiment.' },
         { id: 'a_typhoon', name: 'Typhoon FGR4 Detachment', location: [34.59, 32.99], state: 'operational', tags: ['air', 'combat'], image: '/images/assets/typhoon_aircraft.png', briefing: 'Fourth-generation multi-role combat aircraft detached from RAF Coningsby/Lossiemouth for QRA, DCA, and multi-role strike.' },
         { id: 'a_f35', name: 'F-35B Lightning Detachment', location: [34.57, 32.97], state: 'operational', tags: ['air', 'combat', 'stealth'], image: '/images/assets/f35_aircraft.png', briefing: 'Fifth-generation STOVL multi-role stealth aircraft from RAF Marham, capable of penetrating dense A2AD environments.' },
         { id: 'a_voyager', name: 'Voyager KC2/KC3 Tanker', location: [34.60, 33.01], state: 'operational', tags: ['air', 'mobility', 'aar'], image: '/images/assets/voyager_refueler.png', briefing: 'Air-to-Air Refuelling and strategic transport aircraft, vital for overcoming Air Power\'s limitation of impermanence.' },
-        { id: 'a_poseidon', name: 'P-8A Poseidon MRA1', location: [35.20, 32.50], state: 'operational', tags: ['air', 'isr', 'maritime'], briefing: 'Multi-role maritime patrol aircraft from RAF Lossiemouth, equipped with acoustic sensors and high-resolution radar for ASW and ASuW.' },
-        { id: 'a_rivetjoint', name: 'RC-135W Rivet Joint', location: [35.50, 34.00], state: 'operational', tags: ['air', 'isr'], briefing: 'Dedicated electronic surveillance aircraft surveying the electromagnetic spectrum for SIGINT and MASINT.' },
+        { id: 'a_poseidon', name: 'P-8A Poseidon MRA1', location: [35.20, 32.50], state: 'operational', tags: ['air', 'isr', 'maritime'], image: '/images/assets/p8_poseidon.jpg', briefing: 'Multi-role maritime patrol aircraft from RAF Lossiemouth, equipped with acoustic sensors and high-resolution radar for ASW and ASuW.' },
+        { id: 'a_rivetjoint', name: 'RC-135W Rivet Joint', location: [35.50, 34.00], state: 'operational', tags: ['air', 'isr'], image: '/images/assets/rc135_rivet_joint.jpg', briefing: 'Dedicated electronic surveillance aircraft surveying the electromagnetic spectrum for SIGINT and MASINT.' },
         { id: 'a_chinook', name: 'Chinook & Puma JHC Detachment', location: [34.65, 33.10], state: 'operational', tags: ['air', 'mobility', 'rotary'], image: '/images/assets/raf_chinook.jpg', briefing: 'Joint Helicopter Command support helicopters for intra-theatre tactical mobility, CASEVAC, and Combat Recovery.' },
         { id: 'a_type45', name: 'HMS Duncan (Type 45) & Wildcat', location: [34.20, 33.80], state: 'operational', tags: ['maritime', 'air'], image: '/images/assets/type_45_destroyer.png', briefing: 'Royal Navy Air Defence Destroyer with embarked Wildcat helicopter for Air-Maritime Integration (AMI) and Counter-Sea ops.' }
     ],
@@ -851,6 +851,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.22, 36.20],
+            image: '/images/events/ev_sandstorm_payload.jpg',
             description: 'A dense shamal sandstorm and thick low cloud have rolled across the battlefront, reducing visibility to zero. Meanwhile, a pair of Typhoon FGR4s overhead have expended most of their munitions and only have two missiles remaining.',
             facilitatorNotes: 'Covers LO1 P1 (Task 4: Limitations of Air Power - Limited Payload) and LO2 P8 (Task 28: Three factors that determine the success of an air attack - penetration, number of weapons carried/payload, and poor weather).',
             roleDescriptions: {
@@ -957,6 +958,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.48, 35.85],
+            image: '/images/events/ev_urban_hospital_roe.jpg',
             description: 'An enemy propaganda broadcast tower and insurgent command post has been set up directly inside a functioning civilian hospital complex. Kinetic bombing will cause unacceptable civilian casualties and fracture our international coalition.',
             facilitatorNotes: 'Covers LO2 P8 (Task 28 & 30): The 4th Category of Air Attack—Information Activities (Electronic Warfare and Psychological Operations), and distinguishing Kinetic vs Non-Kinetic effects (Op Shader leaflet/broadcast examples).',
             roleDescriptions: {
@@ -1015,6 +1017,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.60, 36.40],
+            image: '/images/events/ev_airborne_paratroop_drop.jpg',
             description: 'To cut off the enemy\'s retreat, Joint Force Command orders the seizure of an inland desert airfield ("Objective Talon"). Currently, the runway is blocked by craters and obstacles, preventing any fixed-wing aircraft from landing until airborne engineers clear it.',
             facilitatorNotes: 'Covers LO2 P6 (Task 22 & 23): Airborne Operations—distinguishing Air-Drop (using parachutes to deliver troops/loads in flight) vs Air-Land (aircraft lands on runway to offload).',
             roleDescriptions: {
@@ -1330,6 +1333,7 @@ CRITICAL RULES:
             isEndGame: true,
             conditions: { maxScores: { joint_effect: 3 } },
             location: [34.58, 32.98],
+            image: '/images/events/ev_endgame_culmination.jpg',
             description: 'OPERATIONAL STALEMATE: Although RAF combat aircraft won tactical victories in the sky, neglect of Air Mobility/Sustainability or an attempt to rely on independent Air Power without Joint Land/Maritime integration and a Full Spectrum Approach allowed insurgents to re-occupy the cities. As RAF doctrine states: aircraft cannot occupy land alone.',
             facilitatorNotes: 'Trigger this Endgame if the cadets achieved Air Control but let Joint Effect or Sustainability drop to 3 or below. Use this to debrief LO1 P1 (Limitations of Air Power) and LO3 P9 (Why Joint Operations and the Full Spectrum Approach are essential).',
             roleDescriptions: {
@@ -1433,6 +1437,7 @@ CRITICAL RULES:
             name: 'Information Activities: Psychological Operations Broadcast',
             hidden: true,
             location: [35.40, 36.00],
+            image: '/images/events/ev_psyops_leaflet_drop.jpg',
             description: 'RAF aircraft have dropped 100,000 informational leaflets and transmitted radio messages across enemy frequencies (as in Op Shader), convincing two insurgent battalions to lay down their arms without a fight.',
             roleDescriptions: {
                 strike: 'Information Activities (Psychological Operations & Electronic Warfare) shape adversary behaviour without kinetic destruction.'
