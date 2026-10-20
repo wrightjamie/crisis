@@ -268,10 +268,11 @@
     "bvi_gov_house": {
         "id": "bvi_gov_house",
         "file": "/images/library/bvi_gov_house.jpg",
-        "title": "Caribbean Government House in Storm Aftermath",
-        "description": "Colonial-style government residence in the British Virgin Islands battered by hurricane-force winds and tropical rain.",
+        "title": "Caribbean Government House in Road Town",
+        "description": "Colonial-style Government House residence in Road Town, British Virgin Islands, overlooking the tropical harbor and lush hillside.",
         "tags": [
             "asset",
+            "event",
             "civilian",
             "government",
             "caribbean",
@@ -385,14 +386,14 @@
     "ev_alien_reinforcement": {
         "id": "ev_alien_reinforcement",
         "file": "/images/library/ev_alien_reinforcement.png",
-        "title": "Secondary Alien Fleet Entering Earth Orbit",
-        "description": "A vast armada of extraterrestrial vessels emerging from deep space above Earth's glowing horizon.",
+        "title": "Alien Warships Descending Over Military Air Defence Base",
+        "description": "Multiple colossal extraterrestrial warships descending through dark storm clouds over a military airbase as soldiers scramble toward mobile air defence launchers.",
         "tags": [
             "event",
             "sci-fi",
             "alien",
-            "space",
-            "orbital",
+            "military",
+            "air-defence",
             "invasion",
             "apocalyptic"
         ]
@@ -549,14 +550,16 @@
     "ev_city_destruction": {
         "id": "ev_city_destruction",
         "file": "/images/library/ev_city_destruction.png",
-        "title": "Devastated Metropolis Under Apocalyptic Sky",
-        "description": "Ruined city skyline engulfed in fires and smoke plumes following a catastrophic orbital or strategic bombardment.",
+        "title": "Orbital Directed-Energy Beam Obliterating Metropolis",
+        "description": "Catastrophic blue-white directed-energy beam from an alien warship obliterating a city skyline while armored military vehicles and soldiers in gas masks watch from a highway overpass.",
         "tags": [
             "event",
             "civilian",
+            "military",
             "urban",
             "kinetic-strike",
             "sci-fi",
+            "alien",
             "apocalyptic",
             "destruction"
         ]
@@ -1004,8 +1007,8 @@
     "ev_mothership_alt": {
         "id": "ev_mothership_alt",
         "file": "/images/library/ev_mothership_alt.png",
-        "title": "Alien Mothership Hovering in Low Earth Orbit",
-        "description": "Giant extraterrestrial mothership eclipsing the sun in low Earth orbit over the planetary horizon.",
+        "title": "Alien Mothership in Orbit Above Cyclone",
+        "description": "Colossal extraterrestrial mothership hovering in low Earth orbit directly above a swirling atmospheric cyclone and planetary horizon.",
         "tags": [
             "event",
             "sci-fi",
@@ -1330,12 +1333,15 @@
     "ev_secret_weapon": {
         "id": "ev_secret_weapon",
         "file": "/images/library/ev_secret_weapon.png",
-        "title": "Experimental Directed-Energy Weapon Prototype",
-        "description": "Classified high-energy weapon prototype mounted inside a high-tech military testing facility.",
+        "title": "Cyber Virus Injection & Data Extraction on Captured Alien Craft",
+        "description": "Military intelligence technicians in a secure hangar connecting ruggedized laptops displaying 'VIRUS INJECT' to a captured extraterrestrial fighter craft.",
         "tags": [
             "event",
             "sci-fi",
+            "alien",
             "military",
+            "cyber",
+            "intelligence",
             "technology",
             "research",
             "weapon"
@@ -1375,16 +1381,17 @@
     "ev_start": {
         "id": "ev_start",
         "file": "/images/library/ev_start.jpg",
-        "title": "Unidentified Orbital Objects Approaching Earth",
-        "description": "Deep-space tracking view of massive unidentified anomalies entering Earth orbit and disrupting satellite constellations.",
+        "title": "Colossal Alien Vessel Hovering Over London Skyline",
+        "description": "Massive extraterrestrial craft emerging through dark storm clouds directly above Tower Bridge, the River Thames, and The Shard in London.",
         "tags": [
             "event",
             "sci-fi",
             "alien",
-            "space",
-            "orbital",
-            "satellite",
-            "invasion"
+            "urban",
+            "uk",
+            "london",
+            "invasion",
+            "apocalyptic"
         ]
     },
     "ev_start_id4": {
@@ -1727,9 +1734,10 @@
     "evt_hospital_power_failure": {
         "id": "evt_hospital_power_failure",
         "file": "/images/library/evt_hospital_power_failure.jpg",
-        "title": "Darkened Hospital Corridor During Generator Failure",
-        "description": "Hospital intensive care corridor lit only by emergency red backup lights after primary and backup generators fail.",
+        "title": "Darkened City Medical Center During Power Failure",
+        "description": "Exterior of a major urban hospital ('St. Jude's Medical Center') plunged into darkness at night with red emergency stairwell lighting and an ambulance outside.",
         "tags": [
+            "asset",
             "event",
             "civilian",
             "medical",
@@ -1742,9 +1750,10 @@
     "evt_precinct_vulnerable": {
         "id": "evt_precinct_vulnerable",
         "file": "/images/library/evt_precinct_vulnerable.jpg",
-        "title": "Police Precinct Surrounded in Citywide Blackout",
-        "description": "Police cruisers with flashing lightbars outside a darkened central precinct during a communications and power outage.",
+        "title": "Metropolitan Police Precinct in Citywide Blackout",
+        "description": "Police cruisers with flashing red-and-blue lightbars parked outside a darkened 'Metropolitan Police Precinct 12' building during a citywide blackout.",
         "tags": [
+            "asset",
             "event",
             "civilian",
             "police",
@@ -1775,6 +1784,7 @@
         "title": "Floodwaters Surrounding Municipal Water Treatment Plant",
         "description": "Aerial view of a water treatment facility and filtration basins threatened by encroaching muddy floodwaters.",
         "tags": [
+            "asset",
             "event",
             "civilian",
             "infrastructure",
@@ -1820,8 +1830,8 @@
     "generic_cyber": {
         "id": "generic_cyber",
         "file": "/images/library/generic_cyber.png",
-        "title": "Cyber Security Operations Center (Generic)",
-        "description": "Analysts monitoring global network traffic and threat feeds on glowing blue screens in a dark cyber operations center.",
+        "title": "Cyber Security Operations Center Intrusion Alert (Generic)",
+        "description": "Analysts in a darkened cyber operations center facing a giant screen flashing 'RED ALERT: INTRUSION DETECTED / SYSTEM COMPROMISE' over a global network map.",
         "tags": [
             "generic",
             "event",
@@ -1835,8 +1845,8 @@
     "generic_deployment": {
         "id": "generic_deployment",
         "file": "/images/library/generic_deployment.png",
-        "title": "Military Force Protection & Troop Deployment (Generic)",
-        "description": "Armed infantry and RAF Regiment gunners deploying from tactical vehicles to secure a base perimeter.",
+        "title": "Armored Infantry Disembarking in Urban Deployment (Generic)",
+        "description": "British infantry soldiers in combat gear disembarking down the rear ramp of a tracked armored personnel carrier onto a smoke-filled urban street.",
         "tags": [
             "generic",
             "event",
@@ -1844,6 +1854,7 @@
             "military",
             "land",
             "infantry",
+            "armor",
             "force-protection",
             "deployment"
         ]
@@ -2418,13 +2429,14 @@
     "us_v_corps": {
         "id": "us_v_corps",
         "file": "/images/library/us_v_corps.png",
-        "title": "US V Corps Forward Armored Headquarters",
-        "description": "Forward-deployed US Army M1A2 Abrams tanks, Bradley fighting vehicles, and mobile tactical command posts in Eastern Europe.",
+        "title": "US V Corps Forward Armored & Logistics Staging Base",
+        "description": "Sprawling forward military base and supply staging hub at dusk with rows of armored vehicles, field tents, and radar domes.",
         "tags": [
             "asset",
             "military",
             "land",
             "armor",
+            "logistics",
             "us",
             "nato",
             "eastern-europe",

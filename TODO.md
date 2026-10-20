@@ -25,96 +25,96 @@
 ## Missing Images To Bring Life to Scenarios
 
 ### Caribbean Hurricane: Ticking Clock (caribbean_crisis)
-- [ ] Event: "COBRA Briefing: Initial Response" (ev_start) needs an image
-- [ ] Event: "A400M Airborne" (ev_a400_enroute) needs an image
-- [ ] Event: "RFA Mounts Bay En Route" (ev_rfa_enroute) needs an image
-- [ ] Event: "Hospital Generators Failing" (ev_hospital_power) needs an image
-- [ ] Event: "Prison Roof Collapsed" (ev_prison_damage) needs an image
-- [ ] Event: "Desalination Plant Destroyed" (ev_water_plant) needs an image
-- [ ] Event: "Resort Flooded" (ev_tourist_resort) needs an image
-- [ ] Event: "Arteries Blocked" (ev_roads_blocked) needs an image
-- [ ] Event: "Police Absent" (ev_police_disband) needs an image
+- [x] Event: "COBRA Briefing: Initial Response" (ev_start) needs an image
+- [x] Event: "A400M Airborne" (ev_a400_enroute) needs an image
+- [x] Event: "RFA Mounts Bay En Route" (ev_rfa_enroute) needs an image
+- [x] Event: "Hospital Generators Failing" (ev_hospital_power) needs an image
+- [x] Event: "Prison Roof Collapsed" (ev_prison_damage) needs an image
+- [x] Event: "Desalination Plant Destroyed" (ev_water_plant) needs an image
+- [x] Event: "Resort Flooded" (ev_tourist_resort) needs an image
+- [x] Event: "Arteries Blocked" (ev_roads_blocked) needs an image
+- [x] Event: "Police Absent" (ev_police_disband) needs an image
 - [x] Event: "Port Cranes Collapsed" (ev_port_damage) needs an image
-- [ ] Event: "Emergency Funds" (ev_funds_request) needs an image
-- [ ] Event: "A400M in Airspace" (ev_a400_arrives) needs an image
-- [ ] Event: "RFA Arrives" (ev_rfa_arrives) needs an image
-- [ ] Event: "Hospital Loses Power" (ev_hospital_blackout) needs an image
-- [ ] Event: "Airport Cleared" (ev_airport_cleared) needs an image
-- [ ] Event: "Cruise Ship Offer" (ev_cruise_ship) needs an image
-- [ ] Event: "US Coast Guard Offers Cutter" (ev_us_coastguard) needs an image
-- [ ] Event: "Stadium Hospital" (ev_stadium_hospital) needs an image
-- [ ] Event: "Fuel Contaminated" (ev_fuel_contam) needs an image
-- [ ] Event: "Media Demands Timeline" (ev_media_timeline) needs an image
-- [ ] Event: "HNWI Demands" (ev_hnwi_evac) needs an image
-- [ ] Event: "SAR Success" (ev_sar_dogs) needs an image
-- [ ] Event: "Potable Water Depleted" (ev_water_runs_out) needs an image
-- [ ] Event: "Waterborne Illness" (ev_illness) needs an image
-- [ ] Event: "Pharmacy Raided" (ev_pharmacy_raid) needs an image
-- [ ] Event: "NGOs Refuse to Operate" (ev_ngo_refusal) needs an image
-- [ ] Event: "Telecom Restoration Offer" (ev_telecom_offer) needs an image
-- [ ] Event: "Evacuation Clashes" (ev_foreign_clash) needs an image
-- [ ] Event: "Tabloid Attack" (ev_tabloid_attack) needs an image
+- [x] Event: "Emergency Funds" (ev_funds_request) needs an image
+- [x] Event: "A400M in Airspace" (ev_a400_arrives) needs an image
+- [x] Event: "RFA Arrives" (ev_rfa_arrives) needs an image
+- [x] Event: "Hospital Loses Power" (ev_hospital_blackout) needs an image
+- [x] Event: "Airport Cleared" (ev_airport_cleared) needs an image
+- [x] Event: "Cruise Ship Offer" (ev_cruise_ship) needs an image
+- [x] Event: "US Coast Guard Offers Cutter" (ev_us_coastguard) needs an image
+- [x] Event: "Stadium Hospital" (ev_stadium_hospital) needs an image
+- [x] Event: "Fuel Contaminated" (ev_fuel_contam) needs an image
+- [x] Event: "Media Demands Timeline" (ev_media_timeline) needs an image
+- [x] Event: "HNWI Demands" (ev_hnwi_evac) needs an image
+- [x] Event: "SAR Success" (ev_sar_dogs) needs an image
+- [x] Event: "Potable Water Depleted" (ev_water_runs_out) needs an image
+- [x] Event: "Waterborne Illness" (ev_illness) needs an image
+- [x] Event: "Pharmacy Raided" (ev_pharmacy_raid) needs an image
+- [x] Event: "NGOs Refuse to Operate" (ev_ngo_refusal) needs an image
+- [x] Event: "Telecom Restoration Offer" (ev_telecom_offer) needs an image
+- [x] Event: "Evacuation Clashes" (ev_foreign_clash) needs an image
+- [x] Event: "Tabloid Attack" (ev_tabloid_attack) needs an image
 - [x] Event: "Weather Warning" (ev_weather_warning) needs an image
 - [x] Event: "Secondary Swell Hits" (ev_secondary_weather) needs an image
-- [ ] Event: "Criminal Gangs Take Control" (ev_gangs_emerge) needs an image
-- [ ] Event: "Prison Break" (ev_prison_riot) needs an image
-- [ ] Event: "Gunfire at Gov Residence" (ev_gunfire_gov) needs an image
-- [ ] Event: "Local Gov Threatens US Intervention" (ev_local_threat) needs an image
-- [ ] Event: "Curfew Declared" (ev_curfew) needs an image
+- [x] Event: "Criminal Gangs Take Control" (ev_gangs_emerge) needs an image
+- [x] Event: "Prison Break" (ev_prison_riot) needs an image
+- [x] Event: "Gunfire at Gov Residence" (ev_gunfire_gov) needs an image
+- [x] Event: "Local Gov Threatens US Intervention" (ev_local_threat) needs an image
+- [x] Event: "Curfew Declared" (ev_curfew) needs an image
 - [x] Event: "Port Riots" (ev_port_riot) needs an image
-- [ ] Event: "Black Market Emerges" (ev_black_market) needs an image
-- [ ] Event: "Media Crew Attacked" (ev_media_attacked) needs an image
+- [x] Event: "Black Market Emerges" (ev_black_market) needs an image
+- [x] Event: "Media Crew Attacked" (ev_media_attacked) needs an image
 - [x] Event: "Bridge Collapse" (ev_bridge_collapse) needs an image
-- [ ] Event: "Mass Exodus" (ev_mass_exodus) needs an image
-- [ ] Event: "Marines Retake Prison" (ev_marines_push) needs an image
-- [ ] Event: "Epidemic Confirmed" (ev_epidemic) needs an image
-- [ ] Event: "Naval Task Force Arrives" (ev_task_force) needs an image
-- [ ] Event: "Donor Conference" (ev_donor_conf) needs an image
-- [ ] Event: "Officials Arrested" (ev_arrest_officials) needs an image
-- [ ] Event: "Police Mutiny" (ev_mutiny) needs an image
-- [ ] Event: "Turning Point Address" (ev_turning_point) needs an image
-- [ ] Event: "45 Minutes Reached" (ev_endgame_trigger) needs an image
-- [ ] Event: "Scenario Concluded: Success" (ev_end_success) needs an image
-- [ ] Event: "Scenario Concluded: Mitigated Disaster" (ev_end_mixed) needs an image
-- [ ] Event: "Scenario Concluded: Total Collapse" (ev_end_failure) needs an image
+- [x] Event: "Mass Exodus" (ev_mass_exodus) needs an image
+- [x] Event: "Marines Retake Prison" (ev_marines_push) needs an image
+- [x] Event: "Epidemic Confirmed" (ev_epidemic) needs an image
+- [x] Event: "Naval Task Force Arrives" (ev_task_force) needs an image
+- [x] Event: "Donor Conference" (ev_donor_conf) needs an image
+- [x] Event: "Officials Arrested" (ev_arrest_officials) needs an image
+- [x] Event: "Police Mutiny" (ev_mutiny) needs an image
+- [x] Event: "Turning Point Address" (ev_turning_point) needs an image
+- [x] Event: "45 Minutes Reached" (ev_endgame_trigger) needs an image
+- [x] Event: "Scenario Concluded: Success" (ev_end_success) needs an image
+- [x] Event: "Scenario Concluded: Mitigated Disaster" (ev_end_mixed) needs an image
+- [x] Event: "Scenario Concluded: Total Collapse" (ev_end_failure) needs an image
 
 ### Eastern Front Breach (eastern_front_breach)
 - [x] Asset: "72nd Mechanized Brigade" (brigade_alpha) needs an image
-- [ ] Asset: "Central Supply Hub" (supply_depot) needs an image
-- [ ] Asset: "Aerorozvidka Unit" (drone_squad) needs an image
+- [x] Asset: "Central Supply Hub" (supply_depot) needs an image
+- [x] Asset: "Aerorozvidka Unit" (drone_squad) needs an image
 - [x] Event: "Enemy Armored Push" (evt_armor_push) needs an image
 - [x] Event: "Brigade Alpha Encirclement Threat" (evt_encirclement_threat) needs an image
 - [x] Event: "Missile Strike on Supply Depot" (evt_depot_strike) needs an image
-- [ ] Action: "Request Emergency Resupply" (act_request_resupply) needs an image
+- [x] Action: "Request Emergency Resupply" (act_request_resupply) needs an image
 
 ### Independence Day: Global Supremacy (independence_day)
 - [x] Event: "Shadows Over Earth" (ev_start) needs an image
 - [x] Event: "Energy Signatures Detected" (ev_first_strike_prep) needs an image
-- [ ] Event: "Rare Earth Monopoly" (ev_china_hoard) needs an image
+- [x] Event: "Rare Earth Monopoly" (ev_china_hoard) needs an image
 - [x] Event: "European Grid Collapse" (ev_russia_false_flag) needs an image
 - [x] Event: "Fighters Downed" (ev_arms_race_start) needs an image
-- [ ] Event: "Intelligence Coup" (ev_espionage_uk) needs an image
-- [ ] Event: "Cyber Infiltration" (ev_espionage_china) needs an image
-- [ ] Event: "45 Minutes: The Final Stand" (ev_endgame_trigger) needs an image
-- [ ] Event: "Total Extinction" (ev_end_extinction) needs an image
-- [ ] Event: "Pyrrhic Victory" (ev_end_pyrrhic) needs an image
+- [x] Event: "Intelligence Coup" (ev_espionage_uk) needs an image
+- [x] Event: "Cyber Infiltration" (ev_espionage_china) needs an image
+- [x] Event: "45 Minutes: The Final Stand" (ev_endgame_trigger) needs an image
+- [x] Event: "Total Extinction" (ev_end_extinction) needs an image
+- [x] Event: "Pyrrhic Victory" (ev_end_pyrrhic) needs an image
 
 ### Metropolis Blackout (metropolis_blackout)
-- [ ] Asset: "Metro General Hospital" (main_hospital) needs an image
-- [ ] Asset: "Central Police Precinct" (central_precinct) needs an image
+- [x] Asset: "Metro General Hospital" (main_hospital) needs an image
+- [x] Asset: "Central Police Precinct" (central_precinct) needs an image
 - [x] Asset: "Power Substation Alpha" (substation_alpha) needs an image
 - [x] Event: "Hospital Generator Failure" (evt_hospital_power_failure) needs an image
 - [x] Event: "Central Precinct Vulnerable" (evt_precinct_vulnerable) needs an image
 - [x] Event: "Supermarket Riot" (evt_supermarket_riot) needs an image
-- [ ] Action: "Release Emergency Funds" (act_emergency_funds) needs an image
+- [x] Action: "Release Emergency Funds" (act_emergency_funds) needs an image
 
 ### Tutorial Scenario (tutorial)
-- [ ] Asset: "Main Water Treatment Plant" (water_treatment) needs an image
+- [x] Asset: "Main Water Treatment Plant" (water_treatment) needs an image
 - [x] Asset: "Rescue Helicopter" (rescue_heli) needs an image
 - [x] Event: "Flash Flood Warning Issued" (evt_flood_warning) needs an image
 - [x] Event: "Traffic Jam During Evacuation" (evt_evac_jam) needs an image
 - [x] Event: "Water Plant Threat" (evt_water_plant) needs an image
-- [ ] Action: "Hold Press Conference" (act_press_conference) needs an image
+- [x] Action: "Hold Press Conference" (act_press_conference) needs an image
 
 ### UK Crisis: Russian Tensions (uk_crisis)
 - [x] Event: "Russian Submarine Surfaces in the Channel" (ev_sub_surfaces) needs an image

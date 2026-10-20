@@ -119,6 +119,7 @@ module.exports = {
         {
             id: 'ev_china_hoard',
             name: 'Rare Earth Monopoly',
+            image: 'ev_logistics_failure',
             description: 'China has secured the remaining global supply of rare-earth materials vital for orbital defense grids.',
             visibleTo: ['china'],
             decisions: [
@@ -147,6 +148,7 @@ module.exports = {
         {
             id: 'ev_espionage_uk',
             name: 'Intelligence Coup',
+            image: 'ev_secret_weapon',
             description: 'UK Intelligence has intercepted raw data from downed ships.',
             visibleTo: ['uk'],
             decisions: [
@@ -156,6 +158,7 @@ module.exports = {
         {
             id: 'ev_espionage_china',
             name: 'Cyber Infiltration',
+            image: 'generic_cyber',
             description: 'Chinese hackers have breached the global research network.',
             visibleTo: ['china'],
             decisions: [
@@ -176,6 +179,7 @@ module.exports = {
         {
             id: 'ev_endgame_trigger',
             name: '45 Minutes: The Final Stand',
+            image: 'ev_alien_reinforcement',
             description: 'The alien weapon is firing. The global defense grid activates...',
             triggerEvents: [
                 { id: 'ev_end_extinction', delayMs: 1000 },
@@ -186,6 +190,7 @@ module.exports = {
         {
             id: 'ev_end_extinction',
             name: 'Total Extinction',
+            image: 'ev_city_destruction',
             description: 'The global defense grid failed. Humanity was too fractured and technologically inferior to stop the mothership. The planet has been sterilized. Everyone loses.',
             isEndGame: true,
             conditions: { maxScores: { global_tech: 15 } }
@@ -193,6 +198,7 @@ module.exports = {
         {
             id: 'ev_end_pyrrhic',
             name: 'Pyrrhic Victory',
+            image: 'ev_start',
             description: 'The aliens were defeated, but the cost was too high. The Earth is a wasteland. Humanity survives, but there are no superpowers left.',
             isEndGame: true,
             conditions: { minScores: { global_tech: 16 }, maxScores: { usa_survival: 1, china_survival: 1, russia_survival: 1, eu_survival: 1, india_survival: 1, uk_survival: 1 } }

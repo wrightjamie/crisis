@@ -98,6 +98,7 @@ CRITICAL RULES:
         {
             id: 'ev_start',
             name: 'COBRA Briefing: Initial Response',
+            image: 'ev_crisis_cabinet',
             description: 'Hurricane Zephyr has passed. Immediate decisions are required on asset deployment.',
             decisions: [
                 {
@@ -130,76 +131,76 @@ CRITICAL RULES:
                 { id: 'ev_endgame_trigger', delayMs: 2700000 } // 45 mins
             ]
         },
-        { id: 'ev_a400_enroute', name: 'A400M Airborne', description: 'RAF transport planes are airborne.', triggerEvents: [{ id: 'ev_a400_arrives', delayMs: 300000 }] },
-        { id: 'ev_rfa_enroute', name: 'RFA Mounts Bay En Route', description: 'The RFA vessel has altered course.', triggerEvents: [{ id: 'ev_rfa_arrives', delayMs: 300000 }] },
+        { id: 'ev_a400_enroute', name: 'A400M Airborne', image: 'a400m_transport', description: 'RAF transport planes are airborne.', triggerEvents: [{ id: 'ev_a400_arrives', delayMs: 300000 }] },
+        { id: 'ev_rfa_enroute', name: 'RFA Mounts Bay En Route', image: 'rfa_mounts_bay', description: 'The RFA vessel has altered course.', triggerEvents: [{ id: 'ev_rfa_arrives', delayMs: 300000 }] },
         { id: 'ev_initial_recon', name: 'First Aerial Reconnaissance', description: 'Road Town is devastated.', image: 'ev_hurricane_map', decisions: [{ role: 'media', text: 'Release imagery?', options: [{ id: 'rel', text: 'Release', effects: { scores: { political: +1, public_order: -1 } } }, { id: 'hold', text: 'Hold', effects: { scores: { political: -1, public_order: +1 } } }] }] },
-        { id: 'ev_hospital_power', name: 'Hospital Generators Failing', description: 'Peebles Hospital reports flooding.', decisions: [{ role: 'dfid', text: 'Hospital Priority?', options: [{ id: 'evac', text: 'Evacuate', effects: { scores: { humanitarian: -1, logistics: -1 } } }, { id: 'eng', text: 'Send Engineers', effects: { scores: { infrastructure: +1 } } }] }], triggerEvents: [{ id: 'ev_hospital_blackout', delayMs: 120000 }] },
+        { id: 'ev_hospital_power', name: 'Hospital Generators Failing', image: 'evt_hospital_power_failure', description: 'Peebles Hospital reports flooding.', decisions: [{ role: 'dfid', text: 'Hospital Priority?', options: [{ id: 'evac', text: 'Evacuate', effects: { scores: { humanitarian: -1, logistics: -1 } } }, { id: 'eng', text: 'Send Engineers', effects: { scores: { infrastructure: +1 } } }] }], triggerEvents: [{ id: 'ev_hospital_blackout', delayMs: 120000 }] },
         { id: 'ev_prison_damage', name: 'Prison Roof Collapsed', description: 'Guards are abandoning posts at Balsam Ghut.', image: 'ev_prison_damage', decisions: [{ role: 'fcdo', text: 'Request local police to secure?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { public_order: +1 } } }, { id: 'no', text: 'Wait for military', effects: { scores: { public_order: -1 } } }] }] },
-        { id: 'ev_water_plant', name: 'Desalination Plant Destroyed', description: 'Fresh water supply severed.', effects: { scores: { infrastructure: -1 } } },
-        { id: 'ev_tourist_resort', name: 'Resort Flooded', description: 'Hundreds of UK/US nationals trapped.', effects: { scores: { humanitarian: -1 } } },
-        { id: 'ev_roads_blocked', name: 'Arteries Blocked', description: 'Main roads blocked by landslides.', effects: { scores: { logistics: -1 } } },
-        { id: 'ev_police_disband', name: 'Police Absent', description: 'Local police force largely absent checking on families.', effects: { scores: { public_order: -1 } } },
+        { id: 'ev_water_plant', name: 'Desalination Plant Destroyed', image: 'evt_water_plant', description: 'Fresh water supply severed.', effects: { scores: { infrastructure: -1 } } },
+        { id: 'ev_tourist_resort', name: 'Resort Flooded', image: 'evt_flood_warning', description: 'Hundreds of UK/US nationals trapped.', effects: { scores: { humanitarian: -1 } } },
+        { id: 'ev_roads_blocked', name: 'Arteries Blocked', image: 'evt_evac_jam', description: 'Main roads blocked by landslides.', effects: { scores: { logistics: -1 } } },
+        { id: 'ev_police_disband', name: 'Police Absent', image: 'evt_precinct_vulnerable', description: 'Local police force largely absent checking on families.', effects: { scores: { public_order: -1 } } },
         { id: 'ev_port_damage', name: 'Port Cranes Collapsed', description: 'Heavy lift capability destroyed at port.', image: 'ev_port_damage', effects: { scores: { infrastructure: -1, logistics: -1 } } },
-        { id: 'ev_funds_request', name: 'Emergency Funds', description: 'FCDO requests immediate release of emergency funds.', decisions: [{ role: 'PM', text: 'Approve?', options: [{ id: 'yes', text: 'Approve', effects: { scores: { political: +1 } } }, { id: 'delay', text: 'Delay', effects: { scores: { humanitarian: -1 } } }] }] },
+        { id: 'ev_funds_request', name: 'Emergency Funds', image: 'ev_crisis_cabinet', description: 'FCDO requests immediate release of emergency funds.', decisions: [{ role: 'PM', text: 'Approve?', options: [{ id: 'yes', text: 'Approve', effects: { scores: { political: +1 } } }, { id: 'delay', text: 'Delay', effects: { scores: { humanitarian: -1 } } }] }] },
 
         // T+5 to T+20
-        { id: 'ev_a400_arrives', name: 'A400M in Airspace', description: 'Runway is not clear yet. Divert or airdrop?', decisions: [{ role: 'defence', text: 'A400M Action?', options: [{ id: 'airdrop', text: 'Airdrop (risky)', effects: { scores: { public_order: -1, humanitarian: +1 }, triggerEvents: [{ id: 'ev_airdrop_riot', delayMs: 60000 }] } }, { id: 'divert', text: 'Divert to PR', effects: { scores: { political: -1, logistics: -1 } } }] }] },
-        { id: 'ev_rfa_arrives', name: 'RFA Arrives', description: 'Where to deploy engineers first?', decisions: [{ role: 'defence', text: 'Deployment?', options: [{ id: 'airport', text: 'Clear Airport', effects: { scores: { infrastructure: +2, logistics: +1 }, triggerEvents: [{ id: 'ev_airport_cleared', delayMs: 60000 }] } }, { id: 'hospital', text: 'Secure Hospital', effects: { scores: { humanitarian: +2 } } }] }] },
-        { id: 'ev_hospital_blackout', name: 'Hospital Loses Power', description: 'Generators failed. Critical patients dying.', effects: { scores: { humanitarian: -2 } } },
+        { id: 'ev_a400_arrives', name: 'A400M in Airspace', image: 'a400m_transport', description: 'Runway is not clear yet. Divert or airdrop?', decisions: [{ role: 'defence', text: 'A400M Action?', options: [{ id: 'airdrop', text: 'Airdrop (risky)', effects: { scores: { public_order: -1, humanitarian: +1 }, triggerEvents: [{ id: 'ev_airdrop_riot', delayMs: 60000 }] } }, { id: 'divert', text: 'Divert to PR', effects: { scores: { political: -1, logistics: -1 } } }] }] },
+        { id: 'ev_rfa_arrives', name: 'RFA Arrives', image: 'rfa_mounts_bay', description: 'Where to deploy engineers first?', decisions: [{ role: 'defence', text: 'Deployment?', options: [{ id: 'airport', text: 'Clear Airport', effects: { scores: { infrastructure: +2, logistics: +1 }, triggerEvents: [{ id: 'ev_airport_cleared', delayMs: 60000 }] } }, { id: 'hospital', text: 'Secure Hospital', effects: { scores: { humanitarian: +2 } } }] }] },
+        { id: 'ev_hospital_blackout', name: 'Hospital Loses Power', image: 'evt_hospital_power_failure', description: 'Generators failed. Critical patients dying.', effects: { scores: { humanitarian: -2 } } },
         { id: 'ev_airdrop_riot', name: 'Airdrop Riot', description: 'Supplies landed in unsecured area causing a riot.', image: 'ev_airdrop_riot', effects: { scores: { public_order: -2 } } },
-        { id: 'ev_airport_cleared', name: 'Airport Cleared', description: 'Runway cleared for fixed-wing aircraft.', effects: { scores: { logistics: +2 } } },
-        { id: 'ev_cruise_ship', name: 'Cruise Ship Offer', description: 'Cruise ship offshore offers medical assistance.', decisions: [{ role: 'fcdo', text: 'Accept?', options: [{ id: 'yes', text: 'Accept (Needs secure dock)', effects: { scores: { humanitarian: +1, logistics: -1 } } }, { id: 'no', text: 'Decline', effects: { scores: { political: -1 } } }] }], triggerEvents: [{ id: 'ev_us_coastguard', delayMs: 30000 }] },
-        { id: 'ev_us_coastguard', name: 'US Coast Guard Offers Cutter', description: 'USCG offers to divert a cutter.', decisions: [{ role: 'fcdo', text: 'Approve?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { logistics: +1 } } }] }] },
-        { id: 'ev_stadium_hospital', name: 'Stadium Hospital', description: 'Makeshift hospital setup requested in national stadium.', effects: { scores: { infrastructure: -1 } } },
+        { id: 'ev_airport_cleared', name: 'Airport Cleared', image: 'bvi_airport', description: 'Runway cleared for fixed-wing aircraft.', effects: { scores: { logistics: +2 } } },
+        { id: 'ev_cruise_ship', name: 'Cruise Ship Offer', image: 'rfa_mounts_bay', description: 'Cruise ship offshore offers medical assistance.', decisions: [{ role: 'fcdo', text: 'Accept?', options: [{ id: 'yes', text: 'Accept (Needs secure dock)', effects: { scores: { humanitarian: +1, logistics: -1 } } }, { id: 'no', text: 'Decline', effects: { scores: { political: -1 } } }] }], triggerEvents: [{ id: 'ev_us_coastguard', delayMs: 30000 }] },
+        { id: 'ev_us_coastguard', name: 'US Coast Guard Offers Cutter', image: 'type_23_frigate', description: 'USCG offers to divert a cutter.', decisions: [{ role: 'fcdo', text: 'Approve?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { logistics: +1 } } }] }] },
+        { id: 'ev_stadium_hospital', name: 'Stadium Hospital', image: 'ev_combat_recovery_medevac', description: 'Makeshift hospital setup requested in national stadium.', effects: { scores: { infrastructure: -1 } } },
         { id: 'ev_supermarket_looting', name: 'Supermarket Looting', description: 'First reports of coordinated looting at supermarkets.', image: 'ev_supermarket_looting', effects: { scores: { public_order: -1 } } },
-        { id: 'ev_fuel_contam', name: 'Fuel Contaminated', description: 'Aviation fuel reserves are contaminated.', effects: { scores: { logistics: -2 } } },
-        { id: 'ev_media_timeline', name: 'Media Demands Timeline', description: 'Press demands timeline for Royal Navy arrival.', decisions: [{ role: 'media', text: 'Provide timeline?', options: [{ id: 'honest', text: 'Be honest', effects: { scores: { political: -1 } } }, { id: 'vague', text: 'Be vague', effects: { scores: { political: -2 } } }] }] },
-        { id: 'ev_hnwi_evac', name: 'HNWI Demands', description: 'High-net-worth individuals demand private helicopter evacuations.', decisions: [{ role: 'PM', text: 'Allow private evacs?', options: [{ id: 'yes', text: 'Allow', effects: { scores: { public_order: -1, political: -1 } } }, { id: 'no', text: 'Deny', effects: { scores: { political: +1 } } }] }] },
-        { id: 'ev_sar_dogs', name: 'SAR Success', description: 'Search dogs locate survivors in a school.', effects: { scores: { humanitarian: +1 } } },
+        { id: 'ev_fuel_contam', name: 'Fuel Contaminated', image: 'ev_endgame_culmination', description: 'Aviation fuel reserves are contaminated.', effects: { scores: { logistics: -2 } } },
+        { id: 'ev_media_timeline', name: 'Media Demands Timeline', image: 'generic_press', description: 'Press demands timeline for Royal Navy arrival.', decisions: [{ role: 'media', text: 'Provide timeline?', options: [{ id: 'honest', text: 'Be honest', effects: { scores: { political: -1 } } }, { id: 'vague', text: 'Be vague', effects: { scores: { political: -2 } } }] }] },
+        { id: 'ev_hnwi_evac', name: 'HNWI Demands', image: 'rescue_heli', description: 'High-net-worth individuals demand private helicopter evacuations.', decisions: [{ role: 'PM', text: 'Allow private evacs?', options: [{ id: 'yes', text: 'Allow', effects: { scores: { public_order: -1, political: -1 } } }, { id: 'no', text: 'Deny', effects: { scores: { political: +1 } } }] }] },
+        { id: 'ev_sar_dogs', name: 'SAR Success', image: 'rescue_heli', description: 'Search dogs locate survivors in a school.', effects: { scores: { humanitarian: +1 } } },
         
         // T+20 to T+35
-        { id: 'ev_water_runs_out', name: 'Potable Water Depleted', description: 'Water runs out in Road Town. Desperate crowds gather.', effects: { scores: { humanitarian: -1, public_order: -1 } } },
-        { id: 'ev_illness', name: 'Waterborne Illness', description: 'Outbreak suspected in makeshift camps.', effects: { scores: { humanitarian: -1 } } },
-        { id: 'ev_pharmacy_raid', name: 'Pharmacy Raided', description: 'Looters raid main pharmacy for narcotics.', effects: { scores: { public_order: -1 } } },
-        { id: 'ev_ngo_refusal', name: 'NGOs Refuse to Operate', description: 'NGOs refuse to operate without military escort.', effects: { scores: { logistics: -1 } } },
-        { id: 'ev_telecom_offer', name: 'Telecom Restoration Offer', description: 'Company offers to restore cell service if military secures towers.', decisions: [{ role: 'defence', text: 'Divert troops to towers?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { infrastructure: +2, public_order: -1 } } }, { id: 'no', text: 'No', effects: { scores: { political: -1 } } }] }] },
-        { id: 'ev_foreign_clash', name: 'Evacuation Clashes', description: 'Foreign nationals clash with locals over priority lines.', effects: { scores: { public_order: -1 } } },
-        { id: 'ev_tabloid_attack', name: 'Tabloid Attack', description: 'UK tabloid publishes "UK Abandons Its Own".', effects: { scores: { political: -2 } } },
+        { id: 'ev_water_runs_out', name: 'Potable Water Depleted', image: 'evt_supermarket_riot', description: 'Water runs out in Road Town. Desperate crowds gather.', effects: { scores: { humanitarian: -1, public_order: -1 } } },
+        { id: 'ev_illness', name: 'Waterborne Illness', image: 'ev_chemical_attempt', description: 'Outbreak suspected in makeshift camps.', effects: { scores: { humanitarian: -1 } } },
+        { id: 'ev_pharmacy_raid', name: 'Pharmacy Raided', image: 'ev_supermarket_looting', description: 'Looters raid main pharmacy for narcotics.', effects: { scores: { public_order: -1 } } },
+        { id: 'ev_ngo_refusal', name: 'NGOs Refuse to Operate', image: 'generic_deployment', description: 'NGOs refuse to operate without military escort.', effects: { scores: { logistics: -1 } } },
+        { id: 'ev_telecom_offer', name: 'Telecom Restoration Offer', image: 'gchq_bude', description: 'Company offers to restore cell service if military secures towers.', decisions: [{ role: 'defence', text: 'Divert troops to towers?', options: [{ id: 'yes', text: 'Yes', effects: { scores: { infrastructure: +2, public_order: -1 } } }, { id: 'no', text: 'No', effects: { scores: { political: -1 } } }] }] },
+        { id: 'ev_foreign_clash', name: 'Evacuation Clashes', image: 'generic_police', description: 'Foreign nationals clash with locals over priority lines.', effects: { scores: { public_order: -1 } } },
+        { id: 'ev_tabloid_attack', name: 'Tabloid Attack', image: 'ev_uk_casualty_leak', description: 'UK tabloid publishes "UK Abandons Its Own".', effects: { scores: { political: -2 } } },
         
         // Secondary Weather
         { id: 'ev_weather_warning', name: 'Weather Warning', description: 'A massive secondary sea swell is approaching.', image: 'ev_weather_warning', effects: { scores: { political: 0 } } },
         { id: 'ev_secondary_weather', name: 'Secondary Swell Hits', description: 'A massive secondary sea swell has hit. Temporary structures damaged.', image: 'ev_secondary_weather', effects: { scores: { infrastructure: -1, logistics: -1 } }, triggerEvents: [{ id: 'ev_gangs_emerge', delayMs: 15000 }, { id: 'ev_prison_riot', delayMs: 30000 }] },
 
         // Score Gated (T+25 onwards)
-        { id: 'ev_gangs_emerge', name: 'Criminal Gangs Take Control', description: 'Organised gangs take control of eastern district.', conditions: { maxScores: { public_order: 2 } }, effects: { scores: { public_order: -2, humanitarian: -1 } } },
-        { id: 'ev_prison_riot', name: 'Prison Break', description: 'Escaped prisoners raid a police armory.', conditions: { maxScores: { public_order: 2 } }, effects: { scores: { public_order: -2 } } },
+        { id: 'ev_gangs_emerge', name: 'Criminal Gangs Take Control', image: 'evt_supermarket_riot', description: 'Organised gangs take control of eastern district.', conditions: { maxScores: { public_order: 2 } }, effects: { scores: { public_order: -2, humanitarian: -1 } } },
+        { id: 'ev_prison_riot', name: 'Prison Break', image: 'ev_prison_damage', description: 'Escaped prisoners raid a police armory.', conditions: { maxScores: { public_order: 2 } }, effects: { scores: { public_order: -2 } } },
         
         // T+35 to T+45
-        { id: 'ev_gunfire_gov', name: 'Gunfire at Gov Residence', description: 'Gunfire reported near Governor\'s residence.', effects: { scores: { public_order: -1, political: -1 } } },
-        { id: 'ev_local_threat', name: 'Local Gov Threatens US Intervention', description: 'Local gov threatens to request US intervention if UK fails.', decisions: [{ role: 'fcdo', text: 'Response?', options: [{ id: 'reassure', text: 'Reassure', effects: { scores: { political: +1 } } }, { id: 'allow', text: 'Allow US lead', effects: { scores: { political: -2, logistics: +2 } } }] }], triggerEvents: [{ id: 'ev_curfew', delayMs: 15000 }] },
-        { id: 'ev_curfew', name: 'Curfew Declared', description: 'Decision on rules of engagement for Royal Marines.', decisions: [{ role: 'defence', text: 'ROE?', options: [{ id: 'strict', text: 'Strict (Self-defence only)', effects: { scores: { public_order: -1 } } }, { id: 'loose', text: 'Loose (Lethal force authorized)', effects: { scores: { public_order: +2, political: -2 } } }] }] },
+        { id: 'ev_gunfire_gov', name: 'Gunfire at Gov Residence', image: 'bvi_gov_house', description: 'Gunfire reported near Governor\'s residence.', effects: { scores: { public_order: -1, political: -1 } } },
+        { id: 'ev_local_threat', name: 'Local Gov Threatens US Intervention', image: 'bvi_gov_house', description: 'Local gov threatens to request US intervention if UK fails.', decisions: [{ role: 'fcdo', text: 'Response?', options: [{ id: 'reassure', text: 'Reassure', effects: { scores: { political: +1 } } }, { id: 'allow', text: 'Allow US lead', effects: { scores: { political: -2, logistics: +2 } } }] }], triggerEvents: [{ id: 'ev_curfew', delayMs: 15000 }] },
+        { id: 'ev_curfew', name: 'Curfew Declared', image: 'ev_endgame_domestic', description: 'Decision on rules of engagement for Royal Marines.', decisions: [{ role: 'defence', text: 'ROE?', options: [{ id: 'strict', text: 'Strict (Self-defence only)', effects: { scores: { public_order: -1 } } }, { id: 'loose', text: 'Loose (Lethal force authorized)', effects: { scores: { public_order: +2, political: -2 } } }] }] },
         { id: 'ev_port_riot', name: 'Port Riots', description: 'Riots at port as aid shipment unloaded.', image: 'ev_port_riot', effects: { scores: { public_order: -1, logistics: -1 } } },
-        { id: 'ev_black_market', name: 'Black Market Emerges', description: 'Black market for water and fuel run by armed groups.', effects: { scores: { public_order: -1 } } },
-        { id: 'ev_media_attacked', name: 'Media Crew Attacked', description: 'Media crew attacked while filming riots.', effects: { scores: { political: -1 } } },
+        { id: 'ev_black_market', name: 'Black Market Emerges', image: 'ev_supermarket_looting', description: 'Black market for water and fuel run by armed groups.', effects: { scores: { public_order: -1 } } },
+        { id: 'ev_media_attacked', name: 'Media Crew Attacked', image: 'generic_police', description: 'Media crew attacked while filming riots.', effects: { scores: { political: -1 } } },
         { id: 'ev_bridge_collapse', name: 'Bridge Collapse', description: 'Critical bridge collapses under aid convoy.', image: 'ev_bridge_collapse', effects: { scores: { logistics: -2, infrastructure: -1 } } },
-        { id: 'ev_mass_exodus', name: 'Mass Exodus', description: 'Small boats attempting to reach Puerto Rico.', effects: { scores: { humanitarian: -1, political: -1 } } },
+        { id: 'ev_mass_exodus', name: 'Mass Exodus', image: 'ev_secondary_weather', description: 'Small boats attempting to reach Puerto Rico.', effects: { scores: { humanitarian: -1, political: -1 } } },
         
-        { id: 'ev_marines_push', name: 'Marines Retake Prison', description: 'Royal Marines launch operation to retake prison.', effects: { scores: { public_order: +2 } } },
-        { id: 'ev_epidemic', name: 'Epidemic Confirmed', description: 'Major epidemic confirmed; strict quarantine required.', effects: { scores: { humanitarian: -2 } } },
-        { id: 'ev_task_force', name: 'Naval Task Force Arrives', description: 'Full naval task force arrives with heavy lift.', effects: { scores: { logistics: +3, infrastructure: +2 } } },
-        { id: 'ev_donor_conf', name: 'Donor Conference', description: 'International donor conference requires PM commitment.', decisions: [{ role: 'PM', text: 'Commit funding?', options: [{ id: 'yes', text: 'Yes (£2bn)', effects: { scores: { political: +2 } } }, { id: 'no', text: 'No', effects: { scores: { political: -2 } } }] }] },
-        { id: 'ev_arrest_officials', name: 'Officials Arrested', description: 'Local officials arrested for hoarding aid.', effects: { scores: { public_order: +1, political: -1 } } },
-        { id: 'ev_mutiny', name: 'Police Mutiny', description: 'Widespread mutiny among remaining local police forces.', conditions: { maxScores: { public_order: 1, humanitarian: 2 } }, effects: { scores: { public_order: -3 } } },
-        { id: 'ev_turning_point', name: 'Turning Point Address', description: 'PM addresses the territory.', effects: { scores: { political: +1 } } },
+        { id: 'ev_marines_push', name: 'Marines Retake Prison', image: 'generic_deployment', description: 'Royal Marines launch operation to retake prison.', effects: { scores: { public_order: +2 } } },
+        { id: 'ev_epidemic', name: 'Epidemic Confirmed', image: 'ev_chemical_attempt', description: 'Major epidemic confirmed; strict quarantine required.', effects: { scores: { humanitarian: -2 } } },
+        { id: 'ev_task_force', name: 'Naval Task Force Arrives', image: 'hms_prince_of_wales', description: 'Full naval task force arrives with heavy lift.', effects: { scores: { logistics: +3, infrastructure: +2 } } },
+        { id: 'ev_donor_conf', name: 'Donor Conference', image: 'generic_un', description: 'International donor conference requires PM commitment.', decisions: [{ role: 'PM', text: 'Commit funding?', options: [{ id: 'yes', text: 'Yes (£2bn)', effects: { scores: { political: +2 } } }, { id: 'no', text: 'No', effects: { scores: { political: -2 } } }] }] },
+        { id: 'ev_arrest_officials', name: 'Officials Arrested', image: 'generic_police', description: 'Local officials arrested for hoarding aid.', effects: { scores: { public_order: +1, political: -1 } } },
+        { id: 'ev_mutiny', name: 'Police Mutiny', image: 'evt_precinct_vulnerable', description: 'Widespread mutiny among remaining local police forces.', conditions: { maxScores: { public_order: 1, humanitarian: 2 } }, effects: { scores: { public_order: -3 } } },
+        { id: 'ev_turning_point', name: 'Turning Point Address', image: 'act_national_address', description: 'PM addresses the territory.', effects: { scores: { political: +1 } } },
 
         // Endgame Evaluation
-        { id: 'ev_endgame_trigger', name: '45 Minutes Reached', description: 'The 45-minute response window has closed.', triggerEvents: [
+        { id: 'ev_endgame_trigger', name: '45 Minutes Reached', image: 'ev_crisis_cabinet', description: 'The 45-minute response window has closed.', triggerEvents: [
             { id: 'ev_end_success', delayMs: 1000 },
             { id: 'ev_end_mixed', delayMs: 1000 },
             { id: 'ev_end_failure', delayMs: 1000 }
         ] },
-        { id: 'ev_end_success', name: 'Scenario Concluded: Success', description: 'Order was maintained and humanitarian suffering was minimized. A successful crisis response.', isEndGame: true, conditions: { minScores: { public_order: 3, humanitarian: 3 } } },
-        { id: 'ev_end_mixed', name: 'Scenario Concluded: Mitigated Disaster', description: 'The situation was stabilized, but at a high cost. A mixed response.', isEndGame: true, conditions: { minScores: { public_order: 2 }, maxScores: { humanitarian: 2 } } },
-        { id: 'ev_end_failure', name: 'Scenario Concluded: Total Collapse', description: '"UK Abandons Its Own". The territory has fallen into anarchy and mass casualties.', isEndGame: true, conditions: { maxScores: { public_order: 1 } } }
+        { id: 'ev_end_success', name: 'Scenario Concluded: Success', image: 'ev_us_support_success', description: 'Order was maintained and humanitarian suffering was minimized. A successful crisis response.', isEndGame: true, conditions: { minScores: { public_order: 3, humanitarian: 3 } } },
+        { id: 'ev_end_mixed', name: 'Scenario Concluded: Mitigated Disaster', image: 'ev_hurricane_map', description: 'The situation was stabilized, but at a high cost. A mixed response.', isEndGame: true, conditions: { minScores: { public_order: 2 }, maxScores: { humanitarian: 2 } } },
+        { id: 'ev_end_failure', name: 'Scenario Concluded: Total Collapse', image: 'ev_endgame_domestic', description: '"UK Abandons Its Own". The territory has fallen into anarchy and mass casualties.', isEndGame: true, conditions: { maxScores: { public_order: 1 } } }
     ]
 };

@@ -31,6 +31,7 @@ module.exports = {
         {
             id: "main_hospital",
             name: "Metro General Hospital",
+            image: "evt_hospital_power_failure",
             location: [40.7150, -74.0010],
             state: "operational",
             tags: ["infrastructure", "ems"],
@@ -39,6 +40,7 @@ module.exports = {
         {
             id: "central_precinct",
             name: "Central Police Precinct",
+            image: "evt_precinct_vulnerable",
             location: [40.7110, -74.0100],
             state: "operational",
             tags: ["security"],
@@ -200,6 +202,7 @@ module.exports = {
         {
             id: "act_emergency_funds",
             name: "Release Emergency Funds",
+            image: "ev_crisis_cabinet",
             description: "Authorize immediate release of city budget to hire private contractors for grid repair.",
             initiator: ["mayor"],
             conditions: {

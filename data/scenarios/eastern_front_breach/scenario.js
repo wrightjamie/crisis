@@ -40,6 +40,7 @@ module.exports = {
         {
             id: "supply_depot",
             name: "Central Supply Hub",
+            image: "us_v_corps",
             location: [48.4, 34.8],
             state: "operational",
             tags: ["logistics"],
@@ -202,6 +203,7 @@ module.exports = {
         {
             id: "act_request_resupply",
             name: "Request Emergency Resupply",
+            image: "a400m_transport",
             description: "Request an emergency airdrop of artillery shells.",
             initiator: ["logistics", "artillery"],
             requiresApprovalFrom: ["commander"],

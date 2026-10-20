@@ -28,6 +28,7 @@ module.exports = {
         {
             id: "water_treatment",
             name: "Main Water Treatment Plant",
+            image: "evt_water_plant",
             location: [51.51, -0.11],
             state: "operational",
             tags: ["infrastructure"],
@@ -198,6 +199,7 @@ module.exports = {
         {
             id: "evt_media_rumor",
             name: "Social Media Rumors",
+            image: "ev_disinfo_campaign",
             stage: "stage_1",
             description: "False reports of an upstream dam failing are spreading rapidly online, causing panic.\n\n*(Tutorial: This event highlights how the Media role can independently control the 'Public Panic' score.)*",
             location: [51.52, -0.10],
@@ -228,6 +230,7 @@ module.exports = {
         {
             id: "evt_hospital_flooding",
             name: "Hospital Basement Flooding",
+            image: "evt_hospital_power_failure",
             stage: "stage_2",
             description: "The local hospital's backup generators are in the basement and water is rising fast.\n\n*(Tutorial: Sometimes you won't have enough 'Emergency Capacity' to save everything. Prioritization is key.)*",
             location: [51.525, -0.135],
@@ -258,6 +261,7 @@ module.exports = {
         {
             id: "evt_aftermath",
             name: "Storm Receding",
+            image: "act_national_address",
             stage: "stage_2",
             description: "The rain has finally stopped and waters are slowly receding. The immediate crisis is over.\n\n*(Tutorial: The game is ending! Your final choices and scores will determine the AI-generated After Action Report.)*",
             location: [51.50, -0.12],
@@ -290,6 +294,7 @@ module.exports = {
         {
             id: "act_press_conference",
             name: "Hold Press Conference",
+            image: "generic_press",
             description: "Hold a press conference to reassure the public.\n\n*(Tutorial: This is a Manual Action. It requires the 'media' or 'mayor' to initiate, and the 'mayor' must approve it. It also requires Public Panic to be 'Strained' (3) or worse before you can even attempt it!)*",
             initiator: ["media", "mayor"],
             requiresApprovalFrom: ["mayor"],
