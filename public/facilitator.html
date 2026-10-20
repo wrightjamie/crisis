@@ -78,25 +78,25 @@
             <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
         </header>
         <div class="facilitator-container">
-            <div class="admin-card mb-2" style="max-width: 500px; margin: 0 auto;">
+            <div class="admin-card mb-3">
                 <h2 class="card-title text-primary">Create New Game</h2>
                 <div class="flex-column gap-1">
                     <div class="flex-row gap-1 items-center">
                         <input type="text" id="new-game-name" class="form-control flex-1" placeholder="Game Name (e.g., Session 1)">
-                        <button id="btn-random-name" class="btn btn-secondary" title="Random Name" style="padding: 0.5rem; display: flex; align-items: center; justify-content: center;">🔄</button>
+                        <button id="btn-random-name" class="btn btn-secondary" title="Random Name">🔄</button>
                     </div>
                     <button id="btn-create-game" class="btn btn-primary w-100">Create & Join Game</button>
                     <div id="create-error" class="text-red mt-1" style="display:none;"></div>
                 </div>
             </div>
 
-            <h2 class="mb-1 text-center">Active Games</h2>
+            <h2 class="mb-2">Active Games</h2>
             <div id="games-list" class="fac-dashboard-grid">
                 <!-- Games injected by JS -->
             </div>
 
-            <h2 class="mt-3 mb-1 text-center text-muted">Inactive Games (Dead Games)</h2>
-            <div id="dead-games-list" class="fac-dashboard-grid" style="opacity: 0.7;">
+            <h2 class="mt-3 mb-2 text-muted">Inactive Games (Dead Games)</h2>
+            <div id="dead-games-list" class="fac-dashboard-grid dead-games-grid">
                 <!-- Dead Games injected by JS -->
             </div>
         </div>

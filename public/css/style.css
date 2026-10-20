@@ -204,6 +204,27 @@ body {
   border-color: var(--border-color);
 }
 
+/* Form Controls */
+.form-control {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: var(--text-base);
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--accent-blue);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
 /* Button Group */
 .btn-group {
     display: flex;
@@ -595,7 +616,11 @@ body:has(dialog[open]) {
   text-align: center;
 }
 .fac-dashboard-container[open] { display: block; }
-.fac-dashboard-grid { display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr)); }
+#dashboard-view .facilitator-container, .fac-dashboard-wrapper { max-width: 640px; margin: 0 auto; }
+.fac-dashboard-grid { display: flex; flex-direction: column; gap: var(--space-md); width: 100%; }
+.dead-games-grid { opacity: 0.7; }
+.fac-badge-online { background-color: var(--status-1); color: var(--text-primary); font-size: var(--text-xs); padding: var(--space-xs) var(--space-sm); }
+.fac-badge-offline { background-color: var(--accent-orange); color: var(--text-primary); font-size: var(--text-xs); padding: var(--space-xs) var(--space-sm); }
 .fac-event-list { overflow-y: auto; overflow-x: auto; max-height: max(75vh, 400px); padding-right: var(--space-sm); }
 .fac-roles { font-size: var(--text-xs); display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); border-left: 1px solid var(--border-color); padding-left: var(--space-md); margin-left: var(--space-sm); }
 
@@ -717,14 +742,31 @@ body:has(dialog[open]) {
 .flex-row { display: flex; flex-direction: row; }
 .flex-col { display: flex; flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
-.items-center { align-items: center; }
+.items-center, .align-center { align-items: center; }
 .justify-between { justify-content: space-between; }
 .justify-center { justify-content: center; }
-.gap-xs { gap: var(--space-xs); }
+.gap-05, .gap-xs { gap: var(--space-xs); }
 .gap-sm { gap: var(--space-sm); }
 .gap-md { gap: var(--space-md); }
 .w-100 { width: 100%; }
 .flex-1 { flex: 1; }
+.join-form-group { width: 100%; max-width: 240px; margin: 0 auto; }
+.mt-3 { margin-top: var(--space-lg); }
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-3, .mb-lg { margin-bottom: var(--space-lg); }
+.my-3 { margin-top: var(--space-lg); margin-bottom: var(--space-lg); }
+.p-1 { padding: var(--space-sm); }
+.p-2 { padding: var(--space-md); }
+.pt-1 { padding-top: var(--space-sm); }
+.ml-2 { margin-left: var(--space-md); }
+.text-primary { color: var(--text-primary); }
+.text-red { color: var(--accent-red); }
+.text-orange { color: var(--accent-orange); }
+.text-xs { font-size: var(--text-xs); }
+.text-base { font-size: var(--text-base); }
+.text-md { font-size: var(--text-md); }
+.text-lg { font-size: var(--text-lg); }
+.uppercase { text-transform: uppercase; }
 .d-none { display: none !important; }
 
 /* Spacing Utilities */
@@ -798,7 +840,7 @@ body:has(dialog[open]) {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-sm);
 }
 .fac-modal-content {
-  border: none; padding: var(--space-xl); width: 100%; height: 100%; max-width: 100vw; max-height: 100vh; margin: 0; background: var(--bg-primary); color: var(--text-primary);
+  border: none; padding: var(--space-xl); width: 100%; height: 100%; max-width: 100vw; max-height: 100vh; margin: 0 auto; overflow-y: auto; background: var(--bg-primary); color: var(--text-primary);
 }
 .fac-modal-content[open] { display: block; }
 

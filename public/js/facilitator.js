@@ -103,14 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'admin-card';
 
             const stateText = g.status === 'holding' ? 'Lobby/Holding' : 'Active Scenario';
-            const facBadge = g.hasFacilitator ? '<span class="role-badge" style="background-color: var(--status-1); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Online</span>' : '<span class="role-badge" style="background-color: var(--accent-orange); color: var(--text-primary); font-size: 0.8em; padding: 2px 6px;">Facilitator Offline</span>';
+            const facBadgeClass = g.hasFacilitator ? 'fac-badge-online' : 'fac-badge-offline';
+            const facBadgeText = g.hasFacilitator ? 'Facilitator Online' : 'Facilitator Offline';
+            const facBadge = `<span class="role-badge ${facBadgeClass}">${facBadgeText}</span>`;
             const dateStr = new Date(g.lastActivity).toLocaleDateString();
 
             card.innerHTML = `
-                <h3 class="card-title" style="color: var(--text-primary);"></h3>
+                <h3 class="card-title text-primary"></h3>
                 <p class="text-sm text-secondary mb-1">Status: ${stateText}<br>Last Active: ${dateStr}</p>
                 <div class="mb-1">${facBadge}</div>
-                <div class="flex-column gap-05">
+                <div class="flex-column gap-1">
                     <button class="btn btn-primary w-100 join-btn">Join Game</button>
                     ${isDead ? `<button class="btn btn-secondary w-100 text-red delete-btn">Delete Game</button>` : ''}
                 </div>
@@ -128,8 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        if (activeList.children.length === 0) activeList.innerHTML = '<p class="text-muted p-1">No active games.</p>';
-        if (deadList.children.length === 0) deadList.innerHTML = '<p class="text-muted p-1">No dead games.</p>';
+        if (activeList.children.length === 0) activeList.innerHTML = '<p class="text-muted">No active games.</p>';
+        if (deadList.children.length === 0) deadList.innerHTML = '<p class="text-muted">No dead games.</p>';
     });
 
     window.deleteGame = function(id) {
