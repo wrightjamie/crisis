@@ -72,10 +72,11 @@ app.post('/api/bug-reports', async (req, res) => {
     }
 });
 
-app.post('/api/bug-reports/github-config', (req, res) => {
-    const status = bugReports.setGithubConfig(req.body);
+app.post('/api/bug-reports/github-config', async (req, res) => {
+    const status = await bugReports.setGithubConfig(req.body);
     io.emit('bug_reporting_github_updated', status);
-    res.json(status);
+    io.emit('bug_sync_status_updated', bugReports.syncStatus);
+    res.json({ ...status, syncStatus: bugReports.syncStatus });
 });
 
 const setupSockets = require('./src/socket');

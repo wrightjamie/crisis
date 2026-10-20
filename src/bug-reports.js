@@ -83,6 +83,7 @@ class BugReportManager {
                 enabled: this.enabled,
                 counter: this.counter,
                 githubRepo: this.githubRepo,
+                githubToken: this.githubToken || undefined,
                 hasGithubToken: Boolean(this.githubToken),
                 lastUpdated: new Date().toISOString(),
                 reports: this.reports
@@ -108,10 +109,11 @@ class BugReportManager {
         return [...this.reports];
     }
 
-    setGithubConfig({ token, repo }) {
+    async setGithubConfig({ token, repo }) {
         if (repo) this.githubRepo = repo.trim();
         if (token !== undefined) this.githubToken = (token || '').trim();
         this.save();
+        await this.checkSyncStatus(true);
         return this.getGithubStatus();
     }
 

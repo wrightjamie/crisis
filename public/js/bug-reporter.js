@@ -488,6 +488,27 @@
         socket.emit('toggle_bug_reporting', { enabled: nextVal });
     };
 
+    window.promptSetGithubToken = function() {
+        const token = prompt('Enter your GitHub Personal Access Token (starts with github_pat_ or ghp_):', '');
+        if (token === null) return;
+        
+        showToast('Saving GitHub token...');
+        fetch('/api/bug-reports/github-config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: token.trim(), repo: 'wrightjamie/crisis' })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.syncStatus) updateSyncStatusUI(res.syncStatus);
+            const icon = res.syncStatus?.color === 'green' ? '🟢' : '🟡';
+            showToast(`${icon} GitHub token updated! ${res.syncStatus?.label || ''}`);
+        })
+        .catch(err => {
+            showToast(`🔴 Failed to set token: ${err.message}`);
+        });
+    };
+
     window.testBugSync = function() {
         showToast('Testing storage & GitHub sync...');
         fetch('/api/bug-reports/test-sync')
