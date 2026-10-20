@@ -405,6 +405,67 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_D
 // Keep track of markers to update/remove them
 let mapMarkers = {};
 let viewedEvents = new Set();
+let knownEventIds = new Set();
+let isInitialStateLoaded = false;
+
+// Web Audio API Synthesized Alert Sound
+let audioCtx = null;
+function getAudioContext() {
+    if (!audioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+            audioCtx = new AudioCtxClass();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+['click', 'keydown', 'touchstart'].forEach(type => {
+    document.addEventListener(type, () => {
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }, { passive: true });
+});
+
+function playEventAlertSound() {
+    try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        
+        // Two-tone attention chime (D5 587Hz -> A5 880Hz)
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now);
+        gain1.gain.setValueAtTime(0, now);
+        gain1.gain.linearRampToValueAtTime(0.18, now + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.22);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(880, now + 0.12);
+        gain2.gain.setValueAtTime(0, now + 0.12);
+        gain2.gain.linearRampToValueAtTime(0.22, now + 0.14);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.45);
+    } catch (e) {
+        console.warn('Unable to play event alert audio:', e);
+    }
+}
+window.playEventAlertSound = playEventAlertSound;
 let edgeMarkersContainer = null;
 
 // Edge marker logic
@@ -551,6 +612,10 @@ socket.on('connect', () => {
 
 // Socket events
 socket.on('initial_state', (state) => {
+    if (state && state.events) {
+        state.events.forEach(e => knownEventIds.add(e.id));
+        isInitialStateLoaded = true;
+    }
     handleStateUpdate(state);
 });
 
@@ -580,6 +645,8 @@ function handleHoldingState() {
     }
     mapMarkers = {};
     viewedEvents.clear();
+    knownEventIds.clear();
+    isInitialStateLoaded = false;
 }
 
 function handleLobbyState() {
@@ -758,6 +825,22 @@ function updateUI() {
             }
         }
         previousAvailableActions = currentAvailableActions;
+    }
+
+    // Check for newly triggered events and play audio alert
+    if (localState.events && localState.events.length > 0) {
+        if (isInitialStateLoaded) {
+            const newEvents = localState.events.filter(e => !knownEventIds.has(e.id));
+            if (newEvents.length > 0) {
+                playEventAlertSound();
+                newEvents.forEach(evt => {
+                    showToast('🚨 <strong>New Event:</strong> ' + (evt.name || ''));
+                });
+            }
+        } else {
+            isInitialStateLoaded = true;
+        }
+        localState.events.forEach(e => knownEventIds.add(e.id));
     }
 
     renderMap(localState.events, localState.assets);

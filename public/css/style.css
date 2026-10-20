@@ -618,6 +618,9 @@ body:has(dialog[open]) {
 .fac-dashboard-container[open] { display: block; }
 #dashboard-view .facilitator-container, .fac-dashboard-wrapper { max-width: 640px; margin: 0 auto; }
 .fac-dashboard-grid { display: flex; flex-direction: column; gap: var(--space-md); width: 100%; }
+.fac-dashboard-grid .admin-card { background-color: var(--bg-tertiary); border: 1px solid var(--border-color); padding: 1.25rem; margin-bottom: 0; }
+.btn-icon-square { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; min-width: 42px; padding: 0; flex-shrink: 0; }
+.btn-icon-square svg { width: 20px; height: 20px; display: block; }
 .dead-games-grid { opacity: 0.7; }
 .fac-badge-online { background-color: var(--status-1); color: var(--text-primary); font-size: var(--text-xs); padding: var(--space-xs) var(--space-sm); }
 .fac-badge-offline { background-color: var(--accent-orange); color: var(--text-primary); font-size: var(--text-xs); padding: var(--space-xs) var(--space-sm); }

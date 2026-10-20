@@ -19,7 +19,7 @@
 
 ## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
 
-While all 13 scenarios now have functional image mappings in place so no UI cards are blank, several scenarios rely on heavily shoehorned or anachronistic images from other eras or settings. These items should be regenerated with bespoke imagery once the AI generation quota resets:
+While all 13 scenarios now have functional image mappings in place so no UI cards are blank, several scenarios rely on heavily shoehorned or anachronistic images from other eras or settings. These items are fully specified with prompt formulas and metadata in the artifact and will be generated once the AI generation quota resets (exhausted with reset expected ~22-Oct-2026 21:40 UTC):
 
 ### 1. D-Day: Operation Overlord (dday_overlord) — Critical WWII Anachronisms
 - [ ] Asset: "Omaha, Utah, Gold, Juno, Sword Beaches" (omaha_beach, utah_beach, gold_beach, juno_beach, sword_beach) — Currently uses modern Royal Navy RFA Mounts Bay amphibious dock ship. Needs authentic 1944 LCVP Higgins boats approaching Normandy beaches under German machine-gun fire.
