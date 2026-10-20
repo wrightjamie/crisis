@@ -16,7 +16,56 @@
 - [x] Kick player and allow a new player to join
 - [x] Move to a shared image library (`data/image-library.json` and `public/images/library/`) with title, description, and freeform tags across all scenarios
 - [x] Populate and assign 100% image coverage across all 13 scenarios in the game (including generating 11 new assets for Global Pandemic, Project Icarus, and Mars Colony Rebellion)
-- [ ] Optional: Generate unique bespoke image for Mars Colony Rebellion orbital flagship (`a_un_flagship`) once AI image generation quota resets (~54h)
+
+## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
+
+While all 13 scenarios now have functional image mappings in place so no UI cards are blank, several scenarios rely on heavily shoehorned or anachronistic images from other eras or settings. These items should be regenerated with bespoke imagery once the AI generation quota resets:
+
+### 1. D-Day: Operation Overlord (dday_overlord) — Critical WWII Anachronisms
+- [ ] Asset: "Omaha, Utah, Gold, Juno, Sword Beaches" (omaha_beach, utah_beach, gold_beach, juno_beach, sword_beach) — Currently uses modern Royal Navy RFA Mounts Bay amphibious dock ship. Needs authentic 1944 LCVP Higgins boats approaching Normandy beaches under German machine-gun fire.
+- [ ] Asset: "Caen" (caen) — Currently uses modern British mechanized infantry in APC. Needs ruined 1944 Norman stone town under allied aerial bombardment.
+- [ ] Asset: "Cherbourg Deep Water Port" (cherbourg) — Currently uses modern commercial container port in Odesa. Needs 1944 French deep-water port with scuttled ships and concrete Atlantic Wall fortifications.
+- [ ] Asset: "Pointe du Hoc" (pointe_du_hoc) — Currently uses modern soldiers. Needs 2nd Ranger Battalion scaling sheer 100-foot chalk cliffs with rope ladders and grappling hooks.
+- [ ] Event: "Airborne Drops & Gliders" (th1_airborne_start, th1_pegasus_gliders, th1_glider_reinforcements, th1_glider_crash) — Currently uses modern RAF A400M turboprop. Needs WWII C-47 Skytrains dropping paratroopers and wooden Horsa gliders in dark Norman night skies.
+- [ ] Event: "German Panzer Counter-Attacks" (th1_21st_panzer, th3_counter_attack_carentan, ev_panzer_assault, act_axis_release_panzers) — Currently uses modern Ukrainian T-72 tanks. Needs 1944 German Panzer IV / Tiger tanks advancing through Normandy bocage hedgerows.
+- [ ] Event: "Luftwaffe Sortie" (ev_luftwaffe_appearance) — Currently uses modern Soviet Tu-95 Bear bomber shadowed by RAF Typhoon. Needs WWII Messerschmitt Bf 109 or Fw 190 fighters.
+- [ ] Event: "Allied Air Supremacy" (ev_allied_air_superiority) — Currently uses 2020s Eurofighter Typhoon. Needs WWII Supermarine Spitfires, Hawker Typhoons, or P-51 Mustangs with invasion stripes.
+- [ ] Event: "Maquis Rail Sabotage" (ev_french_sabotage) — Currently uses modern Russian logistics rail depot explosion. Needs French resistance fighters blowing up a WWII steam locomotive in rural France.
+- [ ] Event: "Axis Artillery Spotters" (th2_artillery_spotters) — Currently uses a modern commercial quadcopter drone. Needs German forward observers with trench periscopes and rangefinders.
+- [ ] Event: "Hitler & OKW Command Decisions" (ev_hitler_wakes, ev_hitler_sleeps, fac_axis_strategic_reserve) — Currently uses 2026 COBRA situation room with glowing blue digital displays. Needs Berghof / Wolf's Lair map room with paper situation maps.
+
+### 2. Cuban Missile Crisis 1962 (cuban_missile_crisis) — Cold War Era Mismatches
+- [ ] Asset: "San Cristobal MRBM Site" (a_cuba_missile_site) — Currently uses modern Russian Iskander TEL in a pine forest. Needs 1962 Soviet R-12 Dvina (SS-4 Sandal) canvas-covered medium-range ballistic missile launch pads in tropical Cuban jungle clearing.
+- [ ] Asset: "US Quarantine Line" (a_us_blockade, ev_thread1_quarantine_init) — Currently uses modern nuclear supercarrier USS Harry S. Truman. Needs 1962 US Navy Gearing/Fletcher-class destroyers and Essex-class ASW carrier intercepting freighters.
+- [ ] Asset: "Soviet Submarine B-59" (ev_thread1_sub_encounter, ev_thread1_b59_surfaces, act_ussr_sub_patrol) — Currently uses ultra-modern British Astute-class nuclear submarine. Needs 1962 Soviet Project 641 Foxtrot-class diesel-electric submarine forced to surface in choppy waters.
+- [ ] Event: "U-2 Reconnaissance Sorties" (ev_thread3_intel_init, ev_thread3_u2_survives, act_usa_recon) — Currently uses RAF RC-135W Rivet Joint 4-engine airliner. Needs high-altitude Lockheed U-2 Dragon Lady glider-winged spy plane above the Caribbean.
+- [ ] Event: "U-2 Shot Down Over Cuba" (ev_thread3_u2_shot_down, ev_u2_shot_down_manual) — Currently uses modern F-35 stealth jet SAM interception. Needs U-2 wreckage / SA-2 Guideline missile launch over Cuba.
+- [ ] Event: "EXCOMM & Oval Office Deliberations" (ev_start, ev_thread2_trollope_ploy, ev_endgame_trigger) — Currently uses 2026 COBRA crisis cabinet. Needs JFK's 1962 Cabinet Room / Oval Office with Kennedy, McNamara, and Bundy around paper maps.
+
+### 3. Mars Colony Rebellion 2084 (mars_colony_rebellion) — Sci-Fi / Setting Mismatches
+- [ ] Asset: "UNS Resolve Orbital Flagship" (a_un_flagship) — Currently uses alien invasion mothership (ev_mothership_alt) due to quota limit. Needs dedicated UN Space Command battlecruiser in low Mars orbit.
+- [ ] Event: "Martian Smuggler Freighter" (ev_thread2_blockade_run, ev_thread2_boarding_trap, ev_thread2_boarding_success) — Currently uses captured alien saucer (ev_alien_tech). Needs rugged civilian asteroid-belt cargo freighter.
+- [ ] Event: "Earth Protests" (ev_thread3_earth_protests, ev_thread3_rebels_emboldened) — Currently uses rainy contemporary London Whitehall and Manchester streets. Needs futuristic 2084 mega-city Earth protests with holographic displays.
+- [ ] Event: "Surface-to-Orbit Missiles" (ev_thread2_martian_retaliation) — Currently uses F-35 air strike (ev_f35_fail). Needs Martian surface missile silo battery launching kinetic interceptors into space.
+
+### 4. Falklands II (falklands_2) — Setting Mismatches
+- [ ] Asset: "Port Stanley" (port_stanley) — Currently uses Caribbean Government House in Tortola with palm trees (bvi_gov_house). Needs the windswept, treeless, sub-Antarctic coastal town of Stanley with colorful tin roofs and harbor jetties.
+- [ ] Asset: "RAF Mount Pleasant" (mount_pleasant) — Currently uses generic European NATO base. Needs the stark, treeless East Falkland peat-bog military complex under cold grey skies.
+- [ ] Asset: "Argentine Air Bases" (rio_gallegos, rio_grande) — Currently uses NATO air base. Needs Patagonian military airbases in southern Argentina with Super Etendard / Skyhawk revetments.
+- [ ] Event: "Naval Defeat in South Atlantic" (ev_naval_defeat) — Currently uses Portsmouth naval dockyard missile strike (ev_portsmouth_strike). Needs burning UK frigate in rough South Atlantic seas.
+- [ ] Event: "Air Raid on Mount Pleasant" (ev_air_raid) — Currently uses Cyprus Akrotiri strike (ev_akrotiri_strike). Needs Argentine air-launched cruise missile strikes on Mount Pleasant runway.
+
+### 5. Caribbean Hurricane (caribbean_crisis) — Specific Scene Refinements
+- [ ] Event: "US Coast Guard Cutter" (ev_us_coastguard) — Currently uses Royal Navy Type 23 frigate with White Ensign. Needs white USCG Legend/Famous-class cutter with red-and-blue hull racing stripe.
+- [ ] Event: "Stadium Field Hospital" (ev_stadium_hospital) — Currently uses combat medevac from a warzone. Needs makeshift civilian medical clinic inside a storm-damaged tropical athletic stadium.
+- [ ] Event: "Telecom Restoration Offer" (ev_telecom_offer) — Currently uses GCHQ Bude satellite intercept dishes in Cornwall. Needs storm-battered cellular telecom mast on a lush tropical hillside.
+- [ ] Event: "Waterborne Illness / Epidemic" (ev_illness, ev_epidemic) — Currently uses London train station terrorist CBRN hazmat response. Needs open-air tropical relief camp medical isolation ward.
+- [ ] Event: "Naval Task Force" (ev_task_force) — Currently uses aircraft carrier HMS Prince of Wales. Needs multi-ship amphibious disaster relief flotilla with support auxiliaries and landing craft.
+
+### 6. Global Pandemic & Project Icarus Refinements
+- [ ] Global Pandemic: "Vaccine Nationalism / Production" (ev_vaccine_hoarding) — Currently uses military transport loading munitions crates. Needs automated pharmaceutical vaccine vial bottling line under armed cold-chain security.
+- [ ] Project Icarus: "European & Asian Nodes" (node_eu, node_asia) — Currently reuses North American node (node_na). Needs distinct European alpine facility and Asian mega-industrial atmospheric injector.
+- [ ] Project Icarus: "Mass Climate Refugee Border" (ev_climate_refugees) — Currently uses Caribbean food riot (ev_airdrop_riot). Needs massive climate migration checkpoint across arid borderlands.
 
 ## Caribbean Crisis Tasks
 - [x] Generate image: RFA Mounts Bay (Bay-class landing ship) `/images/assets/rfa_mounts_bay.png`
