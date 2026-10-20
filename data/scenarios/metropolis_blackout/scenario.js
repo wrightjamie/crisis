@@ -47,7 +47,7 @@ module.exports = {
         {
             id: "substation_alpha",
             name: "Power Substation Alpha",
-            image: "/images/assets/substation_alpha.jpg",
+            image: "substation_alpha",
             location: [40.7200, -73.9950],
             state: "destroyed",
             tags: ["infrastructure", "grid"],
@@ -98,7 +98,7 @@ module.exports = {
         {
             id: "evt_hospital_power_failure",
             name: "Hospital Generator Failure",
-            image: "/images/events/evt_hospital_power_failure.jpg",
+            image: "evt_hospital_power_failure",
             stage: "dusk",
             description: "Metro General Hospital's backup generators have failed. Critical care patients are at immediate risk.",
             location: [40.7150, -74.0010],
@@ -135,7 +135,7 @@ module.exports = {
         {
             id: "evt_precinct_vulnerable",
             name: "Central Precinct Vulnerable",
-            image: "/images/events/evt_precinct_vulnerable.jpg",
+            image: "evt_precinct_vulnerable",
             stage: "dusk",
             description: "Without backup power, the Central Precinct's communications are severely degraded.",
             location: [40.7110, -74.0100],
@@ -167,7 +167,7 @@ module.exports = {
         {
             id: "evt_supermarket_riot",
             name: "Supermarket Riot",
-            image: "/images/events/evt_supermarket_riot.jpg",
+            image: "evt_supermarket_riot",
             stage: "night",
             description: "A large crowd has gathered at a major supermarket. People are desperate for water and food.",
             location: [40.7180, -73.9980],

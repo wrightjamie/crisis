@@ -97,7 +97,7 @@ CRITICAL RULES:
                     },
                     scoreModifiers: { air_control: +1, sustainability: -1 },
                     assetModifiers: [
-                        { id: 'a_qec', name: 'HMS Queen Elizabeth & F-35B Wing', location: [34.0, 31.5], state: 'operational', tags: ['maritime', 'air', 'strike'], image: '/images/assets/qe_class_carrier.png', briefing: 'Fifth-generation STOVL stealth multi-role fighters operating from the Queen Elizabeth-class carrier.' }
+                        { id: 'a_qec', name: 'HMS Queen Elizabeth & F-35B Wing', location: [34.0, 31.5], state: 'operational', tags: ['maritime', 'air', 'strike'], image: 'qe_class_carrier', briefing: 'Fifth-generation STOVL stealth multi-role fighters operating from the Queen Elizabeth-class carrier.' }
                     ]
                 },
                 {
@@ -110,7 +110,7 @@ CRITICAL RULES:
                     },
                     scoreModifiers: { sustainability: +1, force_protection: -1 },
                     assetModifiers: [
-                        { id: 'a_qec', name: 'HMS Queen Elizabeth', location: [56.02, -3.44], state: 'maintenance', tags: ['maritime'], image: '/images/assets/qe_class_carrier.png', briefing: 'Undergoing refit in Rosyth; unavailable for Carrier Enabled Power Projection.' }
+                        { id: 'a_qec', name: 'HMS Queen Elizabeth', location: [56.02, -3.44], state: 'maintenance', tags: ['maritime'], image: 'qe_class_carrier', briefing: 'Undergoing refit in Rosyth; unavailable for Carrier Enabled Power Projection.' }
                     ]
                 }
             ]
@@ -143,16 +143,16 @@ CRITICAL RULES:
         }
     ],
     assets: [
-        { id: 'a_brize', name: 'RAF Brize Norton (UK Hub)', location: [51.75, -1.58], state: 'operational', tags: ['hub', 'mobility'], image: '/images/assets/raf_brize_norton.jpg', briefing: 'Primary UK Main Operating Base (Hub) for Strategic Transport (C-17 Globemaster), Tactical Transport (A400M Atlas), and Tankers (Voyager).' },
-        { id: 'a_waddington', name: 'RAF Waddington (ISR Hub)', location: [53.16, -0.52], state: 'operational', tags: ['hub', 'isr'], image: '/images/assets/raf_waddington.jpg', briefing: 'Home of No 1 ISR Wing: RC-135W Rivet Joint (SIGINT), Shadow R1, and remotely piloted Reaper/Protector RPAS.' },
-        { id: 'a_akrotiri', name: 'RAF Akrotiri (Forward Spoke)', location: [34.58, 32.98], state: 'operational', tags: ['spoke', 'airfield'], image: '/images/assets/raf_akrotiri.jpg', briefing: 'Forward Mounting Base (Spoke) in Cyprus. Enables Agility and Reach into theatre, protected by the RAF Regiment.' },
-        { id: 'a_typhoon', name: 'Typhoon FGR4 Detachment', location: [34.59, 32.99], state: 'operational', tags: ['air', 'combat'], image: '/images/assets/typhoon_aircraft.png', briefing: 'Fourth-generation multi-role combat aircraft detached from RAF Coningsby/Lossiemouth for QRA, DCA, and multi-role strike.' },
-        { id: 'a_f35', name: 'F-35B Lightning Detachment', location: [34.57, 32.97], state: 'operational', tags: ['air', 'combat', 'stealth'], image: '/images/assets/f35_aircraft.png', briefing: 'Fifth-generation STOVL multi-role stealth aircraft from RAF Marham, capable of penetrating dense A2AD environments.' },
-        { id: 'a_voyager', name: 'Voyager KC2/KC3 Tanker', location: [34.60, 33.01], state: 'operational', tags: ['air', 'mobility', 'aar'], image: '/images/assets/voyager_refueler.png', briefing: 'Air-to-Air Refuelling and strategic transport aircraft, vital for overcoming Air Power\'s limitation of impermanence.' },
-        { id: 'a_poseidon', name: 'P-8A Poseidon MRA1', location: [35.20, 32.50], state: 'operational', tags: ['air', 'isr', 'maritime'], image: '/images/assets/p8_poseidon.jpg', briefing: 'Multi-role maritime patrol aircraft from RAF Lossiemouth, equipped with acoustic sensors and high-resolution radar for ASW and ASuW.' },
-        { id: 'a_rivetjoint', name: 'RC-135W Rivet Joint', location: [35.50, 34.00], state: 'operational', tags: ['air', 'isr'], image: '/images/assets/rc135_rivet_joint.jpg', briefing: 'Dedicated electronic surveillance aircraft surveying the electromagnetic spectrum for SIGINT and MASINT.' },
-        { id: 'a_chinook', name: 'Chinook & Puma JHC Detachment', location: [34.65, 33.10], state: 'operational', tags: ['air', 'mobility', 'rotary'], image: '/images/assets/raf_chinook.jpg', briefing: 'Joint Helicopter Command support helicopters for intra-theatre tactical mobility, CASEVAC, and Combat Recovery.' },
-        { id: 'a_type45', name: 'HMS Duncan (Type 45) & Wildcat', location: [34.20, 33.80], state: 'operational', tags: ['maritime', 'air'], image: '/images/assets/type_45_destroyer.png', briefing: 'Royal Navy Air Defence Destroyer with embarked Wildcat helicopter for Air-Maritime Integration (AMI) and Counter-Sea ops.' }
+        { id: 'a_brize', name: 'RAF Brize Norton (UK Hub)', location: [51.75, -1.58], state: 'operational', tags: ['hub', 'mobility'], image: 'raf_brize_norton', briefing: 'Primary UK Main Operating Base (Hub) for Strategic Transport (C-17 Globemaster), Tactical Transport (A400M Atlas), and Tankers (Voyager).' },
+        { id: 'a_waddington', name: 'RAF Waddington (ISR Hub)', location: [53.16, -0.52], state: 'operational', tags: ['hub', 'isr'], image: 'raf_waddington', briefing: 'Home of No 1 ISR Wing: RC-135W Rivet Joint (SIGINT), Shadow R1, and remotely piloted Reaper/Protector RPAS.' },
+        { id: 'a_akrotiri', name: 'RAF Akrotiri (Forward Spoke)', location: [34.58, 32.98], state: 'operational', tags: ['spoke', 'airfield'], image: 'raf_akrotiri', briefing: 'Forward Mounting Base (Spoke) in Cyprus. Enables Agility and Reach into theatre, protected by the RAF Regiment.' },
+        { id: 'a_typhoon', name: 'Typhoon FGR4 Detachment', location: [34.59, 32.99], state: 'operational', tags: ['air', 'combat'], image: 'typhoon_aircraft', briefing: 'Fourth-generation multi-role combat aircraft detached from RAF Coningsby/Lossiemouth for QRA, DCA, and multi-role strike.' },
+        { id: 'a_f35', name: 'F-35B Lightning Detachment', location: [34.57, 32.97], state: 'operational', tags: ['air', 'combat', 'stealth'], image: 'f35_aircraft', briefing: 'Fifth-generation STOVL multi-role stealth aircraft from RAF Marham, capable of penetrating dense A2AD environments.' },
+        { id: 'a_voyager', name: 'Voyager KC2/KC3 Tanker', location: [34.60, 33.01], state: 'operational', tags: ['air', 'mobility', 'aar'], image: 'voyager_refueler', briefing: 'Air-to-Air Refuelling and strategic transport aircraft, vital for overcoming Air Power\'s limitation of impermanence.' },
+        { id: 'a_poseidon', name: 'P-8A Poseidon MRA1', location: [35.20, 32.50], state: 'operational', tags: ['air', 'isr', 'maritime'], image: 'p8_poseidon', briefing: 'Multi-role maritime patrol aircraft from RAF Lossiemouth, equipped with acoustic sensors and high-resolution radar for ASW and ASuW.' },
+        { id: 'a_rivetjoint', name: 'RC-135W Rivet Joint', location: [35.50, 34.00], state: 'operational', tags: ['air', 'isr'], image: 'rc135_rivet_joint', briefing: 'Dedicated electronic surveillance aircraft surveying the electromagnetic spectrum for SIGINT and MASINT.' },
+        { id: 'a_chinook', name: 'Chinook & Puma JHC Detachment', location: [34.65, 33.10], state: 'operational', tags: ['air', 'mobility', 'rotary'], image: 'raf_chinook', briefing: 'Joint Helicopter Command support helicopters for intra-theatre tactical mobility, CASEVAC, and Combat Recovery.' },
+        { id: 'a_type45', name: 'HMS Duncan (Type 45) & Wildcat', location: [34.20, 33.80], state: 'operational', tags: ['maritime', 'air'], image: 'type_45_destroyer', briefing: 'Royal Navy Air Defence Destroyer with embarked Wildcat helicopter for Air-Maritime Integration (AMI) and Counter-Sea ops.' }
     ],
     stages: [
         { id: 'stage_1', name: 'Stage 1: ISR, Enablers & Deployment (LO1 & LO2)' },
@@ -171,7 +171,7 @@ CRITICAL RULES:
             name: '1.1 National Security & Preventative Diplomacy',
             repeatable: false,
             location: [35.10, 33.90],
-            image: '/images/events/ev_crisis_cabinet.png',
+            image: 'ev_crisis_cabinet',
             description: 'Tensions are escalating rapidly in the Eastern Mediterranean. Before kinetic hostilities break out, the UK Government directs UK JFAC to demonstrate resolve in line with the National Security Strategy (Protect, Project, Promote).',
             facilitatorNotes: 'Covers LO1 P2 (Task 5, 6, 8, 9): National Security Strategy (Protect, Project, Promote), Levels of Warfare (Strategic, Operational, Tactical), and Preventative/Defence Diplomacy vs Deterrence.',
             roleDescriptions: {
@@ -228,7 +228,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.40, 35.90],
-            image: '/images/events/ev_disinfo_campaign.png',
+            image: 'ev_disinfo_campaign',
             description: 'While state forces mass on the border, non-state paramilitary insurgents are smuggling advanced anti-aircraft weapons into coastal towns. Social media videos show covered trucks arriving at a commercial port.',
             facilitatorNotes: 'Covers LO1 P1 (State vs Non-State Actors) and LO2 P7 (Task 25: OSINT, FININT, HUMINT, TECHINT).',
             roleDescriptions: {
@@ -284,7 +284,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.58, 32.98],
-            image: '/images/assets/nato_air_base.png',
+            image: 'nato_air_base',
             description: 'Hostilities have commenced. An allied nation offers us use of an austere forward airfield ("Forward Strip Alpha") just 40 miles from the enemy border. Alternatively, we can operate from our established overseas base at RAF Akrotiri, 150 miles away across the sea.',
             facilitatorNotes: 'Covers LO1 P3 (Task 10, 12, 13): Basing considerations, Fragility/Vulnerability of aircraft on the ground vs Reach and Sustainability.',
             roleDescriptions: {
@@ -340,7 +340,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [51.75, -1.58],
-            image: '/images/events/ev_us_support_success.jpg',
+            image: 'ev_us_support_success',
             description: 'To sustain operations at RAF Akrotiri (our theatre Spoke), thousands of tonnes of munitions, spares, comms gear, and force protection troops must be transported from our UK Main Operating Base (Hub) at RAF Brize Norton.',
             facilitatorNotes: 'Covers LO1 P1 (Task 2: 4 Enablers - Base, Sustain, Connect, Protect) and LO2 P6 (Task 17, 22, 23: Hub & Spoke, Inter-theatre vs Intra-theatre mobility).',
             roleDescriptions: {
@@ -396,7 +396,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.30, 35.80],
-            image: '/scenarios/eastern_front_breach/images/drone_squad.jpg',
+            image: 'drone_squad',
             description: 'Enemy mobile Surface-to-Air Missile (SAM) batteries have gone active, establishing an A2AD bubble. JFAC has issued Step 1 of the ISR Process (Request for Information). No 1 ISR Wing must now Plan, Task, Collect, Analyse, and Disseminate.',
             facilitatorNotes: 'Covers LO2 P7 (Task 16, 24, 25, 26, 27, 29): Surveillance vs Reconnaissance, 9-Step ISR Process, SIGINT/MASINT/GEOINT, and Network Enabled Capability (NEC / Link-16).',
             roleDescriptions: {
@@ -455,7 +455,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.58, 32.98],
-            image: '/images/events/ev_akrotiri_strike.jpg',
+            image: 'ev_akrotiri_strike',
             description: 'RAID INBOUND: The adversary has launched a wave of strike aircraft and cruise missiles toward RAF Akrotiri and HMS Duncan, aiming to destroy our aircraft on the ground before we can gain Control of the Air.',
             facilitatorNotes: 'Covers LO2 P5 (Task 21): Defensive Counter-Air (Active Measures: Detection, Interception, Engagement vs Passive Measures: Hardening, Dispersal, Camouflage, Concealment, Deception).',
             roleDescriptions: {
@@ -512,7 +512,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.62, 32.95],
-            image: '/images/events/ev_drone_swarm_perimeter.jpg',
+            image: 'ev_drone_swarm_perimeter',
             description: 'Minutes after the conventional raid, Non-State insurgents hiding in civilian vans outside the RAF Akrotiri perimeter fence launch a swarm of 15 low-flying commercial quadcopters rigged with explosives toward the fuel farm.',
             facilitatorNotes: 'Covers LO1 P1/P2 (Task 2, 4, 7): Asymmetrical Warfare, Vulnerability of Air Bases, Protect Enabler (RAF Regiment), and Electronic Warfare.',
             roleDescriptions: {
@@ -568,7 +568,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.25, 35.20],
-            image: '/images/assets/nato_awacs.png',
+            image: 'nato_awacs',
             description: 'Enemy mobile missile launchers are hiding in deep mountain valleys, masking themselves from ground-based radar. We need continuous overwatch to maintain Ubiquity across the battlespace.',
             facilitatorNotes: 'Covers LO1 P1/P3 (Task 3 & 10): Strengths of Height, Perspective (greater field-of-view and horizon from altitude), and Ubiquity; and LO2 P4/P7 (Zephyr HAPS & Airborne Early Warning).',
             roleDescriptions: {
@@ -624,7 +624,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.45, 35.95],
-            image: '/images/events/ev_f35_success.jpg',
+            image: 'ev_f35_success',
             description: 'We currently only have a Favourable Air Situation. To enable freedom of manoeuvre for joint forces, UK JFAC must launch an Offensive Counter-Air (OCA) campaign to destroy the enemy\'s main SAM network and fighter airbase at its source.',
             facilitatorNotes: 'Covers LO2 P5 (Task 20 & 21: 3 Degrees of Control of the Air; Offensive Counter-Air) and LO3 P10 (Task 35: Offensive Air-Cyber Integration, Case Study: Operation Orchard 2007).',
             roleDescriptions: {
@@ -680,7 +680,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.50, 36.15],
-            image: '/images/assets/rus_iskander.png',
+            image: 'rus_iskander',
             description: 'Our OCA strike shattered the enemy\'s primary air defences, elevating us from a Favourable Air Situation to Air Superiority! However, an enemy logistics convoy carrying replacement SAM missiles and mobile radar trucks is racing toward the coast to rebuild their A2AD network.',
             facilitatorNotes: 'Covers LO2 P5 (Task 20 & 21): Air Superiority vs Air Supremacy, and using Anti-Surface Operations (Air Interdiction / Battlefield Air Interdiction) to maintain Control of the Air by neutralizing ground threats.',
             roleDescriptions: {
@@ -739,7 +739,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.30, 33.90],
-            image: '/images/events/ev_sub_detection.png',
+            image: 'ev_sub_detection',
             description: 'Desperate to break our maritime blockade, the adversary dispatches an attack submarine and three fast missile boats to ambush Royal Navy shipping in the Eastern Mediterranean.',
             facilitatorNotes: 'Covers LO2 P8 (Task 16, 28, 30: Counter-Sea Operations - Anti-Submarine Warfare & Anti-Surface Warfare; P-8A Poseidon & RN Wildcat) and LO3 P10 (Task 35: Air-Maritime Integration).',
             roleDescriptions: {
@@ -795,7 +795,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.15, 36.10],
-            image: '/images/events/evt_armor_push.jpg',
+            image: 'evt_armor_push',
             description: 'Friendly coalition ground forces have landed on the coast. An enemy tank company is engaging our troops at 400m range, while 60km inland, enemy artillery reinforcements are marshalling at a rail depot.',
             facilitatorNotes: 'Covers LO2 P8 (Task 30): Counter-Land Operations as Force Multipliers (Close Air Support vs Air Interdiction vs Strike, Coordination and Reconnaissance - SCAR) and LO3 P10 (Air-Land Integration).',
             roleDescriptions: {
@@ -851,7 +851,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.22, 36.20],
-            image: '/images/events/ev_sandstorm_payload.jpg',
+            image: 'ev_sandstorm_payload',
             description: 'A dense shamal sandstorm and thick low cloud have rolled across the battlefront, reducing visibility to zero. Meanwhile, a pair of Typhoon FGR4s overhead have expended most of their munitions and only have two missiles remaining.',
             facilitatorNotes: 'Covers LO1 P1 (Task 4: Limitations of Air Power - Limited Payload) and LO2 P8 (Task 28: Three factors that determine the success of an air attack - penetration, number of weapons carried/payload, and poor weather).',
             roleDescriptions: {
@@ -907,7 +907,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.35, 36.30],
-            image: '/images/assets/typhoon_aircraft.png',
+            image: 'typhoon_aircraft',
             description: 'TIME CRITICAL: Shadow R1 detects the enemy\'s top theatre commander boarding a helicopter 100 miles away. He will escape in 8 minutes. No ground force or naval vessel can reach him in time, but a pair of multi-role Typhoon FGR4s are airborne 60 miles away on a routine patrol.',
             facilitatorNotes: 'Covers LO1 P1/P3 (Task 3 & 10): Strengths of Speed, Reach, Agility, Flexibility & Versatility; Re-tasking multi-role aircraft in flight.',
             roleDescriptions: {
@@ -958,7 +958,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.48, 35.85],
-            image: '/images/events/ev_urban_hospital_roe.jpg',
+            image: 'ev_urban_hospital_roe',
             description: 'An enemy propaganda broadcast tower and insurgent command post has been set up directly inside a functioning civilian hospital complex. Kinetic bombing will cause unacceptable civilian casualties and fracture our international coalition.',
             facilitatorNotes: 'Covers LO2 P8 (Task 28 & 30): The 4th Category of Air Attack—Information Activities (Electronic Warfare and Psychological Operations), and distinguishing Kinetic vs Non-Kinetic effects (Op Shader leaflet/broadcast examples).',
             roleDescriptions: {
@@ -1017,7 +1017,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.60, 36.40],
-            image: '/images/events/ev_airborne_paratroop_drop.jpg',
+            image: 'ev_airborne_paratroop_drop',
             description: 'To cut off the enemy\'s retreat, Joint Force Command orders the seizure of an inland desert airfield ("Objective Talon"). Currently, the runway is blocked by craters and obstacles, preventing any fixed-wing aircraft from landing until airborne engineers clear it.',
             facilitatorNotes: 'Covers LO2 P6 (Task 22 & 23): Airborne Operations—distinguishing Air-Drop (using parachutes to deliver troops/loads in flight) vs Air-Land (aircraft lands on runway to offload).',
             roleDescriptions: {
@@ -1057,7 +1057,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [34.85, 34.40],
-            image: '/images/assets/voyager_refueler.png',
+            image: 'voyager_refueler',
             description: 'ENGINEERING EMERGENCY: One of our Voyager KC3 tankers has suffered a hydraulic fault on takeoff, cutting available Air-to-Air Refuelling (AAR) offload capacity by 50%. Currently airborne are a Combat Air Patrol of Typhoons protecting the paratroopers AND a long-range strike package heading deep inland.',
             facilitatorNotes: 'Covers LO1 P1 (Task 4: Limitation of Impermanence) and LO2 P6 (Task 11 & 22: Air-to-Air Refuelling, Voyager, and the Operation Black Buck Victor K2 tanker lesson).',
             roleDescriptions: {
@@ -1113,7 +1113,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.42, 36.12],
-            image: '/images/events/ev_chinook_underslung_mountain.jpg',
+            image: 'ev_chinook_underslung_mountain',
             description: 'The paratroopers at Objective Talon urgently need artillery guns, ammunition pallets, and tactical troop movement across rugged mountain ridges where fixed-wing aircraft cannot land.',
             facilitatorNotes: 'Covers LO1 P1 (Task 3: Agility of Chinook) and LO2 P4/P6 (Task 18, 22, 23: Helicopters—Chinook & Puma HC2, Joint Helicopter Command, Intra-Theatre Air Mobility).',
             roleDescriptions: {
@@ -1152,7 +1152,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.45, 36.28],
-            image: '/images/events/ev_combat_recovery_medevac.jpg',
+            image: 'ev_combat_recovery_medevac',
             description: 'FLASH OVERRIDE: An allied strike jet has suffered mechanical failure and the pilot has ejected into contested territory. Simultaneously, four British soldiers have sustained severe injuries in a mortar attack and require urgent evacuation from the battlefield all the way back to Queen Elizabeth Hospital Birmingham.',
             facilitatorNotes: 'Covers LO2 P6 (Task 22 & 23): Personnel Recovery (Combat Recovery vs Peacetime Recovery; Case Study: Exercise Volfa) and Aeromedical Evacuation (Forward, Tactical, and Strategic Medevac).',
             roleDescriptions: {
@@ -1211,7 +1211,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.50, 35.50],
-            image: '/images/events/ev_gps_jamming.png',
+            image: 'ev_gps_jamming',
             description: 'In a desperate bid to halt our advance, the adversary activates Russian-supplied ultra-high-power electronic warfare systems that jam space-based Positioning, Navigation, and Timing (PNT / GPS) and satellite communications across the entire operational theatre.',
             facilitatorNotes: 'Covers LO3 P10 (Task 35: Air-Space Integration—Space power is vital for enabling Positioning, Navigation, and Timing for aircraft/weapons, as well as voice/data communications) and LO1 P2 (Task 9: Denial & Disruption).',
             roleDescriptions: {
@@ -1251,7 +1251,7 @@ CRITICAL RULES:
             requiresUnlock: true,
             repeatable: false,
             location: [35.52, 35.78],
-            image: '/images/events/evt_depot_strike.jpg',
+            image: 'evt_depot_strike',
             description: 'FINAL OPERATIONAL DECISION: With the enemy\'s field forces shattered and Air Supremacy established, the Crimson State leadership is isolated in its hardened command complex. UK JFAC must execute the culminating action and transition to Post-Conflict Peace Building.',
             facilitatorNotes: 'Covers LO2 P8 (Strategic Attack), LO1 P2 (Task 9: Coercion, Destruction, Post-Conflict Peace Building), and LO3 P9 (Task 33 & 34: Joint Action, Full Spectrum Approach—Military, Diplomatic, Economic; and why independent Air Power cannot occupy land alone). Evaluates scores to trigger the appropriate Endgame.',
             roleDescriptions: {
@@ -1313,7 +1313,7 @@ CRITICAL RULES:
             isEndGame: true,
             conditions: { minScores: { air_control: 4, joint_effect: 4, sustainability: 3 } },
             location: [35.52, 35.78],
-            image: '/images/events/ev_eu_success.jpg',
+            image: 'ev_eu_success',
             description: 'CAMPAIGN VICTORY: By mastering the 4 Fundamental Roles of Air Power (Control of the Air, ISR, Air Attack, and Air Mobility), securing the 4 Enablers (Base, Sustain, Connect, Protect), and integrating seamlessly across Land, Maritime, Space, and Cyber domains within a Full Spectrum Approach, UK JFAC has compelled a full adversary surrender and established lasting regional stability.',
             facilitatorNotes: 'Trigger this Endgame if the cadets achieved strong scores across Air Control (4+), Joint Effect (4+), and Sustainability (3+). Congratulate them on passing the practical application of the Senior/Master Air Power syllabus!',
             roleDescriptions: {
@@ -1333,7 +1333,7 @@ CRITICAL RULES:
             isEndGame: true,
             conditions: { maxScores: { joint_effect: 3 } },
             location: [34.58, 32.98],
-            image: '/images/events/ev_endgame_culmination.jpg',
+            image: 'ev_endgame_culmination',
             description: 'OPERATIONAL STALEMATE: Although RAF combat aircraft won tactical victories in the sky, neglect of Air Mobility/Sustainability or an attempt to rely on independent Air Power without Joint Land/Maritime integration and a Full Spectrum Approach allowed insurgents to re-occupy the cities. As RAF doctrine states: aircraft cannot occupy land alone.',
             facilitatorNotes: 'Trigger this Endgame if the cadets achieved Air Control but let Joint Effect or Sustainability drop to 3 or below. Use this to debrief LO1 P1 (Limitations of Air Power) and LO3 P9 (Why Joint Operations and the Full Spectrum Approach are essential).',
             roleDescriptions: {
@@ -1352,7 +1352,7 @@ CRITICAL RULES:
             isEndGame: true,
             conditions: { maxScores: { air_control: 3 } },
             location: [35.30, 35.80],
-            image: '/images/events/ev_raf_bases_strike.jpg',
+            image: 'ev_raf_bases_strike',
             description: 'CAMPAIGN DEFEAT: UK JFAC failed to neutralize the adversary\'s Anti-Access/Area Denial (A2AD) network or protect its forward operating bases. Without Control of the Air, our transport aircraft, helicopters, and surface ships suffered prohibitive losses and were forced to withdraw from theatre.',
             facilitatorNotes: 'Trigger this Endgame if Air Control is 3 or below. Use this to debrief LO2 P5: why Control of the Air is the foundational prerequisite for all other military operations.',
             roleDescriptions: {
@@ -1371,7 +1371,7 @@ CRITICAL RULES:
             name: 'Special Forces Air Operation: Operation Mikado / HUMINT Success',
             hidden: true,
             location: [35.48, 36.05],
-            image: '/images/events/ev_sf_success.jpg',
+            image: 'ev_sf_success',
             description: 'Tasked by the Mobility and ISR cells, Joint Helicopter Command Chinooks conducted a low-level night infiltration behind enemy lines under Shadow R1 overwatch. UK Special Forces captured key enemy encryption hardware (TECHINT) and intelligence Officers (HUMINT).',
             roleDescriptions: {
                 mobility: 'Special Forces Air Operations (one of the 6 Divisions of Air Mobility) require dedicated aircraft and specialist crews for covert insertion, sustainment, and extraction.',
@@ -1385,7 +1385,7 @@ CRITICAL RULES:
             name: 'Humanitarian Operation: Relief Air-Drop Completed',
             hidden: true,
             location: [35.25, 36.30],
-            image: '/images/assets/a400m_transport.png',
+            image: 'a400m_transport',
             description: 'RAF A400M Atlas aircraft have delivered 40 tonnes of food, water purification kits, and medical aid to displaced civilians via precision parachute Air-Drop, demonstrating how Air Power supports Humanitarian Operations and promotes international goodwill.',
             roleDescriptions: {
                 joint: 'Humanitarian Operations (Task 9) provide short-term material and logistical aid in a crisis, directly supporting the Full Spectrum Approach.'
@@ -1398,7 +1398,7 @@ CRITICAL RULES:
             name: '11 Group QRA & DCA Surge Established',
             hidden: true,
             location: [34.90, 33.50],
-            image: '/images/events/ev_airspace_intercept.png',
+            image: 'ev_airspace_intercept',
             description: 'Additional Typhoon FGR4 sorties supported by Voyager AAR have established a 24/7 barrier Combat Air Patrol across the Eastern Med, deterring enemy air incursions.',
             roleDescriptions: {
                 control: 'Active Defensive Counter-Air (DCA) posture strengthened.'
@@ -1411,7 +1411,7 @@ CRITICAL RULES:
             name: 'Network Enabled Capability (NEC) Architecture Synchronized',
             hidden: true,
             location: [35.00, 34.00],
-            image: '/images/events/ev_cyber_success.jpg',
+            image: 'ev_cyber_success',
             description: 'No 1 ISR Wing and 90 Signals Unit have synchronized Link-16 data links across all RAF, Royal Navy, British Army, and coalition assets in theatre, embodying "Right information, right place, right time."',
             roleDescriptions: {
                 isr: 'Network Enabled Capability (Task 29) joins sensors, decision-makers, and effectors into a seamless network.'
@@ -1424,7 +1424,7 @@ CRITICAL RULES:
             name: 'RAF Regiment Base Defence Sweep Complete',
             hidden: true,
             location: [34.58, 32.98],
-            image: '/images/events/generic_deployment.png',
+            image: 'generic_deployment',
             description: 'RAF Regiment gunners have swept the 25km footprint around RAF Akrotiri, neutralizing an insurgent mortar team and securing the "Protect" enabler for the airfield.',
             roleDescriptions: {
                 jfac: 'Active force protection mitigates the limitation of aircraft vulnerability on the ground.'
@@ -1437,7 +1437,7 @@ CRITICAL RULES:
             name: 'Information Activities: Psychological Operations Broadcast',
             hidden: true,
             location: [35.40, 36.00],
-            image: '/images/events/ev_psyops_leaflet_drop.jpg',
+            image: 'ev_psyops_leaflet_drop',
             description: 'RAF aircraft have dropped 100,000 informational leaflets and transmitted radio messages across enemy frequencies (as in Op Shader), convincing two insurgent battalions to lay down their arms without a fight.',
             roleDescriptions: {
                 strike: 'Information Activities (Psychological Operations & Electronic Warfare) shape adversary behaviour without kinetic destruction.'
@@ -1457,7 +1457,7 @@ CRITICAL RULES:
                 scores: { situational_awareness: +1, joint_effect: +1 },
                 triggerEvents: [{ id: 'ev_sf_raid_success', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/act_special_forces.png'
+            image: 'act_special_forces'
         },
         {
             id: 'act_humanitarian_aid',
@@ -1470,7 +1470,7 @@ CRITICAL RULES:
                 scores: { coalition_support: +2, sustainability: -1 },
                 triggerEvents: [{ id: 'ev_humanitarian_drop', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/act_us_support.png'
+            image: 'act_us_support'
         },
         {
             id: 'act_dca_surge',
@@ -1483,7 +1483,7 @@ CRITICAL RULES:
                 scores: { air_control: +1, force_protection: +1, sustainability: -1 },
                 triggerEvents: [{ id: 'ev_combat_air_patrol_surge', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/ev_airspace_intercept.png'
+            image: 'ev_airspace_intercept'
         },
         {
             id: 'act_nec_sync',
@@ -1496,7 +1496,7 @@ CRITICAL RULES:
                 scores: { joint_effect: +1, situational_awareness: +1 },
                 triggerEvents: [{ id: 'ev_link16_sync', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/act_cyber_offensive.png'
+            image: 'act_cyber_offensive'
         },
         {
             id: 'act_regt_patrol',
@@ -1508,7 +1508,7 @@ CRITICAL RULES:
                 scores: { force_protection: +1 },
                 triggerEvents: [{ id: 'ev_raf_regt_sweep', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/act_national_address.png'
+            image: 'act_national_address'
         },
         {
             id: 'act_info_psyops',
@@ -1521,7 +1521,7 @@ CRITICAL RULES:
                 scores: { coalition_support: +1, joint_effect: +1 },
                 triggerEvents: [{ id: 'ev_psyops_broadcast', delayMs: 4000, probability: 1.0 }]
             },
-            image: '/images/events/act_backchannel_russia.png'
+            image: 'act_backchannel_russia'
         }
     ]
 };

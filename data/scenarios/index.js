@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { resolveScenarioImages } = require('../../src/image-library');
 
 const scenarios = [];
 fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
@@ -7,6 +8,7 @@ fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
         const scenarioPath = path.join(__dirname, dirent.name, 'scenario.js');
         if (fs.existsSync(scenarioPath)) {
             const scenario = require(scenarioPath);
+            resolveScenarioImages(scenario);
             const guidePath = path.join(__dirname, dirent.name, 'guide.html');
             if (!scenario.guideUrl && fs.existsSync(guidePath)) {
                 scenario.guideUrl = `/scenarios/${dirent.name}/guide.html`;

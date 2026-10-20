@@ -235,7 +235,8 @@ class GameEngine {
                 selectedVariantNames: selectedVariantNames,
                 scoreConfigs: scenario.scoreConfigs || {},
                 aiConfig: scenario.aiConfig,
-                stages: scenario.stages || []
+                stages: scenario.stages || [],
+                manualActions: scenario.manualActions || []
             },
             scores: scores,
             events: [],
@@ -312,6 +313,8 @@ class GameEngine {
             description: typeof template.description === 'function' ? template.description(this.gameState) : template.description,
             roleDescriptions: template.roleDescriptions,
             image: template.image,
+            imageId: template.imageId,
+            imageMeta: template.imageMeta,
             visibleTo: template.visibleTo,
             hiddenFrom: template.hiddenFrom,
             timestamp: Date.now()

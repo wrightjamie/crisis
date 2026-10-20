@@ -53,7 +53,11 @@ function generateWikiAsset(currentState, itemId, p) {
     const asset = (currentState && currentState.assets) ? currentState.assets.find(a => a.id === itemId) : null;
     if (asset) {
         html += `<div class="card wiki-card-blue">`;
-        if (asset.image) html += `<img src="${asset.image}" alt="${asset.name}" class="wiki-img">`;
+        if (asset.image) {
+            const altText = asset.imageMeta?.title || asset.name;
+            const titleText = asset.imageMeta?.description || altText;
+            html += `<img src="${asset.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
+        }
         html += `<div class="card-title wiki-title-blue">${asset.name}</div>`;
         if (asset.briefing) html += `<div class="card-desc wiki-desc-margin">${p(asset.briefing)}</div>`;
         html += `</div>`;

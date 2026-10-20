@@ -930,7 +930,11 @@ function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentStat
     const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
     
     let html = `<div class="card btn btn-secondary wiki-back-btn">`;
-    if (template.image) html += `<img src="${template.image}" alt="${template.name}" class="wiki-img">`;
+    if (template.image) {
+        const altText = template.imageMeta?.title || template.name;
+        const titleText = template.imageMeta?.description || altText;
+        html += `<img src="${template.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
+    }
     html += `
             <div class="card-title">${p(template.name)}</div>
             <div class="card-desc">${p(template.description)}</div>

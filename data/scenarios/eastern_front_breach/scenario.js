@@ -31,7 +31,7 @@ module.exports = {
         {
             id: "brigade_alpha",
             name: "72nd Mechanized Brigade",
-            image: "/images/assets/brigade_alpha.jpg",
+            image: "brigade_alpha",
             location: [48.6, 35.2],
             state: "operational",
             tags: ["military", "frontline"],
@@ -51,7 +51,7 @@ module.exports = {
             location: [48.5, 35.0],
             state: "operational",
             tags: ["drone", "recon"],
-            image: '/scenarios/eastern_front_breach/images/drone_squad.jpg',
+            image: 'drone_squad',
             briefing: "Providing vital ISR (Intelligence, Surveillance, Reconnaissance)."
         }
     ],
@@ -100,7 +100,7 @@ module.exports = {
         {
             id: "evt_armor_push",
             name: "Enemy Armored Push",
-            image: "/images/events/evt_armor_push.jpg",
+            image: "evt_armor_push",
             stage: "breach",
             description: "A column of enemy tanks is pushing rapidly through the gap in the line, heading towards the supply depot.",
             location: [48.45, 35.1],
@@ -138,7 +138,7 @@ module.exports = {
         {
             id: "evt_encirclement_threat",
             name: "Brigade Alpha Encirclement Threat",
-            image: "/images/events/evt_encirclement_threat.jpg",
+            image: "evt_encirclement_threat",
             stage: "breach",
             description: "Enemy forces are flanking Brigade Alpha. They risk being entirely cut off in the next hour.",
             location: [48.6, 35.2],
@@ -169,7 +169,7 @@ module.exports = {
         {
             id: "evt_depot_strike",
             name: "Missile Strike on Supply Depot",
-            image: "/images/events/evt_depot_strike.jpg",
+            image: "evt_depot_strike",
             stage: "counter",
             description: "Incoming ballistic missile detected heading for the Central Supply Hub.",
             location: [48.4, 34.8],

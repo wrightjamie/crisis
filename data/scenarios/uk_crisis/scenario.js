@@ -86,7 +86,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: -1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/hms_prince_of_wales.png', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently deployed to the Indo-Pacific.' }
+                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [-33.86, 151.20], state: 'deployed', tags: ['military', 'naval'], image: 'hms_prince_of_wales', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently deployed to the Indo-Pacific.' }
                         ]
                     },
                     {
@@ -98,7 +98,7 @@ CRITICAL RULES:
                         },
                         scoreModifiers: { military_readiness: +1 },
                         assetModifiers: [
-                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/hms_prince_of_wales.png', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently operating in home waters.' }
+                            { id: 'a_pow', name: 'UK Carrier Strike Group', location: [50.5, -1.0], state: 'operational', tags: ['military', 'naval'], image: 'hms_prince_of_wales', briefing: 'The UK Carrier Strike Group, centered around HMS Prince of Wales and including a Type 45 destroyer and other escorts, currently operating in home waters.' }
                         ]
                     }
                 ]
@@ -176,20 +176,20 @@ CRITICAL RULES:
             }
         ],
         assets: [
-            { id: 'a1', name: 'GCHQ Bude', location: [50.88, -4.55], state: 'operational', tags: ['intel', 'cyber'], image: '/scenarios/uk_crisis/images/gchq_bude.png', briefing: 'GCHQ Bude is a satellite ground station and eavesdropping centre located on the north coast of Cornwall, England.' },
-            { id: 'a2', name: 'HMNB Clyde', location: [56.06, -4.81], state: 'operational', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/hmnb_clyde.png', briefing: 'Her Majesty\'s Naval Base Clyde is one of three operating bases in the United Kingdom for the Royal Navy and is the base for the UK\'s continuous at-sea nuclear deterrent.' },
-            { id: 'a3', name: 'National Grid Control', location: [51.41, -0.99], state: 'operational', tags: ['civilian', 'infrastructure'], image: '/scenarios/uk_crisis/images/national_grid.png', briefing: 'The National Grid Control Centre oversees the electricity and gas transmission system in Great Britain, balancing supply and demand.' },
-            { id: 'a_typhoon', name: 'Eurofighter Typhoon', location: [53.09, -0.16], state: 'operational', tags: ['military', 'air'], image: '/scenarios/uk_crisis/images/typhoon_aircraft.png', briefing: 'The Eurofighter Typhoon is the RAF\'s primary multi-role combat aircraft. Coningsby squadrons are on Quick Reaction Alert (QRA), fully armed and fueled for interception of hostile incursions.' },
-            { id: 'a_f35', name: 'F-35B Lightning II', location: [52.64, 0.54], state: 'operational', tags: ['military', 'air'], image: '/scenarios/uk_crisis/images/f35_aircraft.png', briefing: 'The F-35B Lightning II provides advanced stealth strike capabilities. Currently exercising with US assets to ensure NATO interoperability in contested airspace.' },
-            { id: 'a_voyager', name: 'Voyager Tanker', location: [51.75, -1.58], state: 'operational', tags: ['military', 'air', 'support'], image: '/scenarios/uk_crisis/images/voyager_refueler.png', briefing: 'The Voyager fleet is crucial for extending the combat radius of RAF fighters. One aircraft is permanently on standby to support QRA operations.' },
-            { id: 'a_a400m', name: 'A400M Atlas', location: [51.74, -1.59], state: 'operational', tags: ['military', 'air', 'logistics'], image: '/scenarios/uk_crisis/images/a400m_transport.png', briefing: 'The A400M Atlas provides tactical airlift capabilities. Heavy transport readiness is at 80%, critical for rapid deployment of personnel and equipment.' },
-            { id: 'a_type45', name: 'Type 45 Destroyer', location: [50.80, -1.11], state: 'operational', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/type_45_destroyer.png', briefing: 'Type 45 Daring-class destroyers form the backbone of the Royal Navy\'s air defense. HMS Defender is currently at sea providing a protective umbrella over carrier groups.' },
-            { id: 'a_type23', name: 'Type 23 Frigate', location: [50.38, -4.18], state: 'operational', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/type_23_frigate.png', briefing: 'The Type 23 Duke-class frigates are the core anti-submarine warfare (ASW) vessels. Two are currently tracking suspected Russian Akula-class submarines in the GIUK gap.' },
-            { id: 'a_type26', name: 'Type 26 Frigate', location: [59.00, -10.00], state: 'operational', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/type_26_frigate.png', briefing: 'The advanced Type 26 City-class frigate provides next-generation ASW capabilities. Currently patrolling the North Atlantic.' },
-            { id: 'a_qe', name: 'HMS Queen Elizabeth', location: [56.02, -3.44], state: 'maintenance', tags: ['military', 'naval'], image: '/scenarios/uk_crisis/images/qe_class_carrier.png', briefing: 'HMS Queen Elizabeth is the fleet flagship. Currently undergoing deep maintenance in Rosyth. Unavailable for immediate deployment.' },
-            { id: 'a_astute', name: 'Astute Class Submarine', location: [60.50, -5.00], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/scenarios/uk_crisis/images/astute_class_submarine.png', briefing: 'Astute-class nuclear attack submarines are actively deployed. Their exact locations are classified, but they are tasked with shadowing hostile ballistic missile submarines.' },
-            { id: 'a_astute2', name: 'Astute Class Submarine (HMS Ambush)', location: [55.00, -0.50], state: 'operational', tags: ['military', 'naval', 'sub'], image: '/scenarios/uk_crisis/images/astute_class_submarine.png', briefing: 'A second Astute-class submarine currently patrolling the North Sea approaches to the UK.' },
-            { id: 'a_vanguard', name: 'Vanguard Class Submarine', location: [62.00, -15.00], state: 'operational', tags: ['military', 'naval', 'sub', 'strategic'], image: '/scenarios/uk_crisis/images/vanguard_class_sub.png', briefing: 'The Vanguard-class carries the UK\'s Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure.' }
+            { id: 'a1', name: 'GCHQ Bude', location: [50.88, -4.55], state: 'operational', tags: ['intel', 'cyber'], image: 'gchq_bude', briefing: 'GCHQ Bude is a satellite ground station and eavesdropping centre located on the north coast of Cornwall, England.' },
+            { id: 'a2', name: 'HMNB Clyde', location: [56.06, -4.81], state: 'operational', tags: ['military', 'naval'], image: 'hmnb_clyde', briefing: 'Her Majesty\'s Naval Base Clyde is one of three operating bases in the United Kingdom for the Royal Navy and is the base for the UK\'s continuous at-sea nuclear deterrent.' },
+            { id: 'a3', name: 'National Grid Control', location: [51.41, -0.99], state: 'operational', tags: ['civilian', 'infrastructure'], image: 'national_grid', briefing: 'The National Grid Control Centre oversees the electricity and gas transmission system in Great Britain, balancing supply and demand.' },
+            { id: 'a_typhoon', name: 'Eurofighter Typhoon', location: [53.09, -0.16], state: 'operational', tags: ['military', 'air'], image: 'typhoon_aircraft', briefing: 'The Eurofighter Typhoon is the RAF\'s primary multi-role combat aircraft. Coningsby squadrons are on Quick Reaction Alert (QRA), fully armed and fueled for interception of hostile incursions.' },
+            { id: 'a_f35', name: 'F-35B Lightning II', location: [52.64, 0.54], state: 'operational', tags: ['military', 'air'], image: 'f35_aircraft', briefing: 'The F-35B Lightning II provides advanced stealth strike capabilities. Currently exercising with US assets to ensure NATO interoperability in contested airspace.' },
+            { id: 'a_voyager', name: 'Voyager Tanker', location: [51.75, -1.58], state: 'operational', tags: ['military', 'air', 'support'], image: 'voyager_refueler', briefing: 'The Voyager fleet is crucial for extending the combat radius of RAF fighters. One aircraft is permanently on standby to support QRA operations.' },
+            { id: 'a_a400m', name: 'A400M Atlas', location: [51.74, -1.59], state: 'operational', tags: ['military', 'air', 'logistics'], image: 'a400m_transport', briefing: 'The A400M Atlas provides tactical airlift capabilities. Heavy transport readiness is at 80%, critical for rapid deployment of personnel and equipment.' },
+            { id: 'a_type45', name: 'Type 45 Destroyer', location: [50.80, -1.11], state: 'operational', tags: ['military', 'naval'], image: 'type_45_destroyer', briefing: 'Type 45 Daring-class destroyers form the backbone of the Royal Navy\'s air defense. HMS Defender is currently at sea providing a protective umbrella over carrier groups.' },
+            { id: 'a_type23', name: 'Type 23 Frigate', location: [50.38, -4.18], state: 'operational', tags: ['military', 'naval'], image: 'type_23_frigate', briefing: 'The Type 23 Duke-class frigates are the core anti-submarine warfare (ASW) vessels. Two are currently tracking suspected Russian Akula-class submarines in the GIUK gap.' },
+            { id: 'a_type26', name: 'Type 26 Frigate', location: [59.00, -10.00], state: 'operational', tags: ['military', 'naval'], image: 'type_26_frigate', briefing: 'The advanced Type 26 City-class frigate provides next-generation ASW capabilities. Currently patrolling the North Atlantic.' },
+            { id: 'a_qe', name: 'HMS Queen Elizabeth', location: [56.02, -3.44], state: 'maintenance', tags: ['military', 'naval'], image: 'qe_class_carrier', briefing: 'HMS Queen Elizabeth is the fleet flagship. Currently undergoing deep maintenance in Rosyth. Unavailable for immediate deployment.' },
+            { id: 'a_astute', name: 'Astute Class Submarine', location: [60.50, -5.00], state: 'operational', tags: ['military', 'naval', 'sub'], image: 'astute_class_submarine', briefing: 'Astute-class nuclear attack submarines are actively deployed. Their exact locations are classified, but they are tasked with shadowing hostile ballistic missile submarines.' },
+            { id: 'a_astute2', name: 'Astute Class Submarine (HMS Ambush)', location: [55.00, -0.50], state: 'operational', tags: ['military', 'naval', 'sub'], image: 'astute_class_submarine', briefing: 'A second Astute-class submarine currently patrolling the North Sea approaches to the UK.' },
+            { id: 'a_vanguard', name: 'Vanguard Class Submarine', location: [62.00, -15.00], state: 'operational', tags: ['military', 'naval', 'sub', 'strategic'], image: 'vanguard_class_sub', briefing: 'The Vanguard-class carries the UK\'s Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure.' }
         ],
         
         stages: [
@@ -207,7 +207,7 @@ CRITICAL RULES:
                 prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
                 location: [51.51, -0.09],
-                image: '/images/events/ev_cyber_london.png',
+                image: 'ev_cyber_london',
                 description: 'A coordinated cyber attack has targeted major banking institutions in London, disrupting trading and ATM networks.',
                 roleDescriptions: {
                     home: 'Public panic is rising as payment systems fail. Reports of looting in some areas.',
@@ -240,7 +240,7 @@ CRITICAL RULES:
                 name: 'Mass Anti-War Protests in Manchester',
                 repeatable: false,
                 location: [53.48, -2.24],
-                image: '/images/events/ev_protest_manchester.png',
+                image: 'ev_protest_manchester',
                 description: 'Over 100,000 people have gathered in Manchester city centre protesting potential military involvement in Eastern Europe.',
                 roleDescriptions: {
                     home: 'Protests are largely peaceful but stretching police resources. Some radical groups spotted.',
@@ -264,7 +264,7 @@ CRITICAL RULES:
                 name: 'Coordinated Logistics Failure',
                 repeatable: false,
                 location: [51.5, -0.1], // General UK
-                image: '/images/events/ev_logistics_failure.png',
+                image: 'ev_logistics_failure',
                 description: 'Multiple UK regions have experienced rolling outages affecting ports, rail hubs, and fuel distribution networks. Initial technical assessments indicate a coordinated cyber incident.',
                 roleDescriptions: {
                     home: 'Fuel shortages are emerging in parts of the South East. Supermarkets are reporting delivery delays.',
@@ -306,7 +306,7 @@ CRITICAL RULES:
                 prerequisites: [],
                 repeatable: false,
                 location: [51.5, -0.1], // General UK
-                image: '/images/events/ev_cyber_exposure.png',
+                image: 'ev_cyber_exposure',
                 description: 'UK involvement in cyber operations against Russian logistics has been exposed publicly. The US has issued a formal statement condemning escalation beyond agreed defensive thresholds.',
                 roleDescriptions: {
                     foreign: 'The US administration stated that such actions risk widening the conflict. Other NATO partners have expressed concern over escalation control.',
@@ -340,7 +340,7 @@ CRITICAL RULES:
                 prerequisites: ['ev_logistics_failure'],
                 repeatable: true,
                 location: [60.0, -10.0], // North Atlantic
-                image: '/images/events/ev_airspace_intercept.png',
+                image: 'ev_airspace_intercept',
                 description: 'RAF jets were scrambled to intercept Russian aircraft, leading to a near-miss with a civilian transatlantic flight. Aviation authorities have raised severe safety concerns.',
                 roleDescriptions: {
                     defence: 'RAF quick reaction aircraft intercepted Russian reconnaissance flights operating closer to UK air corridors than assessed.',
@@ -373,7 +373,7 @@ CRITICAL RULES:
                 prerequisites: [],
                 repeatable: true,
                 location: [57.0, -15.0], // Atlantic near GIUK gap
-                image: '/images/events/ev_maritime_shadowing.png',
+                image: 'ev_maritime_shadowing',
                 description: 'A Royal Navy task group has been shadowing a Russian naval formation near subsea communications corridors. A temporary degradation in transatlantic data traffic has been reported.',
                 roleDescriptions: {
                     defence: 'Close proximity operations with Russian warships have increased significantly.',
@@ -406,7 +406,7 @@ CRITICAL RULES:
                 prerequisites: [],
                 repeatable: false,
                 location: [55.75, 37.61], // Moscow area / Western Russia
-                image: '/images/events/ev_russia_hub_explosion.png',
+                image: 'ev_russia_hub_explosion',
                 description: 'A massive explosion has occurred at a transport logistics hub in western Russia. Russia has formally accused the United Kingdom of directing the attack.',
                 roleDescriptions: {
                     foreign: 'Russian officials stated: "We have credible evidence that external actors, supported and directed by British intelligence structures, were involved in this atrocity."',
@@ -442,7 +442,7 @@ CRITICAL RULES:
                 conditions: { minScores: { military_escalation: 3 } },
                 repeatable: false,
                 location: [34.5, 33.0], // Cyprus / Akrotiri overseas base approx
-                image: '/images/events/ev_kinetic_strike.png',
+                image: 'ev_kinetic_strike',
                 description: 'An explosion has caused significant damage at a UK military logistics facility supporting overseas operations. Russian officials have implied justification without formally claiming responsibility.',
                 roleDescriptions: {
                     defence: 'The incident has disrupted supply flows and prompted an immediate review of force protection measures. It appears to be a targeted attack.',
@@ -473,7 +473,7 @@ CRITICAL RULES:
                 id: 'ev_sub_surfaces',
                 stage: 'stage_3',
                 name: 'Russian Submarine Surfaces in the Channel',
-                image: '/images/events/ev_sub_surfaces.jpg',
+                image: 'ev_sub_surfaces',
                 prerequisites: [],
                 conditions: { maxScores: { civilian_stability: 4 } },
                 repeatable: false,
@@ -507,7 +507,7 @@ CRITICAL RULES:
                 id: 'ev_undersea_cables',
                 stage: 'stage_2',
                 name: 'Severing of Undersea Internet Cables',
-                image: '/images/events/ev_undersea_cables.jpg',
+                image: 'ev_undersea_cables',
                 prerequisites: [],
                 conditions: { minScores: { uk_russia: 3 } },
                 repeatable: false,
@@ -533,7 +533,7 @@ CRITICAL RULES:
                 id: 'ev_uk_casualty_leak',
                 stage: 'stage_1',
                 name: 'UK Forces Casualty Leaks to Press',
-                image: '/images/events/ev_uk_casualty_leak.jpg',
+                image: 'ev_uk_casualty_leak',
                 prerequisites: [],
                 repeatable: false,
                 location: [51.5, -0.1],
@@ -566,7 +566,7 @@ CRITICAL RULES:
                 id: 'ev_chemical_attempt',
                 stage: 'stage_5',
                 name: 'Attempted Chemical Attack on UK Soil',
-                image: '/images/events/ev_chemical_attempt.jpg',
+                image: 'ev_chemical_attempt',
                 prerequisites: [],
                 conditions: { minScores: { uk_russia: 3, military_escalation: 2 } },
                 repeatable: false,
@@ -600,7 +600,7 @@ CRITICAL RULES:
                 id: 'ev_us_neutrality',
                 stage: 'stage_5',
                 name: 'US Declares European Neutrality',
-                image: '/images/events/ev_us_neutrality.jpg',
+                image: 'ev_us_neutrality',
                 prerequisites: [],
                 conditions: { maxScores: { uk_us: 2 } },
                 repeatable: false,
@@ -634,7 +634,7 @@ CRITICAL RULES:
                 id: 'ev_akrotiri_strike',
                 stage: 'stage_3',
                 name: 'Hypersonic Strike on RAF Akrotiri',
-                image: '/images/events/ev_akrotiri_strike.jpg',
+                image: 'ev_akrotiri_strike',
                 prerequisites: ['ev_uk_casualty_leak'],
                 conditions: { minScores: { military_escalation: 3 } },
                 repeatable: false,
@@ -660,7 +660,7 @@ CRITICAL RULES:
                 id: 'ev_article5_ambiguity',
                 stage: 'stage_5',
                 name: 'NATO Article 5 Ambiguity',
-                image: '/images/events/ev_article5_ambiguity.jpg',
+                image: 'ev_article5_ambiguity',
                 prerequisites: ['ev_akrotiri_strike'],
                 repeatable: false,
                 location: [50.84, 4.39],
@@ -685,7 +685,7 @@ CRITICAL RULES:
                 id: 'ev_raf_bases_strike',
                 stage: 'stage_4',
                 name: 'Coordinated Strikes on RAF Bases',
-                image: '/images/events/ev_raf_bases_strike.jpg',
+                image: 'ev_raf_bases_strike',
                 prerequisites: ['ev_akrotiri_strike'],
                 conditions: { minScores: { military_escalation: 4 } },
                 repeatable: false,
@@ -711,7 +711,7 @@ CRITICAL RULES:
                 id: 'ev_portsmouth_strike',
                 stage: 'stage_4',
                 name: 'Strike on HMNB Portsmouth',
-                image: '/images/events/ev_portsmouth_strike.jpg',
+                image: 'ev_portsmouth_strike',
                 prerequisites: ['ev_raf_bases_strike'],
                 repeatable: false,
                 location: [50.81, -1.10],
@@ -736,7 +736,7 @@ CRITICAL RULES:
                 id: 'ev_faslane_strike_1',
                 stage: 'stage_4',
                 name: 'First Strike on HMNB Clyde (Faslane)',
-                image: '/images/events/ev_faslane_strike_1.jpg',
+                image: 'ev_faslane_strike_1',
                 prerequisites: ['ev_raf_bases_strike'],
                 repeatable: false,
                 location: [56.06, -4.81],
@@ -761,7 +761,7 @@ CRITICAL RULES:
                 id: 'ev_faslane_strike_2',
                 stage: 'stage_4',
                 name: 'Second Strike on HMNB Clyde',
-                image: '/images/events/ev_faslane_strike_2.jpg',
+                image: 'ev_faslane_strike_2',
                 prerequisites: ['ev_faslane_strike_1'],
                 conditions: { minScores: { military_escalation: 4 } },
                 repeatable: false,
@@ -787,7 +787,7 @@ CRITICAL RULES:
                 id: 'ev_power_grid_strike',
                 stage: 'stage_4',
                 name: 'Targeted Strike on UK Power Grid',
-                image: '/images/events/ev_power_grid_strike.jpg',
+                image: 'ev_power_grid_strike',
                 prerequisites: ['ev_raf_bases_strike'],
                 conditions: { minScores: { military_escalation: 4 } },
                 repeatable: false,
@@ -813,7 +813,7 @@ CRITICAL RULES:
                 id: 'ev_airspace_incursion',
                 stage: 'stage_4',
                 name: 'Total Airspace Incursion',
-                image: '/images/events/ev_airspace_incursion.jpg',
+                image: 'ev_airspace_incursion',
                 prerequisites: [],
                 conditions: { minScores: { military_escalation: 5 }, maxScores: { uk_us: 2, uk_europe: 3 } },
                 repeatable: false,
@@ -840,7 +840,7 @@ CRITICAL RULES:
                 id: 'ev_nuclear_readiness',
                 stage: 'stage_4',
                 name: 'Imminent Nuclear Readiness Detected',
-                image: '/images/events/ev_nuclear_readiness.jpg',
+                image: 'ev_nuclear_readiness',
                 prerequisites: ['ev_airspace_incursion'],
                 conditions: { minScores: { military_escalation: 5 } },
                 repeatable: false,
@@ -866,7 +866,7 @@ CRITICAL RULES:
                 id: 'ev_final_authorization',
                 stage: 'stage_5',
                 name: 'CABINET DECISION: Final Authorization',
-                image: '/images/events/ev_final_authorization.jpg',
+                image: 'ev_final_authorization',
                 prerequisites: ['ev_airspace_incursion', 'ev_nuclear_readiness'],
                 conditions: { minScores: { military_escalation: 5 } },
                 repeatable: false,
@@ -894,7 +894,7 @@ CRITICAL RULES:
                 id: 'ev_us_support_success',
                 stage: 'stage_4',
                 name: 'US Authorizes Logistics Support',
-                image: '/images/events/ev_us_support_success.jpg',
+                image: 'ev_us_support_success',
                 hidden: true,
                 description: 'The US administration has approved the immediate redirection of heavy airlift and logistics support to the UK.',
                 location: [51.5, -0.1],
@@ -908,7 +908,7 @@ CRITICAL RULES:
                 id: 'ev_us_support_fail',
                 stage: 'stage_4',
                 name: 'US Declines Immediate Logistics Support',
-                image: '/images/events/ev_us_support_fail.jpg',
+                image: 'ev_us_support_fail',
                 hidden: true,
                 description: 'The US administration has politely declined to redirect strategic airlift to the UK at this time, citing other global commitments.',
                 location: [38.89, -77.03],
@@ -922,7 +922,7 @@ CRITICAL RULES:
                 id: 'ev_russia_deescalate',
                 stage: 'stage_5',
                 name: 'Backchannel Success: Russia Agrees to Pause',
-                image: '/images/events/ev_russia_deescalate.jpg',
+                image: 'ev_russia_deescalate',
                 hidden: true,
                 description: 'Following a tense emergency backchannel communication, Russian leadership has agreed to a temporary tactical pause, conditional on a reduction in UK military posture.',
                 location: [55.75, 37.61],
@@ -936,7 +936,7 @@ CRITICAL RULES:
                 id: 'ev_russia_leak',
                 stage: 'stage_5',
                 name: 'Backchannel Failure: Russia Leaks Call',
-                image: '/images/events/ev_russia_leak.jpg',
+                image: 'ev_russia_leak',
                 hidden: true,
                 description: 'Russia has leaked edited transcripts of our emergency backchannel communication, portraying the UK as begging for a ceasefire.',
                 location: [55.75, 37.61],
@@ -950,7 +950,7 @@ CRITICAL RULES:
                 id: 'ev_cyber_success',
                 stage: 'stage_3',
                 name: 'Covert Cyber Offensive Successful',
-                image: '/images/events/ev_cyber_success.jpg',
+                image: 'ev_cyber_success',
                 hidden: true,
                 description: 'A major covert cyber offensive against Russian logistics networks has been highly successful, degrading their command and control without immediate attribution.',
                 location: [55.75, 37.61],
@@ -963,7 +963,7 @@ CRITICAL RULES:
                 id: 'ev_cyber_fail',
                 stage: 'stage_3',
                 name: 'Covert Cyber Offensive Thwarted',
-                image: '/images/events/ev_cyber_fail.jpg',
+                image: 'ev_cyber_fail',
                 hidden: true,
                 description: 'Our covert cyber offensive was detected and neutralized by Russian defenses. They are now publicly attributing the attack to the UK.',
                 location: [55.75, 37.61],
@@ -977,7 +977,7 @@ CRITICAL RULES:
                 id: 'ev_sf_success',
                 stage: 'stage_3',
                 name: 'Special Forces Operation Success',
-                image: '/images/events/ev_sf_success.jpg',
+                image: 'ev_sf_success',
                 hidden: true,
                 description: 'A highly classified Special Forces operation has successfully secured critical intelligence on Russian deployments without detection.',
                 location: [50.0, 30.0],
@@ -990,7 +990,7 @@ CRITICAL RULES:
                 id: 'ev_sf_fail',
                 stage: 'stage_3',
                 name: 'Special Forces Operation Compromised',
-                image: '/images/events/ev_sf_fail.jpg',
+                image: 'ev_sf_fail',
                 hidden: true,
                 description: 'A classified Special Forces operation has been compromised. Several operators have been captured and are being paraded on Russian state media.',
                 location: [50.0, 30.0],
@@ -1004,7 +1004,7 @@ CRITICAL RULES:
                 id: 'ev_f35_success',
                 stage: 'stage_4',
                 name: 'Deep Strike Success',
-                image: '/images/events/ev_f35_success.jpg',
+                image: 'ev_f35_success',
                 hidden: true,
                 description: 'Our F-35s successfully bypassed Russian air defenses and destroyed a key strategic asset without losses. Russian leadership appears stunned and is signaling a desire to de-escalate.',
                 location: [55.75, 37.61],
@@ -1018,7 +1018,7 @@ CRITICAL RULES:
                 id: 'ev_f35_fail',
                 stage: 'stage_4',
                 name: 'Deep Strike Failure',
-                image: '/images/events/ev_f35_fail.jpg',
+                image: 'ev_f35_fail',
                 hidden: true,
                 description: 'Our F-35 strike package was intercepted. We have lost multiple advanced airframes and pilots. Russia considers this an act of total war.',
                 location: [55.75, 37.61],
@@ -1032,7 +1032,7 @@ CRITICAL RULES:
                 id: 'ev_eu_success',
                 stage: 'stage_4',
                 name: 'European Coalition Formed',
-                image: '/images/events/ev_eu_success.jpg',
+                image: 'ev_eu_success',
                 hidden: true,
                 description: 'A historic European Defense Coalition has been cemented, uniting the continent behind the UK. Russia realizes it cannot divide and conquer.',
                 location: [50.8503, 4.3517], // Brussels
@@ -1045,7 +1045,7 @@ CRITICAL RULES:
                 id: 'ev_eu_fail',
                 stage: 'stage_4',
                 name: 'European Coalition Fails',
-                image: '/images/events/ev_eu_fail.jpg',
+                image: 'ev_eu_fail',
                 hidden: true,
                 description: 'Our attempts to forge a unified European defense bloc have failed spectacularly amid internal bickering. We look weak and divided.',
                 location: [50.8503, 4.3517],
@@ -1058,7 +1058,7 @@ CRITICAL RULES:
                 id: 'ev_endgame_diplomatic',
                 stage: 'stage_5',
                 name: 'END GAME: Diplomatic Breakthrough',
-                image: '/images/events/ev_endgame_diplomatic.jpg',
+                image: 'ev_endgame_diplomatic',
                 description: 'A neutral third party has successfully brokered a ceasefire. Russian forces hold in place. The immediate existential threat to the UK is lifted, though a new Cold War begins.',
                 location: [46.2044, 6.1432], // Geneva
                 isEndGame: true,
@@ -1073,7 +1073,7 @@ CRITICAL RULES:
                 id: 'ev_endgame_domestic',
                 stage: 'stage_5',
                 name: 'END GAME: Domestic Collapse',
-                image: '/images/events/ev_endgame_domestic.jpg',
+                image: 'ev_endgame_domestic',
                 description: 'Before nuclear war can even begin, the UK government collapses due to riots, power grid failures, and complete loss of public confidence. The military is forced to step in to maintain order, withdrawing from the international conflict entirely.',
                 location: [51.5072, -0.1276],
                 isEndGame: true,
@@ -1088,7 +1088,7 @@ CRITICAL RULES:
                 id: 'ev_endgame_eu_defense',
                 stage: 'stage_5',
                 name: 'END GAME: European Defence Pact',
-                image: '/images/events/ev_endgame_eu_defense.jpg',
+                image: 'ev_endgame_eu_defense',
                 description: 'European allies and the UK launch a massive, coordinated conventional defense. Faced with an unwinnable correlation of forces, Russia withdraws. A costly but decisive conventional victory.',
                 location: [50.8503, 4.3517],
                 isEndGame: true,
@@ -1103,7 +1103,7 @@ CRITICAL RULES:
                 id: 'ev_strike_options_leak',
                 stage: 'stage_4',
                 name: 'Strike Planning Leaked',
-                image: '/images/events/ev_strike_options_leak.jpg',
+                image: 'ev_strike_options_leak',
                 hidden: true,
                 description: 'Intelligence regarding our requests for deep strike target packages has leaked. Russia is infuriated, and some European allies are questioning our escalation control.',
                 location: [51.5033, -0.1276],
@@ -1117,7 +1117,7 @@ CRITICAL RULES:
                 id: 'ev_strike_options_secured',
                 stage: 'stage_4',
                 name: 'Strike Planning Secured',
-                image: '/images/events/ev_strike_options_secured.jpg',
+                image: 'ev_strike_options_secured',
                 hidden: true,
                 description: 'The CDS has successfully compartmentalized the target package requests. No intelligence has leaked.',
                 location: [51.5033, -0.1276],
@@ -1130,7 +1130,7 @@ CRITICAL RULES:
                 id: 'ev_strike_options_ready',
                 stage: 'stage_4',
                 name: 'Strike Options Ready',
-                image: '/images/events/ev_strike_options_ready.jpg',
+                image: 'ev_strike_options_ready',
                 hidden: true,
                 description: 'The Chief of Defence Staff has finalized the deep strike target packages. We have viable options against a forward Russian airbase or a critical Command & Control node.',
                 location: [51.5033, -0.1276],
@@ -1146,7 +1146,7 @@ CRITICAL RULES:
                 name: 'Anti-War Protests (London)',
                 repeatable: false,
                 location: [51.50, -0.12],
-                image: '/images/events/ev_protest_london.png',
+                image: 'ev_protest_london',
                 description: 'Large scale protests have erupted outside Downing Street demanding neutrality in the escalating Eastern European situation.',
                 roleDescriptions: {
                     home: 'Crowds are swelling. Intelligence suggests foreign provocateurs may be inciting violence among fringe groups.',
@@ -1170,7 +1170,7 @@ CRITICAL RULES:
                 requiresUnlock: true,
                 repeatable: false,
                 location: [51.50, -0.12],
-                image: '/images/events/ev_protest_london.png',
+                image: 'ev_protest_london',
                 description: 'Following the dispersal order, protests have turned violent. Suspected foreign instigators ("little green men") have been spotted clashing with police. The situation is rapidly deteriorating.',
                 roleDescriptions: {
                     home: 'Multiple officers injured. Several arrests of individuals carrying forged documents. We need an immediate decision before the line breaks.',
@@ -1196,7 +1196,7 @@ CRITICAL RULES:
                 name: 'Attack on Russian Dissident (Discovery)',
                 repeatable: false,
                 location: [51.06, -1.79], // Salisbury
-                image: '/images/events/ev_dissident_discovery.png',
+                image: 'ev_dissident_discovery',
                 description: 'A prominent Russian dissident and Putin critic has been found unconscious in a Salisbury park. Emergency services are on the scene.',
                 autoEffects: { scores: { civilian_stability: -1 } },
                 triggerEvents: [{ id: 'ev_dissident_results', probability: 1.0, delayMs: 120000 }], // 2 minutes
@@ -1212,7 +1212,7 @@ CRITICAL RULES:
                 name: 'Disinformation Campaign Surge',
                 repeatable: true,
                 location: [51.5, -0.1],
-                image: '/images/events/ev_disinfo_campaign.png',
+                image: 'ev_disinfo_campaign',
                 description: 'Intelligence detects a massive surge in bot networks amplifying divisive domestic issues on social media, aiming to fracture public unity.',
                 autoEffects: { scores: { civilian_stability: -1, uk_russia: +1 } },
                 roleDescriptions: {
@@ -1227,7 +1227,7 @@ CRITICAL RULES:
                 name: 'Surge in Bomber Intercepts',
                 repeatable: true,
                 location: [59.0, 0.0], // North Sea
-                image: '/images/events/ev_bomber_intercept.png',
+                image: 'ev_bomber_intercept',
                 description: 'RAF Typhoons have been scrambled a record number of times this week to escort Tu-95 Bear bombers skirting UK airspace without transponders.',
                 autoEffects: { scores: { military_escalation: +1, uk_russia: +1 } },
                 roleDescriptions: {
@@ -1242,7 +1242,7 @@ CRITICAL RULES:
                 name: 'GPS Jamming of VIP Transport',
                 repeatable: false,
                 location: [55.0, 19.0], // Baltic Sea
-                image: '/images/events/ev_gps_jamming.png',
+                image: 'ev_gps_jamming',
                 description: 'An RAF transport carrying the Defence Secretary experienced severe GPS jamming and spoofing while flying over the Baltic Sea near Kaliningrad.',
                 roleDescriptions: {
                     defence: 'The aircraft safely navigated using alternative instruments, but the jamming was highly targeted and aggressive.',
@@ -1265,7 +1265,7 @@ CRITICAL RULES:
                 name: 'Aggressive Interception in Black Sea',
                 repeatable: false,
                 location: [43.0, 31.0], // Black Sea
-                image: '/images/events/ev_black_sea_intercept.png',
+                image: 'ev_black_sea_intercept',
                 description: 'A UK Rivet Joint intelligence aircraft was aggressively intercepted by Russian Su-27s near Crimea, coming within 15 feet in an unsafe maneuver.',
                 roleDescriptions: {
                     defence: 'The Russian pilots fired flares across the flight path. The Rivet Joint had to take evasive action.',
@@ -1289,7 +1289,7 @@ CRITICAL RULES:
                 requiresUnlock: true,
                 repeatable: false,
                 location: [51.06, -1.79], // Salisbury
-                image: '/images/events/ev_dissident_results.png',
+                image: 'ev_dissident_results',
                 description: 'Toxicology confirms the use of a military-grade nerve agent on the Russian dissident. Intelligence heavily points to GRU operatives who fled the country.',
                 roleDescriptions: {
                     foreign: 'Our allies are waiting to see our response. Failing to act strongly will signal weakness.',
@@ -1312,7 +1312,7 @@ CRITICAL RULES:
                 name: 'Unidentified Submarine Detection',
                 repeatable: false,
                 location: [56.0, -5.5], // Near Faslane
-                image: '/images/events/ev_sub_detection.png',
+                image: 'ev_sub_detection',
                 description: 'Sonar contacts near HMNB Clyde suggest a Russian Akula-class attack submarine is probing the defenses of the UK strategic nuclear deterrent base.',
                 roleDescriptions: {
                     defence: 'The submarine is lingering just outside territorial waters but testing our response times.',
@@ -1335,7 +1335,7 @@ CRITICAL RULES:
                 name: 'Targeted Sanctions on Oligarchs',
                 repeatable: false,
                 location: [51.5, -0.1], // London
-                image: '/images/events/ev_oligarch_sanctions.png',
+                image: 'ev_oligarch_sanctions',
                 description: 'Following rising tensions, pressure mounts in Parliament to aggressively freeze the assets of prominent Russian billionaires operating in "Londongrad".',
                 roleDescriptions: {
                     home: 'The public is demanding action against corrupt wealth flowing through the capital.',
@@ -1358,7 +1358,7 @@ CRITICAL RULES:
                 name: 'Suspicious Activity near Undersea Cables',
                 repeatable: false,
                 location: [50.0, -6.5], // Off Cornwall
-                image: '/images/events/ev_undersea_cable.png',
+                image: 'ev_undersea_cable',
                 description: 'A Russian oceanographic research vessel (Yantar-class) is loitering and deploying submersibles near critical transatlantic communication cables off the coast of Cornwall.',
                 roleDescriptions: {
                     defence: 'This vessel is known to carry deep-sea submersibles capable of tapping or severing communication lines.',
@@ -1388,7 +1388,7 @@ CRITICAL RULES:
                 effects: {
                     scores: { military_escalation: +5, civilian_stability: -5 }
                 },
-                image: '/images/events/ev_nuclear_alert.png'
+                image: 'ev_nuclear_alert'
             },
             {
                 id: 'act_backchannel_russia',
@@ -1403,7 +1403,7 @@ CRITICAL RULES:
                     ],
                     scores: { uk_russia: -1 }
                 },
-                image: '/images/events/act_backchannel_russia.png'
+                image: 'act_backchannel_russia'
             },
             {
                 id: 'act_us_support',
@@ -1417,7 +1417,7 @@ CRITICAL RULES:
                         { id: 'ev_us_support_fail', weight: 40, effects: { scores: { uk_europe: -1 } } }
                     ]
                 },
-                image: '/images/events/act_us_support.png'
+                image: 'act_us_support'
             },
             {
                 id: 'act_cyber_offensive',
@@ -1433,7 +1433,7 @@ CRITICAL RULES:
                         { id: 'ev_cyber_fail', weight: 50, effects: { scores: { uk_europe: -1, civilian_stability: -1 } } }
                     ]
                 },
-                image: '/images/events/act_cyber_offensive.png'
+                image: 'act_cyber_offensive'
             },
             {
                 id: 'act_national_address',
@@ -1445,7 +1445,7 @@ CRITICAL RULES:
                 effects: {
                     scores: { civilian_stability: +1, uk_europe: -1 }
                 },
-                image: '/images/events/act_national_address.png'
+                image: 'act_national_address'
             },
             {
                 id: 'act_special_forces',
@@ -1459,13 +1459,13 @@ CRITICAL RULES:
                         { id: 'ev_sf_fail', weight: 50, effects: { scores: { civilian_stability: -1, military_escalation: +1 } } }
                     ]
                 },
-                image: '/images/events/act_special_forces.png'
+                image: 'act_special_forces'
             },
             {
                 id: 'act_request_strike_options',
                 name: 'Request Deep Strike Options',
                 description: 'Request target packages for a deep strike inside Russia from the Chief of Defence Staff (CDS). Options will become available shortly. Small risk of intelligence leak causing diplomatic damage.',
-                image: '/images/events/act_request_strike_options.jpg',
+                image: 'act_request_strike_options',
                 initiator: ['PM', 'defence'],
                 conditions: { minScores: { military_readiness: 3 } },
                 effects: {
@@ -1482,7 +1482,7 @@ CRITICAL RULES:
                 id: 'act_strike_airbase',
                 name: 'Strike Russian Airbase (F-35)',
                 description: 'Launch a deep penetration strike using F-35s against a forward Russian airbase. High chance of tactical success to force de-escalation.',
-                image: '/images/events/act_strike_airbase.jpg',
+                image: 'act_strike_airbase',
                 initiator: ['PM', 'defence'],
                 requiresApprovalFrom: ['PM', 'home'],
                 conditions: { minScores: { military_readiness: 3 }, triggeredEvents: ['ev_strike_options_ready'] },
@@ -1497,7 +1497,7 @@ CRITICAL RULES:
                 id: 'act_strike_c2',
                 name: 'Strike Russian C2 Node (F-35)',
                 description: 'Launch a high-risk strike against a critical Russian Command & Control node. Lower chance of success, but massive de-escalation impact if successful.',
-                image: '/images/events/act_strike_c2.jpg',
+                image: 'act_strike_c2',
                 initiator: ['PM', 'defence'],
                 requiresApprovalFrom: ['PM', 'home'],
                 conditions: { minScores: { military_readiness: 3 }, triggeredEvents: ['ev_strike_options_ready'] },
@@ -1512,7 +1512,7 @@ CRITICAL RULES:
                 id: 'act_eu_coalition',
                 name: 'European Coalition Building',
                 description: 'Push aggressively for a unified European Defense Coalition to stand against Russian aggression.',
-                image: '/images/events/act_eu_coalition.jpg',
+                image: 'act_eu_coalition',
                 initiator: ['PM', 'foreign'],
                 conditions: { minScores: { civilian_stability: 2 } },
                 effects: {

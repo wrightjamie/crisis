@@ -1,9 +1,19 @@
 const scenarios = require('../data/scenarios');
-const { validateScenario } = require('./validate-scenarios');
+const { validateScenario, validateImageLibrary, validateAssets, validateImageReference } = require('./validate-scenarios');
+const { getImage, getAllImages, getAllTags, resolveScenarioImages } = require('./image-library');
+
+console.log("Running image library validation...");
+const libResult = validateImageLibrary();
+if (libResult.isValid) {
+    console.log(`✅ Shared image library is valid (${getAllImages().length} images, ${getAllTags().length} unique tags).`);
+} else {
+    console.error("❌ Shared image library has validation errors:");
+    libResult.errors.forEach(err => console.error(`   - ${err}`));
+}
 
 console.log("Running scenario validation tests...");
 
-let allValid = true;
+let allValid = libResult.isValid;
 
 scenarios.forEach(scenario => {
     const result = validateScenario(scenario);
@@ -38,8 +48,6 @@ resultErrors = [];
 validateRoles(testScen, resultErrors);
 assert.strictEqual(resultErrors.length, 1, "Should have error for missing roleName entry");
 console.log("✅ validateRoles tests passed.");
-
-// Tests moved to bottom
 
 console.log("Testing validateEventTemplates...");
 testScen = {
@@ -97,6 +105,34 @@ resultErrors = [];
 validateAiConfig(testScen, resultErrors);
 assert.strictEqual(resultErrors.length, 0, "Should have 0 errors for valid aiConfig");
 console.log("✅ validateAiConfig tests passed.");
+
+console.log("Testing image library resolution and validation...");
+resultErrors = [];
+validateImageReference({ image: 'non_existent_image_id' }, 'eventTemplate[0]', resultErrors);
+assert.strictEqual(resultErrors.length, 1, "Should catch unknown image ID");
+assert.ok(resultErrors[0].includes("references unknown image ID 'non_existent_image_id'"));
+
+resultErrors = [];
+validateAssets({ assets: [{ id: 'a1', image: 'type_45_destroyer' }] }, resultErrors);
+assert.strictEqual(resultErrors.length, 0, "Valid library image ID should pass validation");
+
+const mockScenario = {
+    assets: [{ id: 'a1', name: 'Destroyer', image: 'type_45_destroyer' }],
+    eventTemplates: [{ id: 'ev1', name: 'Cyber Event', image: 'ev_cyber_london' }],
+    manualActions: [{ id: 'act1', name: 'Backchannel', initiator: ['foreign'], image: 'act_backchannel_russia' }]
+};
+resolveScenarioImages(mockScenario);
+assert.strictEqual(mockScenario.assets[0].imageId, 'type_45_destroyer');
+assert.strictEqual(mockScenario.assets[0].image, '/images/library/type_45_destroyer.png');
+assert.ok(mockScenario.assets[0].imageMeta && mockScenario.assets[0].imageMeta.title.length > 0);
+assert.strictEqual(mockScenario.eventTemplates[0].image, '/images/library/ev_cyber_london.png');
+assert.strictEqual(mockScenario.manualActions[0].image, '/images/library/act_backchannel_russia.png');
+
+const navalImages = getAllImages({ tag: 'naval' });
+assert.ok(navalImages.length > 0 && navalImages.every(img => img.tags.includes('naval')), "Tag filtering should return matching images");
+const searchImages = getAllImages({ q: 'Destroyer' });
+assert.ok(searchImages.some(img => img.id === 'type_45_destroyer'), "Query search should match title/description");
+console.log("✅ Image library resolution and validation tests passed.");
 
 if (allValid) {
     console.log("All scenarios are valid and unit tests passed.");

@@ -1,3 +1,61 @@
+const fs = require('fs');
+const path = require('path');
+const { getImage, getImageLibrary } = require('./image-library');
+
+function validateImageReference(item, itemPath, errors) {
+    if (!item || item.image === undefined || item.image === null) return;
+    const refId = item.imageId || item.image;
+    if (typeof refId !== 'string' || !refId.trim()) {
+        errors.push(`${itemPath} has invalid 'image' reference`);
+        return;
+    }
+    if (!getImage(refId)) {
+        errors.push(`${itemPath} references unknown image ID '${refId}'`);
+    }
+}
+
+function validateImageLibrary(library = getImageLibrary()) {
+    const errors = [];
+    if (!library || typeof library !== 'object' || Array.isArray(library)) {
+        errors.push('Image library must be a JSON object keyed by image ID');
+        return { isValid: false, errors };
+    }
+
+    const publicDir = path.join(__dirname, '..', 'public');
+    for (const [key, entry] of Object.entries(library)) {
+        const entryPath = `imageLibrary['${key}']`;
+        if (!entry || typeof entry !== 'object') {
+            errors.push(`${entryPath} must be an object`);
+            continue;
+        }
+        if (entry.id !== key) {
+            errors.push(`${entryPath} 'id' ('${entry.id}') must match key '${key}'`);
+        }
+        if (!entry.file || typeof entry.file !== 'string') {
+            errors.push(`${entryPath} missing or invalid 'file'`);
+        } else {
+            const diskPath = path.join(publicDir, entry.file.replace(/^\//, ''));
+            if (!fs.existsSync(diskPath)) {
+                errors.push(`${entryPath} file not found on disk: '${entry.file}'`);
+            }
+        }
+        if (!entry.title || typeof entry.title !== 'string') {
+            errors.push(`${entryPath} missing or invalid 'title'`);
+        }
+        if (!entry.description || typeof entry.description !== 'string') {
+            errors.push(`${entryPath} missing or invalid 'description'`);
+        }
+        if (!Array.isArray(entry.tags) || entry.tags.length === 0 || !entry.tags.every(t => typeof t === 'string' && t.trim().length > 0)) {
+            errors.push(`${entryPath} 'tags' must be a non-empty array of strings`);
+        }
+    }
+
+    return {
+        isValid: errors.length === 0,
+        errors
+    };
+}
+
 function validateBasicStructure(scenario, errors) {
     if (!scenario.id || typeof scenario.id !== 'string') errors.push("Missing or invalid 'id'");
     if (!scenario.name || typeof scenario.name !== 'string') errors.push("Missing or invalid 'name'");
@@ -82,6 +140,18 @@ function validateConditions(conditions, path, errors) {
     }
 }
 
+function validateAssets(scenario, errors) {
+    if (!scenario.assets) return;
+    if (!Array.isArray(scenario.assets)) {
+        errors.push("'assets' must be an array");
+    } else {
+        scenario.assets.forEach((asset, index) => {
+            const assetPath = `asset[${index}] (${asset.id || 'unknown'})`;
+            validateImageReference(asset, assetPath, errors);
+        });
+    }
+}
+
 function validateEventTemplates(scenario, errors) {
     if (!scenario.eventTemplates || !Array.isArray(scenario.eventTemplates)) {
         errors.push("Missing or invalid 'eventTemplates'");
@@ -90,6 +160,7 @@ function validateEventTemplates(scenario, errors) {
             const eventPath = `eventTemplate[${index}]`;
             if (!event.id) errors.push(`${eventPath} missing 'id'`);
             if (!event.name) errors.push(`${eventPath} missing 'name'`);
+            validateImageReference(event, `${eventPath} (${event.id || 'unknown'})`, errors);
             if (event.location && (!Array.isArray(event.location) || event.location.length !== 2)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) invalid 'location' array`);
             }
@@ -155,8 +226,14 @@ function validateVariantAxes(scenario, errors) {
                 errors.push(`${axisPath} missing or invalid 'options'`);
             } else {
                 axis.options.forEach((opt, optIndex) => {
-                    if (!opt.id) errors.push(`${axisPath}.options[${optIndex}] missing 'id'`);
-                    if (!opt.name) errors.push(`${axisPath}.options[${optIndex}] missing 'name'`);
+                    const optPath = `${axisPath}.options[${optIndex}]`;
+                    if (!opt.id) errors.push(`${optPath} missing 'id'`);
+                    if (!opt.name) errors.push(`${optPath} missing 'name'`);
+                    if (Array.isArray(opt.assetModifiers)) {
+                        opt.assetModifiers.forEach((asset, assetIdx) => {
+                            validateImageReference(asset, `${optPath}.assetModifiers[${assetIdx}] (${asset.id || 'unknown'})`, errors);
+                        });
+                    }
                 });
             }
         });
@@ -172,6 +249,7 @@ function validateManualActions(scenario, errors) {
             const actionPath = `manualAction[${index}]`;
             if (!action.id) errors.push(`${actionPath} missing 'id'`);
             if (!action.name) errors.push(`${actionPath} missing 'name'`);
+            validateImageReference(action, `${actionPath} (${action.id || 'unknown'})`, errors);
             if (!action.initiator || !Array.isArray(action.initiator)) {
                 errors.push(`${actionPath} (${action.id || 'unknown'}) missing or invalid 'initiator' array`);
             }
@@ -207,6 +285,7 @@ function validateScenario(scenario) {
     validateRoles(scenario, errors);
     validateInitialScores(scenario, errors);
     validateScoreConfigs(scenario, errors);
+    validateAssets(scenario, errors);
     validateEventTemplates(scenario, errors);
     validateVariantAxes(scenario, errors);
     validateManualActions(scenario, errors);
@@ -218,4 +297,15 @@ function validateScenario(scenario) {
     };
 }
 
-module.exports = { validateScenario, validateBasicStructure, validateRoles, validateEventTemplates, validateManualActions, validateAiConfig, validateScoreConfigs };
+module.exports = {
+    validateScenario,
+    validateBasicStructure,
+    validateRoles,
+    validateAssets,
+    validateEventTemplates,
+    validateManualActions,
+    validateAiConfig,
+    validateScoreConfigs,
+    validateImageReference,
+    validateImageLibrary
+};

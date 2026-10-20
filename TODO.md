@@ -14,6 +14,7 @@
 - [x] Allow manual actions to be shown as "disabled" rather than completely hidden when conditions aren't met.
 - [x] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
 - [x] Kick player and allow a new player to join
+- [x] Move to a shared image library (`data/image-library.json` and `public/images/library/`) with title, description, and freeform tags across all scenarios
 
 ## Caribbean Crisis Tasks
 - [x] Generate image: RFA Mounts Bay (Bay-class landing ship) `/images/assets/rfa_mounts_bay.png`

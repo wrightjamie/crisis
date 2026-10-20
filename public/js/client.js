@@ -940,7 +940,11 @@ function buildEventPanelHtml(p) {
     if (!evt) return null;
 
     let html = `<div class="card">`;
-    if (evt.image) html += `<img src="${evt.image}" alt="${evt.name}" class="wiki-img">`;
+    if (evt.image) {
+        const altText = evt.imageMeta?.title || evt.name;
+        const titleText = evt.imageMeta?.description || altText;
+        html += `<img src="${evt.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
+    }
 
     html += `
             <div class="card-title">${evt.name}</div>
@@ -1000,7 +1004,11 @@ function buildAssetPanelHtml(p) {
     if (!asset) return null;
 
     let html = `<div class="card wiki-card-blue">`;
-    if (asset.image) html += `<img src="${asset.image}" alt="${asset.name}" class="wiki-img">`;
+    if (asset.image) {
+        const altText = asset.imageMeta?.title || asset.name;
+        const titleText = asset.imageMeta?.description || altText;
+        html += `<img src="${asset.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
+    }
 
     html += `
             <div class="card-title wiki-title-blue">${asset.name}</div>
@@ -1049,7 +1057,9 @@ function buildActionsPanelHtml(p) {
         }
         
         if (action.image) {
-            html += `<img src="${action.image}" alt="${action.name}" class="wiki-img" class="mb-sm">`;
+            const altText = action.imageMeta?.title || action.name;
+            const titleText = action.imageMeta?.description || altText;
+            html += `<img src="${action.image}" alt="${altText}" title="${titleText}" class="wiki-img mb-sm">`;
         }
         html += `<div class="card-title wiki-title-blue">${action.name}</div>
                  <div class="card-desc">${p(action.description)}</div>`;

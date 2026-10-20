@@ -42,7 +42,7 @@ The top-level object representing a fully playable module.
             location: [lat, lng],
             state: "string",  // Custom state (e.g., 'operational', 'damaged', 'deployed')
             tags: ["string"], // UI badges (e.g., 'military', 'cyber')
-            image: "string",  // (Optional) URL path to asset image
+            image: "string",  // (Optional) Image ID from data/image-library.json (e.g., 'type_45_destroyer')
             briefing: "string"// (Optional) Intelligence brief for the asset
         }
     ],
@@ -120,7 +120,7 @@ Events define map incidents and generate decision tasks for players.
     name: "string",           // Display title
     stage: "string",          // (Optional) ID of the stage this belongs to
     description: "string",    // General description visible to everyone
-    image: "string",          // (Optional) URL path to a dramatic, tactical image of the crisis
+    image: "string",          // (Optional) Image ID from data/image-library.json (e.g., 'ev_cyber_london')
     location: [lat, lng],     // Where the marker drops on the map
     possibleLocations: [      // (Optional) Array of possible locations. If provided, server picks one randomly.
         [lat, lng], [lat, lng]
@@ -207,7 +207,7 @@ Actions that players can trigger proactively from the "Actions" menu, independen
     id: "string",             // Unique identifier (e.g., 'act_nuke')
     name: "string",           // Display title
     description: "string",    // Description shown to players
-    image: "string",          // (Optional) URL path to an image
+    image: "string",          // (Optional) Image ID from data/image-library.json (e.g., 'act_cyber_offensive')
     initiator: ["string"],    // Array of role IDs that can initiate this action
     requiresApprovalFrom: ["string"], // (Optional) Roles that must approve before it triggers
     conditions: {             // Requirements for this action to be available (or visible)
@@ -236,3 +236,19 @@ Actions that players can trigger proactively from the "Actions" menu, independen
     }
 }
 ```
+
+## Shared Image Library (`data/image-library.json`)
+All scenario images live in `public/images/library/` and are cataloged in `data/image-library.json`. Scenarios reference images by their `id` (e.g., `image: "type_45_destroyer"`), which `src/image-library.js` resolves to the serving URL and metadata at load time.
+
+```json
+{
+    "type_45_destroyer": {
+        "id": "type_45_destroyer",
+        "file": "/images/library/type_45_destroyer.png",
+        "title": "Type 45 Daring-Class Air Defence Destroyer",
+        "description": "Royal Navy Type 45 destroyer with SAMPSON radar mast cutting through stormy seas to provide fleet air defence.",
+        "tags": ["asset", "military", "naval", "maritime", "air-defence", "destroyer", "uk", "royal-navy"]
+    }
+}
+```
+- `tags` is a freeform, non-restrictive array of strings. Any new tags or tag categories added to `data/image-library.json` are dynamically exposed via `GET /api/images/tags` and searchable via `GET /api/images?tag=...&q=...`.

@@ -36,3 +36,4 @@ When generating new images using an AI tool, use the following base formulas dep
 - **Avoid Text**: AI generators struggle with text. Try to frame scenes so that specific text (like banners, news chyrons, or tail numbers) isn't the focal point, or omit requests for specific text entirely.
 - **Aspect Ratio**: The platform generally prefers landscape (16:9) or wide aspect ratios for cards and briefings.
 - **Consistency**: If a faction's color scheme is established (e.g., green for aliens, blue for NATO), ensure prompts reinforce this.
+- **Registering New Images**: Place new image files in `public/images/library/<id>.<ext>` and add an entry to `data/image-library.json` with a descriptive `title`, `description`, and freeform `tags` array. Reference the image in `scenario.js` by its `id` (e.g., `image: 'type_45_destroyer'`).

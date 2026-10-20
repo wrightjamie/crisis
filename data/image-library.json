@@ -1,0 +1,2469 @@
+{
+    "a400m_transport": {
+        "id": "a400m_transport",
+        "file": "/images/library/a400m_transport.png",
+        "title": "Airbus A400M Atlas Transport Aircraft",
+        "description": "RAF Airbus A400M Atlas four-engine turboprop military transport aircraft used for tactical and strategic airlift, paratroop insertion, and humanitarian relief air-drops.",
+        "tags": [
+            "asset",
+            "event",
+            "air",
+            "military",
+            "uk",
+            "raf",
+            "transport",
+            "logistics",
+            "mobility",
+            "humanitarian",
+            "airdrop"
+        ]
+    },
+    "act_backchannel_russia": {
+        "id": "act_backchannel_russia",
+        "file": "/images/library/act_backchannel_russia.png",
+        "title": "Diplomatic Backchannel & Secure Communications",
+        "description": "Tense high-level diplomatic backchannel communications and information operations in a dimly lit situation room.",
+        "tags": [
+            "action",
+            "diplomatic",
+            "intelligence",
+            "russia",
+            "uk",
+            "communications",
+            "de-escalation",
+            "psyops"
+        ]
+    },
+    "act_cyber_offensive": {
+        "id": "act_cyber_offensive",
+        "file": "/images/library/act_cyber_offensive.png",
+        "title": "Offensive Cyber & Network Operations Center",
+        "description": "Military cyber operators at glowing tactical consoles conducting offensive cyber strikes and network synchronization.",
+        "tags": [
+            "action",
+            "cyber",
+            "intelligence",
+            "military",
+            "network",
+            "command-and-control",
+            "c2",
+            "uk"
+        ]
+    },
+    "act_eu_coalition": {
+        "id": "act_eu_coalition",
+        "file": "/images/library/act_eu_coalition.jpg",
+        "title": "European Defense Coalition Summit",
+        "description": "European and allied leaders gathered around a summit table to forge a unified defense coalition.",
+        "tags": [
+            "action",
+            "diplomatic",
+            "europe",
+            "eu",
+            "nato",
+            "alliance",
+            "coalition",
+            "politics"
+        ]
+    },
+    "act_national_address": {
+        "id": "act_national_address",
+        "file": "/images/library/act_national_address.png",
+        "title": "Prime Ministerial National Broadcast",
+        "description": "A national leader delivering a formal televised crisis address from podium to reassure the public and restore stability.",
+        "tags": [
+            "action",
+            "civilian",
+            "diplomatic",
+            "media",
+            "broadcast",
+            "government",
+            "uk",
+            "public-order"
+        ]
+    },
+    "act_request_strike_options": {
+        "id": "act_request_strike_options",
+        "file": "/images/library/act_request_strike_options.jpg",
+        "title": "Military Target Package & Deep Strike Planning",
+        "description": "Senior military commanders reviewing classified satellite target packages and deep strike options on a tactical display.",
+        "tags": [
+            "action",
+            "military",
+            "air",
+            "intelligence",
+            "planning",
+            "strike",
+            "command-and-control",
+            "uk"
+        ]
+    },
+    "act_special_forces": {
+        "id": "act_special_forces",
+        "file": "/images/library/act_special_forces.png",
+        "title": "Covert Special Forces Night Insertion",
+        "description": "Elite special forces operators equipped with night-vision gear conducting a covert behind-enemy-lines infiltration.",
+        "tags": [
+            "action",
+            "military",
+            "land",
+            "air",
+            "special-forces",
+            "covert",
+            "intelligence",
+            "reconnaissance"
+        ]
+    },
+    "act_strike_airbase": {
+        "id": "act_strike_airbase",
+        "file": "/images/library/act_strike_airbase.jpg",
+        "title": "Precision Air Strike on Forward Airbase",
+        "description": "Fifth-generation stealth fighters conducting a deep penetration strike against a heavily defended adversary airbase.",
+        "tags": [
+            "action",
+            "military",
+            "air",
+            "kinetic-strike",
+            "airbase",
+            "stealth",
+            "f35",
+            "russia"
+        ]
+    },
+    "act_strike_c2": {
+        "id": "act_strike_c2",
+        "file": "/images/library/act_strike_c2.jpg",
+        "title": "Precision Strike on Command & Control Node",
+        "description": "High-risk precision air strike targeting a hardened adversary command, control, and communications bunker.",
+        "tags": [
+            "action",
+            "military",
+            "air",
+            "kinetic-strike",
+            "command-and-control",
+            "c2",
+            "stealth",
+            "russia"
+        ]
+    },
+    "act_us_support": {
+        "id": "act_us_support",
+        "file": "/images/library/act_us_support.png",
+        "title": "Allied Strategic Airlift & Logistics Support",
+        "description": "Heavy military transport aircraft loading pallets of munitions and humanitarian supplies on an allied airfield apron.",
+        "tags": [
+            "action",
+            "military",
+            "air",
+            "logistics",
+            "mobility",
+            "us",
+            "uk",
+            "nato",
+            "humanitarian",
+            "resupply"
+        ]
+    },
+    "as_keflavik": {
+        "id": "as_keflavik",
+        "file": "/images/library/as_keflavik.png",
+        "title": "Keflavik Air Base (Sub-Arctic Patrol Hub)",
+        "description": "Allied military airbase in Iceland operating maritime patrol and interceptor aircraft overlooking the GIUK gap under sub-arctic skies.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "maritime",
+            "nato",
+            "iceland",
+            "airbase",
+            "giuk-gap",
+            "arctic"
+        ]
+    },
+    "as_ramstein": {
+        "id": "as_ramstein",
+        "file": "/images/library/as_ramstein.png",
+        "title": "Ramstein Air Base (Allied Logistics & C2 Hub)",
+        "description": "Major NATO airbase and strategic logistics hub in Germany with heavy transport aircraft and command facilities.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "logistics",
+            "nato",
+            "us",
+            "europe",
+            "airbase",
+            "command-and-control"
+        ]
+    },
+    "as_truman": {
+        "id": "as_truman",
+        "file": "/images/library/as_truman.png",
+        "title": "USS Harry S. Truman Carrier Strike Group",
+        "description": "US Navy Nimitz-class supercarrier USS Harry S. Truman steaming through rough seas with a full flight deck of strike aircraft.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "air",
+            "us",
+            "nato",
+            "carrier",
+            "strike"
+        ]
+    },
+    "astute_class_submarine": {
+        "id": "astute_class_submarine",
+        "file": "/images/library/astute_class_submarine.png",
+        "title": "Astute-Class Nuclear Attack Submarine",
+        "description": "Royal Navy Astute-class nuclear-powered attack submarine (SSN) running partially surfaced in dark, stormy northern waters.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "uk",
+            "royal-navy",
+            "nuclear",
+            "asw"
+        ]
+    },
+    "brigade_alpha": {
+        "id": "brigade_alpha",
+        "file": "/images/library/brigade_alpha.jpg",
+        "title": "Mechanized Infantry Brigade on the Frontline",
+        "description": "Armored infantry fighting vehicles and main battle tanks holding a muddy frontline defensive position under artillery fire.",
+        "tags": [
+            "asset",
+            "military",
+            "land",
+            "armor",
+            "infantry",
+            "frontline",
+            "ukraine",
+            "eastern-europe"
+        ]
+    },
+    "bvi_airport": {
+        "id": "bvi_airport",
+        "file": "/images/library/bvi_airport.jpg",
+        "title": "Flooded Island International Airport",
+        "description": "Coastal island airport runway and terminal strewn with storm debris and floodwaters after a severe tropical hurricane.",
+        "tags": [
+            "asset",
+            "infrastructure",
+            "air",
+            "civilian",
+            "caribbean",
+            "hurricane",
+            "flood",
+            "natural-disaster",
+            "airport"
+        ]
+    },
+    "bvi_gov_house": {
+        "id": "bvi_gov_house",
+        "file": "/images/library/bvi_gov_house.jpg",
+        "title": "Caribbean Government House in Storm Aftermath",
+        "description": "Colonial-style government residence in the British Virgin Islands battered by hurricane-force winds and tropical rain.",
+        "tags": [
+            "asset",
+            "civilian",
+            "government",
+            "caribbean",
+            "uk",
+            "hurricane",
+            "natural-disaster"
+        ]
+    },
+    "drone_squad": {
+        "id": "drone_squad",
+        "file": "/images/library/drone_squad.jpg",
+        "title": "Tactical Reconnaissance Drone Unit",
+        "description": "Military drone operators launching and monitoring tactical ISR unmanned aerial vehicles from a concealed field position.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "air",
+            "land",
+            "drone",
+            "uav",
+            "isr",
+            "reconnaissance",
+            "ukraine"
+        ]
+    },
+    "ev_airborne_paratroop_drop": {
+        "id": "ev_airborne_paratroop_drop",
+        "file": "/images/library/ev_airborne_paratroop_drop.jpg",
+        "title": "Mass Airborne Paratrooper Drop",
+        "description": "Waves of paratroopers descending under canopies from military transport aircraft over an austere desert airfield.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "land",
+            "paratroopers",
+            "airborne",
+            "airdrop",
+            "desert",
+            "mobility"
+        ]
+    },
+    "ev_airdrop_riot": {
+        "id": "ev_airdrop_riot",
+        "file": "/images/library/ev_airdrop_riot.jpg",
+        "title": "Civilian Crowd Scrambling for Airdropped Aid",
+        "description": "Chaotic crowd surging toward parachuted humanitarian supply pallets in an unsecured disaster zone.",
+        "tags": [
+            "event",
+            "civilian",
+            "riot",
+            "humanitarian",
+            "airdrop",
+            "caribbean",
+            "natural-disaster",
+            "public-order"
+        ]
+    },
+    "ev_airspace_incursion": {
+        "id": "ev_airspace_incursion",
+        "file": "/images/library/ev_airspace_incursion.jpg",
+        "title": "Mass Strategic Bomber Airspace Incursion",
+        "description": "Multiple long-range strategic bombers penetrating national airspace through dark storm clouds.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "russia",
+            "uk",
+            "bomber",
+            "incursion",
+            "escalation"
+        ]
+    },
+    "ev_airspace_intercept": {
+        "id": "ev_airspace_intercept",
+        "file": "/images/library/ev_airspace_intercept.png",
+        "title": "Quick Reaction Alert Fighter Intercept",
+        "description": "Twin-engine multi-role fighter jets scrambling at high altitude to intercept approaching adversary aircraft.",
+        "tags": [
+            "event",
+            "action",
+            "military",
+            "air",
+            "uk",
+            "raf",
+            "typhoon",
+            "intercept",
+            "qra",
+            "air-defence"
+        ]
+    },
+    "ev_akrotiri_strike": {
+        "id": "ev_akrotiri_strike",
+        "file": "/images/library/ev_akrotiri_strike.jpg",
+        "title": "Missile Strike on Forward Operating Airbase",
+        "description": "Explosions and black smoke rising from military airfield hangars and runways following a cruise and hypersonic missile raid.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "kinetic-strike",
+            "missile",
+            "airbase",
+            "uk",
+            "cyprus",
+            "russia"
+        ]
+    },
+    "ev_alien_reinforcement": {
+        "id": "ev_alien_reinforcement",
+        "file": "/images/library/ev_alien_reinforcement.png",
+        "title": "Secondary Alien Fleet Entering Earth Orbit",
+        "description": "A vast armada of extraterrestrial vessels emerging from deep space above Earth's glowing horizon.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "space",
+            "orbital",
+            "invasion",
+            "apocalyptic"
+        ]
+    },
+    "ev_alien_tech": {
+        "id": "ev_alien_tech",
+        "file": "/images/library/ev_alien_tech.jpg",
+        "title": "Classified Alien Craft in Underground Hangar",
+        "description": "Recovered extraterrestrial spacecraft bathed in harsh spotlights inside a secret subterranean research facility.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "intelligence",
+            "research",
+            "technology",
+            "us",
+            "military"
+        ]
+    },
+    "ev_arms_race_start": {
+        "id": "ev_arms_race_start",
+        "file": "/images/library/ev_arms_race_start.jpg",
+        "title": "Downed Alien Fighter Recovery Operation",
+        "description": "Military recovery teams securing the smoking wreckage of a downed extraterrestrial fighter craft.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "military",
+            "air",
+            "crash",
+            "research",
+            "technology"
+        ]
+    },
+    "ev_article5_ambiguity": {
+        "id": "ev_article5_ambiguity",
+        "file": "/images/library/ev_article5_ambiguity.jpg",
+        "title": "Divided NATO North Atlantic Council Emergency Session",
+        "description": "Tense diplomatic confrontation among allied ambassadors in a darkened council chamber over collective defense commitments.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "nato",
+            "europe",
+            "uk",
+            "alliance",
+            "politics"
+        ]
+    },
+    "ev_black_sea_intercept": {
+        "id": "ev_black_sea_intercept",
+        "file": "/images/library/ev_black_sea_intercept.png",
+        "title": "Close Fighter Intercept Over the Black Sea",
+        "description": "Adversary fighter jet banking dangerously close to the wingtip of a large reconnaissance aircraft over open water.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "maritime",
+            "isr",
+            "russia",
+            "uk",
+            "intercept",
+            "black-sea"
+        ]
+    },
+    "ev_blackout": {
+        "id": "ev_blackout",
+        "file": "/images/library/ev_blackout.png",
+        "title": "Citywide Power Grid Blackout from Above",
+        "description": "Aerial view of a sprawling metropolis plunged into darkness following a catastrophic power grid failure.",
+        "tags": [
+            "event",
+            "civilian",
+            "infrastructure",
+            "blackout",
+            "urban",
+            "cyber",
+            "power-grid"
+        ]
+    },
+    "ev_bomber_intercept": {
+        "id": "ev_bomber_intercept",
+        "file": "/images/library/ev_bomber_intercept.png",
+        "title": "RAF Fighter Escorting Russian Tu-95 Bear Bomber",
+        "description": "Quick Reaction Alert fighter shadowing a turboprop Tu-95 strategic bomber over the North Sea.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "uk",
+            "raf",
+            "russia",
+            "bomber",
+            "intercept",
+            "qra"
+        ]
+    },
+    "ev_bridge_collapse": {
+        "id": "ev_bridge_collapse",
+        "file": "/images/library/ev_bridge_collapse.jpg",
+        "title": "Collapsed Highway Bridge in Floodwaters",
+        "description": "A critical concrete road bridge buckled into raging floodwaters, severing overland transport and aid convoys.",
+        "tags": [
+            "event",
+            "infrastructure",
+            "civilian",
+            "logistics",
+            "natural-disaster",
+            "flood",
+            "hurricane",
+            "caribbean",
+            "bridge"
+        ]
+    },
+    "ev_chemical_attempt": {
+        "id": "ev_chemical_attempt",
+        "file": "/images/library/ev_chemical_attempt.jpg",
+        "title": "Hazmat Response at Urban Rail Terminus",
+        "description": "Chemical, biological, radiological, and nuclear (CBRN) responders in hazmat suits cordoning off a major city train station.",
+        "tags": [
+            "event",
+            "civilian",
+            "intelligence",
+            "medical",
+            "chemical",
+            "cbrn",
+            "urban",
+            "uk",
+            "london",
+            "terrorism"
+        ]
+    },
+    "ev_chinook_underslung_mountain": {
+        "id": "ev_chinook_underslung_mountain",
+        "file": "/images/library/ev_chinook_underslung_mountain.jpg",
+        "title": "Chinook Helicopter Underslung Mountain Resupply",
+        "description": "RAF Chinook tandem-rotor heavy-lift helicopter carrying an underslung artillery and ammo load across rugged mountain ridges.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "land",
+            "rotary",
+            "helicopter",
+            "chinook",
+            "logistics",
+            "mobility",
+            "uk"
+        ]
+    },
+    "ev_city_destruction": {
+        "id": "ev_city_destruction",
+        "file": "/images/library/ev_city_destruction.png",
+        "title": "Devastated Metropolis Under Apocalyptic Sky",
+        "description": "Ruined city skyline engulfed in fires and smoke plumes following a catastrophic orbital or strategic bombardment.",
+        "tags": [
+            "event",
+            "civilian",
+            "urban",
+            "kinetic-strike",
+            "sci-fi",
+            "apocalyptic",
+            "destruction"
+        ]
+    },
+    "ev_combat_recovery_medevac": {
+        "id": "ev_combat_recovery_medevac",
+        "file": "/images/library/ev_combat_recovery_medevac.jpg",
+        "title": "Combat Search & Rescue Medical Evacuation",
+        "description": "Military medical evacuation team loading casualties onto a support helicopter under armed escort in a combat zone.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "medical",
+            "rotary",
+            "helicopter",
+            "medevac",
+            "csar",
+            "rescue"
+        ]
+    },
+    "ev_crisis_cabinet": {
+        "id": "ev_crisis_cabinet",
+        "file": "/images/library/ev_crisis_cabinet.png",
+        "title": "COBRA Emergency Crisis Cabinet Briefing",
+        "description": "Senior government ministers and military chiefs gathered around a briefing table with glowing global threat maps.",
+        "tags": [
+            "event",
+            "government",
+            "diplomatic",
+            "military",
+            "intelligence",
+            "uk",
+            "cobra",
+            "command-and-control"
+        ]
+    },
+    "ev_cyber_exposure": {
+        "id": "ev_cyber_exposure",
+        "file": "/images/library/ev_cyber_exposure.png",
+        "title": "Leaked Classified Cyber Operation Dossier",
+        "description": "News broadcasts and digital monitors displaying leaked intelligence attributing covert cyber operations.",
+        "tags": [
+            "event",
+            "cyber",
+            "intelligence",
+            "media",
+            "diplomatic",
+            "leak",
+            "uk",
+            "us"
+        ]
+    },
+    "ev_cyber_fail": {
+        "id": "ev_cyber_fail",
+        "file": "/images/library/ev_cyber_fail.jpg",
+        "title": "Thwarted Cyber Offensive & Intrusion Alert",
+        "description": "Cyber operations center screens flashing red security alerts as an offensive operation is detected and blocked.",
+        "tags": [
+            "event",
+            "cyber",
+            "intelligence",
+            "military",
+            "russia",
+            "uk",
+            "attribution"
+        ]
+    },
+    "ev_cyber_london": {
+        "id": "ev_cyber_london",
+        "file": "/images/library/ev_cyber_london.png",
+        "title": "London Financial District Cyber Disruption",
+        "description": "Emergency vehicles and darkened office towers in central London during a major cyber attack on banking and ATM networks.",
+        "tags": [
+            "event",
+            "cyber",
+            "civilian",
+            "infrastructure",
+            "urban",
+            "uk",
+            "london",
+            "finance"
+        ]
+    },
+    "ev_cyber_success": {
+        "id": "ev_cyber_success",
+        "file": "/images/library/ev_cyber_success.jpg",
+        "title": "Successful Cyber Strike & Network Synchronization",
+        "description": "Blue tactical network maps showing successful penetration of adversary logistics nodes and synchronized coalition data links.",
+        "tags": [
+            "event",
+            "cyber",
+            "intelligence",
+            "military",
+            "network",
+            "command-and-control",
+            "uk"
+        ]
+    },
+    "ev_disinfo_campaign": {
+        "id": "ev_disinfo_campaign",
+        "file": "/images/library/ev_disinfo_campaign.png",
+        "title": "Coordinated Social Media Disinformation Surge",
+        "description": "Wall of monitors tracking bot networks, viral disinformation feeds, and open-source intelligence (OSINT) across social media.",
+        "tags": [
+            "event",
+            "cyber",
+            "intelligence",
+            "media",
+            "disinformation",
+            "osint",
+            "hybrid-warfare"
+        ]
+    },
+    "ev_dissident_discovery": {
+        "id": "ev_dissident_discovery",
+        "file": "/images/library/ev_dissident_discovery.png",
+        "title": "Emergency Cordon at Park Poisoning Scene",
+        "description": "Police tape, ambulances, and forensic tents surrounding a park bench in an English town after a targeted poisoning.",
+        "tags": [
+            "event",
+            "civilian",
+            "intelligence",
+            "medical",
+            "police",
+            "chemical",
+            "uk",
+            "russia",
+            "espionage"
+        ]
+    },
+    "ev_dissident_results": {
+        "id": "ev_dissident_results",
+        "file": "/images/library/ev_dissident_results.png",
+        "title": "Toxicology Lab Nerve Agent Confirmation",
+        "description": "Defense science laboratory analysts in protective gear examining chemical samples confirming a military-grade nerve agent.",
+        "tags": [
+            "event",
+            "intelligence",
+            "medical",
+            "chemical",
+            "cbrn",
+            "uk",
+            "russia",
+            "forensics"
+        ]
+    },
+    "ev_drone_swarm_perimeter": {
+        "id": "ev_drone_swarm_perimeter",
+        "file": "/images/library/ev_drone_swarm_perimeter.jpg",
+        "title": "Insurgent Quadcopter Drone Swarm Attack",
+        "description": "Swarm of weaponized commercial quadcopter drones flying low over an airbase perimeter fence toward fuel storage tanks.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "drone",
+            "uav",
+            "asymmetric",
+            "airbase",
+            "force-protection"
+        ]
+    },
+    "ev_endgame_culmination": {
+        "id": "ev_endgame_culmination",
+        "file": "/images/library/ev_endgame_culmination.jpg",
+        "title": "Grounded Air Wing & Logistical Culmination",
+        "description": "Exhausted ground crews and grounded combat aircraft at an overstretched forward base amid logistical culmination.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "logistics",
+            "endgame",
+            "stalemate",
+            "airbase"
+        ]
+    },
+    "ev_endgame_diplomatic": {
+        "id": "ev_endgame_diplomatic",
+        "file": "/images/library/ev_endgame_diplomatic.jpg",
+        "title": "Ceasefire Signing & Diplomatic Breakthrough",
+        "description": "Diplomatic delegations shaking hands across a negotiating table under international flags to halt hostilities.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "endgame",
+            "peace",
+            "ceasefire",
+            "uk",
+            "russia"
+        ]
+    },
+    "ev_endgame_domestic": {
+        "id": "ev_endgame_domestic",
+        "file": "/images/library/ev_endgame_domestic.jpg",
+        "title": "Domestic Civil Unrest & Government Collapse",
+        "description": "Armored military vehicles deployed on darkened city streets amid widespread blackouts and civil disorder.",
+        "tags": [
+            "event",
+            "civilian",
+            "riot",
+            "blackout",
+            "urban",
+            "endgame",
+            "uk",
+            "public-order"
+        ]
+    },
+    "ev_endgame_eu_defense": {
+        "id": "ev_endgame_eu_defense",
+        "file": "/images/library/ev_endgame_eu_defense.jpg",
+        "title": "Joint European Allied Military Deterrence",
+        "description": "Multinational formation of European fighter jets, naval vessels, and armored units projecting united conventional deterrence.",
+        "tags": [
+            "event",
+            "military",
+            "diplomatic",
+            "europe",
+            "eu",
+            "nato",
+            "uk",
+            "endgame",
+            "alliance"
+        ]
+    },
+    "ev_eu_fail": {
+        "id": "ev_eu_fail",
+        "file": "/images/library/ev_eu_fail.jpg",
+        "title": "Fractured European Summit Walkout",
+        "description": "Diplomats walking out of a tense European council session in disagreement, leaving seats empty.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "europe",
+            "eu",
+            "politics",
+            "crisis"
+        ]
+    },
+    "ev_eu_success": {
+        "id": "ev_eu_success",
+        "file": "/images/library/ev_eu_success.jpg",
+        "title": "United European & Allied Coalition Accord",
+        "description": "Allied leaders and military commanders standing united beneath coalition banners after sealing a joint defense pact.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "military",
+            "europe",
+            "eu",
+            "nato",
+            "uk",
+            "alliance",
+            "endgame"
+        ]
+    },
+    "ev_f35_fail": {
+        "id": "ev_f35_fail",
+        "file": "/images/library/ev_f35_fail.jpg",
+        "title": "Intercepted Stealth Strike & SAM Engagement",
+        "description": "Surface-to-air missiles streaking into the night sky to intercept an inbound air strike package.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "air-defence",
+            "sam",
+            "f35",
+            "russia",
+            "kinetic-strike"
+        ]
+    },
+    "ev_f35_success": {
+        "id": "ev_f35_success",
+        "file": "/images/library/ev_f35_success.jpg",
+        "title": "F-35 Stealth Strike Destroying Air Defence Radar",
+        "description": "Fifth-generation stealth fighter banking away from a precision strike destroying an enemy SAM radar installation.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "stealth",
+            "f35",
+            "kinetic-strike",
+            "oca",
+            "sead"
+        ]
+    },
+    "ev_faslane_strike_1": {
+        "id": "ev_faslane_strike_1",
+        "file": "/images/library/ev_faslane_strike_1.jpg",
+        "title": "Cruise Missile Impact Near Naval Base Perimeter",
+        "description": "Fires burning along the coastal perimeter of a Scottish naval base in a steep sea loch after a cruise missile strike.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "kinetic-strike",
+            "missile",
+            "uk",
+            "nuclear",
+            "submarine"
+        ]
+    },
+    "ev_faslane_strike_2": {
+        "id": "ev_faslane_strike_2",
+        "file": "/images/library/ev_faslane_strike_2.jpg",
+        "title": "Direct Strike on Submarine Berths at Naval Base",
+        "description": "Heavy smoke billowing from submarine pens and dockside infrastructure as emergency tugs battle fires.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "kinetic-strike",
+            "missile",
+            "uk",
+            "nuclear",
+            "submarine",
+            "escalation"
+        ]
+    },
+    "ev_final_authorization": {
+        "id": "ev_final_authorization",
+        "file": "/images/library/ev_final_authorization.jpg",
+        "title": "Nuclear Command Authority & Letters of Last Resort",
+        "description": "Solemn cabinet crisis room focused on the nuclear authorization briefcase and strategic deterrent status boards.",
+        "tags": [
+            "event",
+            "government",
+            "military",
+            "nuclear",
+            "uk",
+            "endgame",
+            "escalation",
+            "cobra"
+        ]
+    },
+    "ev_first_strike_prep": {
+        "id": "ev_first_strike_prep",
+        "file": "/images/library/ev_first_strike_prep.jpg",
+        "title": "Orbital Craft Charging Directed Energy Weapons",
+        "description": "Ominous glowing energy cores building beneath an alien vessel hovering over a densely populated metropolis.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "space",
+            "urban",
+            "invasion",
+            "weapon"
+        ]
+    },
+    "ev_gps_jamming": {
+        "id": "ev_gps_jamming",
+        "file": "/images/library/ev_gps_jamming.png",
+        "title": "Cockpit Avionics & Satellite Navigation Jamming",
+        "description": "Aircraft cockpit displays showing degraded GPS/PNT navigation warnings and electronic warfare interference.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "space",
+            "cyber",
+            "electronic-warfare",
+            "gps",
+            "navigation"
+        ]
+    },
+    "ev_hurricane_map": {
+        "id": "ev_hurricane_map",
+        "file": "/images/library/ev_hurricane_map.jpg",
+        "title": "Hurricane Devastation Aerial Reconnaissance",
+        "description": "Aerial view of a coastal Caribbean town with unroofed buildings, flooded streets, and sunken boats after a Category 5 hurricane.",
+        "tags": [
+            "event",
+            "civilian",
+            "natural-disaster",
+            "hurricane",
+            "flood",
+            "caribbean",
+            "reconnaissance",
+            "infrastructure"
+        ]
+    },
+    "ev_kinetic_strike": {
+        "id": "ev_kinetic_strike",
+        "file": "/images/library/ev_kinetic_strike.png",
+        "title": "Explosion at Military Logistics Facility",
+        "description": "Fireball and secondary explosions ripping through a military supply warehouse at night.",
+        "tags": [
+            "event",
+            "military",
+            "logistics",
+            "kinetic-strike",
+            "sabotage",
+            "infrastructure"
+        ]
+    },
+    "ev_logistics_failure": {
+        "id": "ev_logistics_failure",
+        "file": "/images/library/ev_logistics_failure.png",
+        "title": "Paralyzed Container Port & Rail Hub Outage",
+        "description": "Stalled freight trains and darkened container cranes at a major maritime logistics terminal during a cyber outage.",
+        "tags": [
+            "event",
+            "civilian",
+            "infrastructure",
+            "logistics",
+            "cyber",
+            "maritime",
+            "port"
+        ]
+    },
+    "ev_maritime_shadowing": {
+        "id": "ev_maritime_shadowing",
+        "file": "/images/library/ev_maritime_shadowing.png",
+        "title": "Warship Shadowing Foreign Naval Task Group",
+        "description": "Royal Navy frigate closely shadowing an adversary surface combatant in heavy North Atlantic swells.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "uk",
+            "russia",
+            "escort"
+        ]
+    },
+    "ev_mothership": {
+        "id": "ev_mothership",
+        "file": "/images/library/ev_mothership.jpg",
+        "title": "Colossal Alien Mothership Descending Through Clouds",
+        "description": "Massive kilometer-wide extraterrestrial mothership descending through fiery storm clouds above Earth.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "space",
+            "invasion",
+            "mothership",
+            "apocalyptic"
+        ]
+    },
+    "ev_mothership_alt": {
+        "id": "ev_mothership_alt",
+        "file": "/images/library/ev_mothership_alt.png",
+        "title": "Alien Mothership Hovering in Low Earth Orbit",
+        "description": "Giant extraterrestrial mothership eclipsing the sun in low Earth orbit over the planetary horizon.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "space",
+            "orbital",
+            "mothership",
+            "invasion"
+        ]
+    },
+    "ev_naval_strike": {
+        "id": "ev_naval_strike",
+        "file": "/images/library/ev_naval_strike.png",
+        "title": "Naval Warship Under Anti-Ship Missile Attack",
+        "description": "Surface warship firing close-in weapon systems amidst explosions at sea during a naval engagement.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "kinetic-strike",
+            "missile"
+        ]
+    },
+    "ev_nuclear_alert": {
+        "id": "ev_nuclear_alert",
+        "file": "/images/library/ev_nuclear_alert.png",
+        "title": "Submarine Ballistic Missile Launch Tube Alert",
+        "description": "Strategic ballistic missile submarine launch control room on high alert for Trident nuclear strike authorization.",
+        "tags": [
+            "event",
+            "action",
+            "military",
+            "naval",
+            "nuclear",
+            "submarine",
+            "strategic",
+            "escalation",
+            "uk"
+        ]
+    },
+    "ev_nuclear_readiness": {
+        "id": "ev_nuclear_readiness",
+        "file": "/images/library/ev_nuclear_readiness.jpg",
+        "title": "Mobile Tactical Nuclear Missile Launcher Preparation",
+        "description": "Satellite reconnaissance view of mobile ballistic missile launchers being fueled and prepared in a forest clearing.",
+        "tags": [
+            "event",
+            "military",
+            "land",
+            "nuclear",
+            "missile",
+            "isr",
+            "russia",
+            "escalation"
+        ]
+    },
+    "ev_oligarch_sanctions": {
+        "id": "ev_oligarch_sanctions",
+        "file": "/images/library/ev_oligarch_sanctions.png",
+        "title": "Financial Asset Freeze & Oligarch Sanctions",
+        "description": "Luxury superyacht and prime London financial district properties targeted by government asset freeze orders.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "civilian",
+            "finance",
+            "sanctions",
+            "uk",
+            "russia",
+            "politics"
+        ]
+    },
+    "ev_orbital_strike": {
+        "id": "ev_orbital_strike",
+        "file": "/images/library/ev_orbital_strike.jpg",
+        "title": "Orbital Directed-Energy Strike on City Landmark",
+        "description": "Massive beam of destructive energy lancing down from an orbital craft into the center of a capital city.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "urban",
+            "kinetic-strike",
+            "invasion",
+            "apocalyptic"
+        ]
+    },
+    "ev_port_damage": {
+        "id": "ev_port_damage",
+        "file": "/images/library/ev_port_damage.jpg",
+        "title": "Collapsed Shipping Cranes at Storm-Damaged Port",
+        "description": "Toppled heavy-lift container cranes and buckled pier infrastructure at a hurricane-ravaged seaport.",
+        "tags": [
+            "event",
+            "infrastructure",
+            "maritime",
+            "logistics",
+            "port",
+            "natural-disaster",
+            "hurricane",
+            "caribbean"
+        ]
+    },
+    "ev_port_riot": {
+        "id": "ev_port_riot",
+        "file": "/images/library/ev_port_riot.jpg",
+        "title": "Unrest at Seaport Aid Distribution Point",
+        "description": "Tense confrontation at port gates as desperate crowds press against security barriers during aid unloading.",
+        "tags": [
+            "event",
+            "civilian",
+            "riot",
+            "maritime",
+            "port",
+            "humanitarian",
+            "caribbean",
+            "public-order"
+        ]
+    },
+    "ev_portsmouth_strike": {
+        "id": "ev_portsmouth_strike",
+        "file": "/images/library/ev_portsmouth_strike.jpg",
+        "title": "Missile Strike on Naval Dockyard",
+        "description": "Plumes of smoke rising from warships and drydocks at a major naval base following a long-range missile attack.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "kinetic-strike",
+            "missile",
+            "port",
+            "uk"
+        ]
+    },
+    "ev_power_grid_strike": {
+        "id": "ev_power_grid_strike",
+        "file": "/images/library/ev_power_grid_strike.jpg",
+        "title": "Cruise Missile Strike on Power Generation Plant",
+        "description": "High-voltage transformers and cooling towers burning fiercely at night after a coordinated strike on the power grid.",
+        "tags": [
+            "event",
+            "infrastructure",
+            "civilian",
+            "kinetic-strike",
+            "blackout",
+            "power-grid",
+            "uk"
+        ]
+    },
+    "ev_prison_damage": {
+        "id": "ev_prison_damage",
+        "file": "/images/library/ev_prison_damage.jpg",
+        "title": "Storm-Damaged Prison Facility with Breached Roof",
+        "description": "High-security prison compound with its roof torn away by hurricane winds and perimeter fencing compromised.",
+        "tags": [
+            "event",
+            "civilian",
+            "infrastructure",
+            "police",
+            "natural-disaster",
+            "hurricane",
+            "caribbean",
+            "public-order"
+        ]
+    },
+    "ev_protest_london": {
+        "id": "ev_protest_london",
+        "file": "/images/library/ev_protest_london.png",
+        "title": "Mass Protests & Police Cordon in Whitehall",
+        "description": "Thousands of demonstrators with banners facing lines of police outside government buildings in rainy central London.",
+        "tags": [
+            "event",
+            "civilian",
+            "protest",
+            "police",
+            "urban",
+            "uk",
+            "london",
+            "public-order"
+        ]
+    },
+    "ev_protest_manchester": {
+        "id": "ev_protest_manchester",
+        "file": "/images/library/ev_protest_manchester.png",
+        "title": "Large Anti-War Demonstration in City Square",
+        "description": "Huge crowd of protesters filling a northern UK city square under overcast skies with police monitoring the perimeter.",
+        "tags": [
+            "event",
+            "civilian",
+            "protest",
+            "police",
+            "urban",
+            "uk",
+            "public-order"
+        ]
+    },
+    "ev_psyops_leaflet_drop": {
+        "id": "ev_psyops_leaflet_drop",
+        "file": "/images/library/ev_psyops_leaflet_drop.jpg",
+        "title": "Psychological Operations Leaflet Drop Over Town",
+        "description": "Thousands of informational leaflets fluttering down from the sky over an occupied desert town during an information operation.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "intelligence",
+            "psyops",
+            "information-operations",
+            "desert"
+        ]
+    },
+    "ev_raf_bases_strike": {
+        "id": "ev_raf_bases_strike",
+        "file": "/images/library/ev_raf_bases_strike.jpg",
+        "title": "Coordinated Missile Attack on Military Airfields",
+        "description": "Hardened aircraft shelters and cratered runways burning under heavy storm clouds after a salvo of cruise missiles.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "kinetic-strike",
+            "missile",
+            "airbase",
+            "uk",
+            "endgame"
+        ]
+    },
+    "ev_russia_deescalate": {
+        "id": "ev_russia_deescalate",
+        "file": "/images/library/ev_russia_deescalate.jpg",
+        "title": "High-Level Diplomatic Hotline De-Escalation",
+        "description": "Diplomats and military attaches reviewing a negotiated ceasefire and troop pullback order on secure monitors.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "military",
+            "russia",
+            "uk",
+            "de-escalation",
+            "ceasefire"
+        ]
+    },
+    "ev_russia_false_flag": {
+        "id": "ev_russia_false_flag",
+        "file": "/images/library/ev_russia_false_flag.jpg",
+        "title": "Continental Defense Grid Cyber Collapse",
+        "description": "Strategic European air defense map going dark sector by sector during a coordinated cyber sabotage attack.",
+        "tags": [
+            "event",
+            "cyber",
+            "military",
+            "infrastructure",
+            "europe",
+            "russia",
+            "blackout",
+            "sabotage"
+        ]
+    },
+    "ev_russia_hub_explosion": {
+        "id": "ev_russia_hub_explosion",
+        "file": "/images/library/ev_russia_hub_explosion.png",
+        "title": "Massive Explosion at Rail & Fuel Logistics Hub",
+        "description": "Towering fireball and burning rail fuel cars at a strategic military transport depot.",
+        "tags": [
+            "event",
+            "military",
+            "logistics",
+            "kinetic-strike",
+            "russia",
+            "infrastructure",
+            "sabotage"
+        ]
+    },
+    "ev_russia_leak": {
+        "id": "ev_russia_leak",
+        "file": "/images/library/ev_russia_leak.jpg",
+        "title": "State Media Broadcast of Leaked Diplomatic Call",
+        "description": "Television studio and news tickers broadcasting leaked transcripts of confidential diplomatic negotiations.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "media",
+            "intelligence",
+            "leak",
+            "russia",
+            "uk",
+            "disinformation"
+        ]
+    },
+    "ev_sandstorm_payload": {
+        "id": "ev_sandstorm_payload",
+        "file": "/images/library/ev_sandstorm_payload.jpg",
+        "title": "Fighter Jets Operating in Severe Desert Sandstorm",
+        "description": "Combat aircraft flying above a towering wall of orange desert dust and zero-visibility sandstorm conditions.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "weather",
+            "desert",
+            "sandstorm",
+            "strike"
+        ]
+    },
+    "ev_secondary_weather": {
+        "id": "ev_secondary_weather",
+        "file": "/images/library/ev_secondary_weather.jpg",
+        "title": "Storm Surge & Giant Waves Battering Coastline",
+        "description": "Massive ocean swells crashing over coastal sea walls and flooding temporary relief shelters.",
+        "tags": [
+            "event",
+            "civilian",
+            "maritime",
+            "weather",
+            "natural-disaster",
+            "hurricane",
+            "flood",
+            "caribbean"
+        ]
+    },
+    "ev_secret_weapon": {
+        "id": "ev_secret_weapon",
+        "file": "/images/library/ev_secret_weapon.png",
+        "title": "Experimental Directed-Energy Weapon Prototype",
+        "description": "Classified high-energy weapon prototype mounted inside a high-tech military testing facility.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "military",
+            "technology",
+            "research",
+            "weapon"
+        ]
+    },
+    "ev_sf_fail": {
+        "id": "ev_sf_fail",
+        "file": "/images/library/ev_sf_fail.jpg",
+        "title": "Compromised Covert Operation & Captured Equipment",
+        "description": "Floodlit security cordon and state media cameras surrounding captured tactical gear after a failed covert raid.",
+        "tags": [
+            "event",
+            "military",
+            "intelligence",
+            "special-forces",
+            "covert",
+            "media",
+            "russia"
+        ]
+    },
+    "ev_sf_success": {
+        "id": "ev_sf_success",
+        "file": "/images/library/ev_sf_success.jpg",
+        "title": "Night Special Forces Helicopter Extraction",
+        "description": "Special forces team boarding a low-hovering Chinook helicopter at night after capturing high-value intelligence.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "land",
+            "special-forces",
+            "covert",
+            "intelligence",
+            "helicopter"
+        ]
+    },
+    "ev_start": {
+        "id": "ev_start",
+        "file": "/images/library/ev_start.jpg",
+        "title": "Unidentified Orbital Objects Approaching Earth",
+        "description": "Deep-space tracking view of massive unidentified anomalies entering Earth orbit and disrupting satellite constellations.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "space",
+            "orbital",
+            "satellite",
+            "invasion"
+        ]
+    },
+    "ev_start_id4": {
+        "id": "ev_start_id4",
+        "file": "/images/library/ev_start_id4.jpg",
+        "title": "Giant Shadow Cast Over Capital City by Orbital Craft",
+        "description": "Dark, ominous shadow of a colossal orbital vessel engulfing a major city skyline beneath stormy clouds.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "urban",
+            "invasion",
+            "orbital"
+        ]
+    },
+    "ev_strike_options_leak": {
+        "id": "ev_strike_options_leak",
+        "file": "/images/library/ev_strike_options_leak.jpg",
+        "title": "Press Headline Leak of Classified Strike Plans",
+        "description": "Breaking news broadcast revealing leaked military target maps and deep strike deliberations.",
+        "tags": [
+            "event",
+            "intelligence",
+            "media",
+            "diplomatic",
+            "military",
+            "leak",
+            "uk"
+        ]
+    },
+    "ev_strike_options_ready": {
+        "id": "ev_strike_options_ready",
+        "file": "/images/library/ev_strike_options_ready.jpg",
+        "title": "Finalized Deep Strike Target Folder on Situation Table",
+        "description": "High-resolution satellite reconnaissance photographs and strike routing charts prepared for cabinet authorization.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "intelligence",
+            "planning",
+            "strike",
+            "command-and-control"
+        ]
+    },
+    "ev_strike_options_secured": {
+        "id": "ev_strike_options_secured",
+        "file": "/images/library/ev_strike_options_secured.jpg",
+        "title": "Compartmentalized Briefing in Secure SCIF",
+        "description": "Military intelligence officers locking down classified strike packages inside a secure compartmentalized facility.",
+        "tags": [
+            "event",
+            "military",
+            "intelligence",
+            "planning",
+            "security",
+            "command-and-control"
+        ]
+    },
+    "ev_sub_detection": {
+        "id": "ev_sub_detection",
+        "file": "/images/library/ev_sub_detection.png",
+        "title": "Sonar Contact Display Tracking Submerged Submarine",
+        "description": "Glowing green and blue acoustic sonar waterfall displays in a naval operations room tracking a submerged contact.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "asw",
+            "isr",
+            "sonar"
+        ]
+    },
+    "ev_sub_surfaces": {
+        "id": "ev_sub_surfaces",
+        "file": "/images/library/ev_sub_surfaces.jpg",
+        "title": "Ballistic Missile Submarine Surfacing Near Ferry Lane",
+        "description": "Large nuclear ballistic missile submarine surfaced in choppy coastal waters within sight of a civilian passenger ferry.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "russia",
+            "uk",
+            "escalation"
+        ]
+    },
+    "ev_supermarket_looting": {
+        "id": "ev_supermarket_looting",
+        "file": "/images/library/ev_supermarket_looting.jpg",
+        "title": "Looting at Storm-Damaged Supermarket",
+        "description": "Crowds breaking into a shuttered supermarket amid storm debris to seize bottled water and emergency rations.",
+        "tags": [
+            "event",
+            "civilian",
+            "riot",
+            "urban",
+            "caribbean",
+            "natural-disaster",
+            "public-order",
+            "logistics"
+        ]
+    },
+    "ev_supremacy_victory": {
+        "id": "ev_supremacy_victory",
+        "file": "/images/library/ev_supremacy_victory.jpg",
+        "title": "Global Victory Over Extraterrestrial Invasion",
+        "description": "Formation of allied fighter jets soaring past the burning wreckage of a defeated alien mothership as sunlight breaks through.",
+        "tags": [
+            "event",
+            "sci-fi",
+            "alien",
+            "military",
+            "air",
+            "endgame",
+            "victory"
+        ]
+    },
+    "ev_uk_casualty_leak": {
+        "id": "ev_uk_casualty_leak",
+        "file": "/images/library/ev_uk_casualty_leak.jpg",
+        "title": "Media Press Scrum Over Covert Military Casualties",
+        "description": "Reporters and camera crews gathered outside the Ministry of Defence demanding answers over leaked covert operational casualties.",
+        "tags": [
+            "event",
+            "media",
+            "military",
+            "diplomatic",
+            "uk",
+            "leak",
+            "politics"
+        ]
+    },
+    "ev_undersea_cable": {
+        "id": "ev_undersea_cable",
+        "file": "/images/library/ev_undersea_cable.png",
+        "title": "Spy Ship Operating Submersible Near Undersea Cables",
+        "description": "Foreign oceanographic intelligence vessel hovering over deep-sea fiber-optic communication cables in rough seas.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "intelligence",
+            "infrastructure",
+            "cables",
+            "russia",
+            "hybrid-warfare"
+        ]
+    },
+    "ev_undersea_cables": {
+        "id": "ev_undersea_cables",
+        "file": "/images/library/ev_undersea_cables.jpg",
+        "title": "Severed Deep-Sea Fiber-Optic Communications Cable",
+        "description": "Underwater remotely operated vehicle (ROV) illuminating a frayed, severed subsea telecommunications cable on the ocean floor.",
+        "tags": [
+            "event",
+            "infrastructure",
+            "maritime",
+            "cyber",
+            "cables",
+            "sabotage",
+            "communications"
+        ]
+    },
+    "ev_undersea_cables_alt": {
+        "id": "ev_undersea_cables_alt",
+        "file": "/images/library/ev_undersea_cables_alt.png",
+        "title": "Subsea Cable Network Map & Deep-Sea Sabotage",
+        "description": "Tactical hydrographic display showing severed transatlantic subsea data cables and anomalous underwater contacts.",
+        "tags": [
+            "event",
+            "infrastructure",
+            "maritime",
+            "cyber",
+            "cables",
+            "sabotage",
+            "communications"
+        ]
+    },
+    "ev_urban_hospital_roe": {
+        "id": "ev_urban_hospital_roe",
+        "file": "/images/library/ev_urban_hospital_roe.jpg",
+        "title": "Enemy Communications Array Atop Civilian Hospital",
+        "description": "Target pod feed showing a military radio mast and command post co-located on the roof of a marked civilian hospital.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "civilian",
+            "medical",
+            "urban",
+            "roe",
+            "electronic-warfare",
+            "isr"
+        ]
+    },
+    "ev_us_neutrality": {
+        "id": "ev_us_neutrality",
+        "file": "/images/library/ev_us_neutrality.jpg",
+        "title": "White House Press Briefing Declaring Non-Intervention",
+        "description": "Presidential press briefing announcing strict military neutrality and non-intervention in overseas territorial conflicts.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "us",
+            "nato",
+            "politics",
+            "media",
+            "alliance"
+        ]
+    },
+    "ev_us_support_fail": {
+        "id": "ev_us_support_fail",
+        "file": "/images/library/ev_us_support_fail.jpg",
+        "title": "Grounded Strategic Airlift Fleet on Tarmac",
+        "description": "Rows of heavy strategic transport aircraft parked idle on an airfield apron after a support request is declined.",
+        "tags": [
+            "event",
+            "diplomatic",
+            "military",
+            "air",
+            "logistics",
+            "us",
+            "uk"
+        ]
+    },
+    "ev_us_support_success": {
+        "id": "ev_us_support_success",
+        "file": "/images/library/ev_us_support_success.jpg",
+        "title": "Strategic Airbridge Heavy Transport Sortie",
+        "description": "C-17 Globemaster and A400M heavy transport aircraft marshalling on a wet runway during a rapid strategic airlift surge.",
+        "tags": [
+            "event",
+            "military",
+            "air",
+            "logistics",
+            "mobility",
+            "us",
+            "uk",
+            "airbridge"
+        ]
+    },
+    "ev_weather_warning": {
+        "id": "ev_weather_warning",
+        "file": "/images/library/ev_weather_warning.jpg",
+        "title": "Meteorological Radar Tracking Severe Storm Swell",
+        "description": "High-contrast weather satellite and wave-height radar display tracking a dangerous secondary storm front.",
+        "tags": [
+            "event",
+            "weather",
+            "maritime",
+            "natural-disaster",
+            "hurricane",
+            "caribbean",
+            "isr"
+        ]
+    },
+    "evt_armor_push": {
+        "id": "evt_armor_push",
+        "file": "/images/library/evt_armor_push.jpg",
+        "title": "Armored Tank Column Advancing Through Breach",
+        "description": "Column of main battle tanks and armored vehicles advancing rapidly along a smoke-shrouded country road.",
+        "tags": [
+            "event",
+            "military",
+            "land",
+            "armor",
+            "frontline",
+            "combat",
+            "eastern-europe"
+        ]
+    },
+    "evt_depot_strike": {
+        "id": "evt_depot_strike",
+        "file": "/images/library/evt_depot_strike.jpg",
+        "title": "Ballistic Missile Strike on Central Supply Hub",
+        "description": "Massive explosion and shockwave erupting from a military ammunition and fuel supply depot hit by a ballistic missile.",
+        "tags": [
+            "event",
+            "military",
+            "land",
+            "logistics",
+            "kinetic-strike",
+            "missile",
+            "infrastructure"
+        ]
+    },
+    "evt_encirclement_threat": {
+        "id": "evt_encirclement_threat",
+        "file": "/images/library/evt_encirclement_threat.jpg",
+        "title": "Tactical Map of Pincer Encirclement Threat",
+        "description": "Field command display and frontline view showing hostile armored spearheads threatening to cut off a defending brigade.",
+        "tags": [
+            "event",
+            "military",
+            "land",
+            "armor",
+            "frontline",
+            "command-and-control",
+            "eastern-europe"
+        ]
+    },
+    "evt_evac_jam": {
+        "id": "evt_evac_jam",
+        "file": "/images/library/evt_evac_jam.jpg",
+        "title": "Gridlocked Highway Evacuation in Rising Floodwaters",
+        "description": "Miles of civilian cars trapped in bumper-to-bumper traffic on a flooded highway under torrential rain.",
+        "tags": [
+            "event",
+            "civilian",
+            "infrastructure",
+            "natural-disaster",
+            "flood",
+            "evacuation",
+            "urban",
+            "logistics"
+        ]
+    },
+    "evt_flood_warning": {
+        "id": "evt_flood_warning",
+        "file": "/images/library/evt_flood_warning.jpg",
+        "title": "Rising River Floodwaters Threatening Downtown",
+        "description": "Swollen river overtopping concrete flood barriers beside a city center during a severe storm warning.",
+        "tags": [
+            "event",
+            "civilian",
+            "weather",
+            "natural-disaster",
+            "flood",
+            "urban",
+            "infrastructure"
+        ]
+    },
+    "evt_hospital_power_failure": {
+        "id": "evt_hospital_power_failure",
+        "file": "/images/library/evt_hospital_power_failure.jpg",
+        "title": "Darkened Hospital Corridor During Generator Failure",
+        "description": "Hospital intensive care corridor lit only by emergency red backup lights after primary and backup generators fail.",
+        "tags": [
+            "event",
+            "civilian",
+            "medical",
+            "infrastructure",
+            "blackout",
+            "urban",
+            "hospital"
+        ]
+    },
+    "evt_precinct_vulnerable": {
+        "id": "evt_precinct_vulnerable",
+        "file": "/images/library/evt_precinct_vulnerable.jpg",
+        "title": "Police Precinct Surrounded in Citywide Blackout",
+        "description": "Police cruisers with flashing lightbars outside a darkened central precinct during a communications and power outage.",
+        "tags": [
+            "event",
+            "civilian",
+            "police",
+            "infrastructure",
+            "blackout",
+            "urban",
+            "public-order"
+        ]
+    },
+    "evt_supermarket_riot": {
+        "id": "evt_supermarket_riot",
+        "file": "/images/library/evt_supermarket_riot.jpg",
+        "title": "Crowd Unrest Outside Darkened Supermarket",
+        "description": "Agitated crowd gathered outside a grocery store during a prolonged city blackout demanding food and water.",
+        "tags": [
+            "event",
+            "civilian",
+            "riot",
+            "urban",
+            "blackout",
+            "public-order",
+            "logistics"
+        ]
+    },
+    "evt_water_plant": {
+        "id": "evt_water_plant",
+        "file": "/images/library/evt_water_plant.jpg",
+        "title": "Floodwaters Surrounding Municipal Water Treatment Plant",
+        "description": "Aerial view of a water treatment facility and filtration basins threatened by encroaching muddy floodwaters.",
+        "tags": [
+            "event",
+            "civilian",
+            "infrastructure",
+            "natural-disaster",
+            "flood",
+            "water"
+        ]
+    },
+    "f35_aircraft": {
+        "id": "f35_aircraft",
+        "file": "/images/library/f35_aircraft.png",
+        "title": "F-35B Lightning II Stealth Multi-Role Fighter",
+        "description": "Fifth-generation STOVL F-35B Lightning II stealth strike fighter banking through stormy skies.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "stealth",
+            "f35",
+            "combat",
+            "strike",
+            "uk",
+            "raf",
+            "royal-navy"
+        ]
+    },
+    "gchq_bude": {
+        "id": "gchq_bude",
+        "file": "/images/library/gchq_bude.png",
+        "title": "GCHQ Bude Satellite Ground Station",
+        "description": "Array of white radomes and satellite intercept dishes on the rugged Cornwall coast at dusk.",
+        "tags": [
+            "asset",
+            "intelligence",
+            "cyber",
+            "communications",
+            "satellite",
+            "sigint",
+            "uk",
+            "gchq"
+        ]
+    },
+    "generic_cyber": {
+        "id": "generic_cyber",
+        "file": "/images/library/generic_cyber.png",
+        "title": "Cyber Security Operations Center (Generic)",
+        "description": "Analysts monitoring global network traffic and threat feeds on glowing blue screens in a dark cyber operations center.",
+        "tags": [
+            "generic",
+            "event",
+            "asset",
+            "cyber",
+            "intelligence",
+            "network",
+            "command-and-control"
+        ]
+    },
+    "generic_deployment": {
+        "id": "generic_deployment",
+        "file": "/images/library/generic_deployment.png",
+        "title": "Military Force Protection & Troop Deployment (Generic)",
+        "description": "Armed infantry and RAF Regiment gunners deploying from tactical vehicles to secure a base perimeter.",
+        "tags": [
+            "generic",
+            "event",
+            "action",
+            "military",
+            "land",
+            "infantry",
+            "force-protection",
+            "deployment"
+        ]
+    },
+    "generic_police": {
+        "id": "generic_police",
+        "file": "/images/library/generic_police.png",
+        "title": "Riot Police Line in Urban Center (Generic)",
+        "description": "Line of police officers with riot shields and helmets holding a cordon on a wet city street at night.",
+        "tags": [
+            "generic",
+            "event",
+            "civilian",
+            "police",
+            "riot",
+            "protest",
+            "urban",
+            "public-order"
+        ]
+    },
+    "generic_press": {
+        "id": "generic_press",
+        "file": "/images/library/generic_press.png",
+        "title": "Emergency Government Press Conference (Generic)",
+        "description": "Official podium facing a bank of microphones and flashing press cameras in a government briefing room.",
+        "tags": [
+            "generic",
+            "event",
+            "action",
+            "media",
+            "government",
+            "diplomatic",
+            "broadcast"
+        ]
+    },
+    "generic_un": {
+        "id": "generic_un",
+        "file": "/images/library/generic_un.png",
+        "title": "United Nations Security Council Emergency Session (Generic)",
+        "description": "International diplomats seated around the circular chamber of an emergency United Nations Security Council meeting.",
+        "tags": [
+            "generic",
+            "event",
+            "diplomatic",
+            "un",
+            "international",
+            "politics"
+        ]
+    },
+    "hmnb_clyde": {
+        "id": "hmnb_clyde",
+        "file": "/images/library/hmnb_clyde.png",
+        "title": "HMNB Clyde (Faslane) Submarine Base",
+        "description": "Royal Navy nuclear submarine base nestled in Gare Loch, Scotland, surrounded by steep hills and patrol craft.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "nuclear",
+            "uk",
+            "royal-navy",
+            "port"
+        ]
+    },
+    "hms_prince_of_wales": {
+        "id": "hms_prince_of_wales",
+        "file": "/images/library/hms_prince_of_wales.png",
+        "title": "HMS Prince of Wales Carrier Strike Group",
+        "description": "Royal Navy aircraft carrier HMS Prince of Wales steaming in formation with escorting destroyers and frigates.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "air",
+            "carrier",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "national_grid": {
+        "id": "national_grid",
+        "file": "/images/library/national_grid.png",
+        "title": "National Grid Transmission Control Centre",
+        "description": "Control room engineers monitoring a massive illuminated wall schematic of the national electricity transmission grid.",
+        "tags": [
+            "asset",
+            "civilian",
+            "infrastructure",
+            "power-grid",
+            "uk",
+            "command-and-control"
+        ]
+    },
+    "nato_aegis_ashore": {
+        "id": "nato_aegis_ashore",
+        "file": "/images/library/nato_aegis_ashore.png",
+        "title": "NATO Aegis Ashore Ballistic Missile Defense Facility",
+        "description": "Land-based Aegis Ashore SPY-1 radar deckhouse and vertical launch missile interceptors protecting allied airspace.",
+        "tags": [
+            "asset",
+            "military",
+            "air-defence",
+            "missile",
+            "nato",
+            "europe",
+            "radar"
+        ]
+    },
+    "nato_air_base": {
+        "id": "nato_air_base",
+        "file": "/images/library/nato_air_base.png",
+        "title": "Allied Forward Operating Airfield",
+        "description": "Forward military airfield with hardened aircraft shelters, dispersal aprons, and fighter jets preparing for sortie launch.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "air",
+            "airbase",
+            "nato",
+            "infrastructure"
+        ]
+    },
+    "nato_awacs": {
+        "id": "nato_awacs",
+        "file": "/images/library/nato_awacs.png",
+        "title": "NATO E-3A Sentry AWACS Airborne Early Warning Aircraft",
+        "description": "Airborne early warning and control aircraft with prominent rotating radar rotodome flying high above mountain cloud cover.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "air",
+            "isr",
+            "radar",
+            "command-and-control",
+            "nato",
+            "awacs"
+        ]
+    },
+    "nato_incirlik": {
+        "id": "nato_incirlik",
+        "file": "/images/library/nato_incirlik.png",
+        "title": "Incirlik Air Base (Southern Flank Hub)",
+        "description": "Strategic coalition airbase in southern Turkey featuring hardened shelters and long-range strike and tanker aircraft.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "airbase",
+            "nato",
+            "us"
+        ]
+    },
+    "nato_keflavik": {
+        "id": "nato_keflavik",
+        "file": "/images/library/nato_keflavik.png",
+        "title": "NATO Air Policing Detachment at Keflavik",
+        "description": "Allied fighter interceptors and maritime patrol aircraft staged on a windswept Icelandic tarmac.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "maritime",
+            "airbase",
+            "nato",
+            "iceland",
+            "arctic"
+        ]
+    },
+    "nato_mihail_kogalniceanu": {
+        "id": "nato_mihail_kogalniceanu",
+        "file": "/images/library/nato_mihail_kogalniceanu.png",
+        "title": "Mihail Kogalniceanu Air Base (Black Sea Flank)",
+        "description": "Forward NATO airbase in Romania supporting enhanced Air Policing and rapid reinforcement near the Black Sea.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "airbase",
+            "nato",
+            "eastern-europe",
+            "black-sea"
+        ]
+    },
+    "p8_poseidon": {
+        "id": "p8_poseidon",
+        "file": "/images/library/p8_poseidon.jpg",
+        "title": "P-8A Poseidon MRA1 Maritime Patrol Aircraft",
+        "description": "RAF P-8A Poseidon multi-role maritime patrol aircraft flying low over rough seas on anti-submarine warfare patrol.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "maritime",
+            "naval",
+            "isr",
+            "asw",
+            "uk",
+            "raf"
+        ]
+    },
+    "qe_class_carrier": {
+        "id": "qe_class_carrier",
+        "file": "/images/library/qe_class_carrier.png",
+        "title": "HMS Queen Elizabeth Aircraft Carrier",
+        "description": "Twin-island Queen Elizabeth-class aircraft carrier with F-35B Lightning jets spotted on the ski-jump flight deck.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "air",
+            "carrier",
+            "f35",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "raf_akrotiri": {
+        "id": "raf_akrotiri",
+        "file": "/images/library/raf_akrotiri.jpg",
+        "title": "RAF Akrotiri Sovereign Base Airfield (Cyprus)",
+        "description": "Coastal military airfield on the Akrotiri peninsula in Cyprus with combat and transport aircraft lined along the apron.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "airbase",
+            "spoke",
+            "uk",
+            "raf",
+            "cyprus"
+        ]
+    },
+    "raf_brize_norton": {
+        "id": "raf_brize_norton",
+        "file": "/images/library/raf_brize_norton.jpg",
+        "title": "RAF Brize Norton Air Mobility Hub",
+        "description": "Main UK air transport hub with C-17 Globemaster, A400M Atlas, and Voyager tanker aircraft on a floodlit apron.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "airbase",
+            "hub",
+            "logistics",
+            "mobility",
+            "uk",
+            "raf"
+        ]
+    },
+    "raf_chinook": {
+        "id": "raf_chinook",
+        "file": "/images/library/raf_chinook.jpg",
+        "title": "RAF Chinook HC6 Support Helicopter",
+        "description": "Twin-rotor RAF Chinook heavy support helicopter flying low over coastal terrain during a tactical mobility sortie.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "rotary",
+            "helicopter",
+            "chinook",
+            "mobility",
+            "uk",
+            "raf"
+        ]
+    },
+    "raf_waddington": {
+        "id": "raf_waddington",
+        "file": "/images/library/raf_waddington.jpg",
+        "title": "RAF Waddington ISR Wing Base",
+        "description": "Intelligence, Surveillance, and Reconnaissance airbase operating RC-135W Rivet Joint and Protector RPAS aircraft.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "isr",
+            "airbase",
+            "hub",
+            "intelligence",
+            "uk",
+            "raf"
+        ]
+    },
+    "rc135_rivet_joint": {
+        "id": "rc135_rivet_joint",
+        "file": "/images/library/rc135_rivet_joint.jpg",
+        "title": "RC-135W Rivet Joint Electronic Surveillance Aircraft",
+        "description": "RAF RC-135W Rivet Joint signals intelligence aircraft banking at high altitude with distinctive sensor fairings.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "isr",
+            "intelligence",
+            "sigint",
+            "electronic-warfare",
+            "uk",
+            "raf"
+        ]
+    },
+    "rescue_heli": {
+        "id": "rescue_heli",
+        "file": "/images/library/rescue_heli.jpg",
+        "title": "Emergency Search & Rescue Helicopter",
+        "description": "High-visibility search and rescue helicopter hovering in heavy rain with a winch operator ready for flood rescues.",
+        "tags": [
+            "asset",
+            "civilian",
+            "air",
+            "rotary",
+            "helicopter",
+            "rescue",
+            "emergency",
+            "natural-disaster"
+        ]
+    },
+    "rfa_mounts_bay": {
+        "id": "rfa_mounts_bay",
+        "file": "/images/library/rfa_mounts_bay.jpg",
+        "title": "RFA Mounts Bay Landing Ship Dock",
+        "description": "Royal Fleet Auxiliary Bay-class amphibious landing ship operating mexeflote landing craft off a storm-hit tropical coast.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "logistics",
+            "humanitarian",
+            "uk",
+            "caribbean"
+        ]
+    },
+    "rus_engels": {
+        "id": "rus_engels",
+        "file": "/images/library/rus_engels.png",
+        "title": "Engels-2 Long-Range Strategic Bomber Base",
+        "description": "Russian strategic aviation airbase with Tu-160 Blackjack and Tu-95 Bear heavy bombers parked on snow-dusted revetments.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "bomber",
+            "airbase",
+            "russia",
+            "nuclear",
+            "strategic"
+        ]
+    },
+    "rus_iskander": {
+        "id": "rus_iskander",
+        "file": "/images/library/rus_iskander.png",
+        "title": "9K720 Iskander Mobile Short-Range Ballistic Missile System",
+        "description": "Mobile transporter-erector-launcher elevating dual Iskander ballistic missiles along a camouflaged road.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "land",
+            "missile",
+            "a2ad",
+            "russia",
+            "strike"
+        ]
+    },
+    "rus_kaliningrad": {
+        "id": "rus_kaliningrad",
+        "file": "/images/library/rus_kaliningrad.png",
+        "title": "Kaliningrad A2AD Missile & Radar Bastion",
+        "description": "Heavily fortified S-400 surface-to-air missile and coastal defense battery in the Kaliningrad exclave.",
+        "tags": [
+            "asset",
+            "military",
+            "land",
+            "air-defence",
+            "sam",
+            "a2ad",
+            "russia",
+            "baltic"
+        ]
+    },
+    "rus_northern_fleet": {
+        "id": "rus_northern_fleet",
+        "file": "/images/library/rus_northern_fleet.png",
+        "title": "Russian Northern Fleet Base at Severomorsk",
+        "description": "Arctic naval base in Murmansk hosting nuclear cruisers, destroyers, and ballistic missile submarines in icy waters.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "russia",
+            "arctic",
+            "port"
+        ]
+    },
+    "rus_novorossiysk": {
+        "id": "rus_novorossiysk",
+        "file": "/images/library/rus_novorossiysk.png",
+        "title": "Novorossiysk Black Sea Naval Base",
+        "description": "Fortified Russian naval harbor on the Black Sea coast sheltering frigates and Kilo-class submarines behind breakwaters.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "russia",
+            "black-sea",
+            "port"
+        ]
+    },
+    "rus_sevastopol": {
+        "id": "rus_sevastopol",
+        "file": "/images/library/rus_sevastopol.png",
+        "title": "Sevastopol Naval Base & Harbor Defenses",
+        "description": "Major naval port facility in Crimea with moored surface warships, floating booms, and coastal radar installations.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "russia",
+            "black-sea",
+            "port"
+        ]
+    },
+    "rus_su57": {
+        "id": "rus_su57",
+        "file": "/images/library/rus_su57.png",
+        "title": "Sukhoi Su-57 Felon Stealth Fighter Squadron",
+        "description": "Russian twin-engine fifth-generation stealth fighter aircraft taxiing on a wet military runway.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "combat",
+            "stealth",
+            "russia"
+        ]
+    },
+    "substation_alpha": {
+        "id": "substation_alpha",
+        "file": "/images/library/substation_alpha.jpg",
+        "title": "High-Voltage Electrical Power Substation",
+        "description": "Industrial high-voltage electrical transmission substation with transformers and switchgear in heavy rain.",
+        "tags": [
+            "asset",
+            "civilian",
+            "infrastructure",
+            "power-grid",
+            "urban"
+        ]
+    },
+    "type_23_frigate": {
+        "id": "type_23_frigate",
+        "file": "/images/library/type_23_frigate.png",
+        "title": "Type 23 Duke-Class Anti-Submarine Frigate",
+        "description": "Royal Navy Type 23 frigate conducting anti-submarine warfare operations with towed-array sonar in rough Atlantic seas.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "frigate",
+            "asw",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "type_26_frigate": {
+        "id": "type_26_frigate",
+        "file": "/images/library/type_26_frigate.png",
+        "title": "Type 26 City-Class Global Combat Ship",
+        "description": "Next-generation Royal Navy Type 26 anti-submarine warfare frigate slicing through heavy North Atlantic swells.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "frigate",
+            "asw",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "type_45_destroyer": {
+        "id": "type_45_destroyer",
+        "file": "/images/library/type_45_destroyer.png",
+        "title": "Type 45 Daring-Class Air Defence Destroyer",
+        "description": "Royal Navy Type 45 destroyer with SAMPSON radar mast cutting through stormy seas to provide fleet air defence.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "air-defence",
+            "destroyer",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "typhoon_aircraft": {
+        "id": "typhoon_aircraft",
+        "file": "/images/library/typhoon_aircraft.png",
+        "title": "RAF Eurofighter Typhoon FGR4 Multi-Role Fighter",
+        "description": "RAF Eurofighter Typhoon FGR4 armed with air-to-air and precision strike munitions banking above storm clouds.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "air",
+            "combat",
+            "typhoon",
+            "qra",
+            "strike",
+            "uk",
+            "raf"
+        ]
+    },
+    "ukr_air_defense": {
+        "id": "ukr_air_defense",
+        "file": "/images/library/ukr_air_defense.png",
+        "title": "Mobile Surface-to-Air Missile Battery",
+        "description": "Camouflaged surface-to-air missile radar and launcher battery defending airspace against incoming cruise missiles.",
+        "tags": [
+            "asset",
+            "military",
+            "land",
+            "air-defence",
+            "sam",
+            "ukraine",
+            "eastern-europe"
+        ]
+    },
+    "ukr_kyiv_command": {
+        "id": "ukr_kyiv_command",
+        "file": "/images/library/ukr_kyiv_command.png",
+        "title": "Fortified Underground Joint Command Bunker",
+        "description": "Hardened military command center with digital operational maps tracking air and ground defense sectors.",
+        "tags": [
+            "asset",
+            "military",
+            "command-and-control",
+            "c2",
+            "intelligence",
+            "ukraine",
+            "urban"
+        ]
+    },
+    "ukr_odesa_port": {
+        "id": "ukr_odesa_port",
+        "file": "/images/library/ukr_odesa_port.png",
+        "title": "Odesa Commercial Grain & Naval Port",
+        "description": "Black Sea commercial container and grain port terminal guarded by coastal defense units.",
+        "tags": [
+            "asset",
+            "civilian",
+            "maritime",
+            "logistics",
+            "port",
+            "ukraine",
+            "black-sea",
+            "infrastructure"
+        ]
+    },
+    "us_v_corps": {
+        "id": "us_v_corps",
+        "file": "/images/library/us_v_corps.png",
+        "title": "US V Corps Forward Armored Headquarters",
+        "description": "Forward-deployed US Army M1A2 Abrams tanks, Bradley fighting vehicles, and mobile tactical command posts in Eastern Europe.",
+        "tags": [
+            "asset",
+            "military",
+            "land",
+            "armor",
+            "us",
+            "nato",
+            "eastern-europe",
+            "command-and-control"
+        ]
+    },
+    "vanguard_class_sub": {
+        "id": "vanguard_class_sub",
+        "file": "/images/library/vanguard_class_sub.png",
+        "title": "Vanguard-Class Ballistic Missile Submarine (SSBN)",
+        "description": "Royal Navy Vanguard-class strategic nuclear submarine on Continuous At-Sea Deterrence patrol in deep ocean waters.",
+        "tags": [
+            "asset",
+            "military",
+            "naval",
+            "maritime",
+            "submarine",
+            "nuclear",
+            "strategic",
+            "uk",
+            "royal-navy"
+        ]
+    },
+    "voyager_refueler": {
+        "id": "voyager_refueler",
+        "file": "/images/library/voyager_refueler.png",
+        "title": "RAF Voyager KC2/KC3 Air-to-Air Refuelling Tanker",
+        "description": "RAF Airbus A330 Voyager multi-role tanker transport extending refuelling drogues to fast jets in flight.",
+        "tags": [
+            "asset",
+            "event",
+            "military",
+            "air",
+            "mobility",
+            "logistics",
+            "aar",
+            "tanker",
+            "uk",
+            "raf"
+        ]
+    }
+}

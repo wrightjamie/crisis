@@ -68,7 +68,7 @@ module.exports = {
             id: 'ev_start',
             name: 'Shadows Over Earth',
             description: 'Massive unidentified objects have entered low Earth orbit, positioning themselves over major global capitals. Total global satellite blackout has commenced.',
-            image: '/images/events/ev_start_id4.jpg',
+            image: 'ev_start_id4',
             decisions: [
                 { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Military Posture?', options: [{ id: 'defcon1', text: 'DEFCON 1 (Prepare Nukes)', effects: { scores: { usa_survival: +1, eu_survival: -1 } } }, { id: 'wait', text: 'Observe', effects: { scores: { usa_tech: +1, global_tech: +1 } } }] },
                 { role: 'china', hiddenFrom: ['usa', 'india'], text: 'Public Stance?', options: [{ id: 'lockdown', text: 'Total Martial Law', effects: { scores: { china_survival: +1 } } }, { id: 'evac', text: 'Mass Evacuation', effects: { scores: { china_survival: -1, china_tech: +1, global_tech: +1 } } }] },
@@ -93,7 +93,7 @@ module.exports = {
             name: 'The Roswell Cache',
             description: 'The US unlocks decades of hidden research.',
             visibleTo: ['usa'],
-            image: '/scenarios/independence_day/images/ev_alien_tech.jpg',
+            image: 'ev_alien_tech',
             decisions: [
                 { role: 'usa', text: 'Share Roswell Tech?', options: [{ id: 'share_all', text: 'Share Globally', effects: { scores: { global_tech: +3, eu_tech: +1, uk_tech: +1 } } }, { id: 'keep', text: 'Classified (USA Only)', effects: { scores: { usa_tech: +3, global_tech: +3 } } }] }
             ]
@@ -101,7 +101,7 @@ module.exports = {
         {
             id: 'ev_first_strike_prep',
             name: 'Energy Signatures Detected',
-            image: '/images/events/ev_first_strike_prep.jpg',
+            image: 'ev_first_strike_prep',
             description: 'The orbital ships are powering up massive energy weapons. They are targeting high-density populations.',
             decisions: [
                 { role: 'india', hiddenFrom: ['eu'], text: 'Redirect Targets?', options: [{ id: 'hack', text: 'Hack beacons (Diverts attack from India to EU)', effects: { scores: { india_survival: +1, eu_survival: -2 } } }, { id: 'brace', text: 'Brace for impact', effects: { scores: { india_survival: -2 } } }] },
@@ -113,7 +113,7 @@ module.exports = {
             id: 'ev_global_strike',
             name: 'The Global Strike',
             description: 'Coordinated energy beams obliterate major landmarks worldwide.',
-            image: '/scenarios/independence_day/images/ev_orbital_strike.jpg',
+            image: 'ev_orbital_strike',
             effects: { scores: { usa_survival: -1, china_survival: -1, russia_survival: -1, eu_survival: -1, india_survival: -1, uk_survival: -1 } }
         },
         {
@@ -128,7 +128,7 @@ module.exports = {
         {
             id: 'ev_russia_false_flag',
             name: 'European Grid Collapse',
-            image: '/images/events/ev_russia_false_flag.jpg',
+            image: 'ev_russia_false_flag',
             description: 'As the aliens attacked, a secondary terrestrial cyber-attack wiped out the remaining European defense grids.',
             visibleTo: ['russia'],
             decisions: [
@@ -139,7 +139,7 @@ module.exports = {
         {
             id: 'ev_arms_race_start',
             name: 'Fighters Downed',
-            image: '/images/events/ev_arms_race_start.jpg',
+            image: 'ev_arms_race_start',
             description: 'Conventional military forces have managed to down several small alien fighters. The race to reverse-engineer them begins.',
             effects: { scores: { global_tech: +1 } },
             triggerEvents: [{ id: 'ev_espionage_uk', delayMs: 120000 }, { id: 'ev_espionage_china', delayMs: 240000 }]
@@ -166,7 +166,7 @@ module.exports = {
             id: 'ev_mothership',
             name: 'The Mothership Descends',
             description: 'The primary alien vessel enters the atmosphere. Global survival depends on our response.',
-            image: '/scenarios/independence_day/images/ev_mothership.jpg',
+            image: 'ev_mothership',
             decisions: [
                 { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Final Push?', options: [{ id: 'nuke', text: 'Launch all remaining Nukes', effects: { scores: { usa_survival: -1, global_tech: +3 } } }] },
                 { role: 'russia', hiddenFrom: ['usa', 'china', 'eu', 'uk'], text: 'Dead Hand?', options: [{ id: 'activate', text: 'Activate Dead Hand', effects: { scores: { russia_survival: -1, global_tech: +2 } } }] }
@@ -200,7 +200,7 @@ module.exports = {
         {
             id: 'ev_end_supremacy',
             name: 'Global Supremacy',
-            image: '/scenarios/independence_day/images/ev_supremacy_victory.jpg',
+            image: 'ev_supremacy_victory',
             description: (state) => {
                 const nations = ['usa', 'china', 'russia', 'eu', 'india', 'uk'];
                 const displayNames = { usa: 'The United States', china: 'China', russia: 'Russia', eu: 'The European Union', india: 'India', uk: 'The United Kingdom' };
