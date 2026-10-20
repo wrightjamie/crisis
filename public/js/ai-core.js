@@ -1,3 +1,5 @@
+import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
+
 const MODEL_ID = "SmolLM2-135M-Instruct-q4f16_1-MLC";
 
 function withTimeout(promise, ms) {
