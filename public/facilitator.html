@@ -6,6 +6,7 @@
     <title>Wargame Facilitator</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bug-reporter.css">
     <style>
         /* Facilitator Specific Overrides */
         body { overflow-y: auto; }
@@ -78,6 +79,36 @@
             <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
         </header>
         <div class="facilitator-container">
+            <div class="admin-card mb-3 bug-system-card">
+                <div class="flex-between items-center mb-1">
+                    <div>
+                        <h2 class="card-title text-primary m-0" style="border: none; padding: 0;">🐞 Bug & Feedback Reporting System</h2>
+                        <p class="text-sm text-secondary m-0">Enable in-game chat reporting for all player stations and facilitator.</p>
+                    </div>
+                    <div class="toggle-switch-wrapper">
+                        <label class="toggle-switch" title="Toggle bug reporting system">
+                            <input type="checkbox" id="toggle-bug-system-dashboard" onchange="window.toggleBugReporting(this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex-between items-center mt-2 flex-wrap gap-1">
+                    <div class="text-sm flex-center gap-2">
+                        <span>Status: <span id="bug-system-status-dashboard" class="text-bold text-muted">Disabled</span></span>
+                        <span id="bug-sync-badge-dashboard" class="bug-sync-pill bug-sync-amber" title="Checking sync status...">
+                            <span class="bug-sync-dot"></span>
+                            <span id="bug-sync-text-dashboard">Local Storage Only</span>
+                        </span>
+                        <span id="bug-system-count-dashboard" class="text-muted ml-1"></span>
+                    </div>
+                    <div class="flex-row gap-1 items-center">
+                        <button class="btn btn-secondary text-sm" onclick="window.testBugSync()" title="Test Storage & GitHub Connectivity">🔄 Test Sync</button>
+                        <button class="btn btn-secondary text-sm" onclick="window.copyBugReportsForAi()" title="Copy formatted markdown to paste to AI assistant">📋 Copy for AI</button>
+                        <button class="btn btn-secondary text-sm" onclick="window.downloadBugReportsMd()" title="Download BUG_REPORTS.md">⬇️ Download Report</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="admin-card mb-3">
                 <h2 class="card-title text-primary">Create New Game</h2>
                 <div class="flex-column gap-1">
@@ -112,6 +143,10 @@
             </div>
         </div>
         <div class="flex-center gap-1">
+            <button id="btn-toggle-bugs" class="btn btn-secondary text-sm flex-center gap-1" onclick="window.toggleBugReporting()" title="Toggle Bug & Feedback System">
+                🐞 Bugs: <span id="header-bug-status" class="text-bold">OFF</span>
+                <span id="header-sync-dot" class="bug-sync-dot amber" title="Local Storage Only"></span>
+            </button>
             <button id="btn-wiki" class="btn btn-secondary" onclick="if(window.showWikiPanel) window.showWikiPanel();">Wiki</button>
             <div class="hamburger-menu">
                 <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
@@ -121,7 +156,9 @@
                             <!-- Roles injected via JS -->
                         </div>
                     </div>
-                    <button class="dropdown-item text-danger" onclick="resetGame()">Reset Scenario</button>
+                    <button class="dropdown-item" onclick="window.toggleBugReporting()">🐞 Toggle Bug Reporting</button>
+                    <button class="dropdown-item" onclick="window.copyBugReportsForAi()">📋 Copy Reports for AI</button>
+                    <button class="dropdown-item text-danger top-bar-border" onclick="resetGame()">Reset Scenario</button>
                     <button class="dropdown-item text-danger top-bar-border" onclick="endScenario()">End Scenario</button>
                 </div>
             </div>
@@ -261,6 +298,7 @@
     <script src="js/acronyms.js"></script>
     <script src="js/scenario-explorer.js"></script>
     <script src="js/facilitator.js"></script>
+    <script src="js/bug-reporter.js"></script>
 
     <!-- Grid Lanes Polyfill -->
     <script>

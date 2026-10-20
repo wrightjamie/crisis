@@ -4,10 +4,14 @@ const { Server } = require('socket.io');
 const path = require('path');
 const gameManager = require('./src/game-manager');
 const { getAllImages, getAllTags, getImage } = require('./src/image-library');
+const bugReports = require('./src/bug-reports');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+
+// Parse JSON bodies for API endpoints
+app.use(express.json());
 
 // Serve static files from the 'public' directory, allowing extensionless URLs
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
@@ -33,6 +37,45 @@ app.get('/api/images/:id', (req, res) => {
 
 app.get('/api/images', (req, res) => {
     res.json(getAllImages(req.query));
+});
+
+// Bug & Feedback Reporting API endpoints
+app.get('/api/bug-reports', (req, res) => {
+    res.json(bugReports.getConfig());
+});
+
+app.get('/api/bug-reports/test-sync', async (req, res) => {
+    const syncStatus = await bugReports.checkSyncStatus(true);
+    io.emit('bug_sync_status_updated', syncStatus);
+    res.json(syncStatus);
+});
+
+app.get('/api/bug-reports/markdown', (req, res) => {
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="BUG_REPORTS.md"');
+    res.send(bugReports.generateMarkdown());
+});
+
+app.post('/api/bug-reports/toggle', (req, res) => {
+    const enabled = bugReports.setEnabled(req.body.enabled);
+    io.emit('bug_reporting_toggled', { enabled });
+    res.json({ enabled });
+});
+
+app.post('/api/bug-reports', async (req, res) => {
+    try {
+        const report = await bugReports.addReport(req.body);
+        io.emit('new_bug_report', report);
+        res.status(201).json(report);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/bug-reports/github-config', (req, res) => {
+    const status = bugReports.setGithubConfig(req.body);
+    io.emit('bug_reporting_github_updated', status);
+    res.json(status);
 });
 
 const setupSockets = require('./src/socket');

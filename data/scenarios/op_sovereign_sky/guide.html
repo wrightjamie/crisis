@@ -4,85 +4,398 @@
 <meta charset="UTF-8">
 <title>Operation Sovereign Sky - Instructor & Player Print Pack</title>
 <style>
-  @page { size: A4 portrait; margin: 12mm; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a202c; line-height: 1.35; font-size: 10pt; margin: 0; padding: 0; }
-  h1 { color: #002855; font-size: 16pt; border-bottom: 3px solid #002855; padding-bottom: 4px; margin-top: 0; margin-bottom: 8px; }
-  h2 { color: #003876; font-size: 12pt; border-bottom: 1px solid #cbd5e0; padding-bottom: 2px; margin-top: 10px; margin-bottom: 6px; }
-  h3 { color: #1a365d; font-size: 10.5pt; margin-top: 8px; margin-bottom: 4px; }
-  p, ul, ol { margin-top: 2px; margin-bottom: 6px; }
+  @page { size: A4 portrait; margin: 10mm; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a202c; line-height: 1.35; font-size: 9.5pt; margin: 0; padding: 0; }
+  h1 { color: #002855; font-size: 15pt; border-bottom: 3px solid #002855; padding-bottom: 4px; margin-top: 0; margin-bottom: 6px; }
+  h2 { color: #003876; font-size: 11.5pt; border-bottom: 1px solid #cbd5e0; padding-bottom: 2px; margin-top: 10px; margin-bottom: 6px; }
+  h3 { color: #1a365d; font-size: 10pt; margin-top: 6px; margin-bottom: 3px; }
+  p, ul, ol { margin-top: 2px; margin-bottom: 5px; }
   ul, ol { padding-left: 18px; }
   li { margin-bottom: 3px; }
-  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9.2pt; }
-  th, td { border: 1px solid #a0aec0; padding: 5px 7px; text-align: left; vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9pt; }
+  th, td { border: 1px solid #a0aec0; padding: 4px 6px; text-align: left; vertical-align: top; }
   th { background-color: #002855; color: #ffffff; font-weight: 600; }
   tr:nth-child(even) { background-color: #f7fafc; }
-  .badge { display: inline-block; background: #e2e8f0; color: #002855; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8.5pt; margin-bottom: 6px; }
-  .box { background: #edf2f7; border-left: 4px solid #002855; padding: 6px 10px; margin: 6px 0; font-size: 9.2pt; }
-  .debrief-q { color: #9b2c2c; font-style: italic; font-weight: 600; }
+  .badge { display: inline-block; background: #e2e8f0; color: #002855; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8pt; margin-bottom: 4px; }
+  .box { background: #edf2f7; border-left: 4px solid #002855; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .box-warning { background: #fffaf0; border-left: 4px solid #dd6b20; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .debrief-q { color: #9b2c2c; font-weight: 600; display: block; margin-top: 3px; }
+  .syl-ref { display: inline-block; background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; font-weight: 600; padding: 1px 4px; border-radius: 3px; font-size: 7.8pt; margin-bottom: 2px; }
+  .decision-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px; margin-top: 4px; margin-bottom: 8px; }
+  .opt-recommended { color: #1e4620; font-weight: 600; }
+  .opt-flawed { color: #7f1d1d; }
+  .teaching-tip { color: #2c5282; font-style: italic; }
   .page-break { page-break-before: always; break-before: page; }
   @media screen {
-    body { max-width: 210mm; margin: 20px auto; padding: 15px; background: #e2e8f0; }
-    .sheet { background: white; padding: 15mm; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    body { max-width: 210mm; margin: 15px auto; padding: 12px; background: #e2e8f0; }
+    .sheet { background: white; padding: 12mm; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
   }
 </style>
 </head>
 <body>
 
-<!-- ==================== INSTRUCTOR DEBRIEF GUIDE ==================== -->
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 1 ==================== -->
 <div class="sheet">
-  <div class="badge">INSTRUCTOR & FACILITATOR ONLY — DO NOT ISSUE TO CADETS</div>
-  <h1>Operation Sovereign Sky: Facilitator Debrief Guide</h1>
-  <p>Use these notes to debrief cadets after each event or at the end of each stage. Every event directly demonstrates core concepts from the RAFAC Senior & Master Air Cadet Air Power syllabus.</p>
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — DO NOT ISSUE TO CADETS</div>
+  <h1>Operation Sovereign Sky: Instructor Coaching & Debrief Guide</h1>
+  <p><strong>Purpose & Instructor Hand-Holding:</strong> This guide equips instructors—regardless of prior Air Power knowledge—with comprehensive subject matter explanations, exact syllabus linkages (RAFAC Senior & Master Air Cadet Air Power Delivery Guide, Sections 1–3), and deep-dive analysis for every decision point in <em>Operation Sovereign Sky</em>. Use the structured discussion prompts, doctrinal trade-offs, and common pitfalls to guide cadet syndicate debate.</p>
 
-  <h2>Pre-Game Setup: Variant Axes</h2>
-  <ul>
-    <li><strong>Basing & Carrier Posture:</strong> <em>Carrier Enabled Power Projection</em> (HMS Queen Elizabeth) increases F-35B time-on-station without Air-to-Air Refuelling and extends reach, but limits total force to what the carrier can hold. Operating from an overseas base (RAF Akrotiri) reduces aircraft vulnerability in theatre and increases flexibility, but requires greater reach and tanker support.</li>
-    <li><strong>Adversary Profile:</strong> <em>Symmetrical Warfare</em> pits forces of comparable military power and resources against each other, whereas <em>Asymmetrical Warfare</em> involves a major difference in power and tactics (e.g., insurgents using mobile drones/MANPADS and human shields).</li>
-  </ul>
+  <h2>Pre-Game Variant Setup: Operational Trade-Offs</h2>
+  <div class="decision-box">
+    <span class="syl-ref">Syllabus Link: LO1 P3 (Task 10 & 12: Basing Considerations & Aircraft Carriers)</span>
+    <p><strong>Variant Axis 1: Basing & Carrier Posture (HMS Queen Elizabeth vs RAF Akrotiri Only)</strong></p>
+    <ul>
+      <li><strong>Doctrinal Principle:</strong> <em>Carrier Enabled Power Projection (CEPP)</em> provides mobile, autonomous forward basing. Staging F-35B Lightning stealth fighters from HMS Queen Elizabeth drastically reduces transit time and tanker demand, eliminating dependence on host-nation land clearance. However, carrier capacity is constrained to embarked airframes and magazines. Staging solely from an overseas base (RAF Akrotiri) provides hardened hangars, deep munitions stores, and workshop facilities, but drastically increases the transit distance (<em>Reach</em>), requiring extensive Voyager Air-to-Air Refuelling (AAR) and exposing transit corridors.</li>
+      <li><span class="debrief-q">Instructor Discussion Question:</span> "Why does an aircraft carrier give the Government sovereign political choice without asking other nations for diplomatic overflight or basing rights?"</li>
+    </ul>
+    <span class="syl-ref">Syllabus Link: LO1 P1 & P2 (Task 1 & 7: Actors & Types of Conflict)</span>
+    <p><strong>Variant Axis 2: Adversary Profile (State Actor Symmetrical vs Non-State Asymmetrical)</strong></p>
+    <ul>
+      <li><strong>Doctrinal Principle:</strong> <em>Symmetrical Warfare</em> occurs between actors with comparable military power, formal doctrines, identifiable military bases, and integrated air defence systems (A2AD). <em>Asymmetrical Warfare</em> involves an extreme disparity in equipment and doctrine; insurgents blend with civilian populations, use non-traditional tactics (improvised drone swarms, human shields, commercial communications), and attack vulnerable ground supply nodes rather than challenging friendly air assets in the sky.</li>
+      <li><span class="debrief-q">Instructor Discussion Question:</span> "Why can an adversary with no jet fighters of their own still severely limit high-tech 4th and 5th-generation combat aircraft?"</li>
+    </ul>
+  </div>
 
-  <h2>Stage 1: ISR, Enablers & Deployment</h2>
-  <ul>
-    <li><strong>1.1 National Security & Preventative Diplomacy (ev_1):</strong> Air Power supports the National Security Strategy via <strong>Protect</strong> (protecting UK territory/airspace), <strong>Project</strong> (projecting global influence rapidly), and <strong>Promote</strong> (alliances/prosperity). Respect the <strong>3 Levels of Warfare</strong>: Strategic (Government aims), Operational (JFAC theatre campaign planning), and Tactical (squadron sorties). Visible flypasts achieve <strong>Conflict Prevention / Defence Diplomacy</strong> and <strong>Deterrence</strong>. <span class="debrief-q">Q: Why shouldn't strategic politicians micro-manage tactical cockpit headings?</span></li>
-    <li><strong>1.2 Hybrid Threats: OSINT, FININT & HUMINT (ev_2):</strong> Distinguishes <strong>State Actors</strong> vs <strong>Non-State Actors</strong>. Tracking smuggling requires fusing <strong>OSINT</strong> (social media), <strong>FININT</strong> (financial transactions), and <strong>HUMINT</strong> (informants) alongside economic action. <span class="debrief-q">Q: How can social media posts accidentally give OSINT to an enemy?</span></li>
-    <li><strong>1.3 Basing & Fragility Dilemma (ev_3):</strong> Tests the limitation of <strong>Vulnerability / Fragility</strong> on the ground. Basing 40 miles from enemy artillery invites destruction; basing at RAF Akrotiri protects the fleet while Voyager AAR mitigates the extra Reach required. <span class="debrief-q">Q: What is the trade-off between basing close to the battle vs 150 miles away?</span></li>
-    <li><strong>1.4 Enabling Air Power: Hub & Spoke (ev_4):</strong> Demonstrates the <strong>4 Enablers</strong>: <strong>Base</strong>, <strong>Sustain</strong> (Air Logistics), <strong>Connect</strong> (RAF Signals), and <strong>Protect</strong> (RAF Regiment). Links the UK <strong>Hub</strong> (Brize Norton) to the forward <strong>Spoke</strong> (Akrotiri) using <strong>Inter-Theatre</strong> strategic airlift (C-17 / A400M) rather than short-range <strong>Intra-Theatre</strong> helicopters. <span class="debrief-q">Q: What happens if we deploy fast jets without the Connect and Protect enablers?</span></li>
-    <li><strong>1.5 The 9-Step ISR Cycle & NEC (ev_5):</strong> Contrasts <strong>Surveillance</strong> (continuous wide-area observation) with <strong>Reconnaissance</strong> (targeted specific observation). Uses Rivet Joint (<strong>SIGINT/MASINT</strong>) and Reaper/Shadow R1 (<strong>GEOINT</strong>) across the 9-step ISR cycle, disseminating data via Link-16 <strong>Network Enabled Capability (NEC)</strong>—getting the right info to the right place at the right time. <span class="debrief-q">Q: What is the difference between Surveillance and Reconnaissance?</span></li>
-  </ul>
+  <h2>Stage 1: ISR, Enablers & Expeditionary Deployment (LO1 & LO2)</h2>
+  
+  <div class="decision-box">
+    <h3>1.1 National Security & Preventative Diplomacy (ev_1_levels_of_war)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P2 (Tasks 5, 6, 8, 9) — National Security, Levels of Warfare, Types of Operations</span>
+    <p><strong>Air Power Doctrinal Context:</strong> The UK National Security Strategy sets 3 overarching objectives: <strong>Protect</strong> (UK homeland, territory, and airspace), <strong>Project</strong> (global influence rapidly and decisively), and <strong>Promote</strong> (prosperity and open international order). Decisions must respect the <strong>Three Levels of Warfare</strong>:
+    <br>1. <em>Strategic Level:</em> National leadership and Cabinet define political end-states and rules of engagement (ROE).
+    <br>2. <em>Operational Level (UK JFAC / 11 Group):</em> Translates strategic guidance into theatre air campaign plans, allocating resources between air control, mobility, strike, and ISR.
+    <br>3. <em>Tactical Level:</em> Individual squadrons, formations, and pilots executing specific sorties and air tasks.</p>
+    <p><strong>Decision 1 (JFAC): Campaign Directive:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Issue an Operational campaign directive aligning theatre assets with strategic ends while delegating tactical execution to flight leads. Respects <em>Mission Command</em>—empowering tactical agility.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Whitehall politicians micro-managing tactical cockpit headings. Destroys tactical agility, clogs command channels, and causes catastrophic delays in fast-moving air combat.</p>
+    <p><strong>Decision 2 (Joint): Pre-Hostility Air Employment:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Conduct visible coalition flypasts and deterrence patrols (<em>Deterrence</em> & <em>Defence Diplomacy</em>). Deters adversary aggression while bolstering international legitimacy.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Pre-emptive unannounced bombing. Violates international law, forfeits coalition support, and accelerates escalation.</p>
+    <span class="teaching-tip">Instructor Note: Emphasize that Deterrence uses credible military capability to persuade an adversary not to act, whereas Coercion forces them to change behaviour once they have already acted.</span>
+  </div>
 
-  <h2>Stage 2: Control of the Air (DCA & OCA)</h2>
-  <ul>
-    <li><strong>2.1 Defensive Counter-Air: Active & Passive (ev_6):</strong> <strong>Active DCA</strong> detects, intercepts, and engages incoming threats (Typhoon QRA + Type 45 Sea Viper SAMs). <strong>Passive DCA</strong> reduces ground vulnerability via Hardening (shelters), Dispersal, Camouflage, Concealment, and Deception (decoys). <span class="debrief-q">Q: Why do we need Passive DCA shelters even when Typhoons are airborne?</span></li>
-    <li><strong>2.2 Asymmetric Drone Swarm (ev_7):</strong> Insurgents use <strong>Asymmetrical Warfare</strong> to hit fragile aircraft on the ground. The <strong>RAF Regiment</strong> defends the exterior footprint (Protect enabler) while <strong>Electronic Warfare</strong> jams drone links. <span class="debrief-q">Q: Why is a £500 drone a major threat to a £90m fighter jet?</span></li>
-    <li><strong>2.3 Height, Perspective & Ubiquity (ev_8):</strong> <strong>Height</strong> provides <strong>Perspective</strong> (extended radar horizon into mountain valleys). Combining Height, Speed, and Reach creates <strong>Ubiquity</strong>. High-altitude AEW&C and stratospheric solar platforms (<strong>Zephyr</strong>) look down over terrain barriers. <span class="debrief-q">Q: How does altitude change what a sensor can see compared to a ship radar?</span></li>
-    <li><strong>2.4 Offensive Counter-Air & Op Orchard Cyber (ev_9):</strong> <strong>OCA</strong> destroys enemy SAMs and aircraft at their source. Mirrors <strong>Operation Orchard (2007)</strong>: using <strong>Offensive Air-Cyber Integration</strong> to blind enemy air defence radars so F-35Bs and Typhoons can penetrate A2AD airspace safely. <span class="debrief-q">Q: Why destroy enemy planes on their runways (OCA) rather than over our base (DCA)?</span></li>
-    <li><strong>2.5 Cementing Air Superiority / Supremacy (ev_10):</strong> Reviews the <strong>3 Degrees of Control of the Air</strong>: <em>Favourable Air Situation</em> -> <em>Air Superiority</em> -> <em>Air Supremacy</em> (enemy incapable of effective interference). Uses <strong>Battlefield Air Interdiction (BAI)</strong> against SAM resupply convoys to secure Air Supremacy. <span class="debrief-q">Q: Can a C-17 or Chinook operate safely if we only have a Favourable Air Situation?</span></li>
-  </ul>
+  <div class="decision-box">
+    <h3>1.2 Hybrid Threats: OSINT, FININT & HUMINT (ev_2_osint_finint)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 1: Actors) & LO2 P7 (Task 25: Intelligence Disciplines)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Hybrid warfare intentionally blurs civilian and military lines. Tracking illicit anti-aircraft missile shipments entering commercial ports requires cross-disciplinary intelligence fusion. Radar alone cannot detect shipping paperwork or cash payments. The syllabus defines 7 intelligence disciplines: SIGINT, MASINT, GEOINT, OSINT, TECHINT, HUMINT, and FININT.</p>
+    <p><strong>Decision 1 (ISR): Tracking Smuggling Networks:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Fuse <strong>OSINT</strong> (social media geolocation and ship AIS tracking), <strong>FININT</strong> (illicit financial transactions funding weapons purchases), and <strong>HUMINT</strong> (dockworker and port authority sources).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Relying purely on air-to-air radar. Air-to-air radar detects airborne metallic targets; it cannot read manifests, inspect shipping containers, or trace bank accounts.</p>
+    <p><strong>Decision 2 (Joint): Supply Line Disruption:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Share FININT with Treasury and international partners to freeze accounts (<em>Full Spectrum Approach: Diplomatic, Economic, Military</em>).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ignoring non-state actors. Allows covert missile cells to deploy unchecked, threatening military airlift.</p>
+  </div>
 </div>
 
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 2 ==================== -->
 <div class="sheet page-break">
-  <div class="badge">INSTRUCTOR & FACILITATOR ONLY — PAGE 2</div>
-  <h2>Stage 3: Air Attack Across Domains</h2>
-  <ul>
-    <li><strong>3.1 Counter-Sea & Air-Maritime Integration (ev_11):</strong> <strong>Counter-Sea</strong> covers <strong>Anti-Submarine Warfare (ASW)</strong> and <strong>Anti-Surface Warfare (ASuW)</strong>. Pairs the RAF <strong>P-8A Poseidon</strong> (sonobuoys/torpedoes) with the RN <strong>Wildcat</strong> helicopter and HMS Duncan via <strong>Air-Maritime Integration (AMI)</strong>. <span class="debrief-q">Q: Why are aircraft so effective at hunting submarines alongside warships?</span></li>
-    <li><strong>3.2 Counter-Land: CAS, AI & SCAR (ev_12):</strong> Contrasts <strong>Close Air Support (CAS)</strong> (near friendly troops, requiring JTAC de-confliction and <strong>Air-Land Integration</strong>), <strong>Air Interdiction (AI)</strong> (deep behind enemy lines), and <strong>SCAR</strong> (Strike, Coordination and Reconnaissance). <span class="debrief-q">Q: Why does CAS require much tighter coordination than Air Interdiction?</span></li>
-    <li><strong>3.3 Weather & Limited Payload (ev_13):</strong> The 3 factors determining Air Attack success are <strong>Penetration</strong>, <strong>Payload</strong> (number of weapons carried), and <strong>Weather</strong>. Sandstorms blind laser sensors, requiring all-weather radar/GPS weapons (Brimstone) and rapid ground turnaround. <span class="debrief-q">Q: How do precision-guided munitions help overcome Limited Payload?</span></li>
-    <li><strong>3.4 Agility, Speed & Dynamic Re-Tasking (ev_14):</strong> Demonstrates <strong>Speed</strong>, <strong>Reach</strong>, <strong>Agility</strong>, and <strong>Flexibility/Versatility</strong> by dynamically re-tasking airborne multi-role Typhoon FGR4s via Link-16 to intercept a fleeting target 60 miles away in minutes. <span class="debrief-q">Q: Why is a multi-role/swing-role aircraft so valuable to JFAC?</span></li>
-    <li><strong>3.5 Information Activities: EW & PsyOps (ev_15):</strong> The 4th category of Air Attack is <strong>Information Activities</strong>: non-kinetic <strong>Electronic Warfare</strong> (jamming) and <strong>Psychological Operations</strong> (leaflet drops as in Op Shader, radio broadcasts, RPAS presence, fast-jet Shows of Force) to compel surrender without bombing a hospital. <span class="debrief-q">Q: Why are Information Activities classed under Air Attack even when no bombs fall?</span></li>
-  </ul>
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 2</div>
 
-  <h2>Stage 4: Air Mobility & Sustainment</h2>
-  <ul>
-    <li><strong>4.1 Airborne Operations: Air-Drop vs Air-Land (ev_16):</strong> <strong>Air-Drop</strong> uses parachutes to deliver troops/loads in flight (to clear a cratered runway); <strong>Air-Land</strong> requires a clear runway for the aircraft to land and offload. <span class="debrief-q">Q: When must a commander choose Air-Drop over Air-Land?</span></li>
-    <li><strong>4.2 Impermanence & Air-to-Air Refuelling (ev_17):</strong> Aircraft suffer from <strong>Impermanence</strong> (they cannot stay airborne forever). <strong>Air-to-Air Refuelling (AAR)</strong> via Voyager overcomes impermanence and extends Reach and Endurance—just like the Victor K2 tankers in <strong>Operation Black Buck (1982)</strong>. <span class="debrief-q">Q: Why did Op Black Buck require 11 Victor tankers for a single Vulcan bomber?</span></li>
-    <li><strong>4.3 Intra-Theatre Mobility: JHC Helicopters (ev_18):</strong> Uses <strong>Joint Helicopter Command (JHC)</strong> <strong>Chinook</strong> (heavy underslung loads) and <strong>Puma HC2</strong> helicopters for vertical <strong>Intra-Theatre</strong> lift into mountain terrain where fixed-wing planes cannot land. <span class="debrief-q">Q: What is the difference between Inter-Theatre and Intra-Theatre mobility?</span></li>
-    <li><strong>4.4 Personnel Recovery & 3-Tier Medevac (ev_19):</strong> Contrasts <strong>Peacetime Recovery</strong> with <strong>Combat Recovery</strong> (time-sensitive rescue expecting hostile interference, as in <strong>Exercise Volfa</strong>). Demonstrates the 3 tiers of Aeromedical Evacuation: <strong>Forward Medevac</strong> (battlefield to initial care via Puma/Chinook MERT) -> <strong>Tactical Medevac</strong> (between theatre hospitals via A400M) -> <strong>Strategic Medevac</strong> (theatre to the UK via C-17). <span class="debrief-q">Q: Name the three tiers of Aeromedical Evacuation in order from battlefield to the UK.</span></li>
-  </ul>
+  <div class="decision-box">
+    <h3>1.3 Basing & Fragility Dilemma (ev_3_basing_dilemma)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 4: Limitations - Vulnerability/Fragility) & LO1 P3 (Task 10 & 12: Basing Considerations)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Aircraft are inherently fragile and vulnerable when parked on the ground. A precision fighter costing £90 million can be disabled by a single artillery fragment or cheap mortar shell. Choosing an operating base requires balancing proximity against force protection.</p>
+    <p><strong>Decision 1 (Control): Fleet Basing Location:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Base at RAF Akrotiri (150nm away). Leverages hardened aircraft shelters, secure perimeters, and established supply routes, mitigating ground fragility. Accepts longer transit distances (<em>Reach</em>).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Staging at Forward Strip Alpha (40nm from border). While reducing flight time, the strip lies within enemy tube artillery and rocket range without hardened shelters, risking catastrophic fleet destruction on Day 1.</p>
+    <p><strong>Decision 2 (Mobility): Mitigating Stand-off Distance:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Establish Voyager Air-to-Air Refuelling (AAR) towlines and Forward Arming and Refuelling Points (FARPs) for rotary assets. Overcomes the reach limitation through air mobility enablers.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Under-fuelling combat aircraft to save weight. Severely restricts time-on-station, leaving combat air patrols fuel-starved.</p>
+    <span class="debrief-q">Instructor Discussion Question:</span> "If an airfield has no hardened shelters and is within enemy artillery range, how does the limitation of 'Fragility' dictate our deployment decision?"
+  </div>
 
-  <h2>Stage 5: Multi-Domain & Strategic Endgame</h2>
-  <ul>
-    <li><strong>5.1 Air-Space Integration & PNT Jamming (ev_20):</strong> <strong>Air-Space Integration</strong> provides vital <strong>Positioning, Navigation, and Timing (PNT / GPS)</strong> for aircraft and weapons, plus SATCOM voice/data links. Countering enemy GPS <strong>Denial/Disruption</strong> requires space resilience and destroying the jammers. <span class="debrief-q">Q: What systems on a modern fighter fail if space satellites are jammed?</span></li>
-    <li><strong>5.2 Strategic Attack, Joint Action & Full Spectrum (ev_21):</strong> <strong>Strategic Attack</strong> targets core regime C2 to compel capitulation (<strong>Coercion</strong>). Lasting peace (<strong>Post-Conflict Peace Building</strong>) requires <strong>Joint Operations</strong> (because aircraft cannot occupy land alone) and a <strong>Full Spectrum Approach</strong> (Military, Diplomatic, and Economic). <span class="debrief-q">Q: Why can't the RAF win a war and hold territory entirely on its own?</span></li>
-  </ul>
+  <div class="decision-box">
+    <h3>1.4 Enabling Air Power: Hub & Spoke Airbridge (ev_4_hub_and_spoke)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 2: 4 Enablers) & LO2 P6 (Task 17, 22, 23: Hub & Spoke / Strategic Airlift)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Air Power cannot function in isolation; it requires 4 core enablers: <strong>Base</strong> (well-sited airfields/carriers), <strong>Sustain</strong> (air logistics pipeline), <strong>Connect</strong> (secure communications like RAF Signals / 90 SU), and <strong>Protect</strong> (force protection, e.g., RAF Regiment). The transport network operates on a <em>Hub and Spoke</em> model: UK Main Operating Bases act as <strong>Hubs</strong> (RAF Brize Norton), dispatching <strong>Inter-Theatre</strong> strategic lift across long distances to theatre forward operating bases (<strong>Spokes</strong>, e.g., RAF Akrotiri). <strong>Intra-Theatre</strong> mobility moves personnel and supplies within the operational area.</p>
+    <p><strong>Decision 1 (Mobility): Fleet Selection for the Strategic Airbridge:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Task C-17 Globemaster (4,500nm range, heavy outsized cargo) and A400M Atlas (4,100nm range, 116 troops or Chinooks/vehicles) for the 2,000nm Inter-Theatre airbridge.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Tasking short-range tactical helicopters (Puma HC2 range: ~400nm; A109SP range: 464nm) across continents. Helicopters lack inter-theatre range, speed, and payload capacity.</p>
+    <p><strong>Decision 2 (Joint): Prioritising Enablers for Deployment:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Front-load RAF Regiment (Protect), 90 Signals Unit (Connect), and Air Logistics (Sustain) on the earliest chalks. Ensures the forward base is secure and connected before high-value fast jets arrive.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Deploying combat jets without ground security or satellite communication arrays, leaving them isolated and blind.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>1.5 The 9-Step ISR Cycle & Network Enabled Capability (ev_5_isr_collection)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P7 (Tasks 16, 24, 26, 27, 29) — ISR Definitions, Cycle, and NEC</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Surveillance</strong> is the systematic observation of a <em>wide area of interest</em> over an extended period. <strong>Reconnaissance</strong> is targeted observation of a <em>specific area or objective</em> to answer a focused question. Successful ISR follows a rigorous 9-step cycle:
+    <br><em>1. Request for Information (RFI) &rarr; 2. Plan &rarr; 3. Task/Re-task &rarr; 4. Collect &rarr; 5. Analyse &rarr; 6. Disseminate &rarr; 7. Evaluate &rarr; 8. Apply &rarr; 9. Requirement Satisfied.</em>
+    <br><strong>Network Enabled Capability (NEC):</strong> Seamlessly links sensors, decision-makers, and effectors via Link-16 data links, guaranteeing <em>"the right information to the right place at the right time."</em></p>
+    <p><strong>Decision 1 (ISR): Sensor Tasking:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> RC-135W Rivet Joint (SIGINT/MASINT mapping radar emitters across the electromagnetic spectrum) for wide surveillance, combined with Reaper RPAS and Shadow R1 for precision GEOINT/optical reconnaissance.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Skipping planning and analysis; using transport aircrew visual scanning. Fails to detect modern radar-guided SAM batteries.</p>
+    <p><strong>Decision 2 (JFAC): Dissemination & Link-16 NEC:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Disseminating live radar tracks and threat coordinates digitally via Link-16 to airborne fighters and naval combat systems in real time (NEC in action).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Printing static imagery maps and transporting by sea. Destroys the decision-action cycle against mobile missile launchers.</p>
+    <span class="teaching-tip">Instructor Note: Ask cadets to name the 4 factors for ISR success: 1. Timely accurate information; 2. Processing and analysis; 3. Distribution to decision-makers; 4. Timely decision execution.</span>
+  </div>
+</div>
+
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 3 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 3</div>
+
+  <h2>Stage 2: Control of the Air (DCA & OCA) (LO2 P5)</h2>
+
+  <div class="decision-box">
+    <h3>2.1 Defensive Counter-Air: Active & Passive Measures (ev_6_dca_akrotiri)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P5 (Task 21: Counter-Air Operations) — Active vs Passive DCA</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Control of the Air</strong> determines how freely friendly forces can operate without prohibitive enemy interference. Defensive Counter-Air (DCA) protects friendly forces, bases, and infrastructure from enemy air and missile attack:
+    <br>• <strong>Active DCA:</strong> Direct kinetic action involving <em>Detection, Interception, and Engagement</em> using air defence fighters (Typhoon QRA / Combat Air Patrol) and surface-to-air missiles (e.g., Royal Navy Type 45 Destroyer Sea Viper).
+    <br>• <strong>Passive DCA:</strong> Physical protection measures on the ground: <em>Hardening</em> (Hardened Aircraft Shelters - HAS), <em>Dispersal</em> of assets across separate taxiways and dispersal pans, <em>Camouflage, Concealment, and Deception (CCD)</em> (decoys, smoke screens), and early warning.</p>
+    <p><strong>Decision 1 (Control): Active DCA Response:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Scramble Typhoon FGR4 Quick Reaction Alert (QRA) interceptors and integrate HMS Duncan's Sea Viper missile radar umbrella. Defeats incoming cruise missiles before they reach airfield weapon-release lines.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Holding back fighters and SAMs to conserve ordnance. Permits inbound missiles to impact the runway and fuel farms unopposed.</p>
+    <p><strong>Decision 2 (Mobility): Passive DCA Implementation:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Disperse parked transports, taxi fighters into Hardened Aircraft Shelters, and erect decoy silhouettes across disused pans. Prevents single hits from causing secondary explosions across multiple airframes.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Parking aircraft wingtip-to-wingtip on the main apron. Presents a concentrated target; a single blast shrapnel spread could destroy the entire detachment.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>2.2 Asymmetric Warfare: Drone Swarm on Perimeter (ev_7_asymmetric_swarm)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 2 & 4: Protect Enabler & Airfield Vulnerability) & LO1 P2 (Task 7: Asymmetrical Warfare)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> In asymmetrical conflicts, adversaries avoid confronting advanced jet fighters in the air. Instead, they exploit the ground vulnerability of operating bases by launching commercial quadcopters packed with explosives against fuel depots and maintenance facilities. Airfield security requires active <strong>Force Protection</strong> extending into the surrounding ground footprint (the role of the <strong>RAF Regiment</strong>) combined with <strong>Electronic Warfare</strong>.</p>
+    <p><strong>Decision 1 (JFAC): Ground Perimeter Defence:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Task RAF Regiment ground combat patrols armed with Counter-UAS jamming rifles and kinetic short-range weapons to neutralize drones and sweep the launch areas outside the wire.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ordering supersonic Typhoon fighters to strafe adjacent civilian neighborhoods. High risk of catastrophic collateral damage, civilian casualties, and international outrage, while fast jets cannot engage hovering micro-drones effectively.</p>
+    <p><strong>Decision 2 (ISR): Electronic Attack Support:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Employ tactical electronic warfare jamming against commercial drone command/control RF frequencies and direction-find the control transmitters to guide ground intercept teams.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Dismissing small drones as insignificant. Allows cheap explosives to detonate within bulk fuel storage, grounding the wing.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>2.3 Exploiting Height, Perspective & Ubiquity (ev_8_height_perspective)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 3: Height & Ubiquity) & LO1 P3 (Task 10: Perspective) & LO2 P4 (Task 16: AWACS/Zephyr)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Operating in the vertical dimension provides <strong>Height</strong>, giving Air Power its unique attribute of <strong>Perspective</strong>—a vastly expanded line-of-sight horizon unconstrained by surface terrain. Combining Height, Speed, and Reach produces <strong>Ubiquity</strong>: the ability to appear ubiquitous and project effect across an entire theatre simultaneously. Ground and naval radars are physically limited by the curvature of the earth and terrain masking (radar shadow in mountain valleys).</p>
+    <p><strong>Decision 1 (ISR): Persistent Stratospheric Overwatch:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Deploy the solar-powered <strong>Zephyr High-Altitude Pseudo-Satellite (HAPS)</strong> at 70,000ft alongside Shadow R1. Exploits extreme height to look directly down into steep mountain valleys with weeks of persistence.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Hovering a heavy transport helicopter (Chinook) low in the valley. Severely restricts sensor line of sight and exposes the airframe to shoulder-launched MANPADS and small arms fire.</p>
+    <p><strong>Decision 2 (Control): Overcoming Surface Radar Horizon:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Position an Airborne Early Warning and Control (AEW&C / E-3D Sentry) aircraft at high altitude. Looks down over coastal mountain ranges to illuminate low-flying strike aircraft attempting terrain masking.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Relying purely on shipborne radar at sea level. Terrain blocks the radar beam, creating blind spots through which hostile aircraft can approach undetected.</p>
+    <span class="debrief-q">Instructor Discussion Question:</span> "Why can an airborne radar look over a mountain range that completely blinds a multi-billion pound warship at sea?"</span>
+  </div>
+</div>
+
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 4 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 4</div>
+
+  <div class="decision-box">
+    <h3>2.4 Offensive Counter-Air (OCA) & Operation Orchard Cyber Strike (ev_9_oca_cyber)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P5 (Task 20 & 21: Degrees of Control & OCA) & LO3 P10 (Task 35: Offensive Air-Cyber & Op Orchard)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Offensive Counter-Air (OCA)</strong> operations proactively destroy enemy aircraft, airfields, radar sites, and SAM batteries <em>as close to their source as possible</em> before they can launch. To penetrate dense Anti-Access/Area Denial (A2AD) radar umbrellas safely, Air Power must integrate with <strong>Offensive Air-Cyber Operations</strong>. This mirrors the historic case study in the syllabus: <strong>Operation Orchard (2007)</strong>, where airborne cyber/electronic warfare injected data into enemy radar displays, making skies appear clear while strike aircraft penetrated to their targets without a single loss.</p>
+    <p><strong>Decision 1 (ISR): Offensive Air-Cyber Support:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Execute an Operation Orchard-style cyber attack to manipulate and blind the enemy integrated air defence command system during ingress. Allows friendly aircraft to penetrate contested airspace with minimized risk.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ingressing straight into fully alert, overlapping radar and SAM coverage with no cyber or electronic support. High probability of friendly aircraft attrition.</p>
+    <p><strong>Decision 2 (Control): OCA Strike Fleet Selection:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Deploy 5th-generation <strong>F-35B Lightning</strong> (exploiting low observability/stealth) paired with stand-off Storm Shadow cruise missiles launched from Typhoon FGR4s. Penetrates radar coverage and craters runways and radar vans.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Sending unescorted non-combat VIP/transport aircraft (e.g., BAe146) into high-threat airspace.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>2.5 Cementing Air Superiority: Anti-Surface Counter-Air (ev_10_bai_convoy)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P5 (Task 20 & 21: 3 Degrees of Control of the Air; Anti-Surface Operations for Control of the Air)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Instructors must ensure cadets master the <strong>3 Degrees of Control of the Air</strong>:
+    <br>1. <strong>Favourable Air Situation:</strong> Dominance is localized in time and space; enemy interference is still to be expected.
+    <br>2. <strong>Air Superiority:</strong> Dominance permits friendly operations at a given time and place without prohibitive interference by the adversary.
+    <br>3. <strong>Air Supremacy:</strong> The opposing air force is incapable of effective interference anywhere in theatre.
+    <br>Crucially, Control of the Air is not achieved solely in air-to-air dogfights. <strong>Anti-surface operations</strong> (such as Battlefield Air Interdiction - BAI) neutralize ground targets (SAM missile convoys, fuel bowsers, airbase radars) that threaten our aircraft.</p>
+    <p><strong>Decision 1 (Strike): Interdicting SAM Replacements:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Launch <strong>Battlefield Air Interdiction (BAI)</strong> using Reaper RPAS and Typhoon Brimstone salvos against the mobile SAM resupply convoy. Prevents the enemy from reconstituting their anti-air network.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Permitting convoys to reach coastal firing sites. Allows the enemy to re-establish an A2AD threat, dragging friendly air posture back to contested status.</p>
+    <p><strong>Decision 2 (Control): Assessing Degree of Control:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Declare <strong>Air Supremacy</strong> over the coastal corridor, enabling slow heavy transports, tankers, and medical helicopters to operate without dedicated fighter top cover.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Misinterpreting air supremacy and grounding friendly transport fleets unnecessarily, halting theatre logistics.</p>
+  </div>
+
+  <h2>Stage 3: Air Attack Across Domains (LO2 P8)</h2>
+
+  <div class="decision-box">
+    <h3>3.1 Counter-Sea Operations & Air-Maritime Integration (ev_11_counter_sea)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P8 (Task 16, 28, 30: Counter-Sea Operations) & LO3 P10 (Task 35: Air-Maritime Integration - AMI)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Counter-Sea Operations</strong> are divided into:
+    <br>• <strong>Anti-Submarine Warfare (ASW):</strong> Locating, tracking, and neutralizing submarines using acoustic sensors (sonobuoys dropped from aircraft), magnetic anomaly detectors, and lightweight aerial torpedoes (e.g., Sting Ray).
+    <br>• <strong>Anti-Surface Warfare (ASuW):</strong> Engaging enemy combat surface vessels using maritime attack missiles and naval gunfire.
+    <br>Air Power integrates with naval forces through <strong>Air-Maritime Integration (AMI)</strong>: fusing RAF long-range maritime patrol aircraft (<strong>P-8A Poseidon MRA1</strong>) with Royal Navy surface combatants (Type 45 Destroyers) and Fleet Air Arm helicopters (<strong>Wildcat HMA2</strong>).</p>
+    <p><strong>Decision 1 (Strike): Selecting Counter-Sea Assets:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Pair RAF P-8A Poseidon (dropping acoustic sonobuoy barriers and carrying torpedoes for ASW) with Royal Navy Wildcat helicopters (armed with Martlet/Sea Venom missiles for ASuW).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Tasking a dry-land radar aircraft lacking maritime acoustic processors, sonobuoys, or anti-ship munitions against a submerged submarine.</p>
+    <p><strong>Decision 2 (Joint): AMI Sensor Fusion:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Stream Poseidon acoustic tracks and maritime radar contacts into HMS Duncan's combat management system via Link-16, generating a unified Common Operating Picture (COP).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Operating separate air and naval coordination channels, leading to track confusion and potential fratricide.</p>
+  </div>
+</div>
+
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 5 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 5</div>
+
+  <div class="decision-box">
+    <h3>3.2 Counter-Land Force Multipliers: CAS, AI & SCAR (ev_12_counter_land)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P8 (Task 30: Counter-Land Operations) & LO3 P10 (Task 35: Air-Land Integration - ALI)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Counter-land operations act as <em>force-multipliers</em> for armies. Instructors must distinguish the three subtypes:
+    <br>• <strong>Close Air Support (CAS):</strong> Carried out in <em>close proximity to friendly forces</em>, requiring detailed integration and positive terminal control (by a <strong>Joint Terminal Attack Controller - JTAC</strong>) to prevent fratricide.
+    <br>• <strong>Air Interdiction (AI):</strong> Conducted at <em>significant distances behind enemy lines</em> to destroy, delay, or disrupt enemy reinforcements before they can reach friendly ground units. Does not require detailed terminal control.
+    <br>• <strong>Strike, Coordination & Reconnaissance (SCAR):</strong> A hybrid mission where combat aircraft locate and coordinate strikes on targets of opportunity in a designated area.</p>
+    <p><strong>Decision 1 (Strike): Mission Allocation:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Deliver Close Air Support (CAS) to friendly troops in contact (400m) while executing Air Interdiction (AI) and SCAR against the railway staging depot 60km deep.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Dropping heavy unguided ordnance 400m from friendly troops without JTAC coordinates or ground de-confliction. Extreme fratricide risk.</p>
+    <p><strong>Decision 2 (Joint): Air-Land Integration (ALI) De-confliction:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Direct all CAS attacks through qualified ground JTACs using standardized 9-line briefs and laser designators.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Telling fast-jet pilots to identify camouflaged enemy vehicles visually from high altitude without ground coordination.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>3.3 Limitations of Air Attack: Weather & Limited Payload (ev_13_weather_payload)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 4: Limitations - Limited Payload) & LO2 P8 (Task 28: Factors Determining Air Attack Success)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> The syllabus identifies 3 factors determining the success of an air attack:
+    <br>1. <strong>Penetration:</strong> The ability of aircraft and weapons to penetrate hostile air defences.
+    <br>2. <strong>Payload:</strong> The number and weight of weapons an aircraft can carry (inherently limited compared to land or naval batteries).
+    <br>3. <strong>Weather:</strong> Severe atmospheric conditions (sandstorms, dense cloud) hinder target acquisition and degrade optical/laser sensors.</p>
+    <p><strong>Decision 1 (Strike): Overcoming Weather & Sensor Masking:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Transition from optical/laser-guided weapons to all-weather millimetric-wave radar and GPS-guided munitions (e.g., dual-mode Brimstone and Paveway IV). Focus limited munitions on the single highest-value tactical objective.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Releasing pure laser-guided weapons into opaque dust clouds. Clouds scatter laser energy, causing weapons to ballistic-drift off target.</p>
+    <p><strong>Decision 2 (Mobility): Mitigating Limited Payload:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Implement rapid "hot-pit" refuelling and re-arming at RAF Akrotiri with pre-positioned weapon trailers, increasing daily sortie rates to compensate for aircraft payload limits.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Overloading aircraft beyond Maximum Takeoff Weight (MTOW), risking mechanical stress and airframe crashes.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>3.4 Agility, Speed & Dynamic Re-Tasking (ev_14_dynamic_retask)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 3: Speed, Reach, Agility) & LO1 P3 (Task 10: Flexibility & Versatility, Tasking)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Agility</strong> is the physical and operational ability to adapt rapidly to unexpected developments. <strong>Versatility</strong> describes employing air assets across tactical, operational, and strategic levels. <strong>Speed</strong> and <strong>Reach</strong> enable aircraft to cover vast distances rapidly without surface obstacle constraints. Modern <em>swing-role</em> aircraft (Typhoon FGR4) can instantly switch from an air defence patrol to an air-to-ground strike within the same flight profile when dynamically re-tasked via Link-16.</p>
+    <p><strong>Decision (JFAC): Dynamic Re-Tasking (Time-Critical: 120s):</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Dynamically re-task airborne multi-role Typhoon FGR4s via Link-16 to dash at supersonic speed (Mach 1.6) and intercept the fleeing commander's transport before he escapes.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ordering distant ground troops to march across 100 miles of broken terrain. Surface forces cannot overcome the time-distance problem in time.</p>
+    <span class="teaching-tip">Instructor Note: Highlight that no land or naval weapon system could react to a time-sensitive target 100 miles away within 8 minutes. This embodies the foundational strengths of Speed and Reach.</span>
+  </div>
+
+  <div class="decision-box">
+    <h3>3.5 Information Activities: Non-Kinetic Attack (EW & PsyOps) (ev_15_urban_roe)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P8 (Task 28 & 30: Categories of Air Attack - Information Activities; Op SHADER Context)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Cadets often mistakenly believe Air Attack exclusively means explosive ordnance. The syllabus categorizes <strong>Information Activities</strong> as one of the 4 core categories of Air Attack! Information Activities can be non-kinetic:
+    <br>• <strong>Electronic Warfare (EW):</strong> Denying adversary freedom in the electromagnetic spectrum (jamming command radios and propaganda transmitters).
+    <br>• <strong>Psychological Operations (PsyOps):</strong> Influencing adversary morale and will—such as dropping informational leaflets (extensively used by the RAF in <strong>Operation SHADER</strong>), transmitting surrender broadcasts, maintaining constant armed RPAS presence overhead, or conducting low-altitude supersonic "Shows of Force."</p>
+    <p><strong>Decision 1 (Strike): Neutralising Urban Hospital C2:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Non-kinetic attack: jamming propaganda frequencies with EW and dropping surrender leaflets (PsyOps). Silences the command node without destroying hospital infrastructure or causing civilian casualties.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Dropping 2,000lb high-explosive bombs on the hospital. Results in civilian deaths, international condemnation, and potential war crime liability.</p>
+    <p><strong>Decision 2 (ISR): Sustained Psychological Pressure:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Continuous overhead Reaper RPAS loiter and low-level fast-jet Shows of Force. Demoralizes insurgent fighters and encourages desertion without kinetic fire.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Withdrawing air presence, relinquishing moral dominance to adversary propagandists.</p>
+  </div>
+</div>
+
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 6 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 6</div>
+
+  <h2>Stage 4: Air Mobility & Sustainment (LO2 P6)</h2>
+
+  <div class="decision-box">
+    <h3>4.1 Airborne Operations: Air-Drop vs Air-Land (ev_16_airborne_ops)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P6 (Task 22 & 23: Divisions of Air Mobility - Airborne Operations)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Airborne Operations</strong> project land forces into combat areas using two distinct methods:
+    <br>• <strong>Air-Drop:</strong> Requires parachute delivery of troops, vehicles, or supply pallets <em>while the aircraft remains in flight</em>. Used when no runway exists, when the runway is cratered/blocked, or to insert assault forces behind enemy lines.
+    <br>• <strong>Air-Land:</strong> The transport aircraft <em>lands on the runway or airstrip</em> to disembark troops and heavy roll-on/roll-off vehicles. Requires an intact, cleared, and secured runway.</p>
+    <p><strong>Decision (Mobility): Operational Sequencing:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Phase 1: <strong>Air-Drop</strong> 16 Air Assault Brigade paratroopers and combat engineers by parachute from A400M Atlas to seize the airfield and repair cratered runways &rarr; Phase 2: <strong>Air-Land</strong> heavy engineering vehicles and bulk logistics once the strip is safe.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Attempting an immediate Air-Land with a loaded C-17 onto an obstructed, cratered runway. Risks writing off a strategic transport aircraft and closing the runway permanently.</p>
+    <span class="debrief-q">Instructor Discussion Question:</span> "Why can't we always use Air-Land delivery, even though it avoids dropping equipment on parachutes?"</span>
+  </div>
+
+  <div class="decision-box">
+    <h3>4.2 Impermanence & Air-to-Air Refuelling (The Black Buck Lesson) (ev_17_tanker_crisis)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 4: Impermanence) & LO2 P6 (Task 22: Air-to-Air Refuelling / Op Black Buck Case Study)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> <strong>Impermanence</strong> is a fundamental limitation of Air Power: aircraft cannot remain airborne indefinitely and must return to base for fuel. <strong>Air-to-Air Refuelling (AAR)</strong> is the primary doctrinal countermeasure, drastically extending Reach, Range, and Time-on-Station. The syllabus cites <strong>Operation Black Buck (1982)</strong>, where a single Vulcan bomber required a massive chain of 11 Victor K2 tankers refuelling tankers in flight to strike Port Stanley airfield 3,400nm away.</p>
+    <p><strong>Decision 1 (Mobility): Managing AAR Shortfalls:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Launch the standby <strong>Voyager KC3</strong> from RAF Akrotiri and establish prioritized AAR towlines, ensuring Combat Air Patrols and deep strike packages receive minimum required fuel brackets.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ignoring fuel states. Leads to aircraft fuel starvation and ditching at sea.</p>
+    <p><strong>Decision 2 (JFAC): Managing Fuel Consumption:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Order fighters to throttle back from afterburner to optimum endurance cruise profiles and rotate CAP stations to extend on-station time.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Operating in continuous afterburner at low altitude, exhausting fuel tanks in minutes.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>4.3 Intra-Theatre Mobility: Joint Helicopter Command (ev_18_littoral_jhc)</h3>
+    <span class="syl-ref">Syllabus Link: LO1 P1 (Task 3: Agility - Chinook) & LO2 P6 (Task 18 & 22: JHC / Helicopters / Intra-Theatre)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Where strategic fixed-wing transports handle inter-theatre connections, tactical rotary assets deliver <strong>Intra-Theatre Mobility</strong> (movement <em>within</em> the operational theatre). Under <strong>Joint Helicopter Command (JHC)</strong>, the <strong>Chinook HC6</strong> provides heavy-lift capability (triple cargo hooks for underslung artillery, 55 troops, or Land Rovers) and land/maritime versatility. The <strong>Puma HC2</strong> provides tactical troop lift into tight jungle/mountain clearings.</p>
+    <p><strong>Decision (Mobility): Vertical Mountain Logistics:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Task Chinook HC6 for heavy underslung artillery guns and ammo pallets, paired with Puma HC2 for tactical troop insertion into confined mountain clearings.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Attempting to land a strategic wide-body Voyager airliner on a rocky mountain path.</p>
+  </div>
+
+  <div class="decision-box">
+    <h3>4.4 Personnel Recovery (Combat Recovery) & 3-Tier Medevac (ev_19_csar_medevac)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P6 (Task 22 & 23: Personnel Recovery & Aeromedical Evacuation)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Instructors must ensure cadets master two crucial distinctions:
+    <br><strong>1. Personnel Recovery:</strong> <em>Peacetime Recovery</em> occurs where no threat exists (SAR). <em>Combat Recovery</em> is time-sensitive rescue in contested territory where <strong>hostile interference is expected</strong> (practised in exercises like <strong>Exercise Volfa</strong>). Requires a dedicated rescue task force (escort fighters, attack helicopters, suppression of enemy air defences).
+    <br><strong>2. Aeromedical Evacuation (3 Tiers):</strong>
+    <br>• <em>Forward Medevac:</em> Battlefield point-of-injury to in-theatre initial medical facility (Puma/Chinook MERT).
+    <br>• <em>Tactical Medevac:</em> Between medical facilities within or close to theatre (A400M Atlas).
+    <br>• <em>Strategic Medevac:</em> In-theatre field hospital back to specialized care in the UK (C-17 Globemaster with Critical Care Air Support Teams - CCAST).</p>
+    <p><strong>Decision 1 (Mobility): Downed Pilot Extraction:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Launch a <strong>Combat Recovery Operation</strong> with Chinook and RAF Regiment/Special Forces extraction team, protected by Typhoon fighter escort (RESCORT).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Dispatching an unarmed search-and-rescue helicopter under peacetime rules into hostile territory.</p>
+    <p><strong>Decision 2 (Mobility): Coordinating the 3 Medevac Tiers:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> 1. Forward Medevac (Chinook/Puma MERT from frontline) &rarr; 2. Tactical Medevac (A400M to Akrotiri surgical facility) &rarr; 3. Strategic Medevac (C-17 CCAST back to Queen Elizabeth Hospital Birmingham).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Inverting the chain: attempting to land a C-17 in a forward combat trench and flying a Puma helicopter across continents.</p>
+  </div>
+</div>
+
+<!-- ==================== INSTRUCTOR DEBRIEF GUIDE - PAGE 7 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">INSTRUCTOR & FACILITATOR COMPREHENSIVE GUIDE — PAGE 7</div>
+
+  <h2>Stage 5: Multi-Domain & Strategic Endgame (LO3)</h2>
+
+  <div class="decision-box">
+    <h3>5.1 Air-Space Integration: Countering GPS/PNT & SATCOM Denial (ev_20_space_jamming)</h3>
+    <span class="syl-ref">Syllabus Link: LO3 P10 (Task 35: Air-Space Integration) & LO1 P2 (Task 9: Denial & Disruption)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> Modern Air Power is completely reliant upon the space domain. <strong>Air-Space Integration</strong> enables:
+    <br>• <strong>Positioning, Navigation, and Timing (PNT / GPS):</strong> Vital for precision weapon guidance, automated terrain avoidance, and encrypted Link-16 network time synchronization.
+    <br>• <strong>Satellite Communications (SATCOM):</strong> Beyond-line-of-sight voice and data connectivity for theatre command and control.
+    <br>Adversary GPS jamming is an act of <em>Denial and Disruption</em> designed to degrade precision strike accuracy and network cohesion.</p>
+    <p><strong>Decision (Joint): Countering Space Denial:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Integrate with UK Space Command for anti-jam SATCOM frequencies, transition aircraft guidance to laser and ring-laser gyro inertial navigation, and task Typhoons to destroy ground GPS jammers.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Ignoring space denial and relying on consumer electronic maps in combat cockpits.</p>
+    <span class="debrief-q">Instructor Discussion Question:</span> "If an adversary jams satellite signals, which aircraft systems and weapons fail, and how does Air Power mitigate this?"</span>
+  </div>
+
+  <div class="decision-box">
+    <h3>5.2 Strategic Attack, Joint Action & The Full Spectrum Approach (ev_21_strategic_attack)</h3>
+    <span class="syl-ref">Syllabus Link: LO2 P8 (Task 28 & 30: Strategic Attack) & LO3 P9 (Task 33 & 34: Joint Action & Full Spectrum Approach)</span>
+    <p><strong>Air Power Doctrinal Context:</strong> 
+    <br>• <strong>Strategic Attack:</strong> Targets the vital leadership command centers, communications, and war-supporting infrastructure of an adversary to shatter their ability and will to wage war (compelling capitulation through <em>Coercion</em>).
+    <br>• <strong>The Golden Rule of Air Power (LO3 Doctrine):</strong> <em>Aircraft cannot occupy land!</em> Independent air operations have historically proven incapable of winning and securing peace alone. Lasting success requires <strong>Joint Operations</strong> (Air, Land, and Sea functioning under a single joint commander) and a <strong>Full Spectrum Approach</strong> combining <strong>Military</strong>, <strong>Diplomatic</strong>, and <strong>Economic</strong> instruments of national power to transition into <em>Post-Conflict Peace Building</em>.</p>
+    <p><strong>Decision 1 (Strike): Culminating Strategic Attack:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Launch precision stand-off Storm Shadow strikes against the regime's command and control bunkers to neutralize military leadership and compel immediate surrender.
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Halting strikes while command bunkers remain active, allowing the regime to direct guerrilla resupply.</p>
+    <p><strong>Decision 2 (JFAC): Transition to Post-Conflict Resolution:</strong>
+    <br>• <span class="opt-recommended">Option A (Doctrinally Correct):</span> Transition to Joint Action and the Full Spectrum Approach: land troops secure urban centers, naval forces enforce maritime commerce, while diplomatic emissaries and economic reconstruction teams rebuild infrastructure (<em>Peace Support Operations</em>).
+    <br>• <span class="opt-flawed">Option B (Flawed):</span> Withdrawing land, maritime, and diplomatic partners and attempting to police, govern, and rebuild the country using fighter jets alone.</p>
+  </div>
+
+  <h2>Doctrinal Endgame Debrief Matrix</h2>
+  <table>
+    <tr><th>Endgame Outcome</th><th>Condition & Doctrinal Meaning</th><th>Instructor Debrief Points to Emphasize</th></tr>
+    <tr>
+      <td><strong>Endgame A: Decisive Full-Spectrum Victory</strong><br><span style="color: #276749; font-weight: bold;">(Air Control &ge; 4, Joint &ge; 4, Sustain &ge; 3)</span></td>
+      <td>Cadets applied all 4 fundamental roles of Air Power, secured the 4 enablers, integrated across all domains, and applied the Full Spectrum Approach.</td>
+      <td>• Highlight how <strong>Control of the Air</strong> created freedom of action for all other forces.<br>• Praise recognition that air power enables land and maritime success.<br>• Reinforce the role of UK JFAC (11 Group) in operational C2.</td>
+    </tr>
+    <tr>
+      <td><strong>Endgame B: Logistical Culmination</strong><br><span style="color: #c05621; font-weight: bold;">(Joint Effect &le; 3 or Sustain &le; 3)</span></td>
+      <td><em>Independent Air Power Fallacy:</em> Tactical air victories were won, but neglect of joint land forces or logistics caused the campaign to stall.</td>
+      <td>• <strong>Core syllabus lesson:</strong> Aircraft cannot occupy land.<br>• Without the <em>Sustain</em> enabler (Air Logistics/Mobility), advanced fleets quickly run out of fuel and weapons.<br>• Military force alone cannot build peace without diplomatic and economic instruments.</td>
+    </tr>
+    <tr>
+      <td><strong>Endgame C: A2AD Denial & Air Defeat</strong><br><span style="color: #9b2c2c; font-weight: bold;">(Air Control &le; 3)</span></td>
+      <td>Failure to conduct Offensive/Defensive Counter-Air or protect airfields allowed adversary A2AD systems to dominate the skies.</td>
+      <td>• <strong>Prerequisite rule:</strong> Control of the air is the essential prerequisite for all air, surface, and maritime operations.<br>• Without control of the air, transports, tankers, and helicopters face catastrophic losses.</td>
+    </tr>
+  </table>
 </div>
 
 <!-- ==================== STATION 1: JFAC COMMANDER ==================== -->

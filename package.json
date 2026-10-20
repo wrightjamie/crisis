@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node src/engine-actions.test.js && node src/validate-scenarios.test.js",
+    "test": "node src/engine-actions.test.js && node src/validate-scenarios.test.js && node src/bug-reports.test.js && node src/bug-reports-e2e.test.js",
     "audit": "node scripts/token-audit.js"
   },
   "keywords": [],

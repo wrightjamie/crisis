@@ -1,7 +1,12 @@
+const bugReports = require('./bug-reports');
+
 module.exports = function setupSockets(io, gameManager) {
     // Socket.io connection handling
     io.on('connection', (socket) => {
         console.log(`Client connected: ${socket.id}`);
+
+        // Send current bug reporting status & reports on connection
+        socket.emit('bug_reporting_config', bugReports.getConfig());
 
         // Dashboard specific events
         socket.on('request_dashboard_data', () => {
@@ -441,6 +446,44 @@ module.exports = function setupSockets(io, gameManager) {
             engine.updateActivity();
             if (engine.gameState.status !== 'active') return;
             io.to(gameId).emit('generate_ai_briefing', { role: role, mode: 'initial' });
+        });
+
+        // Bug & Feedback Reporting socket events
+        socket.on('toggle_bug_reporting', (data) => {
+            const enabled = bugReports.setEnabled(data.enabled);
+            io.emit('bug_reporting_toggled', { enabled });
+        });
+
+        socket.on('submit_bug_report', async (data) => {
+            try {
+                const report = await bugReports.addReport(data);
+                io.emit('new_bug_report', report);
+            } catch (err) {
+                socket.emit('bug_report_error', err.message);
+            }
+        });
+
+        socket.on('update_bug_report_status', (data) => {
+            const updated = bugReports.updateReportStatus(data.id, data.status);
+            if (updated) {
+                io.emit('bug_report_updated', updated);
+            }
+        });
+
+        socket.on('request_bug_reports', () => {
+            socket.emit('bug_reporting_config', bugReports.getConfig());
+        });
+
+        socket.on('update_bug_github_config', async (data) => {
+            const status = bugReports.setGithubConfig(data);
+            const syncStatus = await bugReports.checkSyncStatus(true);
+            io.emit('bug_reporting_github_updated', status);
+            io.emit('bug_sync_status_updated', syncStatus);
+        });
+
+        socket.on('check_sync_status', async () => {
+            const syncStatus = await bugReports.checkSyncStatus(true);
+            io.emit('bug_sync_status_updated', syncStatus);
         });
 
         socket.on('disconnect', () => {
