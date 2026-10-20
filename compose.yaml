@@ -13,9 +13,8 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      # Optional: GitHub personal access token to automatically create real GitHub issues
-      # - GITHUB_TOKEN=ghp_your_token_here
-      # - GITHUB_REPO=wrightjamie/crisis
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - GITHUB_REPO=${GITHUB_REPO:-wrightjamie/crisis}
     volumes:
       # Mount data directory so bug reports and scenarios persist across container restarts
       - ./data:/usr/src/app/data

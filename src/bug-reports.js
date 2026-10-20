@@ -51,6 +51,13 @@ class BugReportManager {
 
     load() {
         try {
+            const dataDir = path.dirname(this.dataPath);
+            const tokenTxtPath = path.join(dataDir, 'github-token.txt');
+            if (fs.existsSync(tokenTxtPath) && !this.githubToken) {
+                const t = fs.readFileSync(tokenTxtPath, 'utf8').trim();
+                if (t) this.githubToken = t;
+            }
+
             if (fs.existsSync(this.dataPath)) {
                 const raw = fs.readFileSync(this.dataPath, 'utf8');
                 const data = JSON.parse(raw);
@@ -111,7 +118,16 @@ class BugReportManager {
 
     async setGithubConfig({ token, repo }) {
         if (repo) this.githubRepo = repo.trim();
-        if (token !== undefined) this.githubToken = (token || '').trim();
+        if (token !== undefined) {
+            this.githubToken = (token || '').trim();
+            try {
+                const dataDir = path.dirname(this.dataPath);
+                if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+                fs.writeFileSync(path.join(dataDir, 'github-token.txt'), this.githubToken, 'utf8');
+            } catch (e) {
+                console.error('Error writing github-token.txt:', e);
+            }
+        }
         this.save();
         await this.checkSyncStatus(true);
         return this.getGithubStatus();
