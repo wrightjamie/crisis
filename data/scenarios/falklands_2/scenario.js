@@ -73,6 +73,7 @@ module.exports = {
     assets: [
         {
             id: 'ascension_island',
+            image: 'raf_akrotiri',
             name: 'RAF Ascension Island',
             location: [-7.946, -14.371],
             state: 'operational',
@@ -80,6 +81,7 @@ module.exports = {
         },
         {
             id: 'mount_pleasant',
+            image: 'nato_air_base',
             name: 'RAF Mount Pleasant',
             location: [-51.823, -58.447],
             state: 'operational',
@@ -87,6 +89,7 @@ module.exports = {
         },
         {
             id: 'port_stanley',
+            image: 'bvi_gov_house',
             name: 'Port Stanley',
             location: [-51.692, -57.858],
             state: 'operational',
@@ -94,6 +97,7 @@ module.exports = {
         },
         {
             id: 'rio_gallegos',
+            image: 'act_strike_airbase',
             name: 'Rio Gallegos Air Base (Arg)',
             location: [-51.609, -69.289],
             state: 'operational',
@@ -101,6 +105,7 @@ module.exports = {
         },
         {
             id: 'rio_grande',
+            image: 'nato_air_base',
             name: 'Rio Grande Air Base (Arg)',
             location: [-53.777, -67.755],
             state: 'operational',
@@ -108,6 +113,7 @@ module.exports = {
         },
         {
             id: 'hms_defender',
+            image: 'type_45_destroyer',
             name: 'HMS Defender (Type 45)',
             location: [-51.4, -57.5],
             state: 'operational',
@@ -115,6 +121,7 @@ module.exports = {
         },
         {
             id: 'falklands_typhoons',
+            image: 'typhoon_aircraft',
             name: '1435 Flight (4x Typhoon FGR4)',
             location: [-51.823, -58.447],
             state: 'operational',
@@ -122,6 +129,7 @@ module.exports = {
         },
         {
             id: 'falklands_helis',
+            image: 'raf_chinook',
             name: '1564 Flight (Chinook/Puma)',
             location: [-51.823, -58.447],
             state: 'operational',
@@ -129,6 +137,7 @@ module.exports = {
         },
         {
             id: 'falklands_a400m',
+            image: 'a400m_transport',
             name: 'A400M Atlas',
             location: [-51.823, -58.447],
             state: 'operational',
@@ -136,6 +145,7 @@ module.exports = {
         },
         {
             id: 'ascension_voyager',
+            image: 'voyager_refueler',
             name: 'Voyager KC2 (Refueler)',
             location: [-7.946, -14.371],
             state: 'operational',
@@ -172,6 +182,7 @@ module.exports = {
                     assetModifiers: [
                         {
                             id: 'ascension_island',
+            image: 'raf_akrotiri',
                             name: 'RAF Ascension Island',
                             location: [-7.946, -14.371],
                             state: 'sabotaged',
@@ -228,6 +239,7 @@ module.exports = {
                     assetModifiers: [
                         {
                             id: 'hms_defender',
+            image: 'type_45_destroyer',
                             name: 'HMS Defender (Type 45)',
                             location: [-50.0, -56.0], // Further away
                             state: 'operational',
@@ -249,6 +261,7 @@ module.exports = {
                     assetModifiers: [
                         {
                             id: 'hms_defender',
+            image: 'type_45_destroyer',
                             name: 'HMS Defender (Type 45)',
                             location: [-51.5, -58.0], // Closer
                             state: 'operational',
@@ -267,6 +280,7 @@ module.exports = {
     eventTemplates: [
         {
             id: 'ev_start',
+            image: 'generic_press',
             name: 'Shock Election Result in Stanley',
             description: 'A fiercely contested local election in Port Stanley has resulted in a surprise victory for a candidate openly sympathetic to Argentine sovereignty. MI6 reports circumstantial evidence of foreign electoral interference and vote buying, but lacks concrete proof. The international community is watching closely.',
             location: [-51.692, -57.858],
@@ -286,7 +300,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: 1, uk_public_support: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_military_incursion', delayMs: 120000, probability: 1.0 }
+                                    { id: 'ev_military_incursion',
+            image: 'ev_maritime_shadowing', delayMs: 120000, probability: 1.0 }
                                 ]
                             }
                         },
@@ -296,7 +311,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: 2, argentina_aggression: 1, military_readiness: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_military_incursion', delayMs: 60000, probability: 1.0 }
+                                    { id: 'ev_military_incursion',
+            image: 'ev_maritime_shadowing', delayMs: 60000, probability: 1.0 }
                                 ]
                             }
                         },
@@ -306,7 +322,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: -1, military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_military_incursion', delayMs: 180000, probability: 1.0 }
+                                    { id: 'ev_military_incursion',
+            image: 'ev_maritime_shadowing', delayMs: 180000, probability: 1.0 }
                                 ]
                             }
                         }
@@ -317,6 +334,7 @@ module.exports = {
 
         {
             id: 'ev_military_incursion',
+            image: 'ev_maritime_shadowing',
             name: 'Initial Reports of Aggression',
             description: 'Claiming they are acting to "protect the legitimate administration" following the election unrest, Argentine naval elements and aircraft have crossed into the exclusion zone.',
             location: [-51.5, -59.0],
@@ -335,16 +353,26 @@ module.exports = {
                                 assetStateChanges: { falklands_typhoons: 'intercepting' },
                                 scores: { military_readiness: 1, argentina_aggression: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_naval_skirmish', delayMs: 90000, probability: 1.0 },
-                                    { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
-                                    { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
-                                    { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
-                                    { id: 'ev_cyber_attack', delayMs: 240000, probability: 0.9 },
-                                    { id: 'ev_sub_detected', delayMs: 150000, probability: 0.8 },
-                                    { id: 'ev_supply_shortage', delayMs: 300000, probability: 0.85 },
-                                    { id: 'ev_pm_ultimatum', delayMs: 360000, probability: 1.0 },
-                                    { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
-                                    { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
+                                    { id: 'ev_naval_skirmish',
+            image: 'ev_naval_strike', delayMs: 90000, probability: 1.0 },
+                                    { id: 'ev_ground_incursion',
+            image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
+                                    { id: 'ev_political_pressure',
+            image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
+                                    { id: 'ev_resistance_contact',
+            image: 'act_special_forces', delayMs: 210000, probability: 1.0 },
+                                    { id: 'ev_cyber_attack',
+            image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
+                                    { id: 'ev_sub_detected',
+            image: 'ev_sub_detection', delayMs: 150000, probability: 0.8 },
+                                    { id: 'ev_supply_shortage',
+            image: 'ev_logistics_failure', delayMs: 300000, probability: 0.85 },
+                                    { id: 'ev_pm_ultimatum',
+            image: 'act_national_address', delayMs: 360000, probability: 1.0 },
+                                    { id: 'ev_us_support',
+            image: 'ev_us_support_success', delayMs: 360000, probability: 0.8 },
+                                    { id: 'ev_un_sanctions',
+            image: 'generic_un', delayMs: 360000, probability: 0.8 }
                                 ]
                             }
                         },
@@ -354,16 +382,26 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: -1, international_pressure: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_naval_skirmish', delayMs: 90000, probability: 1.0 },
-                                    { id: 'ev_ground_incursion', delayMs: 180000, probability: 1.0 },
-                                    { id: 'ev_political_pressure', delayMs: 270000, probability: 1.0 },
-                                    { id: 'ev_resistance_contact', delayMs: 210000, probability: 1.0 },
-                                    { id: 'ev_cyber_attack', delayMs: 240000, probability: 0.9 },
-                                    { id: 'ev_sub_detected', delayMs: 150000, probability: 0.8 },
-                                    { id: 'ev_supply_shortage', delayMs: 300000, probability: 0.85 },
-                                    { id: 'ev_pm_ultimatum', delayMs: 360000, probability: 1.0 },
-                                    { id: 'ev_us_support', delayMs: 360000, probability: 0.8 },
-                                    { id: 'ev_un_sanctions', delayMs: 360000, probability: 0.8 }
+                                    { id: 'ev_naval_skirmish',
+            image: 'ev_naval_strike', delayMs: 90000, probability: 1.0 },
+                                    { id: 'ev_ground_incursion',
+            image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
+                                    { id: 'ev_political_pressure',
+            image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
+                                    { id: 'ev_resistance_contact',
+            image: 'act_special_forces', delayMs: 210000, probability: 1.0 },
+                                    { id: 'ev_cyber_attack',
+            image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
+                                    { id: 'ev_sub_detected',
+            image: 'ev_sub_detection', delayMs: 150000, probability: 0.8 },
+                                    { id: 'ev_supply_shortage',
+            image: 'ev_logistics_failure', delayMs: 300000, probability: 0.85 },
+                                    { id: 'ev_pm_ultimatum',
+            image: 'act_national_address', delayMs: 360000, probability: 1.0 },
+                                    { id: 'ev_us_support',
+            image: 'ev_us_support_success', delayMs: 360000, probability: 0.8 },
+                                    { id: 'ev_un_sanctions',
+            image: 'generic_un', delayMs: 360000, probability: 0.8 }
                                 ]
                             }
                         }
@@ -374,6 +412,7 @@ module.exports = {
         // --- THREAD 1: Naval / Air Combat ---
         {
             id: 'ev_naval_skirmish',
+            image: 'ev_naval_strike',
             name: 'Naval Skirmish off East Falkland',
             description: 'HMS Defender is engaging multiple fast attack craft and incoming anti-ship missiles.',
             location: [-51.4, -57.5],
@@ -391,7 +430,8 @@ module.exports = {
                             effects: {
                                 scores: { argentina_aggression: -1, international_pressure: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_air_raid', delayMs: 100000, probability: 0.8 }
+                                    { id: 'ev_air_raid',
+            image: 'ev_akrotiri_strike', delayMs: 100000, probability: 0.8 }
                                 ]
                             }
                         },
@@ -401,7 +441,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_ship_damaged', delayMs: 95000, probability: 0.6 }
+                                    { id: 'ev_ship_damaged',
+            image: 'ev_naval_strike', delayMs: 95000, probability: 0.6 }
                                 ]
                             }
                         }
@@ -411,6 +452,7 @@ module.exports = {
         },
         {
             id: 'ev_air_raid',
+            image: 'ev_akrotiri_strike',
             name: 'Air Raid on Mount Pleasant',
             description: 'Argentine aircraft are attempting to bomb the runway at RAF Mount Pleasant.',
             location: [-51.823, -58.447],
@@ -428,7 +470,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: 1, supply_lines: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_naval_victory', delayMs: 120000, probability: 0.7 }
+                                    { id: 'ev_naval_victory',
+            image: 'type_45_destroyer', delayMs: 120000, probability: 0.7 }
                                 ]
                             }
                         },
@@ -438,7 +481,8 @@ module.exports = {
                             effects: {
                                 scores: { argentina_aggression: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_naval_victory', delayMs: 120000, probability: 0.5 }
+                                    { id: 'ev_naval_victory',
+            image: 'type_45_destroyer', delayMs: 120000, probability: 0.5 }
                                 ]
                             }
                         }
@@ -448,6 +492,7 @@ module.exports = {
         },
         {
             id: 'ev_ship_damaged',
+            image: 'ev_naval_strike',
             name: 'HMS Defender Takes Damage',
             description: 'An Exocet missile has struck HMS Defender, causing significant damage.',
             location: [-51.4, -57.5],
@@ -466,7 +511,8 @@ module.exports = {
                                 scores: { uk_public_support: -1, military_readiness: -1 },
                                 assetStateChanges: { hms_defender: 'withdrawing' },
                                 triggerEvents: [
-                                    { id: 'ev_naval_defeat', delayMs: 110000, probability: 0.9 }
+                                    { id: 'ev_naval_defeat',
+            image: 'ev_portsmouth_strike', delayMs: 110000, probability: 0.9 }
                                 ]
                             }
                         },
@@ -477,7 +523,8 @@ module.exports = {
                                 scores: { military_readiness: 1, uk_public_support: 1 },
                                 assetStateChanges: { hms_defender: 'damaged_but_fighting' },
                                 triggerEvents: [
-                                    { id: 'ev_naval_victory', delayMs: 110000, probability: 0.4 }
+                                    { id: 'ev_naval_victory',
+            image: 'type_45_destroyer', delayMs: 110000, probability: 0.4 }
                                 ]
                             }
                         }
@@ -487,6 +534,7 @@ module.exports = {
         },
         {
             id: 'ev_naval_victory',
+            image: 'type_45_destroyer',
             name: 'Sea Control Re-established',
             description: 'The Royal Navy has successfully repelled the naval and air assaults, securing the waters around the islands.',
             location: [-51.5, -58.0],
@@ -511,6 +559,7 @@ module.exports = {
         },
         {
             id: 'ev_naval_defeat',
+            image: 'ev_portsmouth_strike',
             name: 'Loss of Sea Control',
             description: 'UK naval forces have been forced to retreat, leaving the islands vulnerable to resupply.',
             location: [-51.5, -58.0],
@@ -537,6 +586,7 @@ module.exports = {
         // --- THREAD 2: Ground Operations ---
         {
             id: 'ev_ground_incursion',
+            image: 'ev_combat_recovery_medevac',
             name: 'Heliborne Assault on Port Stanley',
             description: 'Argentine special forces have landed near Port Stanley via helicopter.',
             location: [-51.692, -57.858],
@@ -554,7 +604,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1, argentina_aggression: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_urban_combat', delayMs: 105000, probability: 0.8 }
+                                    { id: 'ev_urban_combat',
+            image: 'generic_deployment', delayMs: 105000, probability: 0.8 }
                                 ]
                             }
                         },
@@ -564,7 +615,8 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_standoff', delayMs: 110000, probability: 0.7 }
+                                    { id: 'ev_standoff',
+            image: 'generic_police', delayMs: 110000, probability: 0.7 }
                                 ]
                             }
                         }
@@ -574,6 +626,7 @@ module.exports = {
         },
         {
             id: 'ev_urban_combat',
+            image: 'generic_deployment',
             name: 'Heavy Fighting in Stanley',
             description: 'Fierce street-to-street fighting has broken out in Port Stanley.',
             location: [-51.692, -57.858],
@@ -591,7 +644,8 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: -1, international_pressure: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_ground_victory', delayMs: 115000, probability: 0.9 }
+                                    { id: 'ev_ground_victory',
+            image: 'generic_deployment', delayMs: 115000, probability: 0.9 }
                                 ]
                             }
                         },
@@ -601,7 +655,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_standoff', delayMs: 120000, probability: 0.6 }
+                                    { id: 'ev_standoff',
+            image: 'generic_police', delayMs: 120000, probability: 0.6 }
                                 ]
                             }
                         }
@@ -611,6 +666,7 @@ module.exports = {
         },
         {
             id: 'ev_standoff',
+            image: 'generic_police',
             name: 'Stalemate at Stanley',
             description: 'A tense standoff has developed. Neither side is making ground.',
             location: [-51.692, -57.858],
@@ -628,7 +684,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1, argentina_aggression: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_ground_victory', delayMs: 110000, probability: 0.7 }
+                                    { id: 'ev_ground_victory',
+            image: 'generic_deployment', delayMs: 110000, probability: 0.7 }
                                 ]
                             }
                         },
@@ -638,7 +695,8 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_ground_defeat', delayMs: 125000, probability: 0.5 }
+                                    { id: 'ev_ground_defeat',
+            image: 'ev_endgame_domestic', delayMs: 125000, probability: 0.5 }
                                 ]
                             }
                         }
@@ -648,6 +706,7 @@ module.exports = {
         },
         {
             id: 'ev_ground_victory',
+            image: 'generic_deployment',
             name: 'Port Stanley Secured',
             description: 'UK forces have successfully neutralized the Argentine threat in Port Stanley.',
             location: [-51.692, -57.858],
@@ -672,6 +731,7 @@ module.exports = {
         },
         {
             id: 'ev_ground_defeat',
+            image: 'ev_endgame_domestic',
             name: 'Stanley Occupied',
             description: 'Argentine forces have taken control of Port Stanley.',
             location: [-51.692, -57.858],
@@ -698,6 +758,7 @@ module.exports = {
         // --- THREAD 3: Political & Mainland Strikes ---
         {
             id: 'ev_political_pressure',
+            image: 'ev_crisis_cabinet',
             name: 'PM Demands Decisive Action',
             description: 'Downing Street is demanding a strong response to reassure the public.',
             location: [-51.5, -59.0],
@@ -715,7 +776,8 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_un_resolution', delayMs: 110000, probability: 1.0 }
+                                    { id: 'ev_un_resolution',
+            image: 'generic_un', delayMs: 110000, probability: 1.0 }
                                 ]
                             }
                         },
@@ -725,7 +787,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_mainland_escalation', delayMs: 120000, probability: 0.9 }
+                                    { id: 'ev_mainland_escalation',
+            image: 'ev_crisis_cabinet', delayMs: 120000, probability: 0.9 }
                                 ]
                             }
                         }
@@ -735,6 +798,7 @@ module.exports = {
         },
         {
             id: 'ev_un_resolution',
+            image: 'generic_un',
             name: 'UN Security Council Convenes',
             description: 'The UN is debating a ceasefire resolution.',
             location: [-51.5, -59.0],
@@ -752,7 +816,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_endgame_trigger', delayMs: 180000, probability: 1.0 }
+                                    { id: 'ev_endgame_trigger',
+            image: 'ev_crisis_cabinet', delayMs: 180000, probability: 1.0 }
                                 ]
                             }
                         },
@@ -762,7 +827,8 @@ module.exports = {
                             effects: {
                                 scores: { uk_public_support: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_endgame_trigger', delayMs: 180000, probability: 1.0 }
+                                    { id: 'ev_endgame_trigger',
+            image: 'ev_crisis_cabinet', delayMs: 180000, probability: 1.0 }
                                 ]
                             }
                         }
@@ -772,6 +838,7 @@ module.exports = {
         },
         {
             id: 'ev_mainland_escalation',
+            image: 'ev_crisis_cabinet',
             name: 'Mainland Escalation Debate',
             description: 'The possibility of striking mainland bases is causing severe international backlash.',
             location: [-51.5, -59.0],
@@ -789,7 +856,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: -1, military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_endgame_trigger', delayMs: 130000, probability: 1.0 }
+                                    { id: 'ev_endgame_trigger',
+            image: 'ev_crisis_cabinet', delayMs: 130000, probability: 1.0 }
                                 ]
                             }
                         },
@@ -799,7 +867,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: 2, argentina_aggression: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_endgame_trigger', delayMs: 130000, probability: 1.0 }
+                                    { id: 'ev_endgame_trigger',
+            image: 'ev_crisis_cabinet', delayMs: 130000, probability: 1.0 }
                                 ]
                             }
                         }
@@ -811,6 +880,7 @@ module.exports = {
         // --- Manual Action Results & Endgames ---
         {
             id: 'ev_sf_success',
+            image: 'ev_sf_success',
             name: 'SAS Operation Successful',
             description: 'Covert operations on the mainland have successfully destroyed several aircraft on the ground.',
             location: [-51.609, -69.289],
@@ -833,6 +903,7 @@ module.exports = {
         },
         {
             id: 'ev_sf_failure',
+            image: 'ev_sf_fail',
             name: 'SAS Team Compromised',
             description: 'A covert UK team has been captured on Argentine soil, causing an international incident.',
             location: [-53.777, -67.755],
@@ -855,6 +926,7 @@ module.exports = {
         },
         {
             id: 'ev_reinforcements_arrive',
+            image: 'hms_prince_of_wales',
             name: 'Reinforcements Arrive',
             description: 'Additional naval and air assets have arrived from the UK.',
             location: [-51.5, -57.0],
@@ -873,6 +945,7 @@ module.exports = {
         },
         {
             id: 'ev_endgame_trigger',
+            image: 'ev_crisis_cabinet',
             name: 'Strategic Assessment',
             description: 'The conflict has reached a critical juncture.',
             location: [-51.5, -59.0],
@@ -891,7 +964,8 @@ module.exports = {
                                 minScores: { uk_public_support: 3, military_readiness: 3 }
                             },
                             effects: {
-                                triggerEvents: [ { id: 'ev_end_victory', delayMs: 10000, probability: 1.0 } ]
+                                triggerEvents: [ { id: 'ev_end_victory',
+            image: 'ev_eu_success', delayMs: 10000, probability: 1.0 } ]
                             }
                         },
                         {
@@ -901,14 +975,16 @@ module.exports = {
                                 maxScores: { military_readiness: 2 }
                             },
                             effects: {
-                                triggerEvents: [ { id: 'ev_end_defeat', delayMs: 10000, probability: 1.0 } ]
+                                triggerEvents: [ { id: 'ev_end_defeat',
+            image: 'ev_endgame_domestic', delayMs: 10000, probability: 1.0 } ]
                             }
                         },
                         {
                             id: 'opt_end_stalemate',
                             text: 'Accept Stalemate. Dig in for winter.',
                             effects: {
-                                triggerEvents: [ { id: 'ev_end_stalemate', delayMs: 10000, probability: 1.0 } ]
+                                triggerEvents: [ { id: 'ev_end_stalemate',
+            image: 'ev_endgame_diplomatic', delayMs: 10000, probability: 1.0 } ]
                             }
                         }
                     ]
@@ -917,6 +993,7 @@ module.exports = {
         },
         {
             id: 'ev_end_victory',
+            image: 'ev_eu_success',
             name: 'Scenario Concluded: Victory',
             description: 'The UK has successfully defended the Falkland Islands against Argentine aggression. The Task Force has achieved its objectives.',
             location: [-51.5, -59.0],
@@ -927,6 +1004,7 @@ module.exports = {
         },
         {
             id: 'ev_end_defeat',
+            image: 'ev_endgame_domestic',
             name: 'Scenario Concluded: Defeat',
             description: 'UK forces have been overwhelmed. The Falkland Islands have fallen under Argentine control.',
             location: [-51.5, -59.0],
@@ -937,6 +1015,7 @@ module.exports = {
         },
         {
             id: 'ev_end_stalemate',
+            image: 'ev_endgame_diplomatic',
             name: 'Scenario Concluded: Stalemate',
             description: 'A bitter stalemate has ensued. Both sides remain entrenched, facing a long and costly standoff.',
             location: [-51.5, -59.0],
@@ -948,6 +1027,7 @@ module.exports = {
 
         {
             id: 'ev_resistance_contact',
+            image: 'act_special_forces',
             name: 'FIDF Resistance Mobilizes',
             description: 'Members of the Falkland Islands Defence Force (FIDF) and local civilians have formed a resistance network in the hills.',
             location: [-51.75, -58.0],
@@ -965,8 +1045,10 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: 1, uk_public_support: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_resistance_success', delayMs: 180000, probability: 0.6 },
-                                    { id: 'ev_resistance_reprisal', delayMs: 180000, probability: 0.4 }
+                                    { id: 'ev_resistance_success',
+            image: 'ev_kinetic_strike', delayMs: 180000, probability: 0.6 },
+                                    { id: 'ev_resistance_reprisal',
+            image: 'generic_police', delayMs: 180000, probability: 0.4 }
                                 ]
                             }
                         },
@@ -976,7 +1058,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_resistance_intel', delayMs: 150000, probability: 1.0 }
+                                    { id: 'ev_resistance_intel',
+            image: 'ev_strike_options_secured', delayMs: 150000, probability: 1.0 }
                                 ]
                             }
                         }
@@ -986,6 +1069,7 @@ module.exports = {
         },
         {
             id: 'ev_resistance_success',
+            image: 'ev_kinetic_strike',
             name: 'Resistance Sabotage Success',
             description: 'The local resistance has successfully ambushed an Argentine supply convoy.',
             location: [-51.75, -58.0],
@@ -996,6 +1080,7 @@ module.exports = {
         },
         {
             id: 'ev_resistance_reprisal',
+            image: 'generic_police',
             name: 'Civilian Reprisals',
             description: 'Following resistance activity, Argentine forces have begun harsh crackdowns on the civilian population.',
             location: [-51.692, -57.858],
@@ -1009,6 +1094,7 @@ module.exports = {
         },
         {
             id: 'ev_resistance_intel',
+            image: 'ev_strike_options_secured',
             name: 'Critical Resistance Intel',
             description: 'The local resistance network has provided invaluable intelligence on enemy troop movements.',
             location: [-51.75, -58.0],
@@ -1023,6 +1109,7 @@ module.exports = {
 
         {
             id: 'ev_cyber_attack',
+            image: 'generic_cyber',
             name: 'Severe Cyber Disruption',
             description: 'GCHQ reports a massive, coordinated cyber attack targeting military logistics databases and satellite communications linking the Task Force to London.',
             location: [-51.5, -59.0],
@@ -1049,7 +1136,8 @@ module.exports = {
                             effects: {
                                 scores: { international_pressure: 1, argentina_aggression: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_cyber_blowback', delayMs: 90000, probability: 0.5 }
+                                    { id: 'ev_cyber_blowback',
+            image: 'ev_cyber_fail', delayMs: 90000, probability: 0.5 }
                                 ]
                             }
                         }
@@ -1059,6 +1147,7 @@ module.exports = {
         },
         {
             id: 'ev_cyber_blowback',
+            image: 'ev_cyber_fail',
             name: 'Cyber Counter-Attack Fails',
             description: 'The offensive cyber operation was traced back to UK assets, causing severe international diplomatic blowback.',
             location: [-51.5, -59.0],
@@ -1069,6 +1158,7 @@ module.exports = {
         },
         {
             id: 'ev_sub_detected',
+            image: 'ev_sub_detection',
             name: 'Unidentified Submarine Detected',
             description: 'Sonar operators on HMS Defender have detected a faint acoustic signature matching a diesel-electric submarine operating inside the exclusion zone.',
             location: [-51.0, -58.0],
@@ -1086,8 +1176,10 @@ module.exports = {
                             effects: {
                                 scores: { argentina_aggression: -1, international_pressure: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_sub_sunk', delayMs: 120000, probability: 0.7 },
-                                    { id: 'ev_sub_evades', delayMs: 120000, probability: 0.3 }
+                                    { id: 'ev_sub_sunk',
+            image: 'astute_class_submarine', delayMs: 120000, probability: 0.7 },
+                                    { id: 'ev_sub_evades',
+            image: 'ev_sub_detection', delayMs: 120000, probability: 0.3 }
                                 ]
                             }
                         },
@@ -1097,7 +1189,8 @@ module.exports = {
                             effects: {
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
-                                    { id: 'ev_sub_attacks', delayMs: 150000, probability: 0.4 }
+                                    { id: 'ev_sub_attacks',
+            image: 'ev_sub_surfaces', delayMs: 150000, probability: 0.4 }
                                 ]
                             }
                         }
@@ -1107,6 +1200,7 @@ module.exports = {
         },
         {
             id: 'ev_sub_sunk',
+            image: 'astute_class_submarine',
             name: 'Submarine Destroyed',
             description: 'An ASW helicopter has successfully engaged and destroyed the hostile submarine.',
             location: [-51.0, -58.0],
@@ -1117,6 +1211,7 @@ module.exports = {
         },
         {
             id: 'ev_sub_evades',
+            image: 'ev_sub_detection',
             name: 'Submarine Contact Lost',
             description: 'The unidentified submarine has slipped the sonar net and remains a threat in the sector.',
             location: [-51.0, -58.0],
@@ -1127,6 +1222,7 @@ module.exports = {
         },
         {
             id: 'ev_sub_attacks',
+            image: 'ev_sub_surfaces',
             name: 'Submarine Launches Torpedoes',
             description: 'The shadowed submarine has fired wire-guided torpedoes at the UK Task Force.',
             location: [-51.0, -58.0],
@@ -1141,6 +1237,7 @@ module.exports = {
         },
         {
             id: 'ev_supply_shortage',
+            image: 'ev_logistics_failure',
             name: 'Critical Supply Shortage',
             description: 'Ammunition and medical supplies for the ground forces are running critically low.',
             location: [-51.692, -57.858],
@@ -1158,7 +1255,8 @@ module.exports = {
                             effects: {
                                 scores: { supply_lines: 1 },
                                 triggerEvents: [
-                                    { id: 'ev_convoy_hit', delayMs: 100000, probability: 0.4 }
+                                    { id: 'ev_convoy_hit',
+            image: 'ev_kinetic_strike', delayMs: 100000, probability: 0.4 }
                                 ]
                             }
                         },
@@ -1179,6 +1277,7 @@ module.exports = {
         },
         {
             id: 'ev_convoy_hit',
+            image: 'ev_kinetic_strike',
             name: 'Supply Convoy Ambushed',
             description: 'The surface supply convoy was struck by Exocet missiles, resulting in heavy casualties and loss of materiel.',
             location: [-51.5, -57.0],
@@ -1189,6 +1288,7 @@ module.exports = {
         },
         {
             id: 'ev_pm_ultimatum',
+            image: 'act_national_address',
             name: 'Downing Street Ultimatum',
             description: 'Due to catastrophic public backlash and mounting military failures, the Prime Minister has issued an ultimatum.',
             location: [-51.5, -59.0],
@@ -1207,7 +1307,8 @@ module.exports = {
                             id: 'opt_pm_resign',
                             text: 'Offer my resignation. I cannot win under these political constraints.',
                             effects: {
-                                triggerEvents: [ { id: 'ev_end_defeat', delayMs: 5000, probability: 1.0 } ]
+                                triggerEvents: [ { id: 'ev_end_defeat',
+            image: 'ev_endgame_domestic', delayMs: 5000, probability: 1.0 } ]
                             }
                         },
                         {
@@ -1223,6 +1324,7 @@ module.exports = {
         },
         {
             id: 'ev_us_support',
+            image: 'ev_us_support_success',
             name: 'US Offers Material Support',
             description: 'Due to favorable international standing, the US has offered satellite intelligence and Sidewinder missiles.',
             location: [-51.5, -59.0],
@@ -1257,6 +1359,7 @@ module.exports = {
         },
         {
             id: 'ev_un_sanctions',
+            image: 'generic_un',
             name: 'UN Threatens Sanctions',
             description: 'Due to highly aggressive UK actions, the UN is threatening economic sanctions if a ceasefire is not reached.',
             location: [-51.5, -59.0],
@@ -1293,6 +1396,7 @@ module.exports = {
     manualActions: [
         {
             id: 'act_sf_mainland',
+            image: 'act_special_forces',
             name: 'Deploy Special Forces to Mainland',
             description: 'Authorize a covert SAS operation on the Argentine mainland to sabotage airbases and disrupt their supply chain. High risk of international condemnation if discovered.',
             initiator: ['uk_commander'],
@@ -1302,13 +1406,16 @@ module.exports = {
             effects: {
                 scores: { international_pressure: 1 },
                 randomEvents: [
-                    { id: 'ev_sf_success', weight: 60 },
-                    { id: 'ev_sf_failure', weight: 40 }
+                    { id: 'ev_sf_success',
+            image: 'ev_sf_success', weight: 60 },
+                    { id: 'ev_sf_failure',
+            image: 'ev_sf_fail', weight: 40 }
                 ]
             }
         },
         {
             id: 'act_request_reinforcements',
+            image: 'act_us_support',
             name: 'Request Emergency Reinforcements',
             description: 'Request immediate deployment of additional naval and air assets from the UK. Requires Ascension Island to be fully operational as a staging base.',
             initiator: ['uk_commander'],
@@ -1319,7 +1426,8 @@ module.exports = {
             effects: {
                 scores: { uk_public_support: -1, supply_lines: 1 },
                 triggerEvents: [
-                    { id: 'ev_reinforcements_arrive', delayMs: 120000, probability: 1.0 }
+                    { id: 'ev_reinforcements_arrive',
+            image: 'hms_prince_of_wales', delayMs: 120000, probability: 1.0 }
                 ]
             }
         }

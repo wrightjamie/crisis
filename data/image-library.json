@@ -18,6 +18,34 @@
             "airdrop"
         ]
     },
+    "a_colony_hub": {
+        "id": "a_colony_hub",
+        "file": "/images/library/a_colony_hub.jpg",
+        "title": "Mars Colony Secundus Habitation Complex",
+        "description": "Cluster of illuminated geodesic biodomes, pressurized surface transit tunnels, and rover tracks across the red Martian regolith.",
+        "tags": [
+            "asset",
+            "sci-fi",
+            "space",
+            "mars",
+            "colony",
+            "civilian"
+        ]
+    },
+    "a_water_extractor": {
+        "id": "a_water_extractor",
+        "file": "/images/library/a_water_extractor.jpg",
+        "title": "Martian Polar Ice Extraction Facility",
+        "description": "Heavy industrial thermal drilling and sublimation rigs cutting into Martian polar ice caps with steam plumes venting into the thin atmosphere.",
+        "tags": [
+            "asset",
+            "sci-fi",
+            "space",
+            "mars",
+            "infrastructure",
+            "water"
+        ]
+    },
     "act_backchannel_russia": {
         "id": "act_backchannel_russia",
         "file": "/images/library/act_backchannel_russia.png",
@@ -164,6 +192,21 @@
             "resupply"
         ]
     },
+    "agri_mekong": {
+        "id": "agri_mekong",
+        "file": "/images/library/agri_mekong.jpg",
+        "title": "Drought-Stricken Mekong Delta Basin",
+        "description": "Aerial view of parched, cracked riverbeds and withered agricultural fields across the Mekong Delta during catastrophic drought.",
+        "tags": [
+            "asset",
+            "civilian",
+            "natural-disaster",
+            "climate",
+            "food",
+            "global-south",
+            "drought"
+        ]
+    },
     "as_keflavik": {
         "id": "as_keflavik",
         "file": "/images/library/as_keflavik.png",
@@ -279,6 +322,22 @@
             "uk",
             "hurricane",
             "natural-disaster"
+        ]
+    },
+    "city_miami": {
+        "id": "city_miami",
+        "file": "/images/library/city_miami.jpg",
+        "title": "Miami Coastline Facing Category 5 Hurricane",
+        "description": "Aerial view of Biscayne Bay and Miami high-rises as massive storm surge waves batter concrete sea walls beneath approaching hurricane clouds.",
+        "tags": [
+            "asset",
+            "civilian",
+            "infrastructure",
+            "natural-disaster",
+            "hurricane",
+            "flood",
+            "urban",
+            "climate"
         ]
     },
     "drone_squad": {
@@ -562,6 +621,20 @@
             "alien",
             "apocalyptic",
             "destruction"
+        ]
+    },
+    "ev_climate_start": {
+        "id": "ev_climate_start",
+        "file": "/images/library/ev_climate_start.jpg",
+        "title": "Antarctic Ice Shelf Catastrophic Collapse",
+        "description": "Massive ancient ice shelf shearing and collapsing into the stormy Southern Ocean, sending gigantic icebergs and towering spray into freezing waters.",
+        "tags": [
+            "event",
+            "natural-disaster",
+            "climate",
+            "antarctica",
+            "polar",
+            "flood"
         ]
     },
     "ev_combat_recovery_medevac": {
@@ -1095,6 +1168,21 @@
             "kinetic-strike",
             "invasion",
             "apocalyptic"
+        ]
+    },
+    "ev_outbreak_start": {
+        "id": "ev_outbreak_start",
+        "file": "/images/library/ev_outbreak_start.jpg",
+        "title": "BSL-4 Pathogen Culture Isolation Chamber",
+        "description": "Virologists in positive-pressure biohazard suits inspecting a bioluminescent viral culture inside a dark sterile biosafety chamber with warning indicators.",
+        "tags": [
+            "event",
+            "civilian",
+            "medical",
+            "research",
+            "pandemic",
+            "chemical",
+            "cbrn"
         ]
     },
     "ev_port_damage": {
@@ -1937,6 +2025,64 @@
             "royal-navy"
         ]
     },
+    "hub_mumbai": {
+        "id": "hub_mumbai",
+        "file": "/images/library/hub_mumbai.jpg",
+        "title": "Mumbai International Airport Transit Hub",
+        "description": "Crowded concourse of Chhatrapati Shivaji Maharaj International Airport in Mumbai with masked travelers and cancelled flight boards during a public health emergency.",
+        "tags": [
+            "asset",
+            "civilian",
+            "air",
+            "infrastructure",
+            "pandemic",
+            "global-south",
+            "airport"
+        ]
+    },
+    "lab_atlanta": {
+        "id": "lab_atlanta",
+        "file": "/images/library/lab_atlanta.jpg",
+        "title": "CDC Headquarters Research Campus",
+        "description": "Centers for Disease Control and Prevention headquarters in Atlanta with high-containment laboratories and emergency response vehicles under stormy skies.",
+        "tags": [
+            "asset",
+            "civilian",
+            "medical",
+            "research",
+            "usa",
+            "pandemic"
+        ]
+    },
+    "lab_oxford": {
+        "id": "lab_oxford",
+        "file": "/images/library/lab_oxford.jpg",
+        "title": "Oxford Vaccine Group & Biomedical Research Centre",
+        "description": "Oxford biomedical research facility integrating historic stone collegiate architecture with a state-of-the-art clinical laboratory wing.",
+        "tags": [
+            "asset",
+            "civilian",
+            "medical",
+            "research",
+            "uk",
+            "eu",
+            "pandemic"
+        ]
+    },
+    "lab_wuhan": {
+        "id": "lab_wuhan",
+        "file": "/images/library/lab_wuhan.jpg",
+        "title": "Wuhan Institute of Virology BSL-4 Facility",
+        "description": "High-containment Biosafety Level-4 virology research institute and laboratory complex in Wuhan under overcast skies.",
+        "tags": [
+            "asset",
+            "civilian",
+            "medical",
+            "research",
+            "china",
+            "pandemic"
+        ]
+    },
     "national_grid": {
         "id": "national_grid",
         "file": "/images/library/national_grid.png",
@@ -2041,6 +2187,20 @@
             "nato",
             "eastern-europe",
             "black-sea"
+        ]
+    },
+    "node_na": {
+        "id": "node_na",
+        "file": "/images/library/node_na.jpg",
+        "title": "Project Icarus Atmospheric Injection Array",
+        "description": "Towering geo-engineering particle injection array and atmospheric conditioning facility under active construction along a stormy coast.",
+        "tags": [
+            "asset",
+            "infrastructure",
+            "science",
+            "climate",
+            "technology",
+            "icarus"
         ]
     },
     "p8_poseidon": {

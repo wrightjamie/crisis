@@ -58,15 +58,21 @@ module.exports = {
     },
     variantAxes: [],
     assets: [
-        { id: 'node_na', name: 'Icarus Node: NA', location: [40.7128, -74.0060], state: 'under_construction', tags: ['icarus', 'north_america'] },
-        { id: 'node_eu', name: 'Icarus Node: EU', location: [48.8566, 2.3522], state: 'under_construction', tags: ['icarus', 'eu'] },
-        { id: 'node_asia', name: 'Icarus Node: Asia', location: [31.2304, 121.4737], state: 'under_construction', tags: ['icarus', 'pan_asia'] },
-        { id: 'city_miami', name: 'Miami (Vulnerable Coastal)', location: [25.7617, -80.1918], state: 'operational', tags: ['infrastructure', 'north_america'] },
-        { id: 'agri_mekong', name: 'Mekong Delta (Agriculture)', location: [10.0333, 105.7833], state: 'operational', tags: ['infrastructure', 'pan_asia'] }
+        { id: 'node_na',
+            image: 'node_na', name: 'Icarus Node: NA', location: [40.7128, -74.0060], state: 'under_construction', tags: ['icarus', 'north_america'] },
+        { id: 'node_eu',
+            image: 'node_na', name: 'Icarus Node: EU', location: [48.8566, 2.3522], state: 'under_construction', tags: ['icarus', 'eu'] },
+        { id: 'node_asia',
+            image: 'node_na', name: 'Icarus Node: Asia', location: [31.2304, 121.4737], state: 'under_construction', tags: ['icarus', 'pan_asia'] },
+        { id: 'city_miami',
+            image: 'city_miami', name: 'Miami (Vulnerable Coastal)', location: [25.7617, -80.1918], state: 'operational', tags: ['infrastructure', 'north_america'] },
+        { id: 'agri_mekong',
+            image: 'agri_mekong', name: 'Mekong Delta (Agriculture)', location: [10.0333, 105.7833], state: 'operational', tags: ['infrastructure', 'pan_asia'] }
     ],
     eventTemplates: [
         {
             id: 'ev_climate_start',
+            image: 'ev_climate_start',
             name: 'The Tipping Point',
             description: 'Massive ice shelf collapse detected in Antarctica. Sea levels are projected to rise catastrophically within hours. Project Icarus is our only option, but requires massive initial funding.',
             location: [-75.2509, -100.2263], // Antarctica
@@ -97,14 +103,19 @@ module.exports = {
                 }
             ],
             triggerEvents: [
-                { id: 'ev_hurricane_miami', delayMs: 120000 },
-                { id: 'ev_drought_mekong', delayMs: 240000 },
-                { id: 'ev_climate_refugees', delayMs: 360000 },
-                { id: 'ev_endgame_eval', delayMs: 600000 }
+                { id: 'ev_hurricane_miami',
+            image: 'city_miami', delayMs: 120000 },
+                { id: 'ev_drought_mekong',
+            image: 'agri_mekong', delayMs: 240000 },
+                { id: 'ev_climate_refugees',
+            image: 'ev_airdrop_riot', delayMs: 360000 },
+                { id: 'ev_endgame_eval',
+            image: 'generic_un', delayMs: 600000 }
             ]
         },
         {
             id: 'ev_hurricane_miami',
+            image: 'city_miami',
             name: 'Category 6 Hurricane',
             description: 'An unprecedented super-storm is bearing down on the North American east coast.',
             location: [25.7617, -80.1918], // Miami
@@ -130,6 +141,7 @@ module.exports = {
         },
         {
             id: 'ev_drought_mekong',
+            image: 'agri_mekong',
             name: 'Agricultural Collapse',
             description: 'Severe drought is devastating the Mekong Delta, a critical global food source.',
             location: [10.0333, 105.7833], // Mekong Delta
@@ -155,6 +167,7 @@ module.exports = {
         },
         {
             id: 'ev_climate_refugees',
+            image: 'ev_airdrop_riot',
             name: 'Mass Migration Crisis',
             description: 'Millions are fleeing uninhabitable zones in the Global South, moving towards Europe and Asia.',
             location: [35.0000, 15.0000], // Mediterranean/North Africa
@@ -179,16 +192,21 @@ module.exports = {
         },
         {
             id: 'ev_endgame_eval',
+            image: 'generic_un',
             name: 'The Final Tipping Point',
             description: 'Global temperatures are spiking. The time for preparation is over. Is Project Icarus ready?',
             triggerEvents: [
-                { id: 'ev_end_extinction', delayMs: 1000 },
-                { id: 'ev_end_salvation', delayMs: 1000 },
-                { id: 'ev_end_wasteland', delayMs: 1000 }
+                { id: 'ev_end_extinction',
+            image: 'ev_city_destruction', delayMs: 1000 },
+                { id: 'ev_end_salvation',
+            image: 'ev_supremacy_victory', delayMs: 1000 },
+                { id: 'ev_end_wasteland',
+            image: 'ev_endgame_domestic', delayMs: 1000 }
             ]
         },
         {
             id: 'ev_end_extinction',
+            image: 'ev_city_destruction',
             name: 'Runaway Greenhouse Effect',
             description: 'Project Icarus was not completed in time. The climate has tipped past the point of no return. The atmosphere is becoming toxic. Humanity is facing extinction. Selfishness has doomed us all.',
             isEndGame: true,
@@ -196,6 +214,7 @@ module.exports = {
         },
         {
             id: 'ev_end_salvation',
+            image: 'ev_supremacy_victory',
             name: 'A New Dawn',
             description: 'Against all odds, the nations of the world united. Project Icarus is fully operational and has successfully stabilized the global climate. The cost was high, but humanity has survived to see another century.',
             isEndGame: true,
@@ -203,6 +222,7 @@ module.exports = {
         },
         {
             id: 'ev_end_wasteland',
+            image: 'ev_endgame_domestic',
             name: 'The Ruined Earth',
             description: 'Project Icarus was partially deployed, preventing total extinction, but the climate remains highly unstable. Resource wars have fractured the global order. Humanity survives, but in a harsh, unforgiving wasteland.',
             isEndGame: true,

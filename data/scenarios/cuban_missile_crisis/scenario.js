@@ -82,14 +82,19 @@ module.exports = {
         }
     ],
     assets: [
-        { id: 'a_cuba_missile_site', name: 'San Cristobal MRBM Site', location: [22.7, -83.0], state: 'operational', tags: ['military', 'ussr'], briefing: 'Primary suspected location of Soviet SS-4 medium-range ballistic missiles.' },
-        { id: 'a_florida_base', name: 'Homestead AFB', location: [25.48, -80.38], state: 'operational', tags: ['military', 'usa'], briefing: 'Staging ground for US tactical air forces and potential invasion troops.' },
-        { id: 'a_soviet_convoy', name: 'Soviet Freighter Poltava', location: [24.0, -60.0], state: 'operational', tags: ['naval', 'ussr'], briefing: 'Suspected of carrying additional missile components to Cuba.' },
-        { id: 'a_us_blockade', name: 'US Quarantine Line', location: [24.5, -65.0], state: 'operational', tags: ['naval', 'usa'], briefing: 'The "quarantine" perimeter established by the US Navy.' }
+        { id: 'a_cuba_missile_site',
+            image: 'ev_nuclear_readiness', name: 'San Cristobal MRBM Site', location: [22.7, -83.0], state: 'operational', tags: ['military', 'ussr'], briefing: 'Primary suspected location of Soviet SS-4 medium-range ballistic missiles.' },
+        { id: 'a_florida_base',
+            image: 'nato_air_base', name: 'Homestead AFB', location: [25.48, -80.38], state: 'operational', tags: ['military', 'usa'], briefing: 'Staging ground for US tactical air forces and potential invasion troops.' },
+        { id: 'a_soviet_convoy',
+            image: 'ev_maritime_shadowing', name: 'Soviet Freighter Poltava', location: [24.0, -60.0], state: 'operational', tags: ['naval', 'ussr'], briefing: 'Suspected of carrying additional missile components to Cuba.' },
+        { id: 'a_us_blockade',
+            image: 'as_truman', name: 'US Quarantine Line', location: [24.5, -65.0], state: 'operational', tags: ['naval', 'usa'], briefing: 'The "quarantine" perimeter established by the US Navy.' }
     ],
     manualActions: [
         {
             id: 'act_usa_recon',
+            image: 'rc135_rivet_joint',
             name: 'Order Covert U-2 Sortie',
             description: 'Request an immediate intelligence sweep over Cuba.',
             initiator: ['usa_intel'],
@@ -98,13 +103,16 @@ module.exports = {
             effects: {
                 scores: { global_tension: 1, usa_momentum: 1 },
                 randomEvents: [
-                    { id: 'ev_u2_success_manual', weight: 70, effects: { scores: { usa_momentum: 1 } } },
-                    { id: 'ev_u2_shot_down_manual', weight: 30, effects: { scores: { global_tension: 2, diplomatic_progress: -1 } } }
+                    { id: 'ev_u2_success_manual',
+            image: 'ev_strike_options_ready', weight: 70, effects: { scores: { usa_momentum: 1 } } },
+                    { id: 'ev_u2_shot_down_manual',
+            image: 'ev_f35_fail', weight: 30, effects: { scores: { global_tension: 2, diplomatic_progress: -1 } } }
                 ]
             }
         },
         {
             id: 'act_ussr_sub_patrol',
+            image: 'astute_class_submarine',
             name: 'Aggressive Submarine Patrol',
             description: 'Order B-59 and other Foxtrot-class subs to surface near the quarantine line to project strength.',
             initiator: ['ussr_defmin'],
@@ -113,13 +121,16 @@ module.exports = {
             effects: {
                 scores: { global_tension: 1, ussr_momentum: 1 },
                 randomEvents: [
-                    { id: 'ev_sub_evades_manual', weight: 60, effects: { scores: { ussr_momentum: 1 } } },
-                    { id: 'ev_sub_depth_charge_manual', weight: 40, effects: { scores: { global_tension: 2, diplomatic_progress: -1 } } }
+                    { id: 'ev_sub_evades_manual',
+            image: 'ev_sub_detection', weight: 60, effects: { scores: { ussr_momentum: 1 } } },
+                    { id: 'ev_sub_depth_charge_manual',
+            image: 'ev_naval_strike', weight: 40, effects: { scores: { global_tension: 2, diplomatic_progress: -1 } } }
                 ]
             }
         },
         {
             id: 'act_backchannel_push',
+            image: 'act_backchannel_russia',
             name: 'Initiate Urgent Backchannel',
             description: 'Attempt to bypass formal diplomacy using journalists or intelligence assets.',
             initiator: ['ussr_kgb'],
@@ -128,8 +139,10 @@ module.exports = {
             effects: {
                 scores: { diplomatic_progress: 1 },
                 randomEvents: [
-                    { id: 'ev_backchannel_success', weight: 50, effects: { scores: { diplomatic_progress: 1 } } },
-                    { id: 'ev_backchannel_fail', weight: 50, effects: { scores: { usa_momentum: -1 } } }
+                    { id: 'ev_backchannel_success',
+            image: 'ev_russia_deescalate', weight: 50, effects: { scores: { diplomatic_progress: 1 } } },
+                    { id: 'ev_backchannel_fail',
+            image: 'ev_russia_leak', weight: 50, effects: { scores: { usa_momentum: -1 } } }
                 ]
             }
         }
@@ -137,14 +150,18 @@ module.exports = {
     eventTemplates: [
         {
             id: 'ev_start',
+            image: 'ev_crisis_cabinet',
             name: 'EXCOMM and Stavka Convene',
             description: 'The existence of Soviet missiles in Cuba is confirmed. Both sides convene their top military and political leadership.',
             location: [38.8951, -77.0364], // Washington DC
             decisions: [],
             triggerEvents: [
-                { id: 'ev_thread1_quarantine_init', delayMs: 90000, probability: 1.0 }, // Naval Blockade
-                { id: 'ev_thread2_diplomacy_init', delayMs: 270000, probability: 1.0 }, // Backchannel Diplomacy
-                { id: 'ev_thread3_intel_init', delayMs: 450000, probability: 1.0 } // U-2 & Intelligence
+                { id: 'ev_thread1_quarantine_init',
+            image: 'as_truman', delayMs: 90000, probability: 1.0 }, // Naval Blockade
+                { id: 'ev_thread2_diplomacy_init',
+            image: 'act_backchannel_russia', delayMs: 270000, probability: 1.0 }, // Backchannel Diplomacy
+                { id: 'ev_thread3_intel_init',
+            image: 'rc135_rivet_joint', delayMs: 450000, probability: 1.0 } // U-2 & Intelligence
             ]
         },
 
@@ -153,6 +170,7 @@ module.exports = {
         // ---------------------------------------------------------
         {
             id: 'ev_thread1_quarantine_init',
+            image: 'as_truman',
             name: 'Quarantine Line Established',
             description: 'US Naval forces establish a quarantine line around Cuba. Soviet freighters are approaching.',
             location: [24.5, -65.0],
@@ -161,14 +179,17 @@ module.exports = {
                     role: 'usa_defsec',
                     text: 'What are the rules of engagement for the blockade?',
                     options: [
-                        { id: 'opt_strict_roe', text: 'Strict ROE: Warning shots only', effects: { scores: { usa_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_soviet_approach', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_loose_roe', text: 'Loose ROE: Disable vessels running the line', effects: { scores: { global_tension: 1, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_thread1_soviet_approach', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_strict_roe', text: 'Strict ROE: Warning shots only', effects: { scores: { usa_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_soviet_approach',
+            image: 'ev_maritime_shadowing', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_loose_roe', text: 'Loose ROE: Disable vessels running the line', effects: { scores: { global_tension: 1, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_thread1_soviet_approach',
+            image: 'ev_maritime_shadowing', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread1_soviet_approach',
+            image: 'ev_maritime_shadowing',
             name: 'Soviet Convoy Nears Quarantine',
             description: 'The Soviet freighter Poltava is nearing the US quarantine line, escorted by Foxtrot submarines.',
             location: [24.0, -60.0],
@@ -178,14 +199,18 @@ module.exports = {
                     role: 'ussr_defmin',
                     text: 'Orders for the Poltava?',
                     options: [
-                        { id: 'opt_hold_course', text: 'Hold course. Challenge the blockade.', effects: { scores: { ussr_momentum: 1, global_tension: 1 }, triggerEvents: [{ id: 'ev_thread1_sub_encounter', delayMs: 90000, probability: 0.7 }, { id: 'ev_thread1_convoy_turns', delayMs: 90000, probability: 0.3 }] } },
-                        { id: 'opt_turn_around', text: 'Turn the convoy around.', effects: { scores: { ussr_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_convoy_turns', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_hold_course', text: 'Hold course. Challenge the blockade.', effects: { scores: { ussr_momentum: 1, global_tension: 1 }, triggerEvents: [{ id: 'ev_thread1_sub_encounter',
+            image: 'ev_sub_detection', delayMs: 90000, probability: 0.7 }, { id: 'ev_thread1_convoy_turns',
+            image: 'ev_maritime_shadowing', delayMs: 90000, probability: 0.3 }] } },
+                        { id: 'opt_turn_around', text: 'Turn the convoy around.', effects: { scores: { ussr_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_convoy_turns',
+            image: 'ev_maritime_shadowing', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread1_sub_encounter',
+            image: 'ev_sub_detection',
             name: 'B-59 Submarine Incident',
             description: 'US destroyers detect a Soviet submarine (B-59) near the quarantine line and begin dropping signaling depth charges.',
             location: [24.5, -65.0],
@@ -195,27 +220,34 @@ module.exports = {
                     text: 'Submarine B-59 reports depth charges. Communications with Moscow are severed.',
                     hiddenFrom: ['usa_potus', 'usa_defsec', 'usa_intel', 'usa_display'],
                     options: [
-                        { id: 'opt_arm_torpedo', text: 'Arm nuclear torpedo (Requires consensus onboard)', effects: { scores: { global_tension: 2, nuclear_readiness: 1 }, triggerEvents: [{ id: 'ev_thread1_b59_surfaces', delayMs: 90000, probability: 0.8 }, { id: 'ev_endgame_trigger', delayMs: 90000, probability: 0.2 }] } },
-                        { id: 'opt_surface', text: 'Order sub to surface and identify', effects: { scores: { ussr_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_b59_surfaces', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_arm_torpedo', text: 'Arm nuclear torpedo (Requires consensus onboard)', effects: { scores: { global_tension: 2, nuclear_readiness: 1 }, triggerEvents: [{ id: 'ev_thread1_b59_surfaces',
+            image: 'ev_sub_surfaces', delayMs: 90000, probability: 0.8 }, { id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 90000, probability: 0.2 }] } },
+                        { id: 'opt_surface', text: 'Order sub to surface and identify', effects: { scores: { ussr_momentum: -1, diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread1_b59_surfaces',
+            image: 'ev_sub_surfaces', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread1_convoy_turns',
+            image: 'ev_maritime_shadowing',
             name: 'Soviet Ships Reverse Course',
             description: 'US Navy reports that Soviet freighters appear to be turning around, halting at the quarantine line.',
             location: [24.0, -60.0],
             effects: { scores: { usa_momentum: 1, global_tension: -1 } },
-            triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 360000 }] // Towards resolution
+            triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 360000 }] // Towards resolution
         },
         {
             id: 'ev_thread1_b59_surfaces',
+            image: 'ev_sub_surfaces',
             name: 'Soviet Submarine Surfaces',
             description: 'A Soviet Foxtrot-class submarine surfaces within the quarantine zone amidst US naval vessels.',
             location: [24.5, -65.0],
             effects: { scores: { usa_momentum: 1, diplomatic_progress: 1 } },
-            triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 360000 }]
+            triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 360000 }]
         },
 
         // ---------------------------------------------------------
@@ -223,6 +255,7 @@ module.exports = {
         // ---------------------------------------------------------
         {
             id: 'ev_thread2_diplomacy_init',
+            image: 'act_backchannel_russia',
             name: 'The Scali-Fomin Backchannel',
             description: 'ABC News correspondent John Scali is approached by KGB operative Aleksandr Fomin with a proposal.',
             location: [38.8951, -77.0364], // Washington DC
@@ -232,14 +265,17 @@ module.exports = {
                     role: 'usa_potus',
                     text: 'Fomin proposes Soviet withdrawal from Cuba in exchange for a public US pledge not to invade. Response?',
                     options: [
-                        { id: 'opt_accept_fomin', text: 'Accept the proposal conditionally.', effects: { scores: { diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread2_khrushchev_letter1', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_reject_fomin', text: 'Reject informal offers. Demand formal UN resolution.', effects: { scores: { usa_momentum: 1, global_tension: 1 }, triggerEvents: [{ id: 'ev_thread2_khrushchev_letter1', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_accept_fomin', text: 'Accept the proposal conditionally.', effects: { scores: { diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread2_khrushchev_letter1',
+            image: 'ev_russia_leak', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_reject_fomin', text: 'Reject informal offers. Demand formal UN resolution.', effects: { scores: { usa_momentum: 1, global_tension: 1 }, triggerEvents: [{ id: 'ev_thread2_khrushchev_letter1',
+            image: 'ev_russia_leak', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread2_khrushchev_letter1',
+            image: 'ev_russia_leak',
             name: 'Khrushchev\'s First Letter',
             description: 'A long, emotional letter arrives from Premier Khrushchev, echoing the Fomin proposal for a non-invasion pledge.',
             location: [55.7558, 37.6173], // Moscow
@@ -249,14 +285,17 @@ module.exports = {
                     role: 'ussr_premier',
                     text: 'The Politburo urges a tougher stance. Send a second, more demanding letter?',
                     options: [
-                        { id: 'opt_send_letter2', text: 'Send Letter 2: Demand removal of US Jupiters from Turkey.', effects: { scores: { ussr_momentum: 1, diplomatic_progress: -1 }, triggerEvents: [{ id: 'ev_thread2_letter2_received', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_hold_firm', text: 'Stand by the first letter.', effects: { scores: { diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread2_trollope_ploy', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_send_letter2', text: 'Send Letter 2: Demand removal of US Jupiters from Turkey.', effects: { scores: { ussr_momentum: 1, diplomatic_progress: -1 }, triggerEvents: [{ id: 'ev_thread2_letter2_received',
+            image: 'act_backchannel_russia', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_hold_firm', text: 'Stand by the first letter.', effects: { scores: { diplomatic_progress: 1 }, triggerEvents: [{ id: 'ev_thread2_trollope_ploy',
+            image: 'ev_russia_deescalate', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread2_letter2_received',
+            image: 'act_backchannel_russia',
             name: 'Khrushchev\'s Second Letter',
             description: 'A second, much more belligerent letter from Moscow is broadcast publicly, demanding the removal of US Jupiter missiles from Turkey.',
             location: [38.8951, -77.0364], // Washington DC
@@ -265,22 +304,27 @@ module.exports = {
                     role: 'usa_potus',
                     text: 'How do we respond to the contradictory letters?',
                     options: [
-                        { id: 'opt_trollope', text: 'Trollope Ploy: Ignore the second letter, accept the first.', effects: { scores: { diplomatic_progress: 1, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_thread2_robert_kennedy_meeting', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_hardline', text: 'Reject both. Prepare airstrikes on Cuba.', effects: { scores: { global_tension: 2, nuclear_readiness: 1 }, triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 180000, probability: 1.0 }] } }
+                        { id: 'opt_trollope', text: 'Trollope Ploy: Ignore the second letter, accept the first.', effects: { scores: { diplomatic_progress: 1, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_thread2_robert_kennedy_meeting',
+            image: 'act_backchannel_russia', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_hardline', text: 'Reject both. Prepare airstrikes on Cuba.', effects: { scores: { global_tension: 2, nuclear_readiness: 1 }, triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 180000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread2_trollope_ploy',
+            image: 'ev_russia_deescalate',
             name: 'US Accepts Initial Terms',
             description: 'The US formally accepts the terms of the first letter, pledging not to invade Cuba.',
             location: [38.8951, -77.0364],
             effects: { scores: { diplomatic_progress: 2, global_tension: -1 } },
-            triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 180000 }]
+            triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 180000 }]
         },
         {
             id: 'ev_thread2_robert_kennedy_meeting',
+            image: 'act_backchannel_russia',
             name: 'RFK-Dobrynin Meeting',
             description: 'Robert Kennedy meets Soviet Ambassador Dobrynin in secret.',
             location: [38.8951, -77.0364], // Washington DC
@@ -290,8 +334,10 @@ module.exports = {
                     role: 'usa_potus',
                     text: 'Authorize RFK to offer a secret deal on Jupiter missiles in Turkey?',
                     options: [
-                        { id: 'opt_offer_turkey', text: 'Offer secret withdrawal from Turkey in 6 months.', effects: { scores: { diplomatic_progress: 2, global_tension: -1 }, triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 120000, probability: 1.0 }] } },
-                        { id: 'opt_no_deal', text: 'Refuse Turkey deal. Ultimatum on Cuba.', effects: { scores: { global_tension: 2, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 120000, probability: 1.0 }] } }
+                        { id: 'opt_offer_turkey', text: 'Offer secret withdrawal from Turkey in 6 months.', effects: { scores: { diplomatic_progress: 2, global_tension: -1 }, triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 120000, probability: 1.0 }] } },
+                        { id: 'opt_no_deal', text: 'Refuse Turkey deal. Ultimatum on Cuba.', effects: { scores: { global_tension: 2, usa_momentum: 1 }, triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 120000, probability: 1.0 }] } }
                     ]
                 }
             ]
@@ -302,6 +348,7 @@ module.exports = {
         // ---------------------------------------------------------
         {
             id: 'ev_thread3_intel_init',
+            image: 'rc135_rivet_joint',
             name: 'Black Saturday: U-2 Sorties',
             description: 'Strategic Air Command has ordered extensive U-2 reconnaissance flights over Cuba and the Soviet Arctic.',
             location: [22.7, -83.0], // Cuba
@@ -311,14 +358,17 @@ module.exports = {
                     role: 'ussr_defmin',
                     text: 'Local Soviet commanders in Cuba track a US U-2 spy plane overhead.',
                     options: [
-                        { id: 'opt_shoot_down', text: 'Authorize SA-2 SAM launch to shoot it down.', effects: { scores: { global_tension: 2, ussr_momentum: 1 }, triggerEvents: [{ id: 'ev_thread3_u2_shot_down', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_hold_fire', text: 'Hold fire. Do not provoke.', effects: { scores: { diplomatic_progress: 1, ussr_momentum: -1 }, triggerEvents: [{ id: 'ev_thread3_u2_survives', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_shoot_down', text: 'Authorize SA-2 SAM launch to shoot it down.', effects: { scores: { global_tension: 2, ussr_momentum: 1 }, triggerEvents: [{ id: 'ev_thread3_u2_shot_down',
+            image: 'ev_f35_fail', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_hold_fire', text: 'Hold fire. Do not provoke.', effects: { scores: { diplomatic_progress: 1, ussr_momentum: -1 }, triggerEvents: [{ id: 'ev_thread3_u2_survives',
+            image: 'rc135_rivet_joint', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread3_u2_shot_down',
+            image: 'ev_f35_fail',
             name: 'U-2 Shot Down Over Cuba',
             description: 'Major Rudolf Anderson\'s U-2 plane is shot down by a Soviet SAM over Cuba. He is killed in action.',
             location: [22.7, -83.0],
@@ -327,36 +377,47 @@ module.exports = {
                     role: 'usa_defsec',
                     text: 'A US pilot is dead. EXCOMM previously agreed to retaliate if a U-2 was downed.',
                     options: [
-                        { id: 'opt_retaliate', text: 'Launch airstrikes on Cuban SAM sites.', effects: { scores: { global_tension: 2, nuclear_readiness: 2 }, triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 90000, probability: 1.0 }] } },
-                        { id: 'opt_pause', text: 'Hold retaliation. Give diplomacy one last chance.', effects: { scores: { diplomatic_progress: 1, usa_momentum: -1 }, triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 90000, probability: 1.0 }] } }
+                        { id: 'opt_retaliate', text: 'Launch airstrikes on Cuban SAM sites.', effects: { scores: { global_tension: 2, nuclear_readiness: 2 }, triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 90000, probability: 1.0 }] } },
+                        { id: 'opt_pause', text: 'Hold retaliation. Give diplomacy one last chance.', effects: { scores: { diplomatic_progress: 1, usa_momentum: -1 }, triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 90000, probability: 1.0 }] } }
                     ]
                 }
             ]
         },
         {
             id: 'ev_thread3_u2_survives',
+            image: 'rc135_rivet_joint',
             name: 'U-2 Completes Mission',
             description: 'The U-2 returns safely with critical intelligence confirming missile sites are fully operational.',
             location: [25.48, -80.38], // Homestead
             effects: { scores: { usa_momentum: 1, nuclear_readiness: 1 } },
-            triggerEvents: [{ id: 'ev_endgame_trigger', delayMs: 180000 }]
+            triggerEvents: [{ id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization', delayMs: 180000 }]
         },
 
         // ---------------------------------------------------------
         // MANUAL ACTION RANDOM EVENTS (Stubs to satisfy the schema)
         // ---------------------------------------------------------
-        { id: 'ev_u2_success_manual', name: 'Intel: Recon Success', description: 'Covert U-2 flight gathered valuable intelligence without incident.', effects: { scores: { usa_momentum: 1 } } },
-        { id: 'ev_u2_shot_down_manual', name: 'Intel: Recon Intercepted', description: 'A U-2 plane was fired upon, drastically raising tensions.', effects: { scores: { global_tension: 2 } } },
-        { id: 'ev_sub_evades_manual', name: 'Soviet Naval Flex', description: 'Soviet subs successfully penetrated the quarantine line undetected.', effects: { scores: { ussr_momentum: 1 } } },
-        { id: 'ev_sub_depth_charge_manual', name: 'Submarine Crisis', description: 'US destroyers dropped depth charges on a Soviet sub, nearly sparking war.', effects: { scores: { global_tension: 2 } } },
-        { id: 'ev_backchannel_success', name: 'Backchannel Breakthrough', description: 'KGB-CIA backchannel yields constructive dialogue.', effects: { scores: { diplomatic_progress: 1 } } },
-        { id: 'ev_backchannel_fail', name: 'Backchannel Burned', description: 'The backchannel was leaked to the press, embarrassing both sides.', effects: { scores: { usa_momentum: -1, ussr_momentum: -1 } } },
+        { id: 'ev_u2_success_manual',
+            image: 'ev_strike_options_ready', name: 'Intel: Recon Success', description: 'Covert U-2 flight gathered valuable intelligence without incident.', effects: { scores: { usa_momentum: 1 } } },
+        { id: 'ev_u2_shot_down_manual',
+            image: 'ev_f35_fail', name: 'Intel: Recon Intercepted', description: 'A U-2 plane was fired upon, drastically raising tensions.', effects: { scores: { global_tension: 2 } } },
+        { id: 'ev_sub_evades_manual',
+            image: 'ev_sub_detection', name: 'Soviet Naval Flex', description: 'Soviet subs successfully penetrated the quarantine line undetected.', effects: { scores: { ussr_momentum: 1 } } },
+        { id: 'ev_sub_depth_charge_manual',
+            image: 'ev_naval_strike', name: 'Submarine Crisis', description: 'US destroyers dropped depth charges on a Soviet sub, nearly sparking war.', effects: { scores: { global_tension: 2 } } },
+        { id: 'ev_backchannel_success',
+            image: 'ev_russia_deescalate', name: 'Backchannel Breakthrough', description: 'KGB-CIA backchannel yields constructive dialogue.', effects: { scores: { diplomatic_progress: 1 } } },
+        { id: 'ev_backchannel_fail',
+            image: 'ev_russia_leak', name: 'Backchannel Burned', description: 'The backchannel was leaked to the press, embarrassing both sides.', effects: { scores: { usa_momentum: -1, ussr_momentum: -1 } } },
 
         // ---------------------------------------------------------
         // FACILITATOR INJECTS (Requires Unlock)
         // ---------------------------------------------------------
         {
             id: 'ev_facil_usa_ally',
+            image: 'generic_un',
             name: 'OAS Support',
             description: 'The Organization of American States unanimously supports the US quarantine.',
             requiresUnlock: true,
@@ -364,6 +425,7 @@ module.exports = {
         },
         {
             id: 'ev_facil_usa_sabotage',
+            image: 'act_special_forces',
             name: 'CIA Sabotage Success',
             description: 'CIA operatives successfully sabotage a Cuban rail line, delaying missile readiness.',
             requiresUnlock: true,
@@ -371,6 +433,7 @@ module.exports = {
         },
         {
             id: 'ev_facil_ussr_cuba_push',
+            image: 'act_national_address',
             name: 'Castro Demands Action',
             description: 'Fidel Castro demands Soviet preemptive strikes against the US, rallying Cuban forces.',
             requiresUnlock: true,
@@ -378,6 +441,7 @@ module.exports = {
         },
         {
             id: 'ev_facil_ussr_berlin',
+            image: 'ev_article5_ambiguity',
             name: 'Pressure on Berlin',
             description: 'Soviet forces increase pressure in West Berlin, dividing US attention.',
             requiresUnlock: true,
@@ -389,16 +453,21 @@ module.exports = {
         // ---------------------------------------------------------
         {
             id: 'ev_endgame_trigger',
+            image: 'ev_final_authorization',
             name: 'The Climax',
             description: 'The critical deadline has been reached.',
             triggerEvents: [
-                { id: 'ev_end_nuclear_war', delayMs: 1000 },
-                { id: 'ev_end_peaceful_res', delayMs: 1000 },
-                { id: 'ev_end_stalemate', delayMs: 1000 }
+                { id: 'ev_end_nuclear_war',
+            image: 'ev_city_destruction', delayMs: 1000 },
+                { id: 'ev_end_peaceful_res',
+            image: 'ev_endgame_diplomatic', delayMs: 1000 },
+                { id: 'ev_end_stalemate',
+            image: 'ev_endgame_culmination', delayMs: 1000 }
             ]
         },
         {
             id: 'ev_end_nuclear_war',
+            image: 'ev_city_destruction',
             name: 'Scenario Concluded: Mutual Assured Destruction',
             description: 'Miscalculations and aggressive posturing have led to the launch of nuclear weapons. Millions are dead.',
             isEndGame: true,
@@ -406,6 +475,7 @@ module.exports = {
         },
         {
             id: 'ev_end_peaceful_res',
+            image: 'ev_endgame_diplomatic',
             name: 'Scenario Concluded: Diplomatic Triumph',
             description: 'Through secret backchannels and careful diplomacy, a deal was struck. The missiles will be removed.',
             isEndGame: true,
@@ -413,6 +483,7 @@ module.exports = {
         },
         {
             id: 'ev_end_stalemate',
+            image: 'ev_endgame_culmination',
             name: 'Scenario Concluded: Frozen Standoff',
             description: 'Neither side blinked, but neither side fired. The blockade remains, and the world holds its breath.',
             isEndGame: true,

@@ -15,6 +15,8 @@
 - [x] Generate remaining asset images (Keflavik Air Base [regenerate], USS Harry S. Truman, Ramstein Air Base) once API rate limit resets
 - [x] Kick player and allow a new player to join
 - [x] Move to a shared image library (`data/image-library.json` and `public/images/library/`) with title, description, and freeform tags across all scenarios
+- [x] Populate and assign 100% image coverage across all 13 scenarios in the game (including generating 11 new assets for Global Pandemic, Project Icarus, and Mars Colony Rebellion)
+- [ ] Optional: Generate unique bespoke image for Mars Colony Rebellion orbital flagship (`a_un_flagship`) once AI image generation quota resets (~54h)
 
 ## Caribbean Crisis Tasks
 - [x] Generate image: RFA Mounts Bay (Bay-class landing ship) `/images/assets/rfa_mounts_bay.png`

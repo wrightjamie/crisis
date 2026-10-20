@@ -194,6 +194,7 @@ module.exports = {
     "assets": [
         {
             "id": "omaha_beach",
+            "image": "rfa_mounts_bay",
             "name": "Omaha Beach",
             "location": [
                 49.37,
@@ -206,6 +207,7 @@ module.exports = {
         },
         {
             "id": "utah_beach",
+            "image": "rfa_mounts_bay",
             "name": "Utah Beach",
             "location": [
                 49.42,
@@ -218,6 +220,7 @@ module.exports = {
         },
         {
             "id": "gold_beach",
+            "image": "rfa_mounts_bay",
             "name": "Gold Beach",
             "location": [
                 49.34,
@@ -230,6 +233,7 @@ module.exports = {
         },
         {
             "id": "juno_beach",
+            "image": "rfa_mounts_bay",
             "name": "Juno Beach",
             "location": [
                 49.33,
@@ -242,6 +246,7 @@ module.exports = {
         },
         {
             "id": "sword_beach",
+            "image": "rfa_mounts_bay",
             "name": "Sword Beach",
             "location": [
                 49.3,
@@ -254,6 +259,7 @@ module.exports = {
         },
         {
             "id": "caen",
+            "image": "generic_deployment",
             "name": "Caen",
             "location": [
                 49.18,
@@ -267,6 +273,7 @@ module.exports = {
         },
         {
             "id": "cherbourg",
+            "image": "ukr_odesa_port",
             "name": "Cherbourg Deep Water Port",
             "location": [
                 49.63,
@@ -279,6 +286,7 @@ module.exports = {
         },
         {
             "id": "pointe_du_hoc",
+            "image": "generic_deployment",
             "name": "Pointe du Hoc",
             "location": [
                 49.39,
@@ -293,6 +301,7 @@ module.exports = {
     "manualActions": [
         {
             "id": "act_allied_naval_barrage",
+            "image": "ev_naval_strike",
             "name": "Request Naval Barrage",
             "description": "Call in heavy offshore bombardment from battleships. Uses significant supply.",
             "initiator": [
@@ -314,6 +323,7 @@ module.exports = {
         },
         {
             "id": "act_axis_release_panzers",
+            "image": "brigade_alpha",
             "name": "Request Panzer Release (Hitler)",
             "description": "Attempt to wake Hitler and get authorization to release the main Panzer reserves.",
             "initiator": [
@@ -328,6 +338,7 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_hitler_wakes",
+            "image": "ev_crisis_cabinet",
                         "weight": 30,
                         "effects": {
                             "scores": {
@@ -338,6 +349,7 @@ module.exports = {
                     },
                     {
                         "id": "ev_hitler_sleeps",
+            "image": "ev_crisis_cabinet",
                         "weight": 70,
                         "effects": {
                             "scores": {
@@ -352,6 +364,7 @@ module.exports = {
     "eventTemplates": [
         {
             "id": "ev_start",
+            "image": "ev_airborne_paratroop_drop",
             "name": "Midnight, June 6",
             "description": "Operation Overlord commences. Airborne pathfinders are dropping in.",
             "location": [
@@ -361,36 +374,43 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_start",
+            "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_omaha_start",
+            "image": "generic_deployment",
                     "delayMs": 270000,
                     "probability": 1
                 },
                 {
                     "id": "th3_carentan_start",
+            "image": "generic_deployment",
                     "delayMs": 450000,
                     "probability": 1
                 },
                 {
                     "id": "ev_endgame_eval",
+            "image": "ev_crisis_cabinet",
                     "delayMs": 600000,
                     "probability": 1
                 },
                 {
                     "id": "ev_luftwaffe_appearance",
+            "image": "ev_bomber_intercept",
                     "delayMs": 400000,
                     "probability": 0.3
                 },
                 {
                     "id": "ev_french_sabotage",
+            "image": "ev_russia_hub_explosion",
                     "delayMs": 200000,
                     "probability": 0.6
                 },
                 {
                     "id": "ev_allied_air_superiority",
+            "image": "typhoon_aircraft",
                     "delayMs": 600000,
                     "probability": 0.9
                 }
@@ -398,6 +418,7 @@ module.exports = {
         },
         {
             "id": "th1_airborne_start",
+            "image": "ev_airborne_paratroop_drop",
             "name": "Airborne Drops Commenced",
             "description": "Paratroopers are landing behind enemy lines.",
             "location": [
@@ -440,16 +461,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_pegasus_gliders",
+            "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th1_axis_confusion",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th1_merville_battery",
+            "image": "act_special_forces",
                     "delayMs": 150000,
                     "probability": 0.8
                 }
@@ -457,6 +481,7 @@ module.exports = {
         },
         {
             "id": "th1_axis_confusion",
+            "image": "generic_deployment",
             "name": "Reports of Paratroopers",
             "description": "Scattered reports of enemy paratroopers in Normandy. Is it a major invasion or a diversion?",
             "location": [
@@ -498,6 +523,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_21st_panzer",
+            "image": "evt_armor_push",
                     "delayMs": 90000,
                     "probability": 0.8
                 }
@@ -505,6 +531,7 @@ module.exports = {
         },
         {
             "id": "th1_pegasus_gliders",
+            "image": "ev_airborne_paratroop_drop",
             "name": "Gliders at Pegasus Bridge",
             "description": "British glider troops have landed directly on the critical bridge over the Caen canal.",
             "location": [
@@ -545,6 +572,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_glider_crash",
+            "image": "ev_airborne_paratroop_drop",
                     "delayMs": 120000,
                     "probability": 0.3
                 }
@@ -552,6 +580,7 @@ module.exports = {
         },
         {
             "id": "th1_21st_panzer",
+            "image": "evt_armor_push",
             "name": "21st Panzer Reacts",
             "description": "Local Axis commanders are requesting permission to commit the 21st Panzer Division against the British airborne.",
             "location": [
@@ -593,16 +622,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_linkup",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.6
                 },
                 {
                     "id": "th1_glider_reinforcements",
+            "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 0.7
                 },
                 {
                     "id": "th1_bayeux_push",
+            "image": "generic_deployment",
                     "delayMs": 240000,
                     "probability": 0.7
                 }
@@ -610,6 +642,7 @@ module.exports = {
         },
         {
             "id": "th1_airborne_linkup",
+            "image": "generic_deployment",
             "name": "Airborne Linkup Delayed",
             "description": "Heavy German resistance is delaying the linkup between the beaches and the airborne troops.",
             "location": [
@@ -625,6 +658,7 @@ module.exports = {
         },
         {
             "id": "th1_glider_reinforcements",
+            "image": "ev_airborne_paratroop_drop",
             "name": "Glider Reinforcements",
             "description": "A second wave of gliders is arriving to reinforce the airborne troops.",
             "location": [
@@ -666,6 +700,7 @@ module.exports = {
         },
         {
             "id": "th2_omaha_start",
+            "image": "generic_deployment",
             "name": "Bloody Omaha",
             "description": "The first waves are hitting Omaha Beach. The bombardment missed the bunkers.",
             "location": [
@@ -731,26 +766,31 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_pointe_du_hoc",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_naval_close_support",
+            "image": "ev_naval_strike",
                     "delayMs": 90000,
                     "probability": 0.8
                 },
                 {
                     "id": "th2_wn62_resistance",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.9
                 },
                 {
                     "id": "th2_vierville_draw",
+            "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.9
                 },
                 {
                     "id": "th2_artillery_spotters",
+            "image": "drone_squad",
                     "delayMs": 150000,
                     "probability": 0.6
                 }
@@ -758,6 +798,7 @@ module.exports = {
         },
         {
             "id": "th2_pointe_du_hoc",
+            "image": "generic_deployment",
             "name": "Scaling Pointe du Hoc",
             "description": "US Rangers are scaling the cliffs to silence heavy coastal guns.",
             "location": [
@@ -792,6 +833,7 @@ module.exports = {
         },
         {
             "id": "th2_naval_close_support",
+            "image": "ev_naval_strike",
             "name": "Destroyers Close In",
             "description": "Allied destroyers are scraping the bottom to provide point-blank fire support on Omaha.",
             "location": [
@@ -808,11 +850,13 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_dog_green_breakout",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.7
                 },
                 {
                     "id": "th2_omaha_ammunition",
+            "image": "ev_logistics_failure",
                     "delayMs": 240000,
                     "probability": 0.7
                 }
@@ -820,6 +864,7 @@ module.exports = {
         },
         {
             "id": "th2_wn62_resistance",
+            "image": "generic_deployment",
             "name": "Widerstandsnest 62",
             "description": "A heavily fortified Axis strongpoint is pouring devastating fire onto the beach.",
             "location": [
@@ -862,6 +907,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_ranger_reinforcements",
+            "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.5
                 }
@@ -869,6 +915,7 @@ module.exports = {
         },
         {
             "id": "th2_dog_green_breakout",
+            "image": "generic_deployment",
             "name": "Breakout at Dog Green",
             "description": "Allied infantry have finally crested the bluffs at Omaha and are infiltrating the German trench networks.",
             "location": [
@@ -885,6 +932,7 @@ module.exports = {
         },
         {
             "id": "th3_carentan_start",
+            "image": "generic_deployment",
             "name": "The Push for Carentan",
             "description": "The Allies must capture Carentan to link Utah and Omaha beaches. The Axis must hold it to keep the beaches divided.",
             "location": [
@@ -938,16 +986,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_flooded_fields",
+            "image": "evt_flood_warning",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th3_counter_attack_carentan",
+            "image": "evt_armor_push",
                     "delayMs": 90000,
                     "probability": 0.6
                 },
                 {
                     "id": "th3_douve_bridges",
+            "image": "ev_bridge_collapse",
                     "delayMs": 150000,
                     "probability": 0.8
                 }
@@ -955,6 +1006,7 @@ module.exports = {
         },
         {
             "id": "th3_flooded_fields",
+            "image": "evt_flood_warning",
             "name": "Flooded Bocage",
             "description": "Rommel ordered the fields around Carentan flooded. The Allies are bogged down.",
             "location": [
@@ -970,6 +1022,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_engineer_assault",
+            "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.8
                 }
@@ -977,6 +1030,7 @@ module.exports = {
         },
         {
             "id": "th3_engineer_assault",
+            "image": "generic_deployment",
             "name": "Combat Engineers",
             "description": "Allied engineers are trying to blow the causeways and drain the fields.",
             "location": [
@@ -1018,6 +1072,7 @@ module.exports = {
         },
         {
             "id": "th3_counter_attack_carentan",
+            "image": "evt_armor_push",
             "name": "17th SS Counter-Attack",
             "description": "The 17th SS Panzergrenadier Division is launching a fierce counter-attack to retake Carentan.",
             "location": [
@@ -1060,11 +1115,13 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_bloody_gulch",
+            "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.7
                 },
                 {
                     "id": "th3_friendly_fire",
+            "image": "ev_kinetic_strike",
                     "delayMs": 210000,
                     "probability": 0.2
                 }
@@ -1072,6 +1129,7 @@ module.exports = {
         },
         {
             "id": "ev_hitler_wakes",
+            "image": "ev_crisis_cabinet",
             "name": "Hitler Authorizes Panzers",
             "description": "Hitler has finally woken up and authorized the release of the Panzer reserves.",
             "location": [
@@ -1081,12 +1139,14 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "ev_panzer_assault",
+            "image": "evt_armor_push",
                     "delayMs": 90000
                 }
             ]
         },
         {
             "id": "ev_hitler_sleeps",
+            "image": "ev_crisis_cabinet",
             "name": "Hitler Sleeps",
             "description": "No one dared wake the Führer. The Panzer reserves remain parked inland.",
             "location": [
@@ -1101,6 +1161,7 @@ module.exports = {
         },
         {
             "id": "ev_panzer_assault",
+            "image": "evt_armor_push",
             "name": "Panzer Counter-Attack!",
             "description": "Axis armored divisions are crashing into the Allied lines!",
             "location": [
@@ -1117,25 +1178,30 @@ module.exports = {
         },
         {
             "id": "ev_endgame_eval",
+            "image": "ev_crisis_cabinet",
             "name": "Nightfall, June 6th",
             "description": "The first day of the invasion comes to a close. Assessing control of the beachhead...",
             "triggerEvents": [
                 {
                     "id": "ev_end_allied_victory",
+            "image": "ev_eu_success",
                     "delayMs": 1000
                 },
                 {
                     "id": "ev_end_axis_victory",
+            "image": "ev_endgame_domestic",
                     "delayMs": 1000
                 },
                 {
                     "id": "ev_end_stalemate",
+            "image": "ev_endgame_culmination",
                     "delayMs": 1000
                 }
             ]
         },
         {
             "id": "ev_end_allied_victory",
+            "image": "ev_eu_success",
             "name": "Allied Breakout",
             "description": "The Allies have secured the beaches and are pushing deep into Normandy. The liberation of Europe has begun.",
             "isEndGame": true,
@@ -1147,6 +1213,7 @@ module.exports = {
         },
         {
             "id": "ev_end_axis_victory",
+            "image": "ev_endgame_domestic",
             "name": "Repelled at the Beaches",
             "description": "The Atlantic Wall held. The Allied forces were thrown back into the sea with heavy losses. Operation Overlord has failed.",
             "isEndGame": true,
@@ -1158,12 +1225,14 @@ module.exports = {
         },
         {
             "id": "ev_end_stalemate",
+            "image": "ev_endgame_culmination",
             "name": "A Bloody Stalemate",
             "description": "The Allies have a tenuous foothold, but the Axis defensive line remains intact. A brutal war of attrition in the bocage country awaits.",
             "isEndGame": true
         },
         {
             "id": "th1_merville_battery",
+            "image": "act_special_forces",
             "name": "The Merville Battery",
             "description": "British paratroopers must assault heavily fortified gun emplacements threatening Sword Beach.",
             "location": [
@@ -1205,6 +1274,7 @@ module.exports = {
         },
         {
             "id": "th1_bayeux_push",
+            "image": "generic_deployment",
             "name": "Advance on Bayeux",
             "description": "Elements of the 50th Infantry Division are making a rapid push towards Bayeux.",
             "location": [
@@ -1242,6 +1312,7 @@ module.exports = {
         },
         {
             "id": "th1_glider_crash",
+            "image": "ev_airborne_paratroop_drop",
             "name": "Glider LZ Compromised",
             "description": "Rommel's Asparagus (anti-glider poles) have decimated a wave of incoming gliders.",
             "location": [
@@ -1257,6 +1328,7 @@ module.exports = {
         },
         {
             "id": "th2_vierville_draw",
+            "image": "generic_deployment",
             "name": "Assault on Vierville Draw",
             "description": "The 29th Infantry is attempting to blast through the heavily defended draw at Vierville-sur-Mer.",
             "location": [
@@ -1284,6 +1356,7 @@ module.exports = {
         },
         {
             "id": "th2_omaha_ammunition",
+            "image": "ev_logistics_failure",
             "name": "Ammunition Shortage on Omaha",
             "description": "Troops pinned on the shingle are running critically low on ammunition.",
             "location": [
@@ -1325,6 +1398,7 @@ module.exports = {
         },
         {
             "id": "th2_artillery_spotters",
+            "image": "drone_squad",
             "name": "Axis Artillery Spotters",
             "description": "Hidden German observers are directing devastating artillery fire onto the beaches.",
             "location": [
@@ -1360,6 +1434,7 @@ module.exports = {
         },
         {
             "id": "th2_ranger_reinforcements",
+            "image": "generic_deployment",
             "name": "Rangers Diverted",
             "description": "Ranger battalions meant for Pointe du Hoc are landing on Omaha to reinforce the line.",
             "location": [
@@ -1375,6 +1450,7 @@ module.exports = {
         },
         {
             "id": "th3_douve_bridges",
+            "image": "ev_bridge_collapse",
             "name": "The Douve River Bridges",
             "description": "Crucial bridges over the Douve river are wired with explosives. The Allies must capture them intact.",
             "location": [
@@ -1412,6 +1488,7 @@ module.exports = {
         },
         {
             "id": "th3_bloody_gulch",
+            "image": "generic_deployment",
             "name": "Battle of Bloody Gulch",
             "description": "Elements of the 17th SS are launching a massive armored attack against the 101st Airborne outside Carentan.",
             "location": [
@@ -1439,6 +1516,7 @@ module.exports = {
         },
         {
             "id": "th3_friendly_fire",
+            "image": "ev_kinetic_strike",
             "name": "Friendly Fire Incident",
             "description": "Allied bombers have accidentally struck friendly positions near Carentan.",
             "location": [
@@ -1454,6 +1532,7 @@ module.exports = {
         },
         {
             "id": "ev_luftwaffe_appearance",
+            "image": "ev_bomber_intercept",
             "name": "Luftwaffe Sortie",
             "description": "Two Fw 190s make a strafing run down the beaches. A rare sight today.",
             "location": [
@@ -1468,6 +1547,7 @@ module.exports = {
         },
         {
             "id": "ev_french_sabotage",
+            "image": "ev_russia_hub_explosion",
             "name": "Rail Network Sabotaged",
             "description": "The Resistance has blown key rail lines, delaying Axis reinforcements.",
             "location": [
@@ -1482,6 +1562,7 @@ module.exports = {
         },
         {
             "id": "ev_allied_air_superiority",
+            "image": "typhoon_aircraft",
             "name": "Air Supremacy",
             "description": "Allied fighters are dominating the skies, severely restricting Axis daytime movement.",
             "location": [
@@ -1497,6 +1578,7 @@ module.exports = {
         },
         {
             "id": "fac_allied_intel_coup",
+            "image": "ev_strike_options_secured",
             "name": "FACILITATOR: Ultra Intel Coup (Pro-Allied)",
             "description": "Bletchley Park has decrypted vital German deployment orders. This gives the Allies a massive advantage.",
             "requiresUnlock": true,
@@ -1510,6 +1592,7 @@ module.exports = {
         },
         {
             "id": "fac_axis_strategic_reserve",
+            "image": "us_v_corps",
             "name": "FACILITATOR: OKW Releases Reserves (Pro-Axis)",
             "description": "The German High Command has unexpectedly released heavy Panzer and SS reserves directly into the battle.",
             "requiresUnlock": true,
@@ -1523,6 +1606,7 @@ module.exports = {
         },
         {
             "id": "fac_logistics_disaster",
+            "image": "ev_port_damage",
             "name": "FACILITATOR: Mulberry Collapse (Pro-Axis)",
             "description": "A catastrophic structural failure at the artificial harbors has crippled the Allied supply chain.",
             "requiresUnlock": true,
@@ -1535,6 +1619,7 @@ module.exports = {
         },
         {
             "id": "fac_french_uprising",
+            "image": "generic_deployment",
             "name": "FACILITATOR: Maquis General Uprising (Pro-Allied)",
             "description": "The French Resistance has launched a coordinated, massive uprising across Normandy, throwing German rear echelons into chaos.",
             "requiresUnlock": true,

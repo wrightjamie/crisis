@@ -58,14 +58,19 @@ module.exports = {
     },
     variantAxes: [],
     assets: [
-        { id: 'lab_atlanta', name: 'CDC Headquarters', location: [33.7490, -84.3880], state: 'operational', tags: ['research', 'usa'] },
-        { id: 'lab_wuhan', name: 'Wuhan Institute of Virology', location: [30.5928, 114.3055], state: 'operational', tags: ['research', 'china'] },
-        { id: 'lab_oxford', name: 'Oxford Vaccine Group', location: [51.7520, -1.2577], state: 'operational', tags: ['research', 'eu'] },
-        { id: 'hub_mumbai', name: 'Mumbai Transit Hub', location: [19.0760, 72.8777], state: 'operational', tags: ['population', 'global_south'] }
+        { id: 'lab_atlanta',
+            image: 'lab_atlanta', name: 'CDC Headquarters', location: [33.7490, -84.3880], state: 'operational', tags: ['research', 'usa'] },
+        { id: 'lab_wuhan',
+            image: 'lab_wuhan', name: 'Wuhan Institute of Virology', location: [30.5928, 114.3055], state: 'operational', tags: ['research', 'china'] },
+        { id: 'lab_oxford',
+            image: 'lab_oxford', name: 'Oxford Vaccine Group', location: [51.7520, -1.2577], state: 'operational', tags: ['research', 'eu'] },
+        { id: 'hub_mumbai',
+            image: 'hub_mumbai', name: 'Mumbai Transit Hub', location: [19.0760, 72.8777], state: 'operational', tags: ['population', 'global_south'] }
     ],
     eventTemplates: [
         {
             id: 'ev_outbreak_start',
+            image: 'ev_outbreak_start',
             name: 'Patient Zero Identified',
             description: 'The WHO has officially declared Strain Omega a Public Health Emergency of International Concern. Global travel is accelerating the spread.',
             location: [46.2044, 6.1432], // Geneva (WHO)
@@ -96,14 +101,19 @@ module.exports = {
                 }
             ],
             triggerEvents: [
-                { id: 'ev_research_breakthrough', delayMs: 120000 },
-                { id: 'ev_supply_chain_collapse', delayMs: 240000 },
-                { id: 'ev_vaccine_hoarding', delayMs: 360000 },
-                { id: 'ev_endgame_eval', delayMs: 600000 }
+                { id: 'ev_research_breakthrough',
+            image: 'generic_cyber', delayMs: 120000 },
+                { id: 'ev_supply_chain_collapse',
+            image: 'ev_logistics_failure', delayMs: 240000 },
+                { id: 'ev_vaccine_hoarding',
+            image: 'act_us_support', delayMs: 360000 },
+                { id: 'ev_endgame_eval',
+            image: 'generic_un', delayMs: 600000 }
             ]
         },
         {
             id: 'ev_research_breakthrough',
+            image: 'generic_cyber',
             name: 'Early Sequencing Data',
             description: 'Researchers have mapped the genome, but the data is held by competing national labs.',
             location: [51.7520, -1.2577], // Oxford
@@ -138,6 +148,7 @@ module.exports = {
         },
         {
             id: 'ev_supply_chain_collapse',
+            image: 'ev_logistics_failure',
             name: 'Global Supply Chain Critical',
             description: 'Lockdowns are disrupting the flow of PPE and basic medical supplies.',
             location: [19.0760, 72.8777], // Mumbai
@@ -162,6 +173,7 @@ module.exports = {
         },
         {
             id: 'ev_vaccine_hoarding',
+            image: 'act_us_support',
             name: 'Vaccine Nationalism',
             description: 'The first viable vaccines are entering production, but demand vastly outstrips supply.',
             location: [33.7490, -84.3880], // Atlanta
@@ -186,16 +198,21 @@ module.exports = {
         },
         {
             id: 'ev_endgame_eval',
+            image: 'generic_un',
             name: 'The Aftermath',
             description: 'The initial acute phase of the pandemic is over. Evaluating global survival...',
             triggerEvents: [
-                { id: 'ev_end_collapse', delayMs: 1000 },
-                { id: 'ev_end_cooperation', delayMs: 1000 },
-                { id: 'ev_end_fractured', delayMs: 1000 }
+                { id: 'ev_end_collapse',
+            image: 'ev_endgame_domestic', delayMs: 1000 },
+                { id: 'ev_end_cooperation',
+            image: 'ev_eu_success', delayMs: 1000 },
+                { id: 'ev_end_fractured',
+            image: 'ev_eu_fail', delayMs: 1000 }
             ]
         },
         {
             id: 'ev_end_collapse',
+            image: 'ev_endgame_domestic',
             name: 'Global Collapse',
             description: 'Selfishness and lack of coordination doomed humanity. The virus mutated faster than research could keep up. Economies are in ruins, and public order has disintegrated worldwide.',
             isEndGame: true,
@@ -203,6 +220,7 @@ module.exports = {
         },
         {
             id: 'ev_end_cooperation',
+            image: 'ev_eu_success',
             name: 'A Triumph of Humanity',
             description: 'Despite immense pressure, nations worked together. Data was shared, supply chains were maintained, and a cure was found and distributed equitably. The world survived together.',
             isEndGame: true,
@@ -210,6 +228,7 @@ module.exports = {
         },
         {
             id: 'ev_end_fractured',
+            image: 'ev_eu_fail',
             name: 'A Fractured World',
             description: 'The virus was contained, but the cost was profound. Vaccine hoarding and economic warfare have created deep global divides. The cure exists, but only for those who could afford to take it by force.',
             isEndGame: true,
