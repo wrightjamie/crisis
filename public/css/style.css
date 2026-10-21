@@ -766,7 +766,7 @@ body:has(dialog[open]) {
 .text-md { font-size: var(--text-md); }
 .text-lg { font-size: var(--text-lg); }
 .uppercase { text-transform: uppercase; }
-.d-none { display: none !important; }
+.d-none { display: none; }
 
 /* Spacing Utilities */
 .m-0 { margin: 0; }
@@ -910,12 +910,12 @@ body:has(dialog[open]) {
 .scenario-stage-content { padding: var(--space-md); background: var(--bg-primary); }
 
 /* Utility Classes */
-.d-block { display: block !important; }
-.d-none { display: none !important; }
-.d-flex { display: flex !important; }
+.d-block { display: block; }
+.d-none { display: none; }
+.d-flex { display: flex; }
 
 /* Utility Classes */
-.d-none { display: none !important; }
+.d-none { display: none; }
 .d-flex { display: flex; }
 .d-flex-col { display: flex; flex-direction: column; }
 .align-center { align-items: center; }

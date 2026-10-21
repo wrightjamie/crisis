@@ -21,8 +21,8 @@
             <div class="flex-column gap-2 items-center join-form-group">
                 <input type="text" id="join-game-id" class="form-control text-center text-lg w-100 uppercase" placeholder="e.g. 1234" maxlength="4">
                 <button id="btn-join-game" class="btn btn-primary w-100">Join Game</button>
-            </div>            </div>
-            <p id="join-error" class="text-red mt-2 d-none"></p>
+            </div>
+            <p id="join-error" class="text-red mt-2" style="display: none;"></p>
         </div>
     </dialog>
 
@@ -67,12 +67,12 @@
         </div>
     </dialog>
 
-    <div id="app" class="d-none">
+    <div id="app" style="display: none;">
         <!-- Top Bar -->
         <header class="top-bar">
             <div id="role-display" class="role-badge">Loading...</div>
             <div class="flex-center gap-1">
-                <button id="btn-actions" class="btn btn-secondary relative">Actions<span id="actions-badge" class="nav-badge d-none">!</span></button>
+                <button id="btn-actions" class="btn btn-secondary relative">Actions<span id="actions-badge" class="nav-badge" style="display: none;">!</span></button>
                 <button id="btn-wiki" class="btn btn-secondary">Wiki</button>
                 <button id="btn-ai-briefing" class="btn btn-primary client-scenario-btn">
                     Intelligence Briefing
@@ -104,7 +104,7 @@
         <div class="holding-content text-center scenario-modal">
             <h1 id="endgame-title" class="text-red mb-2" >SIMULATION TERMINATED</h1>
             <p id="endgame-desc" class="text-lg text-secondary mb-3" ></p>
-            <div id="endgame-role-desc" class="card bg-red-faded border-red p-2 mb-2 d-none" ></div>
+            <div id="endgame-role-desc" class="card bg-red-faded border-red p-2 mb-2" style="display: none;"></div>
             <p class="text-muted mt-3">Awaiting facilitator reset...</p>
         </div>
     </dialog>

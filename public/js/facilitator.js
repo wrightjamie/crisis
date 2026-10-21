@@ -25,14 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const facilitatorView = document.getElementById('facilitator-view');
 
     if (gameId) {
+        dashboardView.classList.add('d-none');
         dashboardView.style.display = 'none';
+        facilitatorView.classList.remove('d-none');
         facilitatorView.style.display = 'block';
         document.getElementById('fac-game-id-display').textContent = gameId;
         socket.emit('join_game', gameId);
 
         socket.emit('register_role', 'facilitator');
     } else {
+        dashboardView.classList.remove('d-none');
         dashboardView.style.display = 'block';
+        facilitatorView.classList.add('d-none');
         facilitatorView.style.display = 'none';
         socket.emit('request_dashboard_data');
     }
