@@ -204,6 +204,8 @@ body {
 
 /* Form Controls */
 .form-control {
+  box-sizing: border-box;
+  height: 38px;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -598,7 +600,7 @@ body:has(dialog[open]) {
 #dashboard-view .facilitator-container, .fac-dashboard-wrapper { max-width: 640px; margin: 0 auto; }
 .fac-dashboard-grid { display: flex; flex-direction: column; gap: var(--space-md); width: 100%; }
 .fac-dashboard-grid .admin-card { background-color: var(--bg-tertiary); border: 1px solid var(--border-color); padding: 1.25rem; margin-bottom: 0; }
-.btn-icon-square { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; min-width: 42px; padding: 0; flex-shrink: 0; }
+.btn-icon-square { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; min-width: 38px; padding: 0; flex-shrink: 0; box-sizing: border-box; }
 .btn-icon-square svg { width: 20px; height: 20px; display: block; }
 .dead-games-grid { opacity: 0.7; }
 .fac-badge-online { background-color: var(--status-1); color: var(--text-primary); font-size: var(--text-xs); padding: var(--space-xs) var(--space-sm); }
@@ -729,7 +731,8 @@ body:has(dialog[open]) {
 .flex-row { display: flex; flex-direction: row; }
 .flex-col, .flex-column, .d-flex-col { display: flex; flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
-.flex-1 { flex: 1; }
+.flex-1 { flex: 1; min-width: 0; }
+.min-w-0 { min-width: 0; }
 .flex-2 { flex: 2; }
 .flex-center { display: flex; align-items: center; justify-content: center; }
 .flex-between { display: flex; align-items: center; justify-content: space-between; }

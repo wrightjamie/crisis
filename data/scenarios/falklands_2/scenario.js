@@ -11,7 +11,6 @@ module.exports = {
         uk_commander: 'UK Task Force Commander'
     },
     minUsers: 1,
-    autoStartEvent: 'ev_start',
     mandatoryRoles: ['uk_commander'],
     initialScores: {
         uk_public_support: 3,

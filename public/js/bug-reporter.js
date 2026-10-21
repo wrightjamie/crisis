@@ -423,6 +423,10 @@
         // Sync Facilitator Dashboard controls if present
         const dashToggle = document.getElementById('toggle-bug-system-dashboard');
         const dashStatus = document.getElementById('bug-system-status-dashboard');
+        const dashDetails = document.getElementById('bug-system-dashboard-details');
+        if (dashDetails) {
+            dashDetails.style.display = isEnabled ? 'flex' : 'none';
+        }
         if (dashToggle) dashToggle.checked = isEnabled;
         if (dashStatus) {
             dashStatus.textContent = isEnabled ? 'Enabled (Active)' : 'Disabled';

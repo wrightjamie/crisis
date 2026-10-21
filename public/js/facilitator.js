@@ -81,6 +81,33 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `?game=${newId}`;
     });
 
+    socket.on('game_not_found', () => {
+        const dashboardView = document.getElementById('dashboard-view');
+        const facilitatorView = document.getElementById('facilitator-view');
+
+        if (facilitatorView) {
+            facilitatorView.classList.add('d-none');
+            facilitatorView.style.display = 'none';
+        }
+        if (dashboardView) {
+            dashboardView.classList.remove('d-none');
+            dashboardView.style.display = 'block';
+        }
+
+        try {
+            window.history.replaceState(null, '', window.location.pathname);
+        } catch (e) {}
+        gameId = null;
+
+        const createError = document.getElementById('create-error');
+        if (createError) {
+            createError.textContent = 'Game not found. You have been redirected to the dashboard.';
+            createError.style.display = 'block';
+        }
+
+        socket.emit('request_dashboard_data');
+    });
+
     socket.on('dashboard_error', (msg) => {
         if (document.getElementById('create-error')) {
             document.getElementById('create-error').textContent = msg;
@@ -152,17 +179,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkAICore = setInterval(() => {
         if (window.AICore) {
             clearInterval(checkAICore);
-            aiStatusText.textContent = "Loading AI...";
+            aiStatusText.textContent = "LOAD"; aiStatusText.style.color = "var(--accent-orange)";
             aiStatusDot.style.background = "var(--accent-orange)";
             
             window.AICore.init((report) => {
-                aiStatusText.textContent = `Loading AI (${Math.round(report.progress * 100)}%)`;
+                aiStatusText.textContent = "LOAD";
             }).then(() => {
-                aiStatusText.textContent = "AI Ready";
+                aiStatusText.textContent = "READY"; aiStatusText.style.color = "var(--accent-green)";
                 aiStatusDot.style.background = "var(--status-1)";
                 processAiQueue(); // Process any queued events that arrived before engine was ready
             }).catch(e => {
-                aiStatusText.textContent = "AI Error";
+                aiStatusText.textContent = "ERR"; aiStatusText.style.color = "var(--accent-red)";
                 aiStatusDot.style.background = "var(--accent-red)";
                 console.error(e);
             });
@@ -288,7 +315,7 @@ async function processAiQueue() {
     const aiStatusText = document.getElementById('ai-status-text');
     const aiStatusDot = document.getElementById('ai-status-dot');
     
-    if (aiStatusText) aiStatusText.textContent = `AI Generating (${task.role})...`;
+    if (aiStatusText) { aiStatusText.textContent = "BUSY"; aiStatusText.style.color = "var(--accent-blue)"; }
     if (aiStatusDot) {
         aiStatusDot.style.background = "var(--accent-blue)";
         aiStatusDot.classList.add('ai-active-dot');
@@ -326,7 +353,7 @@ async function processAiQueue() {
         console.error("AI Generation failed for role:", task.role, e);
     }
 
-    if (aiStatusText) aiStatusText.textContent = "AI Ready";
+    if (aiStatusText) { aiStatusText.textContent = "READY"; aiStatusText.style.color = "var(--accent-green)"; }
     if (aiStatusDot) {
         aiStatusDot.style.background = "var(--status-1)";
         aiStatusDot.classList.remove('ai-active-dot');
@@ -502,6 +529,7 @@ function handleState(state) {
         if (holdingEl.open) holdingEl.close();
         if (!lobbyEl.open) lobbyEl.showModal();
         currentState = state;
+    updateAiStatusUI();
         if (state.scenarioConfig && state.scenarioConfig.roles) {
             scenarioRoles = state.scenarioConfig.roles;
         }
