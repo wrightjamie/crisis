@@ -578,12 +578,7 @@ function renderHoldingScreen() {
     // Reset details panel
     if (detailsPanel) {
         detailsPanel.innerHTML = '<p class="text-secondary text-lg">Select a scenario to view details</p>';
-        detailsPanel.style.display = 'flex';
-        detailsPanel.style.flexDirection = 'column';
-        detailsPanel.style.justifyContent = 'center';
-        detailsPanel.style.alignItems = 'center';
-        detailsPanel.style.textAlign = 'center';
-        detailsPanel.className = 'admin-card';
+        detailsPanel.className = 'admin-card fac-holding-details';
     }
 
     let visibleCount = 0;
@@ -651,14 +646,13 @@ function renderScenarioDetails(scenarioId) {
     const s = availableScenarios.find(x => x.id === scenarioId);
     if (!s) return;
 
-    detailsPanel.style.display = 'block';
-    detailsPanel.style.textAlign = 'left';
+    detailsPanel.className = 'admin-card fac-holding-details fac-holding-details-active';
 
     let guideHtml = '';
     if (s.guideUrl) {
         guideHtml = `
             <div class="mb-2">
-                <a href="${s.guideUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary text-sm" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <a href="${s.guideUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary text-sm inline-flex items-center gap-sm text-decoration-none">
                     <span>📄</span> Open Instructor & Player Guide (Print Pack)
                 </a>
             </div>
