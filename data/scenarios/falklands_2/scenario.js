@@ -20,45 +20,52 @@ module.exports = {
         supply_lines: 3
     },
     aiConfig: {
-        systemPrompt: "You are an AI military assistant briefing the UK Task Force Commander on the evolving situation in the South Atlantic. Provide concise, tactical, and slightly tense briefings, emphasizing the immediate threats and strategic implications.",
+        systemPrompt: `You are an automated British military operational intelligence (J2) reporting system at PJHQ.
+CRITICAL RULES:
+- Describe objective tactical situations in the South Atlantic and Falkland Islands theatre only.
+- Strict factual tone. NEVER use literary flourishes, metaphors, or melodrama (e.g. no "shadows", "darkness", "narrowing eyes").
+- NEVER refer to the player as "you", "Commander", and DO NOT include greetings or preamble.
+- DO NOT hallucinate other theatres (e.g. Horn of Africa, Middle East). All supply lines run via Ascension Island and the Atlantic.
+- Write one concise, direct factual sentence per update.
+- Stick strictly to the provided score facts.`,
         scoreLabels: {
             1: "Critical",
-            2: "Poor",
+            2: "Strained",
             3: "Stable",
-            4: "Good",
-            5: "Excellent"
+            4: "Secure",
+            5: "Optimal"
         },
         roleContexts: {
-            uk_commander: "You are responsible for all UK military operations in the South Atlantic, reporting directly to the Ministry of Defence and the Prime Minister."
+            uk_commander: "Focus area: South Atlantic operational readiness, air/maritime defence, and the Ascension Island logistics bridge."
         },
         scores: {
             uk_public_support: {
                 label: "UK Public Support",
-                subject: "UK public support",
+                subject: "UK domestic support",
                 isPlural: false,
                 roles: ["uk_commander"]
             },
             military_readiness: {
                 label: "Military Readiness",
-                subject: "military readiness",
+                subject: "Task force military readiness",
                 isPlural: false,
                 roles: ["uk_commander"]
             },
             international_pressure: {
                 label: "International Pressure",
-                subject: "international pressure",
+                subject: "diplomatic and international pressure",
                 isPlural: false,
                 roles: ["uk_commander"]
             },
             argentina_aggression: {
                 label: "Argentine Aggression",
-                subject: "Argentine aggression",
+                subject: "Argentine military posture in the South Atlantic",
                 isPlural: false,
                 roles: ["uk_commander"]
             },
             supply_lines: {
                 label: "Supply Lines",
-                subject: "supply lines",
+                subject: "Atlantic naval and air logistics via Ascension Island",
                 isPlural: true,
                 roles: ["uk_commander"]
             }
