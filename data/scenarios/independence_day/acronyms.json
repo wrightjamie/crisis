@@ -1,22 +1,46 @@
 {
     "UN": {
         "definition": "United Nations",
-        "wiki": "An intergovernmental organization whose stated purposes are to maintain international peace and security."
+        "wiki": "An intergovernmental organization whose stated purposes are to maintain international peace and security and coordinate planetary diplomatic communications."
     },
     "DEFCON": {
         "definition": "Defense Readiness Condition",
-        "wiki": "An alert state used by the United States Armed Forces. DEFCON 1 is maximum readiness, meaning nuclear war is imminent or has already started."
+        "wiki": "An alert state used by the United States Armed Forces. DEFCON 1 represents maximum readiness, indicating immediate imminent global conflict."
     },
     "USA": {
         "definition": "United States of America",
-        "wiki": "The world's foremost economic and military superpower."
+        "wiki": "The foremost economic and military superpower, mobilizing global armed forces in response to the extraterrestrial invasion."
     },
     "EU": {
         "definition": "European Union",
-        "wiki": "A political and economic union of 27 member states that are located primarily in Europe."
+        "wiki": "A political and economic union of 27 member states located primarily in Europe, coordinating continental civil defence and air response."
     },
     "UK": {
         "definition": "United Kingdom",
-        "wiki": "A sovereign country in Europe, off the north-western coast of the continental mainland."
+        "wiki": "A sovereign country in Europe operating key Royal Air Force radar facilities and early-warning listening posts across the North Atlantic."
+    },
+    "NORAD": {
+        "definition": "North American Aerospace Defense Command",
+        "wiki": "The combined United States and Canadian organization that provides aerospace warning, air sovereignty, and defense for Northern America, tracking extraterrestrial craft approaching planetary orbit."
+    },
+    "POTUS": {
+        "definition": "President of the United States",
+        "wiki": "The Commander-in-Chief of the US Armed Forces, responsible for authorizing nuclear launches, alien counter-strikes, and national emergency mobilizations."
+    },
+    "Area 51": {
+        "definition": "Homey Airport / Groom Lake Secret Testing Facility",
+        "wiki": "A highly classified United States Air Force facility within the Nevada Test and Training Range, long rumored to conceal captured extraterrestrial technology and wreckage."
+    },
+    "EMP": {
+        "definition": "Electromagnetic Pulse",
+        "wiki": "Intense bursts of electromagnetic radiation capable of incapacitating terrestrial electrical networks, aircraft avionics, and telecommunications satellites."
+    },
+    "USAF": {
+        "definition": "United States Air Force",
+        "wiki": "The aerial warfare branch of the US Armed Forces, deploying advanced combat jets (such as F-18s, F-15s, and F-22s) to engage extraterrestrial city-destroyer craft."
+    },
+    "ICBM": {
+        "definition": "Intercontinental Ballistic Missile",
+        "wiki": "Land-based, rocket-propelled strategic ballistic missiles capable of delivering thermonuclear warheads against global and high-altitude targets."
     }
 }

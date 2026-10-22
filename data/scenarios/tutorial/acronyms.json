@@ -1,7 +1,22 @@
 {
-    "FEMA": "Federal Emergency Management Agency",
-    "EMS": "Emergency Medical Services",
-    "EOC": "Emergency Operations Center",
-    "CERT": "Community Emergency Response Team",
-    "SAR": "Search and Rescue"
+    "FEMA": {
+        "definition": "Federal Emergency Management Agency",
+        "wiki": "An agency of the United States Department of Homeland Security responsible for coordinating federal disaster response, resource allocation, and civil recovery efforts."
+    },
+    "EMS": {
+        "definition": "Emergency Medical Services",
+        "wiki": "Frontline emergency medical and paramedic teams dedicated to providing urgent out-of-hospital medical care, triage, and rapid transport to definitive care facilities."
+    },
+    "EOC": {
+        "definition": "Emergency Operations Center",
+        "wiki": "A central command and control facility responsible for carrying out emergency management and disaster coordination functions at an operational and tactical level."
+    },
+    "CERT": {
+        "definition": "Community Emergency Response Team",
+        "wiki": "Trained volunteer civilian teams educated in basic disaster response skills, including fire safety, light search and rescue, team organization, and disaster medical operations."
+    },
+    "SAR": {
+        "definition": "Search and Rescue",
+        "wiki": "The search for and provision of aid to people who are in distress, imminent danger, or trapped in disaster zones, collapsed structures, or hazardous environments."
+    }
 }

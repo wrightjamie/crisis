@@ -76,7 +76,8 @@ module.exports = {
             name: 'RAF Ascension Island',
             location: [-7.946, -14.371],
             state: 'operational',
-            tags: ['military', 'airbase']
+            tags: ['military', 'airbase'],
+            briefing: 'RAF Ascension Island (Wideawake Airfield) is a vital mid-Atlantic forward staging post situated 4,000 miles from the UK and 3,700 miles from the Falklands. It provides the essential runway, fuel bunkering, and staging facilities required to maintain the South Atlantic air and naval supply bridge.'
         },
         {
             id: 'mount_pleasant',
@@ -84,7 +85,8 @@ module.exports = {
             name: 'RAF Mount Pleasant',
             location: [-51.823, -58.447],
             state: 'operational',
-            tags: ['military', 'airbase']
+            tags: ['military', 'airbase'],
+            briefing: 'RAF Mount Pleasant is the strategic headquarters and main operating base for British Forces South Atlantic Islands (BFSAI) on East Falkland. Featuring hardened aircraft shelters, early-warning radar arrays, and extensive runway infrastructure, it serves as the linchpin for island defence and rapid reinforcement.'
         },
         {
             id: 'port_stanley',
@@ -92,7 +94,8 @@ module.exports = {
             name: 'Port Stanley',
             location: [-51.692, -57.858],
             state: 'operational',
-            tags: ['civilian', 'capital']
+            tags: ['civilian', 'capital'],
+            briefing: 'Port Stanley is the capital, administrative centre, and principal civilian port of the Falkland Islands. Housing the colonial government seat, key communications nodes, and headquarters of the volunteer Falkland Islands Defence Force (FIDF), defending Stanley is politically and strategically paramount.'
         },
         {
             id: 'rio_gallegos',
@@ -100,7 +103,8 @@ module.exports = {
             name: 'Rio Gallegos Air Base (Arg)',
             location: [-51.609, -69.289],
             state: 'operational',
-            tags: ['military', 'airbase']
+            tags: ['military', 'airbase'],
+            briefing: 'Base Aérea Militar Río Gallegos is the primary southern mainland operating base for the Argentine Air Force (Fuerza Aérea Argentina) in Santa Cruz province. Located within combat radius of the Falklands, it hosts strike squadrons capable of launching anti-shipping and low-level island bombing runs.'
         },
         {
             id: 'rio_grande',
@@ -108,7 +112,8 @@ module.exports = {
             name: 'Rio Grande Air Base (Arg)',
             location: [-53.777, -67.755],
             state: 'operational',
-            tags: ['military', 'airbase']
+            tags: ['military', 'airbase'],
+            briefing: 'Base Aeronaval Río Grande (Hermes Quijada) is a strategic Argentine Naval Aviation (COAN) base in Tierra del Fuego. Historically the launch point for deadly Super Étendard and Exocet anti-ship missile strikes against the Royal Navy task force, it represents a potent maritime strike threat.'
         },
         {
             id: 'hms_defender',
@@ -116,7 +121,8 @@ module.exports = {
             name: 'HMS Defender (Type 45)',
             location: [-51.4, -57.5],
             state: 'operational',
-            tags: ['military', 'naval']
+            tags: ['military', 'naval'],
+            briefing: 'HMS Defender is a Daring-class Type 45 guided missile air-defence destroyer. Equipped with SAMPSON multi-function radar, S1850M long-range surveillance radar, and the Sea Viper (Aster 15 and Aster 30) missile system, she provides an impenetrable air-defence umbrella over the Falklands and surrounding seas.'
         },
         {
             id: 'falklands_typhoons',
@@ -124,7 +130,8 @@ module.exports = {
             name: '1435 Flight (4x Typhoon FGR4)',
             location: [-51.823, -58.447],
             state: 'operational',
-            tags: ['military', 'air']
+            tags: ['military', 'air'],
+            briefing: 'No. 1435 Flight, based permanently at RAF Mount Pleasant, operates four Eurofighter Typhoon FGR4 multi-role combat aircraft. Maintaining 24/7 Quick Reaction Alert (QRA), they are armed with Meteor Beyond-Visual-Range (BVR) and ASRAAM missiles to establish immediate air superiority against incursions.'
         },
         {
             id: 'falklands_helis',
@@ -132,7 +139,8 @@ module.exports = {
             name: '1564 Flight (Chinook/Puma)',
             location: [-51.823, -58.447],
             state: 'operational',
-            tags: ['military', 'air']
+            tags: ['military', 'air'],
+            briefing: 'No. 1564 Flight provides tactical rotary-wing mobility out of RAF Mount Pleasant using Chinook and Puma helicopters. Tasked with intra-theatre troop transport across treacherous peat bog terrain, casualty evacuation (CASEVAC), and radar site resupply, the flight is vital for rapid ground reaction.'
         },
         {
             id: 'falklands_a400m',
@@ -140,7 +148,8 @@ module.exports = {
             name: 'A400M Atlas',
             location: [-51.823, -58.447],
             state: 'operational',
-            tags: ['military', 'air']
+            tags: ['military', 'air'],
+            briefing: 'The Airbus A400M Atlas provides heavy tactical airlift and maritime surveillance for British Forces South Atlantic Islands. Stationed at RAF Mount Pleasant, it performs continuous long-range maritime patrols around the islands and operates regular logistics flights connecting the Falklands to Ascension Island.'
         },
         {
             id: 'ascension_voyager',
@@ -148,7 +157,8 @@ module.exports = {
             name: 'Voyager KC2 (Refueler)',
             location: [-7.946, -14.371],
             state: 'operational',
-            tags: ['military', 'air']
+            tags: ['military', 'air'],
+            briefing: 'The Airbus Voyager KC2 (A330 MRTT) based out of RAF Ascension Island delivers crucial Air-to-Air Refuelling (AAR) and strategic airlift. It refuels fast jets and transport aircraft across the mid-Atlantic gap, overcoming the limitation of impermanence in remote air power projection.'
         }
     ],
     variantAxes: [

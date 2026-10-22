@@ -58,14 +58,42 @@ module.exports = {
     },
     variantAxes: [],
     assets: [
-        { id: 'lab_atlanta',
-            image: 'lab_atlanta', name: 'CDC Headquarters', location: [33.7490, -84.3880], state: 'operational', tags: ['research', 'usa'] },
-        { id: 'lab_wuhan',
-            image: 'lab_wuhan', name: 'Wuhan Institute of Virology', location: [30.5928, 114.3055], state: 'operational', tags: ['research', 'china'] },
-        { id: 'lab_oxford',
-            image: 'lab_oxford', name: 'Oxford Vaccine Group', location: [51.7520, -1.2577], state: 'operational', tags: ['research', 'eu'] },
-        { id: 'hub_mumbai',
-            image: 'hub_mumbai', name: 'Mumbai Transit Hub', location: [19.0760, 72.8777], state: 'operational', tags: ['population', 'global_south'] }
+        {
+            id: 'lab_atlanta',
+            image: 'lab_atlanta',
+            name: 'CDC Headquarters',
+            location: [33.7490, -84.3880],
+            state: 'operational',
+            tags: ['research', 'usa'],
+            briefing: 'The Centers for Disease Control and Prevention headquarters in Atlanta, Georgia. Serving as the United States primary national public health institute, it coordinates national disease surveillance, epidemic modeling, genomic sequencing, and federal emergency health responses.'
+        },
+        {
+            id: 'lab_wuhan',
+            image: 'lab_wuhan',
+            name: 'Wuhan Institute of Virology',
+            location: [30.5928, 114.3055],
+            state: 'operational',
+            tags: ['research', 'china'],
+            briefing: 'A leading high-containment biosafety level 4 (BSL-4) research institute located in Hubei Province, China. Specializing in coronaviruses, pathogen genomics, and diagnostic surveillance across eastern Asia.'
+        },
+        {
+            id: 'lab_oxford',
+            image: 'lab_oxford',
+            name: 'Oxford Vaccine Group',
+            location: [51.7520, -1.2577],
+            state: 'operational',
+            tags: ['research', 'eu'],
+            briefing: 'An academic research group based within the Department of Paediatrics at the University of Oxford. A global leader in clinical trials, rapid adenovirus-vector and recombinant protein vaccine design, and translational immunology.'
+        },
+        {
+            id: 'hub_mumbai',
+            image: 'hub_mumbai',
+            name: 'Mumbai Transit Hub',
+            location: [19.0760, 72.8777],
+            state: 'operational',
+            tags: ['population', 'global_south'],
+            briefing: 'A densely populated multimodal transportation megalopolis connecting major international air, maritime shipping, and domestic rail arteries in Maharashtra, India. A critical barometer for transmission rates across the Global South.'
+        }
     ],
     eventTemplates: [
         {

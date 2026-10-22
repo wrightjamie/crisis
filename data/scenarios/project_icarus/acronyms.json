@@ -1,0 +1,42 @@
+{
+    "SAI": {
+        "definition": "Stratospheric Aerosol Injection",
+        "wiki": "A solar radiation management geoengineering technique designed to spray reflective sulfate or diamond-dust aerosols into the upper stratosphere to mimic volcanic cooling and decrease global surface temperatures."
+    },
+    "SRM": {
+        "definition": "Solar Radiation Management",
+        "wiki": "A theoretical approach to climate engineering that seeks to reflect a small percentage of incoming sunlight back into space to offset greenhouse gas induced warming."
+    },
+    "IPCC": {
+        "definition": "Intergovernmental Panel on Climate Change",
+        "wiki": "The United Nations body for assessing the science related to climate change, producing comprehensive assessment reports on climate risks, adaptation, and mitigation pathways."
+    },
+    "COP": {
+        "definition": "Conference of the Parties (UN Climate Change)",
+        "wiki": "The supreme governing body of the United Nations Framework Convention on Climate Change (UNFCCC), meeting annually to negotiate binding international climate agreements."
+    },
+    "NOAA": {
+        "definition": "National Oceanic and Atmospheric Administration",
+        "wiki": "A scientific agency within the United States Department of Commerce focused on atmospheric conditions, oceanic temperatures, major weather forecasting, and satellite environmental monitoring."
+    },
+    "WMO": {
+        "definition": "World Meteorological Organization",
+        "wiki": "A specialized agency of the United Nations dedicated to international cooperation on atmospheric science, climatology, hydrology, and global geophysical research."
+    },
+    "UNEP": {
+        "definition": "United Nations Environment Programme",
+        "wiki": "The global authority that sets the environmental agenda, promotes coherent implementation of environmental sustainability within the UN system, and advocates for global environmental protection."
+    },
+    "GHG": {
+        "definition": "Greenhouse Gases",
+        "wiki": "Gases in Earth's atmosphere—primarily carbon dioxide, methane, nitrous oxide, and fluorinated gases—that trap heat, causing the greenhouse effect and accelerating planetary warming."
+    },
+    "CDR": {
+        "definition": "Carbon Dioxide Removal",
+        "wiki": "Technologies and natural processes (such as direct air capture, biochar, and enhanced ocean alkalinization) that actively extract carbon dioxide from the atmosphere and durably sequester it."
+    },
+    "CCS": {
+        "definition": "Carbon Capture and Storage",
+        "wiki": "The process of capturing industrial carbon dioxide emissions at point sources, transporting them, and depositing them into secure deep underground geological formations."
+    }
+}

@@ -203,7 +203,8 @@ module.exports = {
             "state": "contested",
             "tags": [
                 "objective"
-            ]
+            ],
+            "briefing": "Omaha Beach was the codename for one of the primary American landing sectors during the Normandy invasion. Heavily defended by entrenched German forces of the 352nd Infantry Division on steep bluffs, the sector witnessed intense fire and high Allied casualties before troops secured the seawall and bluffs."
         },
         {
             "id": "utah_beach",
@@ -216,7 +217,8 @@ module.exports = {
             "state": "contested",
             "tags": [
                 "objective"
-            ]
+            ],
+            "briefing": "Utah Beach was the westernmost Allied landing sector on the Cotentin Peninsula, assaulted by the US 4th Infantry Division supported by airborne drops inland. Troops landed slightly south of their intended zone against lighter resistance, quickly linking up with the 82nd and 101st Airborne Divisions."
         },
         {
             "id": "gold_beach",
@@ -229,7 +231,8 @@ module.exports = {
             "state": "contested",
             "tags": [
                 "objective"
-            ]
+            ],
+            "briefing": "Gold Beach was the centre of the British landing sector, assaulted by the British 50th (Northumbrian) Infantry Division. The objective was to secure a beachhead, capture Arromanches for the Mulberry artificial harbour, and link up with American forces at Omaha and Canadians at Juno."
         },
         {
             "id": "juno_beach",
@@ -242,7 +245,8 @@ module.exports = {
             "state": "contested",
             "tags": [
                 "objective"
-            ]
+            ],
+            "briefing": "Juno Beach was the landing zone assigned to the 3rd Canadian Infantry Division. Facing heavy coastal fortifications and treacherous offshore reefs, Canadian troops broke through German beach defences and advanced further inland on D-Day than any other Allied landing force."
         },
         {
             "id": "sword_beach",
@@ -255,7 +259,8 @@ module.exports = {
             "state": "contested",
             "tags": [
                 "objective"
-            ]
+            ],
+            "briefing": "Sword Beach was the easternmost Allied landing zone, assaulted by the British 3rd Division supported by French Commandos. Located closest to the strategic city of Caen and the vulnerable Allied eastern flank, troops linked up with airborne forces at Pegasus Bridge while repelling early counter-attacks by the 21st Panzer Division."
         },
         {
             "id": "caen",
@@ -269,7 +274,8 @@ module.exports = {
             "tags": [
                 "city",
                 "axis_panzer"
-            ]
+            ],
+            "briefing": "Caen was a critical road and rail communications hub in Normandy, and the primary D-Day objective for British and Canadian forces. Heavily fortified and tenaciously defended by elite German Panzer divisions, the protracted Battle for Caen became an intense war of attrition tying down German armoured reserves."
         },
         {
             "id": "cherbourg",
@@ -282,7 +288,8 @@ module.exports = {
             "state": "axis_controlled",
             "tags": [
                 "logistics"
-            ]
+            ],
+            "briefing": "The deep-water port of Cherbourg at the northern tip of the Cotentin Peninsula was vital for sustaining the Allied advance across northwestern Europe. Allied logistics critically depended on capturing its deep berths intact to land heavy armour, fuel, and supplies directly from ocean transports."
         },
         {
             "id": "pointe_du_hoc",
@@ -295,7 +302,8 @@ module.exports = {
             "state": "axis_controlled",
             "tags": [
                 "artillery"
-            ]
+            ],
+            "briefing": "Pointe du Hoc is a prominent 100-foot cliff overlooking the English Channel between Utah and Omaha beaches. Believed to host heavy German artillery capable of devastating both American landing sectors, it was assaulted by the US 2nd Ranger Battalion in an iconic cliff assault using ropes and grappling ladders."
         }
     ],
     "manualActions": [

@@ -66,5 +66,65 @@
     "CDS": {
         "definition": "Chief of the Defence Staff - The professional head of the British Armed Forces",
         "wiki": "The professional head of the British Armed Forces and the most senior uniformed military adviser to the Secretary of State for Defence and the Prime Minister."
+    },
+    "PM": {
+        "definition": "Prime Minister",
+        "wiki": "The head of the UK Government, ultimate decision-maker in national emergencies, and chair of the National Security Council and senior COBRA meetings."
+    },
+    "RAF": {
+        "definition": "Royal Air Force",
+        "wiki": "The United Kingdom's air and space warfare service, responsible for air defence, strategic and tactical mobility, intelligence gathering, and precision strike capabilities."
+    },
+    "HMS": {
+        "definition": "Her Majesty's Ship (or His Majesty's Ship)",
+        "wiki": "The official ship prefix used for naval vessels in the Royal Navy of the United Kingdom."
+    },
+    "HMNB": {
+        "definition": "Her Majesty's Naval Base",
+        "wiki": "Designation for primary operating naval bases in the United Kingdom, including HMNB Clyde (Faslane/Coulport, home of the UK nuclear deterrent), Portsmouth, and Devonport."
+    },
+    "QRA": {
+        "definition": "Quick Reaction Alert",
+        "wiki": "State of readiness maintained 24/7 by RAF Typhoon fighter jets and aircrew at RAF Coningsby and RAF Lossiemouth to scramble within minutes and intercept unidentified or hostile aircraft approaching UK airspace."
+    },
+    "ASW": {
+        "definition": "Anti-Submarine Warfare",
+        "wiki": "Branch of naval warfare using surface warships, attack submarines, sonobuoys, and maritime patrol aircraft (such as the P-8A Poseidon) to locate, track, and counter hostile submarines."
+    },
+    "GIUK": {
+        "definition": "Greenland, Iceland, and United Kingdom Gap",
+        "wiki": "A strategic naval chokepoint in the northern Atlantic Ocean through which Russian naval vessels and submarines based in the Northern Fleet must pass to access the open Atlantic."
+    },
+    "CASD": {
+        "definition": "Continuous At-Sea Deterrence",
+        "wiki": "Operation Relentless: the UK's continuous submarine patrol posture maintained without interruption since April 1969, ensuring at least one Royal Navy Vanguard-class ballistic missile submarine armed with Trident missiles is undetected at sea."
+    },
+    "MACA": {
+        "definition": "Military Aid to the Civil Authorities",
+        "wiki": "Operational framework under which the UK Armed Forces provide support and resources to civil authorities, police, or local government during emergencies, disaster relief, or major security disruptions."
+    },
+    "GRU": {
+        "definition": "Glavnoye Razvedyvatelnoye Upravleniye (Russian Military Intelligence)",
+        "wiki": "The foreign military intelligence agency of the General Staff of the Armed Forces of the Russian Federation, conducting covert operations, signals intelligence, sabotage, and cyber warfare."
+    },
+    "JEF": {
+        "definition": "Joint Expeditionary Force",
+        "wiki": "A UK-led multinational military framework comprising ten northern European nations (UK, Denmark, Estonia, Finland, Iceland, Latvia, Lithuania, Netherlands, Norway, Sweden) designed for rapid response to regional crises."
+    },
+    "GPS": {
+        "definition": "Global Positioning System",
+        "wiki": "A satellite-based radio navigation system owned and operated by the United States Space Force, critical for civilian navigation and military precision guidance."
+    },
+    "EU": {
+        "definition": "European Union",
+        "wiki": "A supranational political and economic union of European nations with close security, trade, and diplomatic ties to the United Kingdom."
+    },
+    "SSN": {
+        "definition": "Nuclear-Powered Attack Submarine",
+        "wiki": "General-purpose attack submarines powered by nuclear reactors (such as the Royal Navy's Astute-class), specialized in hunting enemy surface vessels and submarines, land-attack missile strikes, and covert intelligence collection."
+    },
+    "EEZ": {
+        "definition": "Exclusive Economic Zone",
+        "wiki": "An area of the sea in which a sovereign state has special rights regarding the exploration and use of marine resources, extending up to 200 nautical miles from its coastal baseline."
     }
 }

@@ -26,7 +26,7 @@ function applyVariantsToScenario(scenario, selectedVariants, scores, assets, sel
             option.assetModifiers.forEach(modAsset => {
                 const existingIdx = assets.findIndex(a => a.id === modAsset.id);
                 if (existingIdx !== -1) {
-                    assets[existingIdx] = JSON.parse(JSON.stringify(modAsset));
+                    assets[existingIdx] = { ...assets[existingIdx], ...JSON.parse(JSON.stringify(modAsset)) };
                 } else {
                     assets.push(JSON.parse(JSON.stringify(modAsset)));
                 }

@@ -1,0 +1,62 @@
+{
+    "EXCOMM": {
+        "definition": "Executive Committee of the National Security Council",
+        "wiki": "The top-secret council of United States government officials convened by President John F. Kennedy in October 1962 to advise him during the Cuban Missile Crisis."
+    },
+    "MRBM": {
+        "definition": "Medium-Range Ballistic Missile",
+        "wiki": "Theater ballistic missiles with ranges between 1,000 and 3,000 km (such as the Soviet R-12 Dvina deployed to Cuba), capable of striking Washington D.C. and major US cities within minutes of launch."
+    },
+    "IRBM": {
+        "definition": "Intermediate-Range Ballistic Missile",
+        "wiki": "Ballistic missiles with ranges between 3,000 and 5,500 km (such as the Soviet R-14 Chusovaya scheduled for Cuba and US Jupiter missiles stationed in Turkey and Italy)."
+    },
+    "DEFCON": {
+        "definition": "Defense Readiness Condition",
+        "wiki": "The five-tier alert posture used by the United States Armed Forces. During the crisis, Strategic Air Command was ordered to DEFCON 2—one step below full nuclear war—for the only confirmed time in US history."
+    },
+    "OAS": {
+        "definition": "Organization of American States",
+        "wiki": "A regional solidarity organization of Western Hemisphere states that voted unanimously on October 23, 1962, to endorse the US naval quarantine of Cuba under the Rio Treaty."
+    },
+    "SAC": {
+        "definition": "Strategic Air Command",
+        "wiki": "The Cold War-era US command responsible for land-based strategic bombers (B-52s, B-47s) and intercontinental ballistic missiles, maintaining round-the-clock airborne nuclear alert."
+    },
+    "U-2": {
+        "definition": "Lockheed U-2 Reconnaissance Aircraft ('Dragon Lady')",
+        "wiki": "High-altitude photographic reconnaissance spy plane operated by the CIA and USAF. U-2 flights piloted by Major Richard Heyser took the definitive photographs discovering Soviet ballistic missile sites in San Cristóbal."
+    },
+    "JCS": {
+        "definition": "Joint Chiefs of Staff",
+        "wiki": "The body of senior military leaders in the United States Department of Defense advising the President, which strongly advocated for immediate airstrikes and an amphibious invasion of Cuba."
+    },
+    "CIA": {
+        "definition": "Central Intelligence Agency",
+        "wiki": "The civilian foreign intelligence agency of the United States federal government, providing satellite and aerial imagery interpretation via the National Photographic Interpretation Center (NPIC)."
+    },
+    "KGB": {
+        "definition": "Komitet Gosudarstvennoy Bezopasnosti (Soviet State Security)",
+        "wiki": "The main security and foreign intelligence agency for the Soviet Union, deeply involved in Operation Anadyr—the covert deployment of Soviet missiles and combat divisions to Cuba."
+    },
+    "UN": {
+        "definition": "United Nations",
+        "wiki": "The international forum where US Ambassador Adlai Stevenson famously confronted Soviet Ambassador Valerian Zorin on October 25, 1962, showing photographic evidence of the Cuban missile sites."
+    },
+    "USSR": {
+        "definition": "Union of Soviet Socialist Republics",
+        "wiki": "The Marxist-Leninist superpower led by First Secretary Nikita Khrushchev that initiated Operation Anadyr to deploy nuclear-armed ballistic missiles in Cuba."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "The United States of America, whose naval and air forces enacted a naval quarantine around Cuba to intercept Soviet weapons shipments."
+    },
+    "POTUS": {
+        "definition": "President of the United States",
+        "wiki": "The Commander-in-Chief of the US Armed Forces, held by John F. Kennedy throughout the thirteen days of the Cuban Missile Crisis."
+    },
+    "SAM": {
+        "definition": "Surface-to-Air Missile",
+        "wiki": "Guided anti-aircraft missiles, notably the Soviet S-75 Dvina (SA-2 Guideline) batteries in Cuba, one of which shot down Major Rudolf Anderson's U-2 over Banes on October 27, 1962."
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "SCADA": {
+        "definition": "Supervisory Control and Data Acquisition",
+        "wiki": "A control system architecture comprising computers, networked data communications, and graphical user interfaces for high-level supervisory management of electrical grid substations and municipal water systems."
+    },
+    "EMP": {
+        "definition": "Electromagnetic Pulse",
+        "wiki": "A burst of high-intensity electromagnetic radiation caused by high-altitude nuclear detonations or directed energy weapons, capable of overloading and permanently frying electrical transformers and solid-state microchips."
+    },
+    "FEMA": {
+        "definition": "Federal Emergency Management Agency",
+        "wiki": "The federal agency tasked with coordinating disaster relief, deploying national emergency stockpiles, staging emergency generators, and managing public assistance programs during catastrophic civil crises."
+    },
+    "EMS": {
+        "definition": "Emergency Medical Services",
+        "wiki": "The paramedic and emergency ambulance infrastructure delivering urgent life-saving care and coordinating emergency hospital triage during mass casualty events and system collapses."
+    },
+    "EOC": {
+        "definition": "Emergency Operations Center",
+        "wiki": "The hardened physical command facility where city leadership, emergency services, utility executives, and public health officials convene to direct crisis mitigation and resource logistics."
+    },
+    "CERT": {
+        "definition": "Community Emergency Response Team",
+        "wiki": "Organized neighborhood volunteer networks trained in basic disaster response, first aid, search and rescue, and light firefighting to assist municipal first responders during widespread service disruptions."
+    },
+    "SAR": {
+        "definition": "Search and Rescue",
+        "wiki": "Tactical operations conducted to locate and extract civilians trapped in stranded subway trains, darkened high-rises, elevators, or hazardous floodzones following power grid failure."
+    },
+    "NERC": {
+        "definition": "North American Electric Reliability Corporation",
+        "wiki": "The regulatory authority responsible for monitoring grid reliability, critical infrastructure protection standards (CIP), and assessing bulk power system vulnerabilities against cyber and physical sabotage."
+    },
+    "DHS": {
+        "definition": "Department of Homeland Security",
+        "wiki": "The executive department responsible for public security, border protection, cybersecurity via CISA, and protecting critical infrastructure against hostile domestic and foreign threats."
+    }
+}

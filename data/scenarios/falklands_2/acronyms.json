@@ -1,0 +1,134 @@
+{
+    "FIDF": {
+        "definition": "Falkland Islands Defence Force",
+        "wiki": "The locally maintained volunteer military force responsible for the home defence of the Falkland Islands. Working in coordination with British Armed Forces, the FIDF provides vital local reconnaissance, light infantry, and territorial defence."
+    },
+    "RAF": {
+        "definition": "Royal Air Force",
+        "wiki": "The United Kingdom's air warfare service. In the South Atlantic, the RAF maintains permanent air defence at RAF Mount Pleasant with Typhoon fighters and transport assets, supported by strategic air bridges through Ascension Island."
+    },
+    "HMS": {
+        "definition": "Her Majesty's Ship (or His Majesty's Ship)",
+        "wiki": "The official ship prefix for commissioned warships of the British Royal Navy deployed to protect maritime sovereignty and task force operations."
+    },
+    "SAS": {
+        "definition": "Special Air Service",
+        "wiki": "The elite special forces unit of the British Army, specialized in covert reconnaissance, counter-terrorism, unconventional warfare, and deep penetration raids behind enemy lines."
+    },
+    "GCHQ": {
+        "definition": "Government Communications Headquarters",
+        "wiki": "The UK's signals intelligence and cyber security agency, providing critical intercepted communications, SIGINT warning of adversary troop and naval movements, and cyber operational capabilities."
+    },
+    "MOD": {
+        "definition": "Ministry of Defence",
+        "wiki": "The British government department responsible for national defence policy and the strategic direction of the British Armed Forces."
+    },
+    "COBRA": {
+        "definition": "Cabinet Office Briefing Room A",
+        "wiki": "The crisis response committee of the UK Government convened in Whitehall to coordinate national emergency response, chaired by the Prime Minister or senior Cabinet ministers."
+    },
+    "PM": {
+        "definition": "Prime Minister",
+        "wiki": "The head of the UK Government, holding ultimate executive decision-making authority over military rules of engagement, retaliatory mainland strikes, and diplomatic negotiations."
+    },
+    "UN": {
+        "definition": "United Nations",
+        "wiki": "The global intergovernmental organisation facilitating international diplomacy, ceasefire resolutions, and international legal oversight during sovereignty disputes."
+    },
+    "UNSC": {
+        "definition": "United Nations Security Council",
+        "wiki": "The UN organ charged with maintaining international peace and security, capable of passing binding resolutions, imposing sanctions, or authorizing collective military action."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "A primary NATO ally of the United Kingdom whose diplomatic backing, satellite intelligence sharing, and logistics supply lines (such as fuel and Sidewinder missiles at Ascension Island) are crucial."
+    },
+    "NATO": {
+        "definition": "North Atlantic Treaty Organization",
+        "wiki": "The intergovernmental military alliance. While the North Atlantic Treaty's Article 5 is geographically limited to the North Atlantic north of the Tropic of Cancer, member states provide diplomatic, logistical, and political support."
+    },
+    "C2": {
+        "definition": "Command and Control",
+        "wiki": "The operational communication and authority architecture through which commanders coordinate joint air, land, and naval forces across distant theatres."
+    },
+    "CAP": {
+        "definition": "Combat Air Patrol",
+        "wiki": "Fighter aircraft airborne patrols flown over a critical naval area or airspace to intercept incoming hostile strike formations before they can release their weapons."
+    },
+    "QRA": {
+        "definition": "Quick Reaction Alert",
+        "wiki": "The state of high readiness maintained 24/7 by RAF Typhoon pilots and ground crews at Mount Pleasant, able to scramble within minutes to counter unexpected airspace incursions."
+    },
+    "ASW": {
+        "definition": "Anti-Submarine Warfare",
+        "wiki": "Operations employing surface destroyers, sonar buoys, helicopters, and submarines to detect, shadow, and neutralize hostile submarines attempting to torpedo task force vessels."
+    },
+    "ASuW": {
+        "definition": "Anti-Surface Warfare",
+        "wiki": "Naval and air operations conducted to locate, strike, and destroy hostile warships, patrol boats, and amphibious landing groups."
+    },
+    "EW": {
+        "definition": "Electronic Warfare",
+        "wiki": "Military action involving the use of electromagnetic energy to intercept, deceive, or jam adversary radars, communications, and missile guidance seekers."
+    },
+    "DCA": {
+        "definition": "Defensive Counter-Air",
+        "wiki": "All defensive measures designed to detect, intercept, and destroy adversary airborne attacks against friendly airfields, maritime task forces, and port infrastructure."
+    },
+    "OCA": {
+        "definition": "Offensive Counter-Air",
+        "wiki": "Offensive strikes launched against enemy air bases, runways, maintenance depots, and surface-to-air missile batteries to degrade their ability to contest the skies."
+    },
+    "ISR": {
+        "definition": "Intelligence, Surveillance and Reconnaissance",
+        "wiki": "The collection, processing, and distribution of real-time battlefield data using satellite reconnaissance, aerial patrols, and radar to inform command decisions."
+    },
+    "ROE": {
+        "definition": "Rules of Engagement",
+        "wiki": "Directives issued by military and political leadership outlining under what circumstances, locations, and degrees of force armed combatants may engage hostile targets."
+    },
+    "EEZ": {
+        "definition": "Exclusive Economic Zone",
+        "wiki": "The 200-nautical-mile maritime zone surrounding the Falkland Islands, rich in fisheries and hydrocarbon reserves, which represents a frequent point of geopolitical contestation."
+    },
+    "TEZ": {
+        "definition": "Total Exclusion Zone",
+        "wiki": "A declared maritime and air exclusion zone (typically 200 nautical miles around the Falklands) within which any hostile or unflagged military vessel or aircraft is treated as hostile and liable to be attacked."
+    },
+    "SAM": {
+        "definition": "Surface-to-Air Missile",
+        "wiki": "Guided missile systems fired from ships (like Sea Viper / Aster on Type 45 destroyers) or ground installations (Sky Sabre) to destroy hostile aircraft and incoming anti-ship cruise missiles."
+    },
+    "FAA": {
+        "definition": "Fuerza Aérea Argentina (Argentine Air Force)",
+        "wiki": "The air branch of the Argentine Armed Forces, operating fighter-bombers, transport aircraft, and strike packages from bases in Patagonia and southern Argentina."
+    },
+    "ARA": {
+        "definition": "Armada de la República Argentina (Argentine Navy)",
+        "wiki": "The naval forces of Argentina, comprising surface warships, corvettes, diesel-electric submarines, and amphibious transport assets."
+    },
+    "COAN": {
+        "definition": "Comando de la Aviación Naval (Argentine Naval Aviation)",
+        "wiki": "The naval aviation arm of the Argentine Navy, known for operating maritime patrol and attack aircraft capable of delivering anti-ship missiles."
+    },
+    "SSN": {
+        "definition": "Nuclear-Powered Attack Submarine",
+        "wiki": "Nuclear-propelled attack submarines capable of unlimited underwater endurance at high speed, deployed by the Royal Navy to enforce exclusion zones and deter surface fleets."
+    },
+    "CASEVAC": {
+        "definition": "Casualty Evacuation",
+        "wiki": "The emergency tactical evacuation of wounded military or civilian personnel from the field to advanced medical treatment facilities, executed primarily by support helicopters."
+    },
+    "BFSAI": {
+        "definition": "British Forces South Atlantic Islands",
+        "wiki": "The unified UK joint service command responsible for the military defence of the Falkland Islands, South Georgia, and the South Sandwich Islands, based at RAF Mount Pleasant."
+    },
+    "AAR": {
+        "definition": "Air-to-Air Refuelling",
+        "wiki": "In-flight transfer of aviation fuel from tanker aircraft (such as the Voyager KC2) to receiver aircraft, essential for extending the range and loiter time of combat aircraft in the vast South Atlantic."
+    },
+    "BVR": {
+        "definition": "Beyond Visual Range",
+        "wiki": "Air combat engagements occurring at ranges beyond direct visual sighting, relying on advanced active radar seekers (such as the Meteor missile) and onboard sensor fusion."
+    }
+}

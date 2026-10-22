@@ -1,0 +1,50 @@
+{
+    "WHO": {
+        "definition": "World Health Organization",
+        "wiki": "A specialized agency of the United Nations responsible for international public health, issuing global alerts, tracking viral variants, and coordinating the Access to COVID-19 Tools (ACT) Accelerator."
+    },
+    "CDC": {
+        "definition": "Centers for Disease Control and Prevention",
+        "wiki": "The national public health agency of the United States under the Department of Health and Human Services, providing clinical guidelines, infection control protocols, and epidemic monitoring."
+    },
+    "PHEIC": {
+        "definition": "Public Health Emergency of International Concern",
+        "wiki": "A formal declaration by the World Health Organization of an extraordinary event determined to constitute a public health risk to other states through the international spread of disease."
+    },
+    "R0": {
+        "definition": "Basic Reproduction Number (R-Nought)",
+        "wiki": "An epidemiological metric representing the average number of secondary infections produced by a single infected individual in a completely susceptible population."
+    },
+    "CFR": {
+        "definition": "Case Fatality Rate",
+        "wiki": "The proportion of people diagnosed with a specified disease who die from that disease, serving as a primary measure of disease severity and virulence."
+    },
+    "mRNA": {
+        "definition": "Messenger Ribonucleic Acid (Vaccine Platform)",
+        "wiki": "A modern genetic vaccine technology that instructs host cells to produce a harmless viral antigen protein, triggering a robust humoral and cellular immune response."
+    },
+    "PPE": {
+        "definition": "Personal Protective Equipment",
+        "wiki": "Specialized clothing and equipment—such as N95/FFP3 respirators, face shields, surgical gowns, and nitrile gloves—worn by healthcare workers to prevent pathogen transmission."
+    },
+    "PCR": {
+        "definition": "Polymerase Chain Reaction (Diagnostic Assay)",
+        "wiki": "A molecular laboratory technique used to amplify specific viral RNA or DNA sequences, providing the gold standard in diagnostic accuracy for pathogen detection."
+    },
+    "ICU": {
+        "definition": "Intensive Care Unit",
+        "wiki": "A specialized hospital department providing advanced critical care, mechanical ventilation, and continuous organ monitoring for life-threatening respiratory failure."
+    },
+    "FDA": {
+        "definition": "Food and Drug Administration",
+        "wiki": "The federal agency of the United States Department of Health and Human Services responsible for approving and granting Emergency Use Authorizations (EUAs) for vaccines and therapeutics."
+    },
+    "EMA": {
+        "definition": "European Medicines Agency",
+        "wiki": "An agency of the European Union responsible for evaluating, supervising, and monitoring the safety of medicinal products and vaccines across EU member states."
+    },
+    "CEPI": {
+        "definition": "Coalition for Epidemic Preparedness Innovations",
+        "wiki": "A global partnership between public, private, philanthropic, and civil organizations to finance and coordinate the rapid development of epidemic and pandemic vaccines."
+    }
+}

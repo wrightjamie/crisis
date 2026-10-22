@@ -1,0 +1,50 @@
+{
+    "SHAEF": {
+        "definition": "Supreme Headquarters Allied Expeditionary Force",
+        "wiki": "The overall headquarters of the Commander of Allied forces in northwest Europe, from late 1943 until the end of World War II, led by General Dwight D. Eisenhower."
+    },
+    "COSSAC": {
+        "definition": "Chief of Staff to the Supreme Allied Commander",
+        "wiki": "The Allied planning body created in 1943, directed by British Lieutenant-General Frederick E. Morgan, that laid down the foundational operational plans for Operation Overlord."
+    },
+    "Mulberry": {
+        "definition": "Mulberry Harbours",
+        "wiki": "Temporary portable artificial harbours developed by the British military to rapidly offload cargo, tanks, and personnel onto Normandy beaches without needing intact captured French ports."
+    },
+    "PLUTO": {
+        "definition": "Pipe-Lines Under The Ocean",
+        "wiki": "A major British engineering operation to lay undersea oil pipelines across the English Channel from the Isle of Wight and Dungeness to France, supplying fuel to Allied armies."
+    },
+    "LST": {
+        "definition": "Landing Ship, Tank",
+        "wiki": "Naval assault ships designed to transport and beach tanks, heavy vehicles, and cargo directly onto hostile shores without requiring dockside cranes or facilities."
+    },
+    "LCVP": {
+        "definition": "Landing Craft, Vehicle, Personnel (Higgins Boat)",
+        "wiki": "Plywood-constructed amphibious landing craft designed by Andrew Higgins, capable of carrying a 36-man platoon or small vehicles from transport ships onto shallow beaches."
+    },
+    "C-47": {
+        "definition": "Douglas C-47 Skytrain",
+        "wiki": "The military transport aircraft that served as the primary workhorse for Allied airborne operations, dropping paratroopers of the US 82nd and 101st and British 6th Airborne Divisions into Normandy."
+    },
+    "OKW": {
+        "definition": "Oberkommando der Wehrmacht (High Command of the German Armed Forces)",
+        "wiki": "The supreme military command of Nazi Germany that held direct operational control over the Western Front, reporting directly to Adolf Hitler."
+    },
+    "RAF": {
+        "definition": "Royal Air Force",
+        "wiki": "The British air warfare branch whose fighter and bomber squadrons maintained overwhelming air superiority over Normandy, flying thousands of sorties to interdict German reinforcements."
+    },
+    "USAAF": {
+        "definition": "United States Army Air Forces",
+        "wiki": "The aerial warfare service of the United States Army during World War II, providing heavy tactical and strategic air support across the invasion beachheads."
+    },
+    "D-Day": {
+        "definition": "The Day of Allied Invasion (June 6, 1944)",
+        "wiki": "The designated day on which Operation Overlord was launched, initiating the liberation of German-occupied Western Europe."
+    },
+    "H-Hour": {
+        "definition": "Assault Beach Landing Hour",
+        "wiki": "The exact time at which initial assault landing craft hit the beach in a given sector, timed specifically around low tide to avoid submerged German anti-invasion obstacles."
+    }
+}

@@ -130,5 +130,53 @@
     "SAM": {
         "definition": "Surface-to-Air Missile",
         "wiki": "Ground- or ship-launched guided missile designed to destroy aircraft or other missiles."
+    },
+    "UK": {
+        "definition": "United Kingdom",
+        "wiki": "The sovereign nation directing operations, deploying RAF and Royal Navy forces under the strategic command of the Ministry of Defence and Permanent Joint Headquarters."
+    },
+    "RAF": {
+        "definition": "Royal Air Force",
+        "wiki": "The UK's air and space warfare service, responsible for achieving control of the air, intelligence and situational awareness, air mobility, and precision attack across all operating environments."
+    },
+    "HMS": {
+        "definition": "Her Majesty's Ship (or His Majesty's Ship)",
+        "wiki": "Commissioned surface warships and submarines of the Royal Navy operating in support of Joint and Combined task forces."
+    },
+    "RN": {
+        "definition": "Royal Navy",
+        "wiki": "The naval warfare service branch of the British Armed Forces, providing carrier strike, air defence destroyers, and amphibious lift in maritime task groups."
+    },
+    "STOVL": {
+        "definition": "Short Take-Off and Vertical Landing",
+        "wiki": "Aircraft capable of taking off from short runways or aircraft carrier ski-jumps and landing vertically, a core design capability of the F-35B Lightning II."
+    },
+    "ISTAR": {
+        "definition": "Intelligence, Surveillance, Target Acquisition, and Reconnaissance",
+        "wiki": "The coordinated integration of intelligence, surveillance, and reconnaissance capabilities to provide commanders with actionable battlespace awareness and precise target designation."
+    },
+    "UAS": {
+        "definition": "Unmanned Aerial System",
+        "wiki": "Aircraft operating without an onboard human pilot, encompassing remotely piloted aircraft (RPAS), tactical drones, and autonomous loitering munitions."
+    },
+    "AEW": {
+        "definition": "Airborne Early Warning",
+        "wiki": "Airborne radar systems designed to detect long-range hostile aircraft and cruise missiles at low altitude, overcoming the curvature of the earth and terrain masking."
+    },
+    "GPS": {
+        "definition": "Global Positioning System",
+        "wiki": "Space-based radio navigation network providing crucial positioning, navigation, and timing signals for military platforms and precision-guided weapons."
+    },
+    "SATCOM": {
+        "definition": "Satellite Communications",
+        "wiki": "Beyond-line-of-sight satellite communications architecture essential for global command and control, data feeds, and remote piloting of uncrewed platforms."
+    },
+    "ROE": {
+        "definition": "Rules of Engagement",
+        "wiki": "Directives issued by military authority defining the circumstances, conditions, degree, and manner in which armed force may be applied."
+    },
+    "MACA": {
+        "definition": "Military Aid to the Civil Authorities",
+        "wiki": "Framework authorizing military forces and logistics assets to assist civil authorities during domestic crises, disaster relief, or critical national emergencies."
     }
 }

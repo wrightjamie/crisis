@@ -58,16 +58,51 @@ module.exports = {
     },
     variantAxes: [],
     assets: [
-        { id: 'node_na',
-            image: 'node_na', name: 'Icarus Node: NA', location: [40.7128, -74.0060], state: 'under_construction', tags: ['icarus', 'north_america'] },
-        { id: 'node_eu',
-            image: 'node_na', name: 'Icarus Node: EU', location: [48.8566, 2.3522], state: 'under_construction', tags: ['icarus', 'eu'] },
-        { id: 'node_asia',
-            image: 'node_na', name: 'Icarus Node: Asia', location: [31.2304, 121.4737], state: 'under_construction', tags: ['icarus', 'pan_asia'] },
-        { id: 'city_miami',
-            image: 'city_miami', name: 'Miami (Vulnerable Coastal)', location: [25.7617, -80.1918], state: 'operational', tags: ['infrastructure', 'north_america'] },
-        { id: 'agri_mekong',
-            image: 'agri_mekong', name: 'Mekong Delta (Agriculture)', location: [10.0333, 105.7833], state: 'operational', tags: ['infrastructure', 'pan_asia'] }
+        {
+            id: 'node_na',
+            image: 'node_na',
+            name: 'Icarus Node: NA',
+            location: [40.7128, -74.0060],
+            state: 'under_construction',
+            tags: ['icarus', 'north_america'],
+            briefing: 'The North American primary stratospheric aerosol injection and orbital solar shield array controller. Coordinates continental geoengineering delivery flights and telemetry for atmospheric albedo modification.'
+        },
+        {
+            id: 'node_eu',
+            image: 'node_na',
+            name: 'Icarus Node: EU',
+            location: [48.8566, 2.3522],
+            state: 'under_construction',
+            tags: ['icarus', 'eu'],
+            briefing: 'The European Union central geoengineering array node. Powers massive atmospheric particulate dispersion arrays and high-altitude monitoring lidars, drawing enormous energy from the continental grid.'
+        },
+        {
+            id: 'node_asia',
+            image: 'node_na',
+            name: 'Icarus Node: Asia',
+            location: [31.2304, 121.4737],
+            state: 'under_construction',
+            tags: ['icarus', 'pan_asia'],
+            briefing: 'The Pan-Asian Icarus planetary engineering hub located near the Yangtze estuary. Anchors the eastern hemisphere tropospheric seeding infrastructure and monsoon pattern stabilization systems.'
+        },
+        {
+            id: 'city_miami',
+            image: 'city_miami',
+            name: 'Miami (Vulnerable Coastal)',
+            location: [25.7617, -80.1918],
+            state: 'operational',
+            tags: ['infrastructure', 'north_america'],
+            briefing: 'A major coastal metropolitan area highly vulnerable to king tides, super-hurricanes, and rapid sea-level rise resulting from West Antarctic ice shelf disintegration.'
+        },
+        {
+            id: 'agri_mekong',
+            image: 'agri_mekong',
+            name: 'Mekong Delta (Agriculture)',
+            location: [10.0333, 105.7833],
+            state: 'operational',
+            tags: ['infrastructure', 'pan_asia'],
+            briefing: 'The agricultural food basket of Southeast Asia, highly susceptible to salinization, catastrophic river drought, and monsoon collapse driven by global thermal instability.'
+        }
     ],
     eventTemplates: [
         {

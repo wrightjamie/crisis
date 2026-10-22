@@ -1,0 +1,42 @@
+{
+    "MCA": {
+        "definition": "Mars Colonial Administration",
+        "wiki": "The governing body appointed by Earth-based United Nations member states to oversee planetary infrastructure, labor quotas, trade licenses, and resource export back to Earth."
+    },
+    "EVA": {
+        "definition": "Extravehicular Activity",
+        "wiki": "Work performed by colonists or engineers outside the protective pressurized environment of a habitat or pressurized rover, requiring advanced pressurized space suits and life-support backpacks."
+    },
+    "ISRU": {
+        "definition": "In-Situ Resource Utilization",
+        "wiki": "The practice of harvesting and manufacturing essential consumables (water ice, breathable oxygen, methane rocket fuel, and building regolith) directly from Martian local resources rather than transporting them from Earth."
+    },
+    "Hab": {
+        "definition": "Habitat Module",
+        "wiki": "Pressurized, radiation-shielded subsurface or dome structures providing living quarters, hydroponics bays, air scrubbers, and recreational spaces for Martian colonists."
+    },
+    "Sol": {
+        "definition": "Martian Solar Day",
+        "wiki": "The duration of one solar rotation on Mars, approximately 24 hours, 39 minutes, and 35 seconds, used as the fundamental unit of timekeeping for planetary operations."
+    },
+    "ECLSS": {
+        "definition": "Environmental Control and Life Support System",
+        "wiki": "The critical mechanical and bio-regenerative network that monitors atmospheric pressure, recycles water, scrubs carbon dioxide, and generates breathable oxygen across Martian facilities."
+    },
+    "UN": {
+        "definition": "United Nations",
+        "wiki": "The governing coalition of terrestrial nation-states holding supreme charter authority over sovereign space territories, colonial taxation, and space-faring legal jurisdictions."
+    },
+    "UNSC": {
+        "definition": "United Nations Security Council",
+        "wiki": "The executive committee empowered under interplanetary treaty to authorize military intervention, naval blockades, and peacekeeping task forces beyond low Earth orbit."
+    },
+    "SSTO": {
+        "definition": "Single-Stage-To-Orbit",
+        "wiki": "Reusable shuttle craft capable of launching from the Martian surface into planetary orbit and landing without jettisoning booster stages or drop tanks."
+    },
+    "RCS": {
+        "definition": "Reaction Control System",
+        "wiki": "A subsystem of thrusters used for three-axis attitude control, docking maneuvers, and fine orbital adjustments on transit spacecraft and orbital shuttles."
+    }
+}

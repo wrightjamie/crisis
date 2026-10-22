@@ -65,11 +65,33 @@ socket.on('game_joined', (joinedId) => {
     }
 });
 
+if (joinGameIdInput && btnJoinGame) {
+    joinGameIdInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            btnJoinGame.click();
+        }
+    });
+}
+
 socket.on('game_not_found', () => {
+    try {
+        window.history.replaceState(null, '', window.location.pathname);
+    } catch (e) {}
+    gameId = null;
+    role = null;
+    localState = null;
+    sessionStorage.removeItem('crisis_role');
+    sessionStorage.removeItem('crisis_view_state');
+    updateGlobalLeaveButton();
+
+    switchView('join_game');
     if (joinError) {
-        joinError.textContent = 'Game not found.';
-        joinError.style.display = 'block';
+        joinError.style.display = 'none';
     }
+    if (joinGameIdInput) {
+        joinGameIdInput.select();
+    }
+    showToast('Game not found.');
 });
 
 socket.on('active_roles', (roles) => {
@@ -120,6 +142,16 @@ function switchView(viewName) {
             appEl.style.display = 'grid';
             if (map) setTimeout(() => map.invalidateSize(), 200);
             break;
+    }
+
+    const toastContainer = document.getElementById('toast-container');
+    if (toastContainer) {
+        const activeModal = document.querySelector('dialog[open]');
+        if (activeModal && toastContainer.parentElement !== activeModal) {
+            activeModal.appendChild(toastContainer);
+        } else if (!activeModal && toastContainer.parentElement !== document.body) {
+            document.body.appendChild(toastContainer);
+        }
     }
 }
 
@@ -580,6 +612,13 @@ socket.on('decision_made', (data) => {
 function showToast(message) {
     const container = document.getElementById('toast-container');
     if (!container) return;
+    
+    const activeModal = document.querySelector('dialog[open]');
+    if (activeModal && container.parentElement !== activeModal) {
+        activeModal.appendChild(container);
+    } else if (!activeModal && container.parentElement !== document.body) {
+        document.body.appendChild(container);
+    }
     
     const toast = document.createElement('div');
     toast.className = 'toast';

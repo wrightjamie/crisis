@@ -18,6 +18,61 @@ let aiBaselineScores = {};
 let prevFacilitatorScores = null;
 let aiQueue = [];
 let isGeneratingAi = false;
+let aiCoreError = false;
+
+function updateAiStatusUI() {
+    const aiStatusText = document.getElementById('ai-status-text');
+    const aiStatusDot = document.getElementById('ai-status-dot');
+    const aiStatusContainer = document.getElementById('ai-status');
+    if (!aiStatusText || !aiStatusDot) return;
+
+    if (currentState && currentState.aiEnabled === false) {
+        aiStatusText.textContent = "OFF";
+        aiStatusText.style.color = "var(--text-muted)";
+        aiStatusDot.style.background = "var(--text-muted)";
+        aiStatusDot.classList.remove('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Generator is disabled for this game";
+        return;
+    }
+
+    if (aiCoreError) {
+        aiStatusText.textContent = "ERR";
+        aiStatusText.style.color = "var(--accent-red)";
+        aiStatusDot.style.background = "var(--accent-red)";
+        aiStatusDot.classList.remove('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Error";
+        return;
+    }
+
+    if (isGeneratingAi) {
+        aiStatusText.textContent = "BUSY";
+        aiStatusText.style.color = "var(--accent-blue)";
+        aiStatusDot.style.background = "var(--accent-blue)";
+        aiStatusDot.classList.add('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Generating...";
+        return;
+    }
+
+    if (window.AICore && window.AICore.isReady) {
+        aiStatusText.textContent = "READY";
+        aiStatusText.style.color = "var(--accent-green)";
+        aiStatusDot.style.background = "var(--status-1)";
+        aiStatusDot.classList.remove('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Ready";
+    } else if (window.AICore) {
+        aiStatusText.textContent = "LOAD";
+        aiStatusText.style.color = "var(--accent-orange)";
+        aiStatusDot.style.background = "var(--accent-orange)";
+        aiStatusDot.classList.remove('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Loading...";
+    } else {
+        aiStatusText.textContent = "INIT";
+        aiStatusText.style.color = "";
+        aiStatusDot.style.background = "var(--accent-orange)";
+        aiStatusDot.classList.remove('ai-active-dot');
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Initializing...";
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // Dashboard Logic
@@ -179,18 +234,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkAICore = setInterval(() => {
         if (window.AICore) {
             clearInterval(checkAICore);
-            aiStatusText.textContent = "LOAD"; aiStatusText.style.color = "var(--accent-orange)";
-            aiStatusDot.style.background = "var(--accent-orange)";
+            updateAiStatusUI();
             
             window.AICore.init((report) => {
-                aiStatusText.textContent = "LOAD";
+                updateAiStatusUI();
             }).then(() => {
-                aiStatusText.textContent = "READY"; aiStatusText.style.color = "var(--accent-green)";
-                aiStatusDot.style.background = "var(--status-1)";
+                updateAiStatusUI();
                 processAiQueue(); // Process any queued events that arrived before engine was ready
             }).catch(e => {
-                aiStatusText.textContent = "ERR"; aiStatusText.style.color = "var(--accent-red)";
-                aiStatusDot.style.background = "var(--accent-red)";
+                aiCoreError = true;
+                updateAiStatusUI();
                 console.error(e);
             });
         }
@@ -315,11 +368,7 @@ async function processAiQueue() {
     const aiStatusText = document.getElementById('ai-status-text');
     const aiStatusDot = document.getElementById('ai-status-dot');
     
-    if (aiStatusText) { aiStatusText.textContent = "BUSY"; aiStatusText.style.color = "var(--accent-blue)"; }
-    if (aiStatusDot) {
-        aiStatusDot.style.background = "var(--accent-blue)";
-        aiStatusDot.classList.add('ai-active-dot');
-    }
+    updateAiStatusUI();
 
     try {
         const config = currentState.scenarioConfig.aiConfig;
@@ -353,12 +402,8 @@ async function processAiQueue() {
         console.error("AI Generation failed for role:", task.role, e);
     }
 
-    if (aiStatusText) { aiStatusText.textContent = "READY"; aiStatusText.style.color = "var(--accent-green)"; }
-    if (aiStatusDot) {
-        aiStatusDot.style.background = "var(--status-1)";
-        aiStatusDot.classList.remove('ai-active-dot');
-    }
     isGeneratingAi = false;
+    updateAiStatusUI();
     processAiQueue();
 }
 
@@ -524,12 +569,13 @@ function handleState(state) {
         aiBaselineScores = {}; // Reset AI tracking
         prevFacilitatorScores = null;
         renderHoldingScreen();
+        updateAiStatusUI();
     } else if (state.status === 'lobby') {
         dashboardEl.style.display = 'none';
         if (holdingEl.open) holdingEl.close();
         if (!lobbyEl.open) lobbyEl.showModal();
         currentState = state;
-    updateAiStatusUI();
+        updateAiStatusUI();
         if (state.scenarioConfig && state.scenarioConfig.roles) {
             scenarioRoles = state.scenarioConfig.roles;
         }
@@ -544,6 +590,7 @@ function handleState(state) {
         dashboardEl.style.display = 'block';
         if (holdingEl.open) holdingEl.close();
         currentState = state;
+        updateAiStatusUI();
         if (state.scenarioConfig && state.scenarioConfig.roles) {
             scenarioRoles = state.scenarioConfig.roles;
         }

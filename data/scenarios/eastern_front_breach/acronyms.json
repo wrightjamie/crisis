@@ -1,0 +1,54 @@
+{
+    "NATO": {
+        "definition": "North Atlantic Treaty Organization",
+        "wiki": "The military alliance of 32 European and North American democracies dedicated to mutual defense under Article 5 of the Washington Treaty."
+    },
+    "VJTF": {
+        "definition": "Very High Readiness Joint Task Force",
+        "wiki": "NATO's highest-readiness spearhead force, capable of deploying an initial brigade-sized joint element to any flank within 48 to 72 hours of activation."
+    },
+    "eFP": {
+        "definition": "Enhanced Forward Presence",
+        "wiki": "NATO's forward multinational battlegroups stationed permanently on a rotational basis in the Baltic states, Poland, Romania, and Bulgaria to deter adversary aggression."
+    },
+    "C2": {
+        "definition": "Command and Control",
+        "wiki": "The facilities, communications, procedures, and personnel used by commanders to plan, direct, coordinate, and control military forces in tactical combat."
+    },
+    "EW": {
+        "definition": "Electronic Warfare",
+        "wiki": "Military actions exploiting the electromagnetic spectrum, including GPS jamming, communications intercept, drone spoofing, and radar counter-measures."
+    },
+    "UAV": {
+        "definition": "Unmanned Aerial Vehicle (Combat & Reconnaissance Drones)",
+        "wiki": "Remotely piloted or autonomous aircraft used extensively for real-time artillery spotting, frontline reconnaissance, and precision strike with loitering munitions."
+    },
+    "SAM": {
+        "definition": "Surface-to-Air Missile",
+        "wiki": "Air defense systems (ranging from MANPADS to medium- and long-range batteries like Patriot and S-300/400) deployed to contest airspace and shoot down attack jets, cruise missiles, and drones."
+    },
+    "IFV": {
+        "definition": "Infantry Fighting Vehicle",
+        "wiki": "Armored combat vehicles designed to carry infantry squads into direct combat while providing heavy direct autocannon and anti-tank guided missile fire support."
+    },
+    "MBT": {
+        "definition": "Main Battle Tank",
+        "wiki": "Heavily armored, tracked combat vehicles mounting a high-velocity main gun, providing mobile direct-fire punch and shock action for mechanized breakthrough operations."
+    },
+    "CAS": {
+        "definition": "Close Air Support",
+        "wiki": "Air attacks against hostile targets in close proximity to friendly ground troops, requiring detailed coordination and target deconfliction with forward controllers."
+    },
+    "ISR": {
+        "definition": "Intelligence, Surveillance and Reconnaissance",
+        "wiki": "Integrated intelligence gathering using aerial drones, optical reconnaissance satellites, radar systems, and radio intercept to track enemy concentrations."
+    },
+    "HIMARS": {
+        "definition": "M142 High Mobility Artillery Rocket System",
+        "wiki": "A light multiple rocket launcher mounted on a standard medium tactical vehicle frame, firing GPS-guided GMLRS rockets for deep precision strikes behind enemy lines."
+    },
+    "ATGM": {
+        "definition": "Anti-Tank Guided Missile",
+        "wiki": "Man-portable or vehicle-mounted guided missiles (such as Javelin, NLAW, and Spike) designed to penetrate and destroy heavy armor at long ranges."
+    }
+}
