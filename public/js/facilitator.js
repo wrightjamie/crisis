@@ -599,7 +599,36 @@ function handleState(state) {
         renderScoreAdjust();
         renderGlobalView();
     }
+    updatePauseUI(state.isPaused);
 }
+
+function updatePauseUI(isPaused) {
+    const btn = document.getElementById('btn-pause-game');
+    const icon = document.getElementById('pause-icon');
+    const text = document.getElementById('pause-text');
+    const banner = document.getElementById('game-paused-banner');
+    
+    if (banner) {
+        banner.style.display = isPaused ? 'block' : 'none';
+    }
+    if (btn && icon && text) {
+        if (isPaused) {
+            btn.className = 'btn btn-danger text-sm flex-center gap-1';
+            icon.textContent = '▶️';
+            text.textContent = 'RESUME';
+            btn.title = 'Resume Game Clocks';
+        } else {
+            btn.className = 'btn btn-secondary text-sm flex-center gap-1';
+            icon.textContent = '⏸️';
+            text.textContent = 'PAUSE';
+            btn.title = 'Pause Game Clocks';
+        }
+    }
+}
+
+window.togglePauseGame = function() {
+    socket.emit('toggle_pause_game');
+};
 
 function renderLobbyScreen() {
     if (!currentState || !currentState.scenarioConfig) return;
@@ -1120,13 +1149,24 @@ function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentStat
         html += `</div>`;
     }
 
-    html += `
-        <div class="mt-2">
-            <button class="btn btn-primary w-100 p-2 text-md ${meetsConditions ? '' : 'btn-danger'}" onclick="triggerEventFromPanel('${template.id}')">
-                ${triggerBtnText}
-            </button>
-        </div>
-    `;
+    const isAlreadyTriggered = !template.repeatable && (currentState.events || []).some(e => e.templateId === template.id);
+    if (isAlreadyTriggered) {
+        html += `
+            <div class="mt-2">
+                <button class="btn btn-secondary w-100 p-2 text-md" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    ALREADY TRIGGERED
+                </button>
+            </div>
+        `;
+    } else {
+        html += `
+            <div class="mt-2">
+                <button class="btn btn-primary w-100 p-2 text-md ${meetsConditions ? '' : 'btn-danger'}" onclick="triggerEventFromPanel('${template.id}')">
+                    ${triggerBtnText}
+                </button>
+            </div>
+        `;
+    }
     
     return html;
 }

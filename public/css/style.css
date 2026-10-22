@@ -1003,3 +1003,117 @@ body:has(dialog[open]) {
 .secret-badge-right { margin-right: 8px; }
 .mx-auto { margin-left: auto; margin-right: auto; }
 
+/* Navigation Notification Token Badges */
+.nav-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: var(--accent-red);
+  color: #ffffff;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  line-height: 1;
+  text-align: center;
+  padding: 0 4px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Global Game Paused Banner */
+.game-paused-banner {
+  background: var(--accent-red);
+  color: #ffffff;
+  font-weight: 700;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+}
+
+/* Leaflet Cluster Disambiguation Popup */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+.leaflet-popup-tip {
+  background: var(--bg-secondary) !important;
+}
+.leaflet-popup-content {
+  margin: 10px 12px;
+  line-height: 1.4;
+  min-width: 200px;
+}
+.cluster-popup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+.cluster-popup-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cluster-popup-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-blue);
+}
+
+/* Events Panel Sorting & Grouping */
+.events-section-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.resolved-events-details summary {
+  cursor: pointer;
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  outline: none;
+}
+.resolved-events-details[open] summary {
+  margin-bottom: 8px;
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+
+

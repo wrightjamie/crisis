@@ -189,8 +189,8 @@ module.exports = function setupSockets(io, gameManager) {
             socket.emit('role_registered', role);
             io.to(gameId).emit('active_roles', engine.getActiveRoles());
 
-            // Resume game if a facilitator joins a paused game
-            if (role === 'facilitator' && engine.gameState.isPaused) {
+            // Resume game if a facilitator joins a game paused due to disconnect
+            if (role === 'facilitator' && engine.gameState.isPaused && !engine.isManualPause) {
                 engine.resumeGame();
                 io.to(gameId).emit('state_update', engine.gameState);
             }
@@ -426,6 +426,20 @@ module.exports = function setupSockets(io, gameManager) {
             if (engine.gameState.status !== 'active') return;
             console.log('Game reset by facilitator');
             engine.createLobby(engine.gameState.scenarioId);
+            io.to(gameId).emit('state_update', engine.gameState);
+        });
+
+        // Facilitator pauses/resumes all clocks
+        socket.on('toggle_pause_game', () => {
+            const gameId = socket.data.gameId;
+            const engine = gameId ? gameManager.getGame(gameId) : null;
+            if (!engine || socket.data.role !== 'facilitator') return;
+            engine.updateActivity();
+            if (engine.isPaused) {
+                engine.resumeGame();
+            } else {
+                engine.pauseGame(true);
+            }
             io.to(gameId).emit('state_update', engine.gameState);
         });
 

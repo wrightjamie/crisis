@@ -104,9 +104,10 @@ class GameEngine {
         return Object.values(this.connectedClients).includes('facilitator');
     }
 
-    pauseGame() {
+    pauseGame(isManual = false) {
         if (!this.isPaused && this.gameState.status === 'active') {
             this.isPaused = true;
+            this.isManualPause = isManual;
             this.gameState.isPaused = true;
             this.updateActivity();
 
@@ -129,13 +130,14 @@ class GameEngine {
                 });
             }
 
-            console.log(`Game ${this.gameId} paused due to facilitator disconnect.`);
+            console.log(`Game ${this.gameId} paused ${isManual ? 'manually by facilitator' : 'due to facilitator disconnect'}.`);
         }
     }
 
     resumeGame() {
         if (this.isPaused && this.gameState.status === 'active') {
             this.isPaused = false;
+            this.isManualPause = false;
             this.gameState.isPaused = false;
             this.updateActivity();
 
@@ -294,6 +296,17 @@ class GameEngine {
 
         const template = scenario.eventTemplates.find(e => e.id === eventId);
         if (!template) return false;
+
+        if (!template.repeatable && this.gameState.events.some(e => e.templateId === eventId)) {
+            console.warn(`Event ${eventId} (${template.name}) has already been triggered and is not repeatable. Ignoring duplicate trigger.`);
+            this.gameState.scheduledEvents = this.gameState.scheduledEvents.filter(se => se.templateId !== eventId);
+            return false;
+        }
+
+        // Cancel any pending scheduled occurrences of this event template since it has now been triggered
+        if (!template.repeatable) {
+            this.gameState.scheduledEvents = this.gameState.scheduledEvents.filter(se => se.templateId !== eventId);
+        }
 
         console.log(`Event triggered: ${template.name}`);
 
@@ -473,7 +486,16 @@ class GameEngine {
         }
 
         if (effects.triggerEvents) {
+            const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
             effects.triggerEvents.forEach(te => {
+                const template = scenario?.eventTemplates?.find(e => e.id === te.id);
+                if (template && !template.repeatable) {
+                    const alreadyTriggered = this.gameState.events.some(e => e.templateId === te.id);
+                    const alreadyScheduled = this.gameState.scheduledEvents.some(se => se.templateId === te.id);
+                    if (alreadyTriggered || alreadyScheduled) {
+                        return;
+                    }
+                }
                 const roll = Math.random();
                 if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
                     this.gameState.scheduledEvents.push({
@@ -488,10 +510,19 @@ class GameEngine {
         }
 
         if (effects.randomEvents) {
+            const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
             const totalWeight = effects.randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
             let roll = Math.random() * totalWeight;
             for (const re of effects.randomEvents) {
                 if (roll < (re.weight || 1)) {
+                    const template = scenario?.eventTemplates?.find(e => e.id === re.id);
+                    if (template && !template.repeatable) {
+                        const alreadyTriggered = this.gameState.events.some(e => e.templateId === re.id);
+                        const alreadyScheduled = this.gameState.scheduledEvents.some(se => se.templateId === re.id);
+                        if (alreadyTriggered || alreadyScheduled) {
+                            break;
+                        }
+                    }
                     this.gameState.scheduledEvents.push({
                         uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                         templateId: re.id,

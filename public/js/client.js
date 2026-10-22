@@ -904,10 +904,6 @@ function updateUI() {
                 newEvents.forEach(evt => {
                     showToast('🚨 <strong>New Event:</strong> ' + (evt.name || ''));
                 });
-                if (!currentInfoView || currentInfoView.type !== 'events_list') {
-                    const badge = document.getElementById('events-badge');
-                    if (badge) badge.style.display = 'block';
-                }
             }
         } else {
             isInitialStateLoaded = true;
@@ -915,9 +911,35 @@ function updateUI() {
         localState.events.forEach(e => knownEventIds.add(e.id));
     }
 
+    const playerPausedBanner = document.getElementById('player-paused-banner');
+    if (playerPausedBanner) {
+        playerPausedBanner.style.display = localState.isPaused ? 'block' : 'none';
+    }
+    updateEventsBadge();
+
     renderMap(localState.events, localState.assets);
     refreshInfoPanel();
 }
+
+function updateEventsBadge() {
+    const badge = document.getElementById('events-badge');
+    if (!badge || !localState || !localState.events) return;
+    const visibleEvents = localState.events.filter(evt => window.canSee(evt, role));
+    const unresolvedCount = visibleEvents.filter(evt => {
+        const eventTasks = (localState.decisionTasks || []).filter(t => t.eventId === evt.id);
+        const hasTasks = eventTasks.length > 0;
+        const isResolved = hasTasks ? eventTasks.every(t => t.status === 'resolved') : viewedEvents.has(evt.id);
+        return !isResolved;
+    }).length;
+
+    if (unresolvedCount > 0) {
+        badge.textContent = unresolvedCount > 99 ? '99+' : unresolvedCount;
+        badge.style.display = 'inline-flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+window.updateEventsBadge = updateEventsBadge;
 
 window.activeCluster = null;
 
@@ -1032,28 +1054,45 @@ function renderMap(events, assets) {
 
         marker.on('click', () => {
             if (cluster.items.length > 1) {
-                if (!window.activeCluster || window.activeCluster.clusterId !== clusterId) {
-                    window.activeCluster = {
-                        clusterId: clusterId,
-                        items: cluster.items,
-                        currentIndex: 0
-                    };
-                } else {
-                    window.activeCluster.currentIndex = (window.activeCluster.currentIndex + 1) % cluster.items.length;
-                }
-                const activeItem = window.activeCluster.items[window.activeCluster.currentIndex];
-                if (activeItem.type === 'event') {
-                    viewedEvents.add(activeItem.id);
-                }
-                currentInfoView = { type: activeItem.type, id: activeItem.id };
-                openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
-                refreshInfoPanel();
-                renderMap(localState.events, localState.assets); // Re-render to update marker color
+                let listHtml = `<div style="font-weight: bold; font-size: 0.85rem; margin-bottom: 6px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Objects at this Location (${cluster.items.length})</div>`;
+                listHtml += `<div class="cluster-popup-list">`;
+                cluster.items.forEach((item, itemIdx) => {
+                    let iconEmoji = item.type === 'event' ? '🚨' : '🛡️';
+                    let statusPill = '';
+                    if (item.type === 'event') {
+                        if (item.isResolved) {
+                            iconEmoji = '✅';
+                            statusPill = '<span class="badge" style="background: rgba(34,197,94,0.2); color: var(--accent-green); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">Resolved</span>';
+                        } else if (!viewedEvents.has(item.id)) {
+                            statusPill = '<span class="badge font-bold" style="background: rgba(239,68,68,0.25); color: var(--accent-red); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">NEW</span>';
+                        } else {
+                            statusPill = '<span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">Active</span>';
+                        }
+                    } else {
+                        statusPill = `<span class="badge uppercase" style="background: rgba(148,163,184,0.2); color: var(--text-muted); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">${item.state || 'Asset'}</span>`;
+                    }
+                    listHtml += `
+                        <button type="button" class="cluster-popup-item" onclick="window.selectClusterItem(${index}, ${itemIdx})">
+                            <span style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                <span>${iconEmoji}</span>
+                                <span style="font-weight: 500;">${item.name}</span>
+                            </span>
+                            <span>${statusPill}</span>
+                        </button>
+                    `;
+                });
+                listHtml += `</div>`;
+
+                L.popup({ offset: [0, -10], closeButton: true })
+                    .setLatLng(cluster.location)
+                    .setContent(listHtml)
+                    .openOn(map);
             } else {
                 window.activeCluster = null;
                 const activeItem = cluster.items[0];
                 if (activeItem.type === 'event') {
                     viewedEvents.add(activeItem.id);
+                    if (window.updateEventsBadge) window.updateEventsBadge();
                 }
                 currentInfoView = { type: activeItem.type, id: activeItem.id };
                 openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
@@ -1066,8 +1105,31 @@ function renderMap(events, assets) {
         mapMarkers[clusterId] = marker;
     });
 
+    window.currentClusters = clusters;
     updateEdgeMarkers();
 }
+
+window.selectClusterItem = function(clusterIndex, itemIndex) {
+    const cluster = window.currentClusters && window.currentClusters[clusterIndex];
+    if (!cluster || !cluster.items[itemIndex]) return;
+
+    window.activeCluster = {
+        clusterId: `cluster_${clusterIndex}`,
+        items: cluster.items,
+        currentIndex: itemIndex
+    };
+
+    const activeItem = cluster.items[itemIndex];
+    if (activeItem.type === 'event') {
+        viewedEvents.add(activeItem.id);
+        if (window.updateEventsBadge) window.updateEventsBadge();
+    }
+    currentInfoView = { type: activeItem.type, id: activeItem.id };
+    openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
+    refreshInfoPanel();
+    renderMap(localState.events, localState.assets);
+    map.closePopup();
+};
 
 
 
@@ -1077,55 +1139,112 @@ function buildEventsListHtml(p) {
     }
 
     const visibleEvents = [...localState.events]
-        .filter(evt => window.canSee(evt, role))
-        .reverse();
+        .filter(evt => window.canSee(evt, role));
 
     if (visibleEvents.length === 0) {
         return '<p class="text-muted">No crisis events visible to your station.</p>';
     }
 
-    let html = '<div class="events-list flex-column gap-2">';
+    // Categorise into 3 tiers:
+    // 0: Unviewed & Unresolved (Top priority)
+    // 1: Viewed & Unresolved (Active in progress)
+    // 2: Resolved (Tasks finished or viewed acknowledged)
+    const unviewedEvents = [];
+    const activeEvents = [];
+    const resolvedEvents = [];
+
     visibleEvents.forEach(evt => {
         const eventTasks = (localState.decisionTasks || []).filter(t => t.eventId === evt.id);
         const hasTasks = eventTasks.length > 0;
         const isResolved = hasTasks ? eventTasks.every(t => t.status === 'resolved') : viewedEvents.has(evt.id);
-        const hasLoc = isValidLocation(evt.location);
+        evt._isResolved = isResolved;
+        evt._hasTasks = hasTasks;
 
-        const cardBorderClass = isResolved ? 'border-color' : 'border-red';
-        const cardBgClass = isResolved ? 'bg-primary' : 'bg-red-faded';
-
-        html += `<div class="card ${cardBorderClass} ${cardBgClass} p-2">`;
-        
-        html += `<div class="flex-between items-center mb-1 flex-wrap gap-1">`;
         if (isResolved) {
-            html += `<span class="badge text-xs uppercase" style="background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); padding: 2px 8px; border-radius: 4px;">Resolved</span>`;
+            resolvedEvents.push(evt);
+        } else if (!viewedEvents.has(evt.id)) {
+            unviewedEvents.push(evt);
         } else {
-            html += `<span class="badge text-xs uppercase font-bold" style="background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); padding: 2px 8px; border-radius: 4px;">⚠️ Active Event</span>`;
+            activeEvents.push(evt);
+        }
+    });
+
+    // Sort newer events first within each tier
+    const sortRecent = (a, b) => (b.timestamp || 0) - (a.timestamp || 0);
+    unviewedEvents.sort(sortRecent);
+    activeEvents.sort(sortRecent);
+    resolvedEvents.sort(sortRecent);
+
+    function renderEventCard(evt, isUnviewed) {
+        const hasLoc = isValidLocation(evt.location);
+        const cardBorderClass = evt._isResolved ? 'border-color' : (isUnviewed ? 'border-red' : 'border-color');
+        const cardBgClass = evt._isResolved ? 'bg-primary' : (isUnviewed ? 'bg-red-faded' : 'bg-primary');
+
+        let cardHtml = `<div class="card ${cardBorderClass} ${cardBgClass} p-2 mb-2">`;
+        cardHtml += `<div class="flex-between items-center mb-1 flex-wrap gap-1">`;
+        if (evt._isResolved) {
+            cardHtml += `<span class="badge text-xs uppercase" style="background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); padding: 2px 8px; border-radius: 4px;">Resolved</span>`;
+        } else if (isUnviewed) {
+            cardHtml += `<span class="badge text-xs uppercase font-bold" style="background: rgba(239, 68, 68, 0.25); color: var(--accent-red); border: 1px solid var(--accent-red); padding: 2px 8px; border-radius: 4px;">🚨 NEW EVENT</span>`;
+        } else {
+            cardHtml += `<span class="badge text-xs uppercase" style="background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 2px 8px; border-radius: 4px;">Active Event</span>`;
         }
 
         if (hasLoc) {
-            html += `<span class="text-xs text-muted font-mono">📍 Map Location</span>`;
+            cardHtml += `<span class="text-xs text-muted font-mono">📍 Map Location</span>`;
         } else {
-            html += `<span class="text-xs text-muted font-mono">🌐 Global / Direct</span>`;
+            cardHtml += `<span class="text-xs text-muted font-mono">🌐 Global / Direct</span>`;
         }
-        html += `</div>`;
+        cardHtml += `</div>`;
 
-        html += `<h3 class="card-title text-base mb-1 font-bold">${evt.name}</h3>`;
+        cardHtml += `<h3 class="card-title text-base mb-1 font-bold">${evt.name}</h3>`;
         if (evt.description) {
             const rawDesc = typeof evt.description === 'string' ? evt.description : '';
             const previewDesc = rawDesc.length > 140 ? rawDesc.substring(0, 140) + '...' : rawDesc;
-            html += `<p class="card-desc text-sm text-secondary mb-2">${p(previewDesc)}</p>`;
+            cardHtml += `<p class="card-desc text-sm text-secondary mb-2">${p(previewDesc)}</p>`;
         }
 
-        html += `<div class="flex-row gap-1 items-center mt-1">`;
-        html += `<button class="btn btn-secondary text-sm flex-1" onclick="window.selectEventFromList('${evt.id}')">View Details</button>`;
+        cardHtml += `<div class="flex-row gap-1 items-center mt-1">`;
+        cardHtml += `<button class="btn btn-secondary text-sm flex-1" onclick="window.selectEventFromList('${evt.id}')">View Details</button>`;
         if (hasLoc) {
-            html += `<button class="btn btn-ghost text-sm" onclick="event.stopPropagation(); window.locateEventOnMap('${evt.id}');" title="Locate on Map">📍 Locate</button>`;
+            cardHtml += `<button class="btn btn-ghost text-sm" onclick="event.stopPropagation(); window.locateEventOnMap('${evt.id}');" title="Locate on Map">📍 Locate</button>`;
         }
-        html += `</div>`;
+        cardHtml += `</div>`;
 
-        html += `</div>`;
-    });
+        cardHtml += `</div>`;
+        return cardHtml;
+    }
+
+    let html = '<div class="events-list flex-column">';
+
+    // 1. Unviewed section at top
+    if (unviewedEvents.length > 0) {
+        html += `<div class="events-section-title text-red">⚠️ Unviewed Events (${unviewedEvents.length})</div>`;
+        unviewedEvents.forEach(evt => { html += renderEventCard(evt, true); });
+    }
+
+    // 2. Active section in middle
+    if (activeEvents.length > 0) {
+        html += `<div class="events-section-title">Active Events (${activeEvents.length})</div>`;
+        activeEvents.forEach(evt => { html += renderEventCard(evt, false); });
+    }
+
+    // 3. Resolved section at bottom (collapsible)
+    if (resolvedEvents.length > 0) {
+        const hasActive = (unviewedEvents.length + activeEvents.length) > 0;
+        const defaultOpen = hasActive ? '' : 'open';
+        html += `
+            <details class="resolved-events-details mt-2" ${defaultOpen}>
+                <summary>Resolved Events (${resolvedEvents.length})</summary>
+                <div class="mt-2">
+        `;
+        resolvedEvents.forEach(evt => { html += renderEventCard(evt, false); });
+        html += `
+                </div>
+            </details>
+        `;
+    }
+
     html += '</div>';
 
     return html;
@@ -1141,6 +1260,7 @@ window.selectEventFromList = function(eventId) {
     const evt = localState.events.find(e => e.id === eventId);
     if (!evt) return;
     viewedEvents.add(eventId);
+    if (window.updateEventsBadge) window.updateEventsBadge();
     if (isValidLocation(evt.location)) {
         map.flyTo(L.latLng(evt.location), Math.max(map.getZoom(), 8));
     }
@@ -1426,6 +1546,7 @@ document.head.appendChild(style);
 
 // Interval to update countdown timers every second
 setInterval(() => {
+    if (localState && localState.isPaused) return; // Clocks paused by facilitator
     const timers = document.querySelectorAll('.countdown-timer');
     timers.forEach(timer => {
         const endTime = parseInt(timer.getAttribute('data-endtime'));

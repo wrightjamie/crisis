@@ -238,6 +238,45 @@ result = engine.triggerManualAction('test_any_active_roles_action', 'home');
 assert.strictEqual(result, true, "Should succeed because foreign is active");
 console.log("✅ activeRoles conditions tests passed.");
 
+console.log("Testing event deduplication and pause/resume...");
+resetEngine();
+const tutorialScenario = scenarios.find(s => s.id === 'tutorial');
+if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
+    engine.gameState.scenarioId = 'tutorial';
+    engine.gameState.scenarioConfig = tutorialScenario;
+    const e1 = tutorialScenario.eventTemplates[0];
+    engine.triggerScenarioEvent(e1.id);
+    assert.strictEqual(engine.gameState.events.length, 1, "First trigger should succeed");
+
+    const duplicateTrigger = engine.triggerScenarioEvent(e1.id);
+    assert.strictEqual(duplicateTrigger, false, "Duplicate trigger of non-repeatable event should be rejected");
+    assert.strictEqual(engine.gameState.events.length, 1, "Event count should still be 1");
+
+    const e2 = tutorialScenario.eventTemplates[1];
+    engine.gameState.scheduledEvents.push({
+        uuid: 'test_se_1',
+        templateId: e2.id,
+        triggerTimeMs: Date.now() + 60000,
+        paused: false
+    });
+    assert.strictEqual(engine.gameState.scheduledEvents.length, 1);
+    engine.triggerScenarioEvent(e2.id);
+    assert.strictEqual(engine.gameState.events.length, 2);
+    assert.strictEqual(engine.gameState.scheduledEvents.length, 0, "Scheduled event should be cancelled when event triggers");
+
+    // Pause / Resume test
+    engine.pauseGame(true);
+    assert.strictEqual(engine.isPaused, true);
+    assert.strictEqual(engine.isManualPause, true);
+    assert.strictEqual(engine.gameState.isPaused, true);
+
+    engine.resumeGame();
+    assert.strictEqual(engine.isPaused, false);
+    assert.strictEqual(engine.isManualPause, false);
+    assert.strictEqual(engine.gameState.isPaused, false);
+    console.log("✅ Event deduplication and pause/resume tests passed.");
+}
+
 // Cleanup
 scenarios.pop();
 console.log("All engine-actions tests passed.");

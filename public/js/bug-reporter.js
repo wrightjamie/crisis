@@ -177,7 +177,7 @@
 
     // Toggle Chat Panel visibility
     function togglePanel(explicitState) {
-        isOpen = explicitState !== undefined ? explicitState : !isOpen;
+        isOpen = typeof explicitState === 'boolean' ? explicitState : !isOpen;
         const panel = document.getElementById('bug-reporter-panel');
         if (!panel) return;
 

@@ -353,7 +353,7 @@ CRITICAL RULES:
             image: 'ev_maritime_shadowing',
             name: 'Initial Reports of Aggression',
             description: 'Claiming they are acting to "protect the legitimate administration" following the election unrest, Argentine naval elements and aircraft have crossed into the exclusion zone.',
-            location: [-51.5, -59.0],
+            location: [-50.4, -60.8],
             roleDescriptions: {
                 uk_commander: 'Sir, early warning systems confirm multiple bogeys inbound. We have a rapidly developing situation on our hands.'
             },
