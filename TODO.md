@@ -51,7 +51,7 @@ While all 13 scenarios now have functional image mappings in place so no UI card
 ### 4. Falklands II (falklands_2) — Setting Mismatches
 - [ ] Asset: "Port Stanley" (port_stanley) — Currently uses Caribbean Government House in Tortola with palm trees (bvi_gov_house). Needs the windswept, treeless, sub-Antarctic coastal town of Stanley with colorful tin roofs and harbor jetties.
 - [ ] Asset: "RAF Mount Pleasant" (mount_pleasant) — Currently uses generic European NATO base. Needs the stark, treeless East Falkland peat-bog military complex under cold grey skies.
-- [ ] Asset: "Argentine Air Bases" (rio_gallegos, rio_grande) — Currently uses NATO air base. Needs Patagonian military airbases in southern Argentina with Super Etendard / Skyhawk revetments.
+- [ ] Asset: "Argentine Air Bases" (rio_gallegos, rio_grande) — rio_grande updated with bespoke Argentine naval airbase image (arg_rio_grande_base); rio_gallegos pending bespoke Patagonian airbase artwork.
 - [ ] Event: "Naval Defeat in South Atlantic" (ev_naval_defeat) — Currently uses Portsmouth naval dockyard missile strike (ev_portsmouth_strike). Needs burning UK frigate in rough South Atlantic seas.
 - [ ] Event: "Air Raid on Mount Pleasant" (ev_air_raid) — Currently uses Cyprus Akrotiri strike (ev_akrotiri_strike). Needs Argentine air-launched cruise missile strikes on Mount Pleasant runway.
 

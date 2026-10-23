@@ -311,7 +311,12 @@ class GameEngine {
         console.log(`Event triggered: ${template.name}`);
 
         let eventLocation = template.location;
-        if (template.possibleLocations && template.possibleLocations.length > 0) {
+        if (template.assetLocation && this.gameState.assets) {
+            const linkedAsset = this.gameState.assets.find(a => a.id === template.assetLocation);
+            if (linkedAsset && linkedAsset.location) {
+                eventLocation = linkedAsset.location;
+            }
+        } else if (template.possibleLocations && template.possibleLocations.length > 0) {
             eventLocation = template.possibleLocations[Math.floor(Math.random() * template.possibleLocations.length)];
         }
 

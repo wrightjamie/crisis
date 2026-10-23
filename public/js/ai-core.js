@@ -176,7 +176,13 @@ Summary: Public support remains strong following recent operations, but our fina
     async generateScenarioSummary(aiConfig, roleId, combinedText) {
         if (!this.engine) throw new Error("AI Engine not initialized");
         const systemPrompt = `You are an automated intelligence reporting system.\n${aiConfig.roleContexts[roleId] || ''}\n${aiConfig.systemPrompt}`;
-        const userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into a comprehensive executive briefing. Provide a clear overview paragraph of the operational picture, followed by 2-3 bullet points highlighting the most critical specific details and challenges for this role.`;
+        const userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into a comprehensive executive briefing formatted in clean Markdown.
+Format requirements:
+- Provide a clear, cohesive overview paragraph of the operational picture. Do NOT include greetings or titles like "EXECUTIVE BRIEFING".
+- Follow with a "### Critical Details & Challenges" heading.
+- Provide 2-3 concise bullet points highlighting the most critical specific details, risks, or challenges for this role.
+- In each bullet point, bold the key subject at the start (e.g. "- **Subject:** Details...").
+- Separate paragraphs, headings, and bullet points with blank lines.`;
         
         const summaryReply = await withTimeout(this.engine.chat.completions.create({
             messages: [
@@ -187,8 +193,11 @@ Summary: Public support remains strong following recent operations, but our fina
             max_tokens: 350
         }), 60000); // 60 second timeout for summary
 
+        const rawOutput = summaryReply.choices[0].message.content.trim();
+        const cleanedText = (typeof window !== 'undefined' && window.tidyAiBrief) ? window.tidyAiBrief(rawOutput) : rawOutput;
+
         return {
-            text: summaryReply.choices[0].message.content.trim(),
+            text: cleanedText,
             prompt: userPrompt
         };
     }

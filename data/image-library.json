@@ -2637,5 +2637,66 @@
             "uk",
             "raf"
         ]
+    },
+    "arg_rio_grande_base": {
+        "id": "arg_rio_grande_base",
+        "file": "/images/library/arg_rio_grande_base.jpg",
+        "title": "Base Aeronaval Río Grande (Hermes Quijada)",
+        "description": "Argentine Naval Aviation base in Tierra del Fuego with hardened revetments, maintenance hangars, and naval strike combat aircraft under bleak Patagonian skies.",
+        "tags": [
+            "asset",
+            "military",
+            "air",
+            "airbase",
+            "argentina",
+            "falklands",
+            "infrastructure"
+        ]
+    },
+    "ev_sea_skimming_missiles": {
+        "id": "ev_sea_skimming_missiles",
+        "file": "/images/library/ev_sea_skimming_missiles.jpg",
+        "title": "Sea-Skimming Anti-Ship Missiles Strike",
+        "description": "Anti-ship cruise missiles skimming meters above choppy South Atlantic waters with rocket exhaust trails heading toward a naval target.",
+        "tags": [
+            "event",
+            "military",
+            "naval",
+            "maritime",
+            "missile",
+            "strike",
+            "combat",
+            "falklands"
+        ]
+    },
+    "ev_fidf_resistance": {
+        "id": "ev_fidf_resistance",
+        "file": "/images/library/ev_fidf_resistance.jpg",
+        "title": "Falkland Islands Defence Force (FIDF) Volunteers",
+        "description": "Local civilian defence force volunteers and islanders in rugged outdoor gear establishing observation and resistance positions in the windswept Falklands hills.",
+        "tags": [
+            "event",
+            "civilian",
+            "military",
+            "land",
+            "resistance",
+            "falklands",
+            "uk"
+        ]
+    },
+    "ev_stanley_standoff": {
+        "id": "ev_stanley_standoff",
+        "file": "/images/library/ev_stanley_standoff.jpg",
+        "title": "Military Standoff at Port Stanley",
+        "description": "Tense armed military faceoff between Argentine troops and British soldiers near the Port Stanley harbor front amidst colorful tin-roofed settlement houses.",
+        "tags": [
+            "event",
+            "military",
+            "land",
+            "standoff",
+            "falklands",
+            "uk",
+            "argentina"
+        ]
     }
 }

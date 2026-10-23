@@ -413,6 +413,170 @@ body.fac-panel-open .info-panel {
   border-left: 3px solid var(--accent-orange);
 }
 
+.briefing-ai {
+  border-left: 3px solid var(--status-1);
+}
+
+/* Briefing Typography & Prose Styling */
+.briefing-section,
+.ai-briefing-content,
+#briefing-ai-summary-text {
+  line-height: 1.65;
+  color: var(--text-primary);
+  font-size: var(--text-base);
+}
+
+.briefing-section p,
+.ai-briefing-content p,
+#briefing-ai-summary-text p {
+  margin-bottom: var(--space-md);
+  line-height: 1.65;
+}
+
+.briefing-section p:last-child,
+.ai-briefing-content p:last-child,
+#briefing-ai-summary-text p:last-child {
+  margin-bottom: 0;
+}
+
+.briefing-section h1,
+.briefing-section h2,
+.briefing-section h3,
+.briefing-section h4,
+.ai-briefing-content h1,
+.ai-briefing-content h2,
+.ai-briefing-content h3,
+.ai-briefing-content h4,
+#briefing-ai-summary-text h1,
+#briefing-ai-summary-text h2,
+#briefing-ai-summary-text h3,
+#briefing-ai-summary-text h4 {
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+}
+
+.briefing-section h1:first-child,
+.briefing-section h2:first-child,
+.briefing-section h3:first-child,
+.briefing-section h4:first-child,
+.ai-briefing-content h1:first-child,
+.ai-briefing-content h2:first-child,
+.ai-briefing-content h3:first-child,
+.ai-briefing-content h4:first-child,
+#briefing-ai-summary-text h1:first-child,
+#briefing-ai-summary-text h2:first-child,
+#briefing-ai-summary-text h3:first-child,
+#briefing-ai-summary-text h4:first-child {
+  margin-top: 0;
+}
+
+.briefing-section h3,
+.ai-briefing-content h3,
+#briefing-ai-summary-text h3 {
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #60a5fa;
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+
+.briefing-section h4,
+.ai-briefing-content h4,
+#briefing-ai-summary-text h4 {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+/* Bullet list & item styling */
+.briefing-section ul,
+.briefing-section ol,
+.ai-briefing-content ul,
+.ai-briefing-content ol,
+#briefing-ai-summary-text ul,
+#briefing-ai-summary-text ol {
+  padding-left: 1.4rem;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-md);
+  list-style-type: disc;
+}
+
+.briefing-section ul:last-child,
+.briefing-section ol:last-child,
+.ai-briefing-content ul:last-child,
+.ai-briefing-content ol:last-child,
+#briefing-ai-summary-text ul:last-child,
+#briefing-ai-summary-text ol:last-child {
+  margin-bottom: 0;
+}
+
+.briefing-section li,
+.ai-briefing-content li,
+#briefing-ai-summary-text li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.6;
+  padding-left: 0.2rem;
+}
+
+.briefing-section li:last-child,
+.ai-briefing-content li:last-child,
+#briefing-ai-summary-text li:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested sub-bullets */
+.briefing-section li > ul,
+.briefing-section li > ol,
+.ai-briefing-content li > ul,
+.ai-briefing-content li > ol,
+#briefing-ai-summary-text li > ul,
+#briefing-ai-summary-text li > ol {
+  padding-left: 1.25rem;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  list-style-type: circle;
+}
+
+.briefing-section li > ul > li,
+.briefing-section li > ol > li,
+.ai-briefing-content li > ul > li,
+.ai-briefing-content li > ol > li,
+#briefing-ai-summary-text li > ul > li,
+#briefing-ai-summary-text li > ol > li {
+  margin-bottom: var(--space-xs);
+  color: var(--text-secondary);
+}
+
+/* Emphasized topic in bullet points */
+.briefing-section li > strong:first-child,
+.ai-briefing-content li > strong:first-child,
+#briefing-ai-summary-text li > strong:first-child {
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+/* In-game AI Panel updates list */
+.ai-briefing-seeds {
+  list-style-type: disc;
+  padding-left: 1.4rem;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.ai-briefing-seeds li {
+  margin-bottom: var(--space-xs);
+  line-height: 1.5;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .info-panel {

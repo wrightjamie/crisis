@@ -341,7 +341,7 @@ function showBriefing() {
         html += `
             <div class="briefing-section">
                 <div class="briefing-section-label">Situation Overview</div>
-                ${p(briefings._general)}
+                <div class="ai-briefing-content">${window.renderBriefingMarkdown ? window.renderBriefingMarkdown(briefings._general) : p(briefings._general)}</div>
             </div>
         `;
     }
@@ -352,14 +352,14 @@ function showBriefing() {
             html += `
                 <div class="briefing-section briefing-role">
                     <div class="briefing-section-label">${vb.axisName} — ${role.toUpperCase()} Intel</div>
-                    ${p(vb.roleBriefings[role])}
+                    <div class="ai-briefing-content">${window.renderBriefingMarkdown ? window.renderBriefingMarkdown(vb.roleBriefings[role]) : p(vb.roleBriefings[role])}</div>
                 </div>
             `;
         } else if (vb.briefingText) {
             html += `
                 <div class="briefing-section briefing-variant">
                     <div class="briefing-section-label">${vb.axisName}</div>
-                    ${p(vb.briefingText)}
+                    <div class="ai-briefing-content">${window.renderBriefingMarkdown ? window.renderBriefingMarkdown(vb.briefingText) : p(vb.briefingText)}</div>
                 </div>
             `;
         }
@@ -370,15 +370,15 @@ function showBriefing() {
         html += `
             <div class="briefing-section briefing-role">
                 <div class="briefing-section-label">Your Role — ${role.toUpperCase()}</div>
-                ${p(briefings[role])}
+                <div class="ai-briefing-content">${window.renderBriefingMarkdown ? window.renderBriefingMarkdown(briefings[role]) : p(briefings[role])}</div>
             </div>
         `;
     }
 
     html += `
-        <div class="briefing-section briefing-ai" class="border-status-1">
+        <div class="briefing-section briefing-ai border-status-1">
             <div class="briefing-section-label">Executive Summary</div>
-            <div id="briefing-ai-summary-text" class="pre-wrap"><em>Writing your brief... Please wait.</em></div>
+            <div id="briefing-ai-summary-text" class="ai-briefing-content"><em>Writing your brief... Please wait.</em></div>
         </div>
     `;
     
@@ -400,7 +400,7 @@ function showBriefing() {
             
             const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
             
-            aiSummaryText.innerHTML = `<div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
+            aiSummaryText.innerHTML = window.renderBriefingMarkdown ? window.renderBriefingMarkdown(combinedText) : p(combinedText).replace(/\n/g, '<br>');
         }
     }, 45000);
 }
@@ -829,11 +829,9 @@ function updateUI() {
         if (aiSummaryText && (aiSummaryText.innerHTML.includes('Writing') || aiSummaryText.innerHTML.includes('raw briefing data'))) {
             const summaryData = localState.aiScenarioSummaries[role];
             if (summaryData.text) {
-                let processedText = p(summaryData.text);
-                let html = window.marked && window.DOMPurify
-                    ? DOMPurify.sanitize(marked.parse(processedText))
-                    : processedText.replace(/\n/g, '<br>');
-                aiSummaryText.innerHTML = html;
+                aiSummaryText.innerHTML = window.renderBriefingMarkdown
+                    ? window.renderBriefingMarkdown(summaryData.text)
+                    : p(summaryData.text).replace(/\n/g, '<br>');
             } else if (localState.aiEnabled === false) {
                 const config = localState.scenarioConfig;
                 const general = config.briefings._general || '';
@@ -844,7 +842,9 @@ function updateUI() {
                     return (genVar + '\n' + roleVar).trim();
                 }).filter(t => t).join('\n\n');
                 const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
-                aiSummaryText.innerHTML = `<div class="lh-16">${p(combinedText.replace(/\n/g, '<br>'))}</div>`;
+                aiSummaryText.innerHTML = window.renderBriefingMarkdown
+                    ? window.renderBriefingMarkdown(combinedText)
+                    : p(combinedText).replace(/\n/g, '<br>');
             }
         }
     }
@@ -975,6 +975,7 @@ function renderMap(events, assets) {
             items.push({
                 type: 'event',
                 id: evt.id,
+                name: evt.name,
                 location: evt.location,
                 isResolved: isResolved,
                 priority: isResolved ? 3 : 1,
@@ -989,6 +990,8 @@ function renderMap(events, assets) {
             items.push({
                 type: 'asset',
                 id: asset.id,
+                name: asset.name,
+                state: asset.state,
                 location: asset.location,
                 priority: 2,
                 data: asset
@@ -1057,6 +1060,7 @@ function renderMap(events, assets) {
                 let listHtml = `<div style="font-weight: bold; font-size: 0.85rem; margin-bottom: 6px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">Objects at this Location (${cluster.items.length})</div>`;
                 listHtml += `<div class="cluster-popup-list">`;
                 cluster.items.forEach((item, itemIdx) => {
+                    const itemName = item.name || item.data?.name || (item.type === 'event' ? 'Unnamed Event' : 'Unnamed Asset');
                     let iconEmoji = item.type === 'event' ? '🚨' : '🛡️';
                     let statusPill = '';
                     if (item.type === 'event') {
@@ -1069,13 +1073,14 @@ function renderMap(events, assets) {
                             statusPill = '<span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">Active</span>';
                         }
                     } else {
-                        statusPill = `<span class="badge uppercase" style="background: rgba(148,163,184,0.2); color: var(--text-muted); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">${item.state || 'Asset'}</span>`;
+                        const stateText = item.state || item.data?.state || 'Asset';
+                        statusPill = `<span class="badge uppercase" style="background: rgba(148,163,184,0.2); color: var(--text-muted); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px;">${stateText}</span>`;
                     }
                     listHtml += `
                         <button type="button" class="cluster-popup-item" onclick="window.selectClusterItem(${index}, ${itemIdx})">
                             <span style="display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <span>${iconEmoji}</span>
-                                <span style="font-weight: 500;">${item.name}</span>
+                                <span style="font-weight: 500;">${itemName}</span>
                             </span>
                             <span>${statusPill}</span>
                         </button>
@@ -1276,16 +1281,16 @@ function buildAiPanelHtml(p) {
     let html = `
         <div class="mb-3">
             ${aiBriefing && aiBriefing.text 
-                ? `<div class="text-base lh-16">${window.marked && window.DOMPurify ? DOMPurify.sanitize(marked.parse(p(aiBriefing.text))) : p(aiBriefing.text).replace(/\n/g, '<br>')}</div>` 
+                ? `<div class="ai-briefing-content">${window.renderBriefingMarkdown ? window.renderBriefingMarkdown(aiBriefing.text) : p(aiBriefing.text).replace(/\n/g, '<br>')}</div>` 
                 : (localState.aiEnabled === false ? '' : '<p class="text-muted">Briefing is currently unavailable.</p>')}
         </div>
     `;
 
     if (aiBriefing && aiBriefing.seeds && aiBriefing.seeds.length > 0) {
         html += `<h4 class="mb-sm text-secondary">Intelligence Updates</h4>
-                 <ul class="list-none p-0 m-0 text-sm text-muted">`;
+                 <ul class="ai-briefing-seeds">`;
         aiBriefing.seeds.forEach(seed => {
-            html += `<li class="mb-05">• ${p(seed.text)}</li>`;
+            html += `<li>${p(seed.text)}</li>`;
         });
         html += `</ul>`;
     }

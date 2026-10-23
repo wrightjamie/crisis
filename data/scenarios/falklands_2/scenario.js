@@ -115,7 +115,7 @@ CRITICAL RULES:
         },
         {
             id: 'rio_grande',
-            image: 'nato_air_base',
+            image: 'arg_rio_grande_base',
             name: 'Rio Grande Air Base (Arg)',
             location: [-53.777, -67.755],
             state: 'operational',
@@ -370,13 +370,13 @@ CRITICAL RULES:
                                 scores: { military_readiness: 1, argentina_aggression: 1 },
                                 triggerEvents: [
                                     { id: 'ev_naval_skirmish',
-            image: 'ev_naval_strike', delayMs: 90000, probability: 1.0 },
+            image: 'ev_sea_skimming_missiles', delayMs: 90000, probability: 1.0 },
                                     { id: 'ev_ground_incursion',
             image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure',
             image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
                                     { id: 'ev_resistance_contact',
-            image: 'act_special_forces', delayMs: 210000, probability: 1.0 },
+            image: 'ev_fidf_resistance', delayMs: 210000, probability: 1.0 },
                                     { id: 'ev_cyber_attack',
             image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
                                     { id: 'ev_sub_detected',
@@ -399,13 +399,13 @@ CRITICAL RULES:
                                 scores: { uk_public_support: -1, international_pressure: -1 },
                                 triggerEvents: [
                                     { id: 'ev_naval_skirmish',
-            image: 'ev_naval_strike', delayMs: 90000, probability: 1.0 },
+            image: 'ev_sea_skimming_missiles', delayMs: 90000, probability: 1.0 },
                                     { id: 'ev_ground_incursion',
             image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
                                     { id: 'ev_political_pressure',
             image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
                                     { id: 'ev_resistance_contact',
-            image: 'act_special_forces', delayMs: 210000, probability: 1.0 },
+            image: 'ev_fidf_resistance', delayMs: 210000, probability: 1.0 },
                                     { id: 'ev_cyber_attack',
             image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
                                     { id: 'ev_sub_detected',
@@ -428,7 +428,8 @@ CRITICAL RULES:
         // --- THREAD 1: Naval / Air Combat ---
         {
             id: 'ev_naval_skirmish',
-            image: 'ev_naval_strike',
+            assetLocation: 'hms_defender',
+            image: 'ev_sea_skimming_missiles',
             name: 'Naval Skirmish off East Falkland',
             description: 'HMS Defender is engaging multiple fast attack craft and incoming anti-ship missiles.',
             location: [-51.4, -57.5],
@@ -458,7 +459,7 @@ CRITICAL RULES:
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
                                     { id: 'ev_ship_damaged',
-            image: 'ev_naval_strike', delayMs: 95000, probability: 0.6 }
+            image: 'ev_sea_skimming_missiles', delayMs: 95000, probability: 0.6 }
                                 ]
                             }
                         }
@@ -508,7 +509,8 @@ CRITICAL RULES:
         },
         {
             id: 'ev_ship_damaged',
-            image: 'ev_naval_strike',
+            assetLocation: 'hms_defender',
+            image: 'ev_sea_skimming_missiles',
             name: 'HMS Defender Takes Damage',
             description: 'An Exocet missile has struck HMS Defender, causing significant damage.',
             location: [-51.4, -57.5],
@@ -632,7 +634,7 @@ CRITICAL RULES:
                                 scores: { uk_public_support: 1 },
                                 triggerEvents: [
                                     { id: 'ev_standoff',
-            image: 'generic_police', delayMs: 110000, probability: 0.7 }
+            image: 'ev_stanley_standoff', delayMs: 110000, probability: 0.7 }
                                 ]
                             }
                         }
@@ -672,7 +674,7 @@ CRITICAL RULES:
                                 scores: { military_readiness: -1 },
                                 triggerEvents: [
                                     { id: 'ev_standoff',
-            image: 'generic_police', delayMs: 120000, probability: 0.6 }
+            image: 'ev_stanley_standoff', delayMs: 120000, probability: 0.6 }
                                 ]
                             }
                         }
@@ -682,7 +684,7 @@ CRITICAL RULES:
         },
         {
             id: 'ev_standoff',
-            image: 'generic_police',
+            image: 'ev_stanley_standoff',
             name: 'Stalemate at Stanley',
             description: 'A tense standoff has developed. Neither side is making ground.',
             location: [-51.692, -57.858],
@@ -1043,7 +1045,7 @@ CRITICAL RULES:
 
         {
             id: 'ev_resistance_contact',
-            image: 'act_special_forces',
+            image: 'ev_fidf_resistance',
             name: 'FIDF Resistance Mobilizes',
             description: 'Members of the Falkland Islands Defence Force (FIDF) and local civilians have formed a resistance network in the hills.',
             location: [-51.75, -58.0],

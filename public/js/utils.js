@@ -1,9 +1,146 @@
 // Utility Functions Shared Between Client and Facilitator
 
-// Format score names (e.g., 'uk_russia' -> 'Uk Russia')
-window.formatName = function(str) {
+function formatName(str) {
     return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-};
+}
+if (typeof window !== 'undefined') {
+    window.formatName = formatName;
+}
+
+// Clean up and structure AI briefs for consistent formatting, paragraph spacing, and bullets
+function tidyAiBrief(rawText) {
+    if (!rawText || typeof rawText !== 'string') return '';
+
+    let text = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+
+    // Strip regurgitated LLM prompts if the model echoes the prompt (e.g. "Context:... Task:...")
+    text = text.replace(/^Context:\s*[\s\S]*?(?:Task|Instructions|Prompt):[^\n]*\n*/i, '').trim();
+
+    // Split into lines
+    const rawLines = text.split('\n');
+    const cleanedLines = [];
+
+    // Helper to check if a line is a bullet
+    const isBulletLine = (line) => /^\s*([•◦▪⁃\*\-]|(?:\d+\.))\s+/.test(line);
+
+    let skippedPreamble = false;
+
+    for (let i = 0; i < rawLines.length; i++) {
+        let line = rawLines[i].trim();
+
+        if (!line) {
+            // Keep empty lines as paragraph dividers if the last line wasn't already empty
+            if (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1] !== '') {
+                cleanedLines.push('');
+            }
+            continue;
+        }
+
+        // Strip regurgitated prompt lines like "Context:", "Task:", "Prompt:"
+        if (!skippedPreamble && /^(?:Context|Task|Prompt|Instructions):\s*$/i.test(line)) {
+            continue;
+        }
+
+        // Remove redundant top-level briefing titles (e.g. "EXECUTIVE BRIEFING", "# EXECUTIVE SUMMARY")
+        if (cleanedLines.length === 0 || (cleanedLines.length === 1 && cleanedLines[0] === '')) {
+            if (/^(?:#+\s*|\*\*)?(?:EXECUTIVE\s+BRIEFING|INTELLIGENCE\s+BRIEFING|MISSION\s+BRIEFING|SITUATION\s+REPORT|EXECUTIVE\s+SUMMARY)(?:\*\*|:)?\s*$/i.test(line)) {
+                skippedPreamble = true;
+                continue;
+            }
+        }
+
+        skippedPreamble = true;
+
+        // Standalone section titles like "OVERVIEW", "SITUATION OVERVIEW"
+        if (/^(?:#+\s*|\*\*)?(OVERVIEW|SITUATION OVERVIEW|OPERATIONAL PICTURE|EXECUTIVE OVERVIEW)(?:\*\*|:)?\s*$/i.test(line)) {
+            const headingText = line.replace(/^[#\*\s]+/, '').replace(/[\*:]+$/, '').trim();
+            const formatted = headingText.charAt(0).toUpperCase() + headingText.slice(1).toLowerCase();
+            if (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1] !== '') cleanedLines.push('');
+            cleanedLines.push(`### ${formatted}`);
+            cleanedLines.push('');
+            continue;
+        }
+
+        // Section headers ending with a colon e.g. "Critical Details and Challenges:" or "Key Highlights:"
+        const headerWithColon = line.match(/^(?:#+\s*|\*\*)?([A-Za-z0-9\s/&—–-]{3,50})(?:\*\*)?:\s*$/i);
+        if (headerWithColon && !isBulletLine(line)) {
+            const rawHeader = headerWithColon[1].trim();
+            const formatted = rawHeader.charAt(0).toUpperCase() + rawHeader.slice(1);
+            if (cleanedLines.length > 0 && cleanedLines[cleanedLines.length - 1] !== '') cleanedLines.push('');
+            cleanedLines.push(`### ${formatted}`);
+            cleanedLines.push('');
+            continue;
+        }
+
+        // Sub-bullets with white circle (◦) or indented bullets
+        if (/^◦\s+(.*)$/.test(line)) {
+            const content = line.replace(/^◦\s+/, '').trim();
+            cleanedLines.push(`  - ${content}`);
+            continue;
+        }
+        if (/^(\s{2,}|\t)[•◦▪⁃\*\-]\s+(.*)$/.test(rawLines[i])) {
+            const content = rawLines[i].replace(/^(\s{2,}|\t)[•◦▪⁃\*\-]\s+/, '').trim();
+            cleanedLines.push(`  - ${content}`);
+            continue;
+        }
+
+        // Top-level bullets: •, ▪, ⁃, *, -
+        if (/^[•▪⁃\*\-]\s+(.*)$/.test(line)) {
+            let content = line.replace(/^[•▪⁃\*\-]\s+/, '').trim();
+
+            // Auto-bold the leading topic if it has a colon e.g. "Key Installations: Securing..." -> "**Key Installations:** Securing..."
+            const colonMatch = content.match(/^([^:*_\n]{2,40}):\s+(.*)$/);
+            if (colonMatch && !content.startsWith('**')) {
+                content = `**${colonMatch[1].trim()}:** ${colonMatch[2].trim()}`;
+            }
+
+            // Ensure a blank line before the first bullet if the previous line is text
+            if (cleanedLines.length > 0) {
+                const prev = cleanedLines[cleanedLines.length - 1];
+                if (prev !== '' && !prev.startsWith('- ') && !prev.startsWith('  - ')) {
+                    cleanedLines.push('');
+                }
+            }
+
+            cleanedLines.push(`- ${content}`);
+            continue;
+        }
+
+        // Regular paragraph lines
+        // If previous line was a bullet, insert blank line before starting a new paragraph
+        if (cleanedLines.length > 0) {
+            const prev = cleanedLines[cleanedLines.length - 1];
+            if (prev !== '' && (prev.startsWith('- ') || prev.startsWith('  - '))) {
+                cleanedLines.push('');
+            }
+        }
+
+        cleanedLines.push(line);
+    }
+
+    let result = cleanedLines.join('\n');
+    return result.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// Render Markdown with acronym parsing, HTML sanitization, and fallback
+function renderBriefingMarkdown(rawText) {
+    if (!rawText || typeof rawText !== 'string') return '';
+    const p = (t) => (typeof window !== 'undefined' && window.parseAcronyms) ? window.parseAcronyms(t) : t;
+    const tidied = tidyAiBrief(rawText);
+    const withAcronyms = p(tidied);
+    if (typeof window !== 'undefined' && window.marked && window.DOMPurify) {
+        return window.DOMPurify.sanitize(window.marked.parse(withAcronyms), { ADD_ATTR: ['onclick'] });
+    }
+    return withAcronyms.replace(/\n/g, '<br>');
+}
+
+if (typeof window !== 'undefined') {
+    window.tidyAiBrief = tidyAiBrief;
+    window.renderBriefingMarkdown = renderBriefingMarkdown;
+    if (window.marked && typeof window.marked.setOptions === 'function') {
+        window.marked.setOptions({ breaks: true, gfm: true });
+    }
+}
 
 function generateWikiMainMenu(currentState, p) {
     let html = `<div class="card wiki-card-blue">
@@ -81,8 +218,8 @@ function generateWikiTerm(itemId, p) {
 }
 
 // Generate HTML for the Knowledge Wiki panel
-window.generateWikiHtml = function(currentState, category, itemId) {
-    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+function generateWikiHtml(currentState, category, itemId) {
+    const p = (t) => (typeof window !== 'undefined' && window.parseAcronyms) ? window.parseAcronyms(t) : t;
     if (!category) {
         return generateWikiMainMenu(currentState, p);
     } else if (category === 'asset') {
@@ -91,4 +228,16 @@ window.generateWikiHtml = function(currentState, category, itemId) {
         return generateWikiTerm(itemId, p);
     }
     return '';
-};
+}
+if (typeof window !== 'undefined') {
+    window.generateWikiHtml = generateWikiHtml;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        formatName,
+        generateWikiHtml,
+        tidyAiBrief,
+        renderBriefingMarkdown
+    };
+}

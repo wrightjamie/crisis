@@ -375,9 +375,10 @@ async function processAiQueue() {
         
         if (task.type === 'summary') {
             const result = await window.AICore.generateScenarioSummary(config, task.role, task.combinedText);
+            const cleanText = window.tidyAiBrief ? window.tidyAiBrief(result.text) : result.text;
             socket.emit('submit_scenario_summary', {
                 role: task.role,
-                text: result.text,
+                text: cleanText,
                 prompt: result.prompt,
                 timestamp: Date.now()
             });
@@ -391,9 +392,10 @@ async function processAiQueue() {
                 aiBaselineScores[task.role] = JSON.parse(JSON.stringify(currentScores));
             }
 
+            const cleanText = window.tidyAiBrief ? window.tidyAiBrief(result.text) : result.text;
             socket.emit('submit_ai_briefing', {
                 role: task.role,
-                text: result.text,
+                text: cleanText,
                 seeds: result.seeds,
                 timestamp: Date.now()
             });
