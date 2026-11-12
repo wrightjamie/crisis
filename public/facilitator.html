@@ -266,9 +266,41 @@
                         <button class="btn btn-secondary text-sm" onclick="window.changeStage(1)">&gt;</button>
                     </div>
                 </div>
-                <p class="text-sm text-secondary mb-1">Click nodes to view details and trigger events. Events from future stages are hidden.</p>
+                <p class="text-sm text-secondary mb-1">Click nodes or cards to view details and trigger events. Events from future stages are hidden.</p>
+                
+                <!-- Filter and Search Toolbar -->
+                <div class="fac-event-toolbar mb-2">
+                    <div class="fac-filter-btn-group">
+                        <button class="btn-filter active" id="filter-btn-all" onclick="window.setEventFilter('all')" title="Show all events">
+                            <span>🌐 All</span> <span class="badge" id="count-all">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-available" id="filter-btn-available" onclick="window.setEventFilter('available')" title="Show only events ready to trigger right now">
+                            <span>🟢 Available</span> <span class="badge" id="count-available">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-pending" id="filter-btn-pending" onclick="window.setEventFilter('pending')" title="Show events waiting on scores, assets, or unlocks">
+                            <span>⏳ Pending</span> <span class="badge" id="count-pending">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-locked" id="filter-btn-locked" onclick="window.setEventFilter('locked')" title="Show events with unfulfilled prerequisites">
+                            <span>🔒 Locked</span> <span class="badge" id="count-locked">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-triggered" id="filter-btn-triggered" onclick="window.setEventFilter('triggered')" title="Show events that have already triggered">
+                            <span>✅ Triggered</span> <span class="badge" id="count-triggered">0</span>
+                        </button>
+                    </div>
+                    <div class="flex-row items-center gap-sm mt-1">
+                        <div class="fac-search-box">
+                            <input type="text" id="fac-event-search" placeholder="🔍 Filter events by name, role, or description..." class="form-control text-sm w-100" oninput="window.setEventSearch(this.value)">
+                            <button id="fac-event-search-clear" class="btn-search-clear" onclick="window.clearEventSearch()" style="display: none;" title="Clear search">&times;</button>
+                        </div>
+                        <div class="flex-row items-center gap-xs">
+                            <button id="btn-view-tree" class="btn btn-secondary btn-sm active" title="Prerequisite Tree View" onclick="window.setExplorerView('tree')">🌳 Tree</button>
+                            <button id="btn-view-list" class="btn btn-secondary btn-sm" title="Flat Card List View" onclick="window.setExplorerView('list')">📋 Cards</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="scenario-explorer-container" class="fac-event-list">
-                    <!-- Tree injected via JS -->
+                    <!-- Tree or Cards injected via JS -->
                 </div>
             </div>
 
