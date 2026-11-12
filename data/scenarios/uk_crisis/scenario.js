@@ -513,6 +513,23 @@ module.exports = {
             ],
             "image": "vanguard_class_sub",
             "briefing": "The Vanguard-class carries the UK's Trident nuclear deterrent. At least one boat is always on Continuous At-Sea Deterrence (CASD) patrol. Communications are secure."
+        },
+        {
+            "id": "a_rus_sub_faslane",
+            "name": "Russian Severodvinsk Submarine",
+            "location": [
+                56.0,
+                -5.5
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "naval",
+                "sub"
+            ],
+            "image": "ev_sub_detection",
+            "briefing": "Russian Yasen-class nuclear-powered cruise missile submarine operating submerged near the entrance to the Clyde estuary."
         }
     ],
     "stages": [
@@ -542,6 +559,7 @@ module.exports = {
             "id": "ev_cyber_london",
             "stage": "stage_2",
             "name": "Cyber Attack on London Banks",
+            "sound": "teletype",
             "prerequisites": [
                 "ev_logistics_failure"
             ],
@@ -856,6 +874,7 @@ module.exports = {
             "id": "ev_airspace_intercept",
             "stage": "stage_3",
             "name": "Near-Miss Over the Atlantic",
+            "sound": "klaxon",
             "prerequisites": [
                 "ev_logistics_failure"
             ],
@@ -933,6 +952,7 @@ module.exports = {
             "id": "ev_maritime_shadowing",
             "stage": "stage_1",
             "name": "Russian Warships Over Undersea Cables",
+            "sound": "sonar",
             "prerequisites": [],
             "repeatable": true,
             "location": [
@@ -1083,6 +1103,7 @@ module.exports = {
             "id": "ev_kinetic_strike",
             "stage": "stage_4",
             "name": "Explosion at UK Military Supply Base",
+            "sound": "explosion",
             "prerequisites": [
                 "ev_maritime_shadowing"
             ],
@@ -1562,6 +1583,7 @@ module.exports = {
             "id": "ev_raf_bases_strike",
             "stage": "stage_4",
             "name": "Cruise Missile Strikes on UK Airbases",
+            "sound": "explosion",
             "image": "ev_raf_bases_strike",
             "prerequisites": [
                 "ev_akrotiri_strike"
@@ -1614,6 +1636,7 @@ module.exports = {
             "id": "ev_portsmouth_strike",
             "stage": "stage_4",
             "name": "Naval Base Portsmouth Struck",
+            "sound": "explosion",
             "image": "ev_portsmouth_strike",
             "prerequisites": [
                 "ev_raf_bases_strike"
@@ -1772,6 +1795,7 @@ module.exports = {
             "id": "ev_airspace_incursion",
             "stage": "stage_4",
             "name": "Mass Bomber Fleet Approaches UK Airspace",
+            "sound": "klaxon",
             "image": "ev_airspace_incursion",
             "prerequisites": [],
             "conditions": {
@@ -2514,11 +2538,17 @@ module.exports = {
             "stage": "stage_2",
             "name": "Russian Submarine Detected Near Faslane",
             "repeatable": false,
+            "sound": "sonar",
             "location": [
                 56,
                 -5.5
             ],
             "image": "ev_sub_detection",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_rus_sub_faslane"
+                ]
+            },
             "description": "Sonar listening posts detect a Russian attack submarine creeping close to HMNB Clyde, where our Trident nuclear submarines operate.",
             "roleDescriptions": {
                 "defence": "The submarine is just outside our territorial waters, testing how fast our patrol boats respond.",

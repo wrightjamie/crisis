@@ -148,6 +148,9 @@ function validateAssets(scenario, errors) {
         scenario.assets.forEach((asset, index) => {
             const assetPath = `asset[${index}] (${asset.id || 'unknown'})`;
             validateImageReference(asset, assetPath, errors);
+            if (asset.hidden !== undefined && typeof asset.hidden !== 'boolean') {
+                errors.push(`${assetPath} 'hidden' must be a boolean`);
+            }
         });
     }
 }
@@ -169,6 +172,9 @@ function validateEventTemplates(scenario, errors) {
             }
             if (event.hiddenFrom && !Array.isArray(event.hiddenFrom)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'hiddenFrom' must be an array`);
+            }
+            if (event.sound && typeof event.sound !== 'string') {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'sound' must be a string`);
             }
             if (event.conditions) {
                 validateConditions(event.conditions, `${eventPath} (${event.id || 'unknown'})`, errors);

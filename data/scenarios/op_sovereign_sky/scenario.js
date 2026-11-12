@@ -442,6 +442,40 @@ module.exports = {
             ],
             "image": "type_45_destroyer",
             "briefing": "Royal Navy Air Defence Destroyer with embarked Wildcat helicopter for Air-Maritime Integration (AMI) and Counter-Sea ops."
+        },
+        {
+            "id": "a_crimson_sam_battery",
+            "name": "Hostile SA-17 SAM Battery",
+            "location": [
+                35.35,
+                35.85
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "sam",
+                "air_defence"
+            ],
+            "image": "ukr_air_defense",
+            "briefing": "Mobile SA-17 'Grizzly' surface-to-air missile system deployed in concealed mountain positions along the coast."
+        },
+        {
+            "id": "a_hostile_sub",
+            "name": "Hostile Attack Submarine",
+            "location": [
+                34.3,
+                33.9
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "naval",
+                "sub"
+            ],
+            "image": "astute_class_submarine",
+            "briefing": "Hostile Kilo-class diesel-electric submarine operating submerged to threaten Allied shipping lanes."
         }
     ],
     "stages": [
@@ -472,6 +506,7 @@ module.exports = {
             "stage": "stage_1",
             "name": "1.1 Show of Force & Deterrence",
             "repeatable": false,
+            "sound": "teletype",
             "location": [
                 35.1,
                 33.9
@@ -815,6 +850,9 @@ module.exports = {
                                     "situational_awareness": 2,
                                     "air_control": 1
                                 },
+                                "revealAssets": [
+                                    "a_crimson_sam_battery"
+                                ],
                                 "unlockEvents": [
                                     "ev_6_dca_akrotiri"
                                 ]
@@ -866,6 +904,7 @@ module.exports = {
             "id": "ev_6_dca_akrotiri",
             "stage": "stage_2",
             "name": "2.1 Air Raid Alert: Defending RAF Akrotiri",
+            "sound": "klaxon",
             "requiresUnlock": true,
             "repeatable": false,
             "location": [
@@ -946,6 +985,7 @@ module.exports = {
             "id": "ev_7_asymmetric_swarm",
             "stage": "stage_2",
             "name": "2.2 Drone Attack on the Base Perimeter",
+            "sound": "explosion",
             "prerequisites": [
                 "ev_6_dca_akrotiri"
             ],
@@ -1105,6 +1145,7 @@ module.exports = {
             "id": "ev_9_oca_cyber",
             "stage": "stage_2",
             "name": "2.4 Neutralising Enemy Airbases: Strike & Cyber",
+            "sound": "explosion",
             "prerequisites": [
                 "ev_8_height_perspective"
             ],
@@ -1265,6 +1306,7 @@ module.exports = {
             "id": "ev_11_counter_sea",
             "stage": "stage_3",
             "name": "3.1 Protecting the Fleet: Maritime Air Patrol",
+            "sound": "sonar",
             "requiresUnlock": true,
             "repeatable": false,
             "location": [
@@ -1291,6 +1333,9 @@ module.exports = {
                                     "joint_effect": 2,
                                     "force_protection": 1
                                 },
+                                "revealAssets": [
+                                    "a_hostile_sub"
+                                ],
                                 "unlockEvents": [
                                     "ev_12_counter_land"
                                 ]

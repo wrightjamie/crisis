@@ -332,6 +332,7 @@ class GameEngine {
             imageMeta: template.imageMeta,
             visibleTo: template.visibleTo,
             hiddenFrom: template.hiddenFrom,
+            sound: template.sound,
             timestamp: Date.now()
         };
 
@@ -486,6 +487,36 @@ class GameEngine {
                 if (asset) {
                     asset.state = newState;
                     console.log(`Asset state changed: ${assetId} -> ${newState}`);
+                }
+            }
+        }
+
+        if (effects.revealAssets) {
+            effects.revealAssets.forEach(assetId => {
+                const asset = this.gameState.assets.find(a => a.id === assetId);
+                if (asset) {
+                    asset.hidden = false;
+                    console.log(`Asset revealed: ${assetId}`);
+                }
+            });
+        }
+
+        if (effects.hideAssets) {
+            effects.hideAssets.forEach(assetId => {
+                const asset = this.gameState.assets.find(a => a.id === assetId);
+                if (asset) {
+                    asset.hidden = true;
+                    console.log(`Asset hidden: ${assetId}`);
+                }
+            });
+        }
+
+        if (effects.assetVisibilityChanges) {
+            for (const [assetId, isVisible] of Object.entries(effects.assetVisibilityChanges)) {
+                const asset = this.gameState.assets.find(a => a.id === assetId);
+                if (asset) {
+                    asset.hidden = !isVisible;
+                    console.log(`Asset visibility changed: ${assetId} -> visible=${Boolean(isVisible)}`);
                 }
             }
         }

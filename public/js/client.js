@@ -161,6 +161,7 @@ socket.on('role_registered', (registeredRole) => {
     const roleDisplay = document.getElementById('role-display');
     if (roleDisplay) roleDisplay.textContent = role.toUpperCase();
     updateGlobalLeaveButton();
+    updateSoundToggleButton();
     if (localState) handleStateUpdate(localState); // Re-render correct view
     if (role === 'display') {
         document.body.classList.add('role-display');
@@ -189,6 +190,7 @@ socket.on('role_error', (msg) => {
     role = null;
     sessionStorage.removeItem('crisis_role');
     updateGlobalLeaveButton();
+    updateSoundToggleButton();
     if (localState && localState.status === 'lobby') {
         switchView('role_selection');
         renderRoleSelection();
@@ -455,8 +457,42 @@ let viewedEvents = new Set();
 let knownEventIds = new Set();
 let isInitialStateLoaded = false;
 
-// Web Audio API Synthesized Alert Sound
+// Web Audio API Synthesized Sound System (Display role only)
 let audioCtx = null;
+let isDisplaySoundEnabled = localStorage.getItem('crisis_display_sound') !== 'false';
+
+function updateSoundToggleButton() {
+    const btn = document.getElementById('btn-sound-toggle');
+    if (!btn) return;
+    if (role === 'display') {
+        btn.style.display = 'inline-flex';
+        btn.innerHTML = isDisplaySoundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+        btn.title = isDisplaySoundEnabled ? 'Sound alerts enabled for Display role. Click to mute.' : 'Sound alerts muted. Click to unmute.';
+        if (isDisplaySoundEnabled) {
+            btn.classList.remove('btn-muted');
+        } else {
+            btn.classList.add('btn-muted');
+        }
+    } else {
+        btn.style.display = 'none';
+    }
+}
+
+function initSoundToggle() {
+    const btn = document.getElementById('btn-sound-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+        isDisplaySoundEnabled = !isDisplaySoundEnabled;
+        localStorage.setItem('crisis_display_sound', isDisplaySoundEnabled ? 'true' : 'false');
+        updateSoundToggleButton();
+        if (isDisplaySoundEnabled) {
+            getAudioContext();
+            playSound('alert');
+        }
+    });
+    updateSoundToggleButton();
+}
+
 function getAudioContext() {
     if (!audioCtx) {
         const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
@@ -478,41 +514,181 @@ function getAudioContext() {
     }, { passive: true });
 });
 
-function playEventAlertSound() {
+// Sound synthesizers
+function playAlertChime(ctx, now) {
+    // Two-tone attention chime (D5 587Hz -> A5 880Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(587.33, now);
+    gain1.gain.setValueAtTime(0, now);
+    gain1.gain.linearRampToValueAtTime(0.18, now + 0.02);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.22);
+
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880, now + 0.12);
+    gain2.gain.setValueAtTime(0, now + 0.12);
+    gain2.gain.linearRampToValueAtTime(0.22, now + 0.14);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.12);
+    osc2.stop(now + 0.45);
+}
+
+function playKlaxon(ctx, now) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    osc.type = 'sawtooth';
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1400, now);
+
+    // Oscillating emergency horn siren (sweeping up and down)
+    osc.frequency.setValueAtTime(480, now);
+    osc.frequency.linearRampToValueAtTime(840, now + 0.35);
+    osc.frequency.linearRampToValueAtTime(480, now + 0.7);
+    osc.frequency.linearRampToValueAtTime(840, now + 1.05);
+    osc.frequency.linearRampToValueAtTime(480, now + 1.4);
+    osc.frequency.linearRampToValueAtTime(750, now + 1.75);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+    gain.gain.setValueAtTime(0.2, now + 1.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.85);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 1.85);
+}
+
+function playExplosion(ctx, now) {
+    const duration = 2.0;
+
+    // Deep sub-bass boom
+    const osc = ctx.createOscillator();
+    const oscGain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(130, now);
+    osc.frequency.exponentialRampToValueAtTime(32, now + 0.75);
+    oscGain.gain.setValueAtTime(0.35, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+    osc.connect(oscGain);
+    oscGain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 1.1);
+
+    // Filtered noise blast with resonant decay
+    const bufferSize = Math.floor(ctx.sampleRate * duration);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(750, now);
+    filter.frequency.exponentialRampToValueAtTime(65, now + duration);
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.35, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+
+    noise.start(now);
+    noise.stop(now + duration);
+}
+
+function playSonar(ctx, now) {
+    const duration = 2.4;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1180, now);
+    osc.frequency.exponentialRampToValueAtTime(1120, now + 0.35);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.28, now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+}
+
+function playTeletype(ctx, now) {
+    const clicks = 6;
+    for (let i = 0; i < clicks; i++) {
+        const clickTime = now + (i * 0.09) + (Math.random() * 0.02);
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1600 + (Math.random() * 500), clickTime);
+        gain.gain.setValueAtTime(0.08, clickTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.035);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(clickTime);
+        osc.stop(clickTime + 0.035);
+    }
+}
+
+function playSound(soundType) {
+    // Sound is strictly available ONLY for the 'display' role
+    if (role !== 'display') return;
+    if (!isDisplaySoundEnabled) return;
+
     try {
         const ctx = getAudioContext();
         if (!ctx) return;
         const now = ctx.currentTime;
-        
-        // Two-tone attention chime (D5 587Hz -> A5 880Hz)
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(587.33, now);
-        gain1.gain.setValueAtTime(0, now);
-        gain1.gain.linearRampToValueAtTime(0.18, now + 0.02);
-        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-        osc1.connect(gain1);
-        gain1.connect(ctx.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.22);
-
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(880, now + 0.12);
-        gain2.gain.setValueAtTime(0, now + 0.12);
-        gain2.gain.linearRampToValueAtTime(0.22, now + 0.14);
-        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-        osc2.connect(gain2);
-        gain2.connect(ctx.destination);
-        osc2.start(now + 0.12);
-        osc2.stop(now + 0.45);
+        switch (soundType) {
+            case 'klaxon':
+                playKlaxon(ctx, now);
+                break;
+            case 'explosion':
+                playExplosion(ctx, now);
+                break;
+            case 'sonar':
+                playSonar(ctx, now);
+                break;
+            case 'teletype':
+                playTeletype(ctx, now);
+                break;
+            case 'alert':
+            default:
+                playAlertChime(ctx, now);
+                break;
+        }
     } catch (e) {
-        console.warn('Unable to play event alert audio:', e);
+        console.warn('Unable to play audio:', e);
     }
 }
+
+function playEventAlertSound(soundType) {
+    playSound(soundType || 'alert');
+}
+
+window.playSound = playSound;
 window.playEventAlertSound = playEventAlertSound;
+initSoundToggle();
 let edgeMarkersContainer = null;
 
 // Edge marker logic
@@ -900,7 +1076,8 @@ function updateUI() {
         if (isInitialStateLoaded) {
             const newEvents = localState.events.filter(e => !knownEventIds.has(e.id));
             if (newEvents.length > 0) {
-                playEventAlertSound();
+                const soundToPlay = newEvents.find(e => e.sound)?.sound || 'alert';
+                playSound(soundToPlay);
                 newEvents.forEach(evt => {
                     showToast('🚨 <strong>New Event:</strong> ' + (evt.name || ''));
                 });
@@ -986,6 +1163,7 @@ function renderMap(events, assets) {
 
     // Process Assets
     assets.forEach(asset => {
+        if (asset.hidden) return;
         if (isValidLocation(asset.location)) {
             items.push({
                 type: 'asset',
@@ -1370,7 +1548,7 @@ function buildEventPanelHtml(p) {
 
 function buildAssetPanelHtml(p) {
     const asset = localState.assets.find(a => a.id === currentInfoView.id);
-    if (!asset) return null;
+    if (!asset || asset.hidden) return null;
 
     let html = `<div class="card wiki-card-blue">`;
     if (asset.image) {

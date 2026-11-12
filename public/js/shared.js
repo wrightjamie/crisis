@@ -9,6 +9,14 @@ function checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEven
     if (c.maxScores && !Object.entries(c.maxScores).every(([k, v]) => (scores[k] || 0) <= v)) return false;
     if (c.assets && !Object.entries(c.assets).every(([k, v]) => (assets.find(a => a.id === k) || {}).state === v)) return false;
     if (c.assetStates && !Object.entries(c.assetStates).every(([k, v]) => (assets.find(a => a.id === k) || {}).state === v)) return false;
+    if (c.visibleAssets && !c.visibleAssets.every(id => {
+        const a = (assets || []).find(x => x.id === id);
+        return a && !a.hidden;
+    })) return false;
+    if (c.hiddenAssets && !c.hiddenAssets.every(id => {
+        const a = (assets || []).find(x => x.id === id);
+        return a && a.hidden;
+    })) return false;
     if (c.unlockedEvents && !c.unlockedEvents.every(e => unlockedEvents.includes(e))) return false;
     if (c.triggeredEvents && !c.triggeredEvents.every(e => triggeredEvents.includes(e))) return false;
     if (c.activeRoles && !c.activeRoles.every(r => activeRoles.includes(r))) return false;

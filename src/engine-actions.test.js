@@ -167,6 +167,41 @@ assert.strictEqual(engine.gameState.scores.uk_us, 1, "Legacy score should clamp 
 assert.strictEqual(engine.gameState.scores.budget, 0, "Custom score should clamp to min from config");
 console.log("✅ Asset state and custom score tests passed.");
 
+// --- New Tests for Hidden / Revealed Assets ---
+console.log("Testing hidden and revealed asset effects...");
+resetEngine();
+engine.gameState.assets.push({
+    id: 'hidden_test_asset',
+    name: 'Hidden Test Asset',
+    location: [50, 0],
+    state: 'operational',
+    hidden: true,
+    tags: []
+});
+assert.strictEqual(engine.gameState.assets[1].hidden, true, "Asset should initially be hidden");
+
+// Reveal asset via revealAssets
+engine.applyEffects({ revealAssets: ['hidden_test_asset'] });
+assert.strictEqual(engine.gameState.assets[1].hidden, false, "Asset should now be revealed (hidden === false)");
+
+// Hide asset via hideAssets
+engine.applyEffects({ hideAssets: ['hidden_test_asset'] });
+assert.strictEqual(engine.gameState.assets[1].hidden, true, "Asset should be hidden again (hidden === true)");
+
+// Toggle visibility via assetVisibilityChanges
+engine.applyEffects({ assetVisibilityChanges: { 'hidden_test_asset': true, 'test_asset': false } });
+assert.strictEqual(engine.gameState.assets[1].hidden, false, "Asset should be visible via assetVisibilityChanges");
+assert.strictEqual(engine.gameState.assets[0].hidden, true, "Test asset should be hidden via assetVisibilityChanges");
+
+// Test conditions with visibleAssets and hiddenAssets
+const { checkConditions: testCheckConditions } = require('../public/js/shared.js');
+assert.strictEqual(testCheckConditions({ conditions: { visibleAssets: ['hidden_test_asset'] } }, engine.gameState.scores, engine.gameState.assets), true);
+assert.strictEqual(testCheckConditions({ conditions: { visibleAssets: ['test_asset'] } }, engine.gameState.scores, engine.gameState.assets), false);
+assert.strictEqual(testCheckConditions({ conditions: { hiddenAssets: ['test_asset'] } }, engine.gameState.scores, engine.gameState.assets), true);
+assert.strictEqual(testCheckConditions({ conditions: { hiddenAssets: ['hidden_test_asset'] } }, engine.gameState.scores, engine.gameState.assets), false);
+
+console.log("✅ Hidden and revealed asset tests passed.");
+
 // --- New Tests for Timed Decisions ---
 console.log("Testing timed decisions...");
 resetEngine();
