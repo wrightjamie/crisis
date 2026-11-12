@@ -81,7 +81,8 @@ Fields:
 
 * Static location
 * Simple state: `operational | reduced | destroyed`
-* Used for conditions + effects only
+* Visibility: `hidden: boolean` (default: false). Can be revealed or hidden via effects (`revealAssets`, `hideAssets`, `assetVisibilityChanges`).
+* Used for conditions (`visibleAssets`, `hiddenAssets`, `assetVisibility`, `assets`) + effects only
 
 ```js
 {
@@ -89,6 +90,7 @@ Fields:
   name,
   location,
   state,
+  hidden: false,
   tags: []
 }
 ```

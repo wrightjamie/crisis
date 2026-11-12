@@ -17,6 +17,13 @@ function checkConditions(obj, scores, assets, unlockedEvents = [], triggeredEven
         const a = (assets || []).find(x => x.id === id);
         return a && a.hidden;
     })) return false;
+    if (c.assetVisibility && !Object.entries(c.assetVisibility).every(([k, v]) => {
+        const a = (assets || []).find(x => x.id === k);
+        if (!a) return false;
+        const isVisible = !a.hidden;
+        const expected = (v === true || v === 'visible');
+        return isVisible === expected;
+    })) return false;
     if (c.unlockedEvents && !c.unlockedEvents.every(e => unlockedEvents.includes(e))) return false;
     if (c.triggeredEvents && !c.triggeredEvents.every(e => triggeredEvents.includes(e))) return false;
     if (c.activeRoles && !c.activeRoles.every(r => activeRoles.includes(r))) return false;

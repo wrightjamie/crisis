@@ -1090,6 +1090,37 @@ function _checkAssetWarnings(assetReqs, currentState) {
     return html;
 }
 
+function _checkAssetVisibilityWarnings(conditions, currentState) {
+    let html = '';
+    if (conditions.visibleAssets) {
+        conditions.visibleAssets.forEach(assetId => {
+            const asset = (currentState.assets || []).find(a => a.id === assetId);
+            if (!asset || asset.hidden) {
+                html += `<div>• Asset "${asset ? asset.name : assetId}" must be visible / detected</div>`;
+            }
+        });
+    }
+    if (conditions.hiddenAssets) {
+        conditions.hiddenAssets.forEach(assetId => {
+            const asset = (currentState.assets || []).find(a => a.id === assetId);
+            if (!asset || !asset.hidden) {
+                html += `<div>• Asset "${asset ? asset.name : assetId}" must be hidden / undetected</div>`;
+            }
+        });
+    }
+    if (conditions.assetVisibility) {
+        for (const [assetId, expected] of Object.entries(conditions.assetVisibility)) {
+            const asset = (currentState.assets || []).find(a => a.id === assetId);
+            const isVisible = Boolean(asset && !asset.hidden);
+            const expectedVisible = (expected === true || expected === 'visible');
+            if (isVisible !== expectedVisible) {
+                html += `<div>• Asset "${asset ? asset.name : assetId}" must be ${expectedVisible ? 'visible / detected' : 'hidden / undetected'}</div>`;
+            }
+        }
+    }
+    return html;
+}
+
 function buildFacilitatorEventConditionsWarning(template, currentState) {
     let reasonHtml = '';
     if (template.requiresUnlock && !(currentState.unlockedEvents || []).includes(template.id)) {
@@ -1099,6 +1130,7 @@ function buildFacilitatorEventConditionsWarning(template, currentState) {
         if (template.conditions.minScores) reasonHtml += _checkMinScoreWarnings(template.conditions.minScores, currentState);
         if (template.conditions.maxScores) reasonHtml += _checkMaxScoreWarnings(template.conditions.maxScores, currentState);
         if (template.conditions.assets) reasonHtml += _checkAssetWarnings(template.conditions.assets, currentState);
+        reasonHtml += _checkAssetVisibilityWarnings(template.conditions, currentState);
     }
     return `
         <div class="card mb-2 border-red bg-red-faded">

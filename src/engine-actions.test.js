@@ -199,6 +199,8 @@ assert.strictEqual(testCheckConditions({ conditions: { visibleAssets: ['hidden_t
 assert.strictEqual(testCheckConditions({ conditions: { visibleAssets: ['test_asset'] } }, engine.gameState.scores, engine.gameState.assets), false);
 assert.strictEqual(testCheckConditions({ conditions: { hiddenAssets: ['test_asset'] } }, engine.gameState.scores, engine.gameState.assets), true);
 assert.strictEqual(testCheckConditions({ conditions: { hiddenAssets: ['hidden_test_asset'] } }, engine.gameState.scores, engine.gameState.assets), false);
+assert.strictEqual(testCheckConditions({ conditions: { assetVisibility: { 'hidden_test_asset': true, 'test_asset': false } } }, engine.gameState.scores, engine.gameState.assets), true);
+assert.strictEqual(testCheckConditions({ conditions: { assetVisibility: { 'hidden_test_asset': false } } }, engine.gameState.scores, engine.gameState.assets), false);
 
 console.log("✅ Hidden and revealed asset tests passed.");
 

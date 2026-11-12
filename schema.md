@@ -41,6 +41,7 @@ The top-level object representing a fully playable module.
             name: "string",
             location: [lat, lng],
             state: "string",  // Custom state (e.g., 'operational', 'damaged', 'deployed')
+            hidden: boolean,  // (Optional, default false) If true, hidden from map and station panels until revealed by an effect/action
             tags: ["string"], // UI badges (e.g., 'military', 'cyber')
             image: "string",  // (Optional) Image ID from data/image-library.json (e.g., 'type_45_destroyer')
             briefing: "string"// (Optional) Intelligence brief for the asset
@@ -126,17 +127,32 @@ Events define map incidents and generate decision tasks for players.
         [lat, lng], [lat, lng]
     ],
     repeatable: boolean,      // If false, the event moves to "Used" after being triggered once.
+    sound: "string",          // (Optional) Sound effect triggered on 'display' role: 'klaxon' | 'explosion' | 'sonar' | 'teletype' | 'alert'
     
     // Advanced Logic (Optional)
     requiresUnlock: boolean,  // If true, this event is hidden from the Facilitator until a decision explicitly unlocks it.
     visibleTo: ["string"],    // (Optional) Array of roles that can see this event. If used, the 'display' role is also hidden from it.
     hiddenFrom: ["string"],   // (Optional) Array of roles that cannot see this event. If used, the 'display' role is also hidden from it.
-    conditions: {             // The event can only be triggered if current scores meet these bounds
+    conditions: {             // Requirements for this event to be available/triggerable
         minScores: { "score_id": number }, // E.g. { "global_panic": 4 }
         maxScores: { "score_id": number },
         assets: { "asset_id": "required_state" }, // E.g. { "area51": "operational" }
-        activeRoles: ["role_id"], // All of these roles must be active players in the session
-        anyActiveRoles: ["role_id"] // At least one of these roles must be active players in the session
+        visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed
+        hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
+        assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
+        unlockedEvents: ["event_id"],     // Event IDs that must have been unlocked
+        triggeredEvents: ["event_id"],    // Event IDs that must have already triggered
+        activeRoles: ["role_id"],         // All of these roles must be active players in the session
+        anyActiveRoles: ["role_id"]       // At least one of these roles must be active players in the session
+    },
+    
+    autoEffects: {            // (Optional) Immediate effects applied as soon as the event triggers (e.g. revealing an asset upon detection)
+        revealAssets: ["asset_id"],       // Reveals previously hidden asset(s) on map and station panels
+        hideAssets: ["asset_id"],         // Hides visible asset(s)
+        assetVisibilityChanges: { "asset_id": boolean },
+        assetStateChanges: { "asset_id": "new_state" },
+        scores: { "score_id": number },
+        unlockEvents: ["event_id"]
     },
     
     facilitatorNotes: "string", // Secret context only shown in the Facilitator's info panel before triggering
@@ -167,8 +183,13 @@ Presented to a specific role when an event is triggered.
             text: "string",   // The button text
             conditions: {     // (Optional) If present, this option is hidden from the player when conditions are not met
                 assets: { "asset_id": "required_state" },
+                visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed (e.g. target must be detected before strike option appears)
+                hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
+                assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
                 minScores: { "score_id": number },
                 maxScores: { "score_id": number },
+                unlockedEvents: ["event_id"],
+                triggeredEvents: ["event_id"],
                 activeRoles: ["role_id"],
                 anyActiveRoles: ["role_id"]
             },
@@ -180,12 +201,19 @@ Presented to a specific role when an event is triggered.
                 // 2. Unlock Manual Events
                 unlockEvents: ["event_id"], // Event IDs that become visible to the Facilitator
                 
-                // 3. Update Asset States
+                // 3. Reveal or Hide Assets (ISR Recon / Submersion / Camouflage)
+                revealAssets: ["asset_id"], // Array of asset IDs to reveal on map and stations
+                hideAssets: ["asset_id"],   // Array of asset IDs to hide from map and stations
+                assetVisibilityChanges: {
+                    "asset_id": boolean    // Explicit visibility toggle: true = visible, false = hidden
+                },
+
+                // 4. Update Asset States
                 assetStateChanges: {
                     "asset_id": "new_state_string" // E.g., { "power_grid": "offline" }
                 },
 
-                // 4. Schedule Automatic Events
+                // 5. Schedule Automatic Events
                 triggerEvents: [ 
                     { 
                         id: "event_id",     // The event to trigger
@@ -214,12 +242,22 @@ Actions that players can trigger proactively from the "Actions" menu, independen
         minScores: { "score_id": number },
         maxScores: { "score_id": number },
         assets: { "asset_id": "required_state" },
+        visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed
+        hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
+        assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
+        unlockedEvents: ["event_id"],
+        triggeredEvents: ["event_id"],
         activeRoles: ["role_id"],
         anyActiveRoles: ["role_id"]
     },
     effects: {                // What happens when this action is fully approved and triggered
         scores: { "score_id": number }, // E.g., { military_escalation: +2 }
         unlockEvents: ["event_id"],
+        revealAssets: ["asset_id"],     // Reveals previously hidden asset(s)
+        hideAssets: ["asset_id"],       // Hides asset(s)
+        assetVisibilityChanges: {
+            "asset_id": boolean
+        },
         assetStateChanges: {
             "asset_id": "new_state_string"
         },

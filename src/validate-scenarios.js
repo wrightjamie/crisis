@@ -138,6 +138,15 @@ function validateConditions(conditions, path, errors) {
     if (conditions.anyActiveRoles && !Array.isArray(conditions.anyActiveRoles)) {
         errors.push(`${path}.conditions 'anyActiveRoles' must be an array`);
     }
+    if (conditions.visibleAssets && !Array.isArray(conditions.visibleAssets)) {
+        errors.push(`${path}.conditions 'visibleAssets' must be an array`);
+    }
+    if (conditions.hiddenAssets && !Array.isArray(conditions.hiddenAssets)) {
+        errors.push(`${path}.conditions 'hiddenAssets' must be an array`);
+    }
+    if (conditions.assetVisibility && typeof conditions.assetVisibility !== 'object') {
+        errors.push(`${path}.conditions 'assetVisibility' must be an object`);
+    }
 }
 
 function validateAssets(scenario, errors) {
