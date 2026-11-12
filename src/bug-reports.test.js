@@ -23,11 +23,33 @@ async function runTests() {
     assert.strictEqual(manager.isEnabled(), false, 'Default enabled should be false');
     assert.strictEqual(manager.getReports().length, 0, 'Default reports should be empty');
 
-    // Test 2: Enable / Disable
-    manager.setEnabled(true);
-    assert.strictEqual(manager.isEnabled(), true, 'Enabled should be true after setEnabled(true)');
+    // Test 2: Enable / Disable & Target (All vs Facilitator)
+    assert.strictEqual(manager.getTarget(), 'all', 'Default target should be all');
+    manager.setEnabled(true, 'facilitator');
+    assert.strictEqual(manager.isEnabled(), true, 'Enabled should be true after setEnabled(true, facilitator)');
+    assert.strictEqual(manager.getTarget(), 'facilitator', 'Target should be facilitator');
+    
+    manager.setTarget('all');
+    assert.strictEqual(manager.getTarget(), 'all', 'Target should be all');
+
     manager.setEnabled(false);
     assert.strictEqual(manager.isEnabled(), false, 'Enabled should be false after setEnabled(false)');
+
+    // Test 2c: Facilitator-only restriction test
+    manager.setEnabled(true, 'facilitator');
+    await assert.rejects(
+        async () => {
+            await manager.addReport({
+                type: 'bug',
+                text: 'Player bug report while restricted',
+                sender: 'Player 1',
+                role: 'home_office'
+            });
+        },
+        /restricted to facilitator only/,
+        'Should reject non-facilitator report when target is facilitator'
+    );
+    manager.setTarget('all');
 
     // Test 3: Add report
     manager.setEnabled(true);

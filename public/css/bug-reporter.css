@@ -133,6 +133,32 @@
     background-color: var(--bg-tertiary);
 }
 
+/* Facilitator Drawer Audience Bar */
+.bug-drawer-audience-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 1rem;
+    background-color: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--text-xs);
+}
+
+.bug-target-select-drawer {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.5rem;
+    font-size: var(--text-xs);
+    cursor: pointer;
+}
+
+.bug-target-select-drawer:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
 /* Filter Bar */
 .bug-filter-tabs {
     display: flex;

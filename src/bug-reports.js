@@ -29,6 +29,7 @@ class BugReportManager {
         this.dataPath = dataPath || path.join(__dirname, '../data/bug-reports.json');
         this.markdownPath = markdownPath || path.join(__dirname, '../BUG_REPORTS.md');
         this.enabled = false;
+        this.target = 'all'; // 'all' or 'facilitator'
         this.reports = [];
         this.counter = 0;
         
@@ -62,12 +63,14 @@ class BugReportManager {
                 const raw = fs.readFileSync(this.dataPath, 'utf8');
                 const data = JSON.parse(raw);
                 this.enabled = Boolean(data.enabled);
+                this.target = data.target === 'facilitator' ? 'facilitator' : 'all';
                 this.reports = Array.isArray(data.reports) ? data.reports : [];
                 this.counter = typeof data.counter === 'number' ? data.counter : this.reports.length;
                 if (data.githubRepo) this.githubRepo = data.githubRepo;
                 if (data.githubToken && !this.githubToken) this.githubToken = data.githubToken;
             } else {
                 this.enabled = false;
+                this.target = 'all';
                 this.reports = [];
                 this.counter = 0;
                 this.save();
@@ -75,6 +78,7 @@ class BugReportManager {
         } catch (err) {
             console.error('Error loading bug reports:', err);
             this.enabled = false;
+            this.target = 'all';
             this.reports = [];
             this.counter = 0;
         }
@@ -88,6 +92,7 @@ class BugReportManager {
             }
             const payload = {
                 enabled: this.enabled,
+                target: this.target || 'all',
                 counter: this.counter,
                 githubRepo: this.githubRepo,
                 githubToken: this.githubToken || undefined,
@@ -106,10 +111,30 @@ class BugReportManager {
         return this.enabled;
     }
 
-    setEnabled(value) {
-        this.enabled = Boolean(value);
+    getTarget() {
+        return this.target || 'all';
+    }
+
+    setEnabled(value, target) {
+        if (typeof value === 'object' && value !== null) {
+            this.enabled = Boolean(value.enabled);
+            if (value.target !== undefined) {
+                this.target = value.target === 'facilitator' ? 'facilitator' : 'all';
+            }
+        } else {
+            this.enabled = Boolean(value);
+            if (target !== undefined) {
+                this.target = target === 'facilitator' ? 'facilitator' : 'all';
+            }
+        }
         this.save();
         return this.enabled;
+    }
+
+    setTarget(target) {
+        this.target = target === 'facilitator' ? 'facilitator' : 'all';
+        this.save();
+        return this.target;
     }
 
     getReports() {
@@ -223,6 +248,7 @@ class BugReportManager {
     getConfig() {
         return {
             enabled: this.enabled,
+            target: this.target || 'all',
             reports: this.reports,
             github: this.getGithubStatus(),
             syncStatus: this.syncStatus
@@ -286,6 +312,14 @@ class BugReportManager {
     }
 
     async addReport({ type = 'bug', text = '', sender = '', role = '', gameId = null, scenarioId = null, stage = null }) {
+        if (!this.enabled) {
+            throw new Error('Bug reporting is currently disabled.');
+        }
+
+        if (this.target === 'facilitator' && role !== 'facilitator') {
+            throw new Error('Bug reporting is currently restricted to facilitator only.');
+        }
+
         const trimmed = (text || '').trim();
         if (!trimmed) {
             throw new Error('Report text cannot be empty');

@@ -58,9 +58,16 @@ app.get('/api/bug-reports/markdown', (req, res) => {
 });
 
 app.post('/api/bug-reports/toggle', (req, res) => {
-    const enabled = bugReports.setEnabled(req.body.enabled);
-    io.emit('bug_reporting_toggled', { enabled });
-    res.json({ enabled });
+    const enabled = bugReports.setEnabled(req.body.enabled, req.body.target);
+    const target = bugReports.getTarget();
+    io.emit('bug_reporting_toggled', { enabled, target });
+    res.json({ enabled, target });
+});
+
+app.post('/api/bug-reports/target', (req, res) => {
+    const target = bugReports.setTarget(req.body.target);
+    io.emit('bug_reporting_toggled', { enabled: bugReports.enabled, target });
+    res.json({ enabled: bugReports.enabled, target });
 });
 
 app.post('/api/bug-reports', async (req, res) => {

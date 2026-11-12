@@ -465,8 +465,14 @@ module.exports = function setupSockets(io, gameManager) {
 
         // Bug & Feedback Reporting socket events
         socket.on('toggle_bug_reporting', (data) => {
-            const enabled = bugReports.setEnabled(data.enabled);
-            io.emit('bug_reporting_toggled', { enabled });
+            const enabled = bugReports.setEnabled(data.enabled, data.target);
+            const target = bugReports.getTarget();
+            io.emit('bug_reporting_toggled', { enabled, target });
+        });
+
+        socket.on('set_bug_reporting_target', (data) => {
+            const target = bugReports.setTarget(data.target);
+            io.emit('bug_reporting_toggled', { enabled: bugReports.enabled, target });
         });
 
         socket.on('submit_bug_report', async (data) => {

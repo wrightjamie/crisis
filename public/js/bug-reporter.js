@@ -4,6 +4,7 @@
 
     // State
     let isEnabled = false;
+    let targetAudience = 'all'; // 'all' or 'facilitator'
     let isOpen = false;
     let reports = [];
     let currentFilter = 'all';
@@ -76,6 +77,16 @@
             <button id="bug-btn-download-md" class="bug-btn-icon" title="Download BUG_REPORTS.md">⬇️</button>
         ` : '';
 
+        const facAudienceBar = isFac ? `
+            <div id="bug-drawer-audience-bar" class="bug-drawer-audience-bar">
+                <span class="text-xs text-secondary font-bold">Target Audience:</span>
+                <select id="bug-drawer-target-select" class="bug-target-select-drawer" onchange="window.setBugReportingTarget(this.value)">
+                    <option value="all">🌐 All Users</option>
+                    <option value="facilitator">👤 Facilitator Only</option>
+                </select>
+            </div>
+        ` : '';
+
         panel.innerHTML = `
             <div class="bug-panel-header">
                 <div class="bug-panel-title">
@@ -91,6 +102,7 @@
                     <button id="bug-btn-close" class="bug-btn-icon" title="Close / Minimize">&times;</button>
                 </div>
             </div>
+            ${facAudienceBar}
             
             <div class="bug-filter-tabs">
                 <button class="bug-tab active" data-filter="all">All (<span id="count-all">0</span>)</button>
@@ -407,15 +419,22 @@
     }
 
     // Apply enabled state to UI
-    function setSystemEnabled(enabled) {
+    function setSystemEnabled(enabled, target) {
         isEnabled = Boolean(enabled);
+        if (target !== undefined && target !== null) {
+            targetAudience = target === 'facilitator' ? 'facilitator' : 'all';
+        }
+
+        const isFac = isFacilitatorPage();
+        const visibleForMe = isEnabled && (targetAudience === 'all' || isFac);
+
         const launcher = document.getElementById('bug-reporter-launcher');
         const panel = document.getElementById('bug-reporter-panel');
 
         if (launcher) {
-            launcher.style.display = isEnabled ? 'inline-flex' : 'none';
+            launcher.style.display = visibleForMe ? 'inline-flex' : 'none';
         }
-        if (panel && !isEnabled) {
+        if (panel && !visibleForMe) {
             panel.style.display = 'none';
             isOpen = false;
         }
@@ -424,27 +443,62 @@
         const dashToggle = document.getElementById('toggle-bug-system-dashboard');
         const dashStatus = document.getElementById('bug-system-status-dashboard');
         const dashDetails = document.getElementById('bug-system-dashboard-details');
+        const targetWrapper = document.getElementById('bug-target-wrapper');
+        const selectBugTarget = document.getElementById('select-bug-target');
+        const drawerTargetSelect = document.getElementById('bug-drawer-target-select');
+        const bugSystemDesc = document.getElementById('bug-system-desc');
+
         if (dashDetails) {
             dashDetails.style.display = isEnabled ? 'flex' : 'none';
         }
+        if (targetWrapper) {
+            targetWrapper.style.display = isEnabled ? 'inline-flex' : 'none';
+        }
         if (dashToggle) dashToggle.checked = isEnabled;
+        if (selectBugTarget) selectBugTarget.value = targetAudience;
+        if (drawerTargetSelect) drawerTargetSelect.value = targetAudience;
+
         if (dashStatus) {
-            dashStatus.textContent = isEnabled ? 'Enabled (Active)' : 'Disabled';
-            dashStatus.className = isEnabled ? 'text-bold text-accent-green' : 'text-bold text-muted';
+            if (isEnabled) {
+                const label = targetAudience === 'facilitator' ? 'Facilitator Only' : 'All Users';
+                dashStatus.textContent = `Enabled (${label})`;
+                dashStatus.className = 'text-bold text-accent-green';
+            } else {
+                dashStatus.textContent = 'Disabled';
+                dashStatus.className = 'text-bold text-muted';
+            }
+        }
+
+        if (bugSystemDesc) {
+            if (!isEnabled) {
+                bugSystemDesc.textContent = 'Enable in-game chat reporting for all player stations or just the facilitator.';
+            } else if (targetAudience === 'facilitator') {
+                bugSystemDesc.textContent = 'Active for facilitator only (hidden from player stations).';
+            } else {
+                bugSystemDesc.textContent = 'Active for all player stations and facilitator.';
+            }
         }
 
         // Sync Header Button if present
         const headerStatus = document.getElementById('header-bug-status');
         const headerBtn = document.getElementById('btn-toggle-bugs');
         if (headerStatus) {
-            headerStatus.textContent = isEnabled ? 'ON' : 'OFF';
-            headerStatus.style.color = isEnabled ? 'var(--accent-green)' : 'var(--text-secondary)';
+            if (!isEnabled) {
+                headerStatus.textContent = 'OFF';
+                headerStatus.style.color = 'var(--text-secondary)';
+            } else {
+                headerStatus.textContent = targetAudience === 'facilitator' ? 'FAC' : 'ALL';
+                headerStatus.style.color = 'var(--accent-green)';
+            }
         }
         if (headerBtn) {
             if (isEnabled) {
                 headerBtn.classList.add('border-accent-green');
+                const label = targetAudience === 'facilitator' ? 'Facilitator Only' : 'All Users';
+                headerBtn.title = `Bug Reporting: ${label} (Click to switch / toggle)`;
             } else {
                 headerBtn.classList.remove('border-accent-green');
+                headerBtn.title = 'Toggle Bug & Feedback System (Currently OFF)';
             }
         }
     }
@@ -486,10 +540,29 @@
         }
     }
 
+    // Toggle Bug Reporting Target (All Users vs Facilitator Only)
+    window.setBugReportingTarget = function(target) {
+        const nextTarget = target === 'facilitator' ? 'facilitator' : 'all';
+        targetAudience = nextTarget;
+        socket.emit('set_bug_reporting_target', { target: nextTarget });
+    };
+
     // Toggle Bug Reporting (for Facilitator)
-    window.toggleBugReporting = function(explicitVal) {
-        const nextVal = explicitVal !== undefined ? explicitVal : !isEnabled;
-        socket.emit('toggle_bug_reporting', { enabled: nextVal });
+    window.toggleBugReporting = function(explicitVal, explicitTarget) {
+        if (explicitVal !== undefined) {
+            const nextVal = Boolean(explicitVal);
+            const nextTarget = explicitTarget || targetAudience;
+            socket.emit('toggle_bug_reporting', { enabled: nextVal, target: nextTarget });
+        } else {
+            // Header button clicked without arguments: cycle OFF -> ALL -> FAC -> OFF
+            if (!isEnabled) {
+                socket.emit('toggle_bug_reporting', { enabled: true, target: 'all' });
+            } else if (targetAudience === 'all') {
+                socket.emit('set_bug_reporting_target', { target: 'facilitator' });
+            } else {
+                socket.emit('toggle_bug_reporting', { enabled: false, target: 'all' });
+            }
+        }
     };
 
     window.promptSetGithubToken = function() {
@@ -536,7 +609,7 @@
         githubConfig = config.github || githubConfig;
         
         updateSyncStatusUI(config.syncStatus || (config.github && config.github.syncStatus));
-        setSystemEnabled(config.enabled);
+        setSystemEnabled(config.enabled, config.target);
         renderReports();
     });
 
@@ -545,7 +618,7 @@
     });
 
     socket.on('bug_reporting_toggled', (data) => {
-        setSystemEnabled(data.enabled);
+        setSystemEnabled(data.enabled, data.target);
     });
 
     socket.on('new_bug_report', (report) => {

@@ -28,8 +28,13 @@ async function runE2ETest() {
     app.get('/api/bug-reports', (req, res) => res.json(testBugManager.getConfig()));
     app.get('/api/bug-reports/markdown', (req, res) => res.send(testBugManager.generateMarkdown()));
     app.post('/api/bug-reports/toggle', (req, res) => {
-        const enabled = testBugManager.setEnabled(req.body.enabled);
-        res.json({ enabled });
+        const enabled = testBugManager.setEnabled(req.body.enabled, req.body.target);
+        const target = testBugManager.getTarget();
+        res.json({ enabled, target });
+    });
+    app.post('/api/bug-reports/target', (req, res) => {
+        const target = testBugManager.setTarget(req.body.target);
+        res.json({ enabled: testBugManager.enabled, target });
     });
     app.post('/api/bug-reports', async (req, res) => {
         try {
@@ -79,11 +84,31 @@ async function runE2ETest() {
         assert.strictEqual(res1.data.enabled, false);
         assert.strictEqual(res1.data.reports.length, 0);
 
-        // Test 2: Toggle ON
-        const res2 = await request('POST', '/api/bug-reports/toggle', { enabled: true });
+        // Test 2: Toggle ON with target
+        const res2 = await request('POST', '/api/bug-reports/toggle', { enabled: true, target: 'all' });
         assert.strictEqual(res2.status, 200);
         assert.strictEqual(res2.data.enabled, true);
+        assert.strictEqual(res2.data.target, 'all');
         assert.strictEqual(testBugManager.isEnabled(), true);
+        assert.strictEqual(testBugManager.getTarget(), 'all');
+
+        // Test 2b: Switch target to facilitator only
+        const res2b = await request('POST', '/api/bug-reports/target', { target: 'facilitator' });
+        assert.strictEqual(res2b.status, 200);
+        assert.strictEqual(res2b.data.target, 'facilitator');
+        assert.strictEqual(testBugManager.getTarget(), 'facilitator');
+
+        // Non-facilitator submission should fail when target is facilitator
+        const failRes = await request('POST', '/api/bug-reports', {
+            type: 'bug',
+            text: 'Should fail for player',
+            sender: 'Player',
+            role: 'home_office'
+        });
+        assert.strictEqual(failRes.status, 400);
+
+        // Switch back to all for subsequent tests
+        await request('POST', '/api/bug-reports/target', { target: 'all' });
 
         // Test 3: Submit bug report via API
         const res3 = await request('POST', '/api/bug-reports', {
