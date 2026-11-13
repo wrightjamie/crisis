@@ -49,6 +49,9 @@ function checkPageAuth(req, res, next) {
 app.get('/facilitator', checkPageAuth);
 app.get('/admin', checkPageAuth);
 
+// Serve static vendor files
+app.use('/vendor/tagify', express.static(path.join(__dirname, 'node_modules/@yaireo/tagify/dist')));
+
 // Serve static files from the 'public' directory, allowing extensionless URLs
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 

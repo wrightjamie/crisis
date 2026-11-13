@@ -261,6 +261,9 @@
 
 
     // 7. Image Library
+    let imageTagify = null;
+    let availableTags = [];
+
     async function loadImages() {
         try {
             const [imagesRes, tagsRes] = await Promise.all([
@@ -268,13 +271,9 @@
                 apiFetch('/api/images/tags')
             ]);
             allImages = await imagesRes.json();
-            const tags = await tagsRes.json();
+            availableTags = await tagsRes.json();
 
-            // Populate tags select
-            const tagSelect = document.getElementById('image-tag-filter');
-            tagSelect.innerHTML = '<option value="">All Tags</option>' +
-                tags.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
-
+            initOrUpdateTagify(availableTags);
             renderImagesGrid(allImages);
         } catch (err) {
             document.getElementById('images-grid').innerHTML = `
@@ -283,6 +282,45 @@
                 </div>
             `;
         }
+    }
+
+    function initOrUpdateTagify(tags) {
+        const tagInput = document.getElementById('image-tag-filter');
+        if (!tagInput) return;
+
+        if (typeof Tagify === 'undefined') {
+            console.warn('Tagify library not loaded. Falling back to basic input.');
+            tagInput.addEventListener('input', filterImages);
+            return;
+        }
+
+        if (!imageTagify) {
+            imageTagify = new Tagify(tagInput, {
+                whitelist: tags,
+                enforceWhitelist: true,
+                dropdown: {
+                    maxItems: 30,
+                    enabled: 0, // Show suggestions on focus / click
+                    closeOnSelect: false,
+                    highlightFirst: true
+                },
+                placeholder: 'Filter by tags (type & Tab)...'
+            });
+
+            imageTagify.on('change', () => {
+                updateClearBtnVisibility();
+                filterImages();
+            });
+        } else {
+            imageTagify.whitelist = tags;
+        }
+    }
+
+    function updateClearBtnVisibility() {
+        const btn = document.getElementById('btn-clear-tag-filters');
+        if (!btn) return;
+        const count = imageTagify && Array.isArray(imageTagify.value) ? imageTagify.value.length : 0;
+        btn.style.display = count > 0 ? 'inline-flex' : 'none';
     }
 
     function renderImagesGrid(images) {
@@ -295,7 +333,7 @@
         }
 
         grid.innerHTML = images.map(img => {
-            const tagsHtml = (img.tags || []).map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('');
+            const tagsHtml = (img.tags || []).map(t => `<span class="tag-pill clickable-tag" data-tag="${escapeHtml(t)}" title="Filter by tag: ${escapeHtml(t)}">${escapeHtml(t)}</span>`).join('');
             const baseBadge = img.is_base ?
                 `<span class="badge badge-builtin" style="position: absolute; top: 8px; right: 8px;">Base</span>` :
                 `<span class="badge badge-custom" style="position: absolute; top: 8px; right: 8px;">Custom</span>`;
@@ -317,11 +355,23 @@
     // Filter Images
     function filterImages() {
         const query = document.getElementById('image-search').value.trim().toLowerCase();
-        const tag = document.getElementById('image-tag-filter').value.toLowerCase();
+        
+        let selectedTags = [];
+        if (imageTagify && Array.isArray(imageTagify.value)) {
+            selectedTags = imageTagify.value.map(item => (typeof item === 'string' ? item : item.value).toLowerCase());
+        } else {
+            const rawVal = document.getElementById('image-tag-filter')?.value;
+            if (rawVal) {
+                selectedTags = rawVal.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+            }
+        }
 
         let filtered = allImages;
-        if (tag) {
-            filtered = filtered.filter(img => (img.tags || []).some(t => t.toLowerCase() === tag));
+        if (selectedTags.length > 0) {
+            filtered = filtered.filter(img => {
+                const imgTags = (img.tags || []).map(t => t.toLowerCase());
+                return selectedTags.every(st => imgTags.includes(st));
+            });
         }
         if (query) {
             filtered = filtered.filter(img =>
@@ -334,7 +384,29 @@
     }
 
     document.getElementById('image-search').addEventListener('input', filterImages);
-    document.getElementById('image-tag-filter').addEventListener('change', filterImages);
+
+    const btnClearTags = document.getElementById('btn-clear-tag-filters');
+    if (btnClearTags) {
+        btnClearTags.addEventListener('click', () => {
+            if (imageTagify) {
+                imageTagify.removeAllTags();
+            }
+        });
+    }
+
+    // Clicking a tag on an image card adds it to the active filter
+    const gridEl = document.getElementById('images-grid');
+    if (gridEl) {
+        gridEl.addEventListener('click', (e) => {
+            const pill = e.target.closest('.clickable-tag');
+            if (pill && imageTagify) {
+                const tag = pill.getAttribute('data-tag');
+                if (tag) {
+                    imageTagify.addTags([tag]);
+                }
+            }
+        });
+    }
 
     // Helpers
     function showBanner(message, type = 'info') {
