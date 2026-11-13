@@ -118,16 +118,12 @@ class ScenarioService {
         return this.getScenario(id);
     }
 
-    deleteScenario(id, { force = false } = {}) {
+    deleteScenario(id) {
         if (!id) throw new Error('Scenario ID is required');
         const db = this.getDb();
         const row = db.prepare(`SELECT id, is_builtin FROM scenarios WHERE id = ?`).get(id);
         if (!row) {
             return { success: false, error: 'Scenario not found' };
-        }
-
-        if (row.is_builtin && !force) {
-            throw new Error('Cannot delete built-in system scenario');
         }
 
         db.transaction(() => {
@@ -136,6 +132,30 @@ class ScenarioService {
         })();
 
         return { success: true, id };
+    }
+
+    exportAllScenarios(outputDir = null, publicDir = null) {
+        const targetDir = outputDir || path.join(__dirname, '..', '..', 'scenarios');
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
+        }
+
+        const scenarios = this.listScenarios();
+        const results = [];
+
+        for (const s of scenarios) {
+            const zipBuffer = this.exportScenarioZip(s.id, publicDir);
+            const zipPath = path.join(targetDir, `${s.id}.zip`);
+            fs.writeFileSync(zipPath, zipBuffer);
+            results.push({
+                id: s.id,
+                name: s.name,
+                path: zipPath,
+                sizeBytes: zipBuffer.length
+            });
+        }
+
+        return results;
     }
 
     exportScenarioZip(id, publicDir = null) {
@@ -167,8 +187,18 @@ class ScenarioService {
             zip.addFile('acronyms.json', Buffer.from(JSON.stringify(scenarioData.acronyms, null, 2), 'utf8'));
         }
 
-        // 4. Bundle all associated images
+        // 4. Bundle all associated images (both linked and recursively extracted)
         const associatedImages = this.imageService.getScenarioImages(id);
+        const seenIds = new Set(associatedImages.map(img => img.id));
+        const extraImageIds = this.imageService.extractScenarioImageIds(scenarioData);
+        for (const extraId of extraImageIds) {
+            const img = this.imageService.getImage(extraId);
+            if (img && !seenIds.has(img.id)) {
+                associatedImages.push(img);
+                seenIds.add(img.id);
+            }
+        }
+
         const imageManifest = [];
 
         for (const img of associatedImages) {

@@ -192,34 +192,33 @@ class ImageService {
     extractScenarioImageIds(scenarioData) {
         if (!scenarioData || typeof scenarioData !== 'object') return [];
         const imageIds = new Set();
+        const visited = new Set();
 
-        const collectFromItem = (item) => {
-            if (!item) return;
-            if (item.imageId) imageIds.add(item.imageId);
-            if (item.image && typeof item.image === 'string') imageIds.add(item.image);
+        const walk = (node) => {
+            if (!node || typeof node !== 'object' || visited.has(node)) return;
+            visited.add(node);
+
+            if (Array.isArray(node)) {
+                for (const item of node) walk(item);
+                return;
+            }
+
+            for (const [key, val] of Object.entries(node)) {
+                if (typeof val === 'string' && val.trim()) {
+                    const trimmed = val.trim();
+                    const lowerKey = key.toLowerCase();
+                    if (lowerKey === 'image' || lowerKey === 'imageid' || lowerKey === 'photo' || lowerKey === 'thumbnail') {
+                        imageIds.add(trimmed);
+                    } else if (/\.(png|jpe?g|webp|gif|svg)$/i.test(trimmed)) {
+                        imageIds.add(trimmed);
+                    }
+                } else if (typeof val === 'object') {
+                    walk(val);
+                }
+            }
         };
 
-        if (Array.isArray(scenarioData.assets)) {
-            scenarioData.assets.forEach(collectFromItem);
-        }
-        if (Array.isArray(scenarioData.eventTemplates)) {
-            scenarioData.eventTemplates.forEach(collectFromItem);
-        }
-        if (Array.isArray(scenarioData.manualActions)) {
-            scenarioData.manualActions.forEach(collectFromItem);
-        }
-        if (Array.isArray(scenarioData.variantAxes)) {
-            scenarioData.variantAxes.forEach(axis => {
-                if (Array.isArray(axis.options)) {
-                    axis.options.forEach(opt => {
-                        if (Array.isArray(opt.assetModifiers)) {
-                            opt.assetModifiers.forEach(collectFromItem);
-                        }
-                    });
-                }
-            });
-        }
-
+        walk(scenarioData);
         return Array.from(imageIds);
     }
 

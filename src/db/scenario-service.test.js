@@ -1,5 +1,7 @@
 const assert = require('assert');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const AdmZip = require('adm-zip');
 const { initDatabase, closeDb } = require('./database');
 const { ImageService, computeBufferHash } = require('./image-service');
@@ -88,15 +90,14 @@ function runTests() {
     const overwriteResult = scenarioService.importScenarioZip(zipBuffer, { overwrite: true });
     assert.strictEqual(overwriteResult.success, true, 'Should overwrite when requested');
 
-    // 6. Test delete built-in protection
+    // 6. Test delete scenario (Issue #56: equalized scenarios, any scenario can be deleted)
     scenarioService.saveScenario({
         ...mockScenario,
-        id: 'protected_builtin'
+        id: 'deletable_scenario'
     }, { isBuiltin: 1 });
 
-    assert.throws(() => {
-        scenarioService.deleteScenario('protected_builtin', { force: false });
-    }, /Cannot delete built-in system scenario/);
+    const deleteBuiltinRes = scenarioService.deleteScenario('deletable_scenario');
+    assert.strictEqual(deleteBuiltinRes.success, true);
 
     // 7. Save custom scenario and delete it
     const customScenario = {
@@ -105,11 +106,21 @@ function runTests() {
         name: 'Custom Mission'
     };
     scenarioService.saveScenario(customScenario, { isBuiltin: 0 });
-    assert.strictEqual(scenarioService.listScenarios().length, 3);
+    assert.strictEqual(scenarioService.listScenarios().length, 2);
 
     const deleteRes = scenarioService.deleteScenario('custom_mission');
     assert.strictEqual(deleteRes.success, true);
-    assert.strictEqual(scenarioService.listScenarios().length, 2);
+    assert.strictEqual(scenarioService.listScenarios().length, 1);
+
+    // 8. Test exportAllScenarios
+    const exportTempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'crisis-export-test-'));
+    const dummyPubDir = fs.mkdtempSync(path.join(os.tmpdir(), 'crisis-pub-test-'));
+    const allExports = scenarioService.exportAllScenarios(exportTempDir, dummyPubDir);
+    assert.strictEqual(allExports.length, 1);
+    assert.strictEqual(fs.existsSync(path.join(exportTempDir, 'test_mission.zip')), true);
+
+    fs.rmSync(exportTempDir, { recursive: true, force: true });
+    fs.rmSync(dummyPubDir, { recursive: true, force: true });
 
     closeDb();
     console.log("✅ Scenario Service unit tests passed successfully!");

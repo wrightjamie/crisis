@@ -459,6 +459,21 @@ module.exports = function setupSockets(io, gameManager) {
             io.to(gameId).emit('state_update', engine.gameState);
         });
 
+        // Facilitator toggles AI briefings ON/OFF during live games (Issue #53)
+        socket.on('toggle_ai_enabled', (data) => {
+            const gameId = socket.data.gameId || (data && data.gameId);
+            const engine = gameId ? gameManager.getGame(gameId) : null;
+            if (!engine || socket.data.role !== 'facilitator') return;
+            engine.updateActivity();
+            if (typeof data === 'object' && typeof data.enabled === 'boolean') {
+                engine.gameState.aiEnabled = data.enabled;
+            } else {
+                engine.gameState.aiEnabled = !engine.gameState.aiEnabled;
+            }
+            console.log(`[Game ${gameId}] AI Briefings toggled to: ${engine.gameState.aiEnabled ? 'ENABLED' : 'DISABLED'}`);
+            io.to(gameId).emit('state_update', engine.gameState);
+        });
+
         socket.on('submit_ai_briefing', (data) => {
             const gameId = socket.data.gameId;
             const engine = gameId ? gameManager.getGame(gameId) : null;

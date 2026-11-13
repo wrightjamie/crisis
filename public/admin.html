@@ -36,9 +36,10 @@
         <section id="tab-scenarios">
             <div class="toolbar">
                 <div class="toolbar-left">
-                    <input type="text" id="scenario-search" class="search-input" placeholder="Search scenarios by name or ID...">
+                    <input type="text" id="scenario-search" class="search-input" placeholder="Search scenarios by name or description...">
                 </div>
                 <div class="toolbar-right">
+                    <button type="button" class="btn btn-secondary text-sm" id="btn-export-all" title="Download all scenarios in a single archive">📦 Export All (.zip)</button>
                     <div class="file-upload-wrapper">
                         <input type="file" id="scenario-file-input" accept=".zip" style="display: none;">
                         <button type="button" class="btn btn-secondary text-sm" id="btn-choose-file">📁 Select ZIP File</button>
@@ -57,18 +58,19 @@
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>Scenario ID</th>
                             <th>Name</th>
-                            <th>Type</th>
-                            <th>Roles / Players</th>
-                            <th>Guide</th>
+                            <th style="text-align: center;">Min Players</th>
+                            <th style="text-align: center;">Max Players</th>
+                            <th style="text-align: center;">Events</th>
+                            <th style="text-align: center;">Version</th>
+                            <th style="text-align: center;">Guide</th>
                             <th>Last Updated</th>
                             <th style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="scenarios-table-body">
                         <tr>
-                            <td colspan="7" class="text-center text-muted" style="padding: 2rem;">Loading scenarios...</td>
+                            <td colspan="8" class="text-center text-muted" style="padding: 2rem;">Loading scenarios...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -94,17 +96,6 @@
             </div>
         </section>
     </main>
-
-    <!-- JSON Preview Modal -->
-    <div class="modal-overlay" id="json-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="json-modal-title">Scenario Definition</h2>
-                <button type="button" class="btn-close" id="btn-close-json">&times;</button>
-            </div>
-            <pre class="json-viewer" id="json-modal-content"></pre>
-        </div>
-    </div>
 
     <!-- Conflict Confirmation Modal -->
     <div class="modal-overlay" id="conflict-modal">

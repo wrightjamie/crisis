@@ -207,7 +207,7 @@ function renderScenarioExplorer() {
                                 <div class="flex-row items-center gap-xs">
                                     ${soundBadge}
                                     ${secretBadge}
-                                    <span class="badge uppercase" style="background: ${status.color}; color: #000; font-weight: bold; font-size: 0.7rem;">${status.icon} ${status.text}</span>
+                                    <span class="badge event-status-pill badge-${status.key}">${status.icon} ${status.text}</span>
                                 </div>
                             </div>
                             <div class="fac-event-card-title mb-1">${p(template.name)}</div>

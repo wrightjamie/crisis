@@ -7,6 +7,7 @@
     "test": "node src/auth/access-control.test.js && node src/db/image-service.test.js && node src/db/scenario-service.test.js && node src/engine-actions.test.js && node src/validate-scenarios.test.js && node src/tidy-brief.test.js && node src/bug-reports.test.js && node src/bug-reports-e2e.test.js",
     "set-admin": "node scripts/set-admin-password.js",
     "db:migrate": "node scripts/migrate-scenarios-to-db.js",
+    "export-all": "node scripts/export-all-scenarios.js",
     "audit": "node scripts/token-audit.js"
   },
   "keywords": [],

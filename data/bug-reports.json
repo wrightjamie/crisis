@@ -4,7 +4,7 @@
   "counter": 9,
   "githubRepo": "wrightjamie/crisis",
   "hasGithubToken": true,
-  "lastUpdated": "2026-11-13T21:52:34.028Z",
+  "lastUpdated": "2026-11-13T22:53:18.603Z",
   "reports": [
     {
       "id": "BR-9",
@@ -16,11 +16,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 59,
         "url": "https://github.com/wrightjamie/crisis/issues/59"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.590Z"
     },
     {
       "id": "BR-8",
@@ -32,11 +33,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 58,
         "url": "https://github.com/wrightjamie/crisis/issues/58"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.592Z"
     },
     {
       "id": "BR-7",
@@ -48,11 +50,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 57,
         "url": "https://github.com/wrightjamie/crisis/issues/57"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.594Z"
     },
     {
       "id": "BR-6",
@@ -64,11 +67,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 56,
         "url": "https://github.com/wrightjamie/crisis/issues/56"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.596Z"
     },
     {
       "id": "BR-5",
@@ -80,11 +84,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 55,
         "url": "https://github.com/wrightjamie/crisis/issues/55"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.597Z"
     },
     {
       "id": "BR-4",
@@ -96,11 +101,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 54,
         "url": "https://github.com/wrightjamie/crisis/issues/54"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.598Z"
     },
     {
       "id": "BR-3",
@@ -112,11 +118,12 @@
       "gameId": "6219",
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 53,
         "url": "https://github.com/wrightjamie/crisis/issues/53"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.599Z"
     },
     {
       "id": "BR-2",
@@ -128,11 +135,12 @@
       "gameId": "6219",
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 52,
         "url": "https://github.com/wrightjamie/crisis/issues/52"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.600Z"
     },
     {
       "id": "BR-1",
@@ -144,11 +152,12 @@
       "gameId": "6219",
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 51,
         "url": "https://github.com/wrightjamie/crisis/issues/51"
-      }
+      },
+      "updatedAt": "2026-11-13T22:53:18.601Z"
     }
   ]
 }

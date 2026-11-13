@@ -8,6 +8,7 @@ const { getAllImages, getAllTags, getImage } = require('./src/image-library');
 const bugReports = require('./src/bug-reports');
 const accessControl = require('./src/auth/access-control');
 const scenarioService = require('./src/db/scenario-service');
+const AdmZip = require('adm-zip');
 
 const app = express();
 const server = http.createServer(app);
@@ -133,6 +134,23 @@ function extractZipBuffer(req) {
 // Scenarios API Endpoints
 app.get('/api/scenarios', (req, res) => {
     res.json(scenarioService.listScenarios());
+});
+
+app.get('/api/scenarios/export-all', (req, res) => {
+    try {
+        const scenarios = scenarioService.listScenarios();
+        const masterZip = new AdmZip();
+        for (const s of scenarios) {
+            const buf = scenarioService.exportScenarioZip(s.id);
+            masterZip.addFile(`${s.id}.zip`, buf);
+        }
+        const masterBuffer = masterZip.toBuffer();
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', 'attachment; filename="all-scenarios.zip"');
+        res.send(masterBuffer);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.get('/api/scenarios/:id', (req, res) => {

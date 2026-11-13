@@ -36,7 +36,7 @@ function updateAiStatusUI() {
         aiStatusText.style.color = "var(--text-muted)";
         aiStatusDot.style.background = "var(--text-muted)";
         aiStatusDot.classList.remove('ai-active-dot');
-        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Generator is disabled for this game";
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Generator is OFF (Click to turn ON)";
         return;
     }
 
@@ -45,7 +45,7 @@ function updateAiStatusUI() {
         aiStatusText.style.color = "var(--accent-red)";
         aiStatusDot.style.background = "var(--accent-red)";
         aiStatusDot.classList.remove('ai-active-dot');
-        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Error";
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Error (Click to toggle)";
         return;
     }
 
@@ -63,7 +63,7 @@ function updateAiStatusUI() {
         aiStatusText.style.color = "var(--accent-green)";
         aiStatusDot.style.background = "var(--status-1)";
         aiStatusDot.classList.remove('ai-active-dot');
-        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Ready";
+        if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Ready (Click to turn OFF)";
     } else if (window.AICore) {
         aiStatusText.textContent = "LOAD";
         aiStatusText.style.color = "var(--accent-orange)";
@@ -78,6 +78,12 @@ function updateAiStatusUI() {
         if (aiStatusContainer) aiStatusContainer.title = "AI Briefing Engine Initializing...";
     }
 }
+
+window.toggleAiEnabled = function() {
+    if (!gameId) return;
+    const isCurrentlyEnabled = currentState ? (currentState.aiEnabled !== false) : true;
+    socket.emit('toggle_ai_enabled', { gameId, enabled: !isCurrentlyEnabled });
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     // Dashboard Logic
@@ -377,9 +383,11 @@ async function processAiQueue() {
 
     try {
         const config = currentState.scenarioConfig.aiConfig;
+        const styleSelect = document.getElementById('ai-briefing-style-select');
+        const stylePreset = (styleSelect && styleSelect.value) ? styleSelect.value : 'sitrep';
         
         if (task.type === 'summary') {
-            const result = await window.AICore.generateScenarioSummary(config, task.role, task.combinedText);
+            const result = await window.AICore.generateScenarioSummary(config, task.role, task.combinedText, stylePreset);
             const cleanText = window.tidyAiBrief ? window.tidyAiBrief(result.text) : result.text;
             socket.emit('submit_scenario_summary', {
                 role: task.role,
@@ -391,7 +399,7 @@ async function processAiQueue() {
             const currentScores = currentState.scores;
             let baseline = task.forceInitial ? null : (aiBaselineScores[task.role] || null);
             
-            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context, currentState.scenarioConfig?.scoreConfigs || {});
+            const result = await window.AICore.generateBrief(config, task.role, currentScores, baseline, task.context, currentState.scenarioConfig?.scoreConfigs || {}, 'iterative', stylePreset);
             
             if (result.generated) {
                 aiBaselineScores[task.role] = JSON.parse(JSON.stringify(currentScores));

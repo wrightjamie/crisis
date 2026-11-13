@@ -28,14 +28,31 @@ window.AICore = {
         }
     },
 
-    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null, scoreConfigs = {}, strategy = "iterative") {
+    STYLE_PRESETS: {
+        sitrep: 'Military SITREP (BLUF)',
+        executive: 'Executive Flash',
+        standard: 'Standard Narrative'
+    },
+
+    async generateBrief(aiConfig, roleId, currentScores, baselineScores, actionContext = null, scoreConfigs = {}, strategy = "iterative", stylePreset = "sitrep") {
         if (!this.engine) throw new Error("AI Engine not initialized");
 
         const mode = baselineScores ? 'update' : 'initial';
         const roleContext = aiConfig.roleContexts[roleId] || "";
         
-        // Combine system prompt with role specific context
-        const systemPrompt = `You are an automated intelligence reporting system.\n${roleContext}\n\n${aiConfig.systemPrompt}`;
+        let styleInstruction = "";
+        let temperature = 0.7;
+
+        if (stylePreset === 'sitrep') {
+            temperature = 0.3;
+            styleInstruction = "\nSTYLE: Military SITREP (BLUF - Bottom Line Up Front). Be strictly factual, objective, and operational. Maximum 2 to 3 concise sentences. State immediate operational impacts and status. Zero dramatic metaphors, fluff, or flowery narrative (e.g. no 'storm brewing', 'shadows loom', 'powder keg').";
+        } else if (stylePreset === 'executive') {
+            temperature = 0.5;
+            styleInstruction = "\nSTYLE: Executive Flash. High-level strategic summary with immediate cross-agency risk implications and recommended decisions. Concise and actionable.";
+        }
+
+        // Combine system prompt with role specific context and style instructions
+        const systemPrompt = `You are an automated intelligence reporting system.\n${roleContext}\n\n${aiConfig.systemPrompt}${styleInstruction}`;
         
         const relevantMetrics = Object.entries(currentScores).filter(([key, val]) => {
             const config = scoreConfigs[key];
@@ -121,7 +138,7 @@ window.AICore = {
                               { role: "user", content: p }
                           ],
                           max_tokens: 50,
-                          temperature: 0.7
+                          temperature
                       }), 10000);
                       combinedText += `- ${reply.choices[0].message.content.trim()}\n`;
                  } catch(e) {
@@ -156,7 +173,7 @@ Summary: Public support remains strong following recent operations, but our fina
                         { role: "system", content: systemPrompt },
                         { role: "user", content: summaryPrompt }
                     ],
-                    temperature: 0.7,
+                    temperature,
                     max_tokens: 250
                 }), 45000); // 45 second timeout
 
@@ -173,23 +190,45 @@ Summary: Public support remains strong following recent operations, but our fina
         }
     },
 
-    async generateScenarioSummary(aiConfig, roleId, combinedText) {
+    async generateScenarioSummary(aiConfig, roleId, combinedText, stylePreset = "sitrep") {
         if (!this.engine) throw new Error("AI Engine not initialized");
         const systemPrompt = `You are an automated intelligence reporting system.\n${aiConfig.roleContexts[roleId] || ''}\n${aiConfig.systemPrompt}`;
-        const userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into a comprehensive executive briefing formatted in clean Markdown.
+        
+        let userPrompt = '';
+        let temperature = 0.7;
+
+        if (stylePreset === 'sitrep') {
+            temperature = 0.3;
+            userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into a concise Military Situation Report (SITREP / BLUF).
+Format requirements:
+- BLUF (Bottom Line Up Front): Maximum 2 sentences stating the immediate operational reality.
+- ### Key Metrics & Tactical Status
+- Exactly 2 to 3 factual bullet points. In each bullet point, bold the key subject at the start (e.g. "- **Subject:** Details...").
+- Zero dramatic flair or narrative fluff. Plain, rigorous intelligence language.`;
+        } else if (stylePreset === 'executive') {
+            temperature = 0.5;
+            userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into an Executive Strategic Risk Briefing.
+Format requirements:
+- Strategic Risk Overview: 1 clear, high-level summary paragraph.
+- ### Ministerial Decisions Required
+- 2 to 3 actionable bullet points bolding the primary stakeholder/decision area.`;
+        } else {
+            temperature = 0.7;
+            userPrompt = `Context:\n${combinedText}\nTask: Synthesize this intelligence into a comprehensive executive briefing formatted in clean Markdown.
 Format requirements:
 - Provide a clear, cohesive overview paragraph of the operational picture. Do NOT include greetings or titles like "EXECUTIVE BRIEFING".
 - Follow with a "### Critical Details & Challenges" heading.
 - Provide 2-3 concise bullet points highlighting the most critical specific details, risks, or challenges for this role.
 - In each bullet point, bold the key subject at the start (e.g. "- **Subject:** Details...").
 - Separate paragraphs, headings, and bullet points with blank lines.`;
-        
+        }
+
         const summaryReply = await withTimeout(this.engine.chat.completions.create({
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt }
             ],
-            temperature: 0.7,
+            temperature,
             max_tokens: 350
         }), 60000); // 60 second timeout for summary
 

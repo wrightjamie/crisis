@@ -8,3 +8,4 @@ data/github-token.txt
 *.db-wal
 data/scenarios_archive/
 *.zip
+!scenarios/*.zip

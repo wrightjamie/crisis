@@ -53,33 +53,32 @@
     function renderScenariosTable(scenarios) {
         const tbody = document.getElementById('scenarios-table-body');
         if (!scenarios || scenarios.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted" style="padding: 2rem;">No scenarios found matching your criteria.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted" style="padding: 2rem;">No scenarios found matching your criteria.</td></tr>`;
             return;
         }
 
         tbody.innerHTML = scenarios.map(s => {
-            const typeBadge = s.isBuiltin ?
-                `<span class="badge badge-builtin">Built-in</span>` :
-                `<span class="badge badge-custom">Custom</span>`;
-
             const guideBadge = s.hasGuide ?
-                `<a href="/scenarios/${encodeURIComponent(s.id)}/guide.html" target="_blank" rel="noopener" class="badge badge-guide text-decoration-none" title="Open Guide">📄 Guide</a>` :
+                `<a href="/scenarios/${encodeURIComponent(s.id)}/guide.html" target="_blank" rel="noopener" class="badge badge-guide text-decoration-none" title="Open Facilitator Guide">📄 Guide</a>` :
                 `<span class="text-xs text-muted">-</span>`;
 
             const updatedDate = s.updatedAt ? new Date(s.updatedAt).toLocaleDateString() : '-';
 
             return `
                 <tr data-id="${s.id}">
-                    <td><code>${escapeHtml(s.id)}</code></td>
-                    <td style="font-weight: 500;">${escapeHtml(s.name)}</td>
-                    <td>${typeBadge}</td>
-                    <td><span class="text-xs text-muted">${s.minPlayers || 1}–${s.maxPlayers || 10} roles (${s.eventCount || 0} events)</span></td>
-                    <td>${guideBadge}</td>
+                    <td style="font-weight: 500;">
+                        <div>${escapeHtml(s.name)}</div>
+                        ${s.description ? `<div class="text-xs text-muted" style="margin-top: 2px; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(s.description)}</div>` : ''}
+                    </td>
+                    <td style="text-align: center;">${s.minPlayers || 1}</td>
+                    <td style="text-align: center;">${s.maxPlayers || 1}</td>
+                    <td style="text-align: center;"><span class="badge" style="background: var(--bg-tertiary); color: var(--text-primary); font-weight: 500;">${s.eventCount || 0}</span></td>
+                    <td style="text-align: center;"><code style="font-size: 0.8rem;">v${escapeHtml(s.version || '1.0.0')}</code></td>
+                    <td style="text-align: center;">${guideBadge}</td>
                     <td class="text-xs text-muted">${updatedDate}</td>
                     <td style="text-align: right; white-space: nowrap;">
                         <button type="button" class="btn-icon btn-export" data-id="${s.id}" title="Export .zip package">📥 Export</button>
-                        <button type="button" class="btn-icon btn-view-json" data-id="${s.id}" title="View JSON">👁️ JSON</button>
-                        <button type="button" class="btn-icon btn-danger btn-delete" data-id="${s.id}" data-name="${escapeHtml(s.name)}" data-builtin="${s.isBuiltin ? 'true' : 'false'}" title="Delete scenario">🗑️</button>
+                        <button type="button" class="btn-icon btn-danger btn-delete" data-id="${s.id}" data-name="${escapeHtml(s.name)}" title="Delete scenario">🗑️</button>
                     </td>
                 </tr>
             `;
@@ -89,14 +88,10 @@
         tbody.querySelectorAll('.btn-export').forEach(btn => {
             btn.addEventListener('click', () => exportScenario(btn.getAttribute('data-id')));
         });
-        tbody.querySelectorAll('.btn-view-json').forEach(btn => {
-            btn.addEventListener('click', () => viewScenarioJson(btn.getAttribute('data-id')));
-        });
         tbody.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', () => deleteScenario(
                 btn.getAttribute('data-id'),
-                btn.getAttribute('data-name'),
-                btn.getAttribute('data-builtin') === 'true'
+                btn.getAttribute('data-name')
             ));
         });
     }
@@ -136,27 +131,33 @@
         }
     }
 
-    async function viewScenarioJson(id) {
+    // Export All Scenarios
+    document.getElementById('btn-export-all')?.addEventListener('click', async () => {
         try {
-            const res = await apiFetch(`/api/scenarios/${encodeURIComponent(id)}`);
-            const data = await res.json();
-            document.getElementById('json-modal-title').textContent = `${data.name} (${data.id})`;
-            document.getElementById('json-modal-content').textContent = JSON.stringify(data, null, 2);
-            document.getElementById('json-modal').style.display = 'flex';
+            showBanner('Generating all scenarios backup archive...', 'info');
+            const res = await apiFetch('/api/scenarios/export-all');
+            if (!res.ok) throw new Error('Failed to generate master backup');
+
+            const blob = await res.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = 'crisis-all-scenarios.zip';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+            showBanner('All scenarios exported successfully.', 'success');
         } catch (err) {
-            showBanner(`Failed to load scenario details: ${err.message}`, 'error');
+            showBanner(`Export all failed: ${err.message}`, 'error');
         }
-    }
+    });
 
-    async function deleteScenario(id, name, isBuiltin) {
-        let msg = `Are you sure you want to delete scenario '${name}' (${id})?`;
-        if (isBuiltin) {
-            msg = `⚠️ Warning: '${name}' is a built-in system scenario. Are you sure you want to force delete it?`;
-        }
-        if (!confirm(msg)) return;
+    async function deleteScenario(id, name) {
+        if (!confirm(`Are you sure you want to delete scenario '${name}'? This will remove all associated custom assets.`)) return;
 
         try {
-            const res = await apiFetch(`/api/scenarios/${encodeURIComponent(id)}${isBuiltin ? '?force=true' : ''}`, {
+            const res = await apiFetch(`/api/scenarios/${encodeURIComponent(id)}`, {
                 method: 'DELETE'
             });
             const data = await res.json();
@@ -257,10 +258,7 @@
         }
     });
 
-    // Close JSON modal
-    document.getElementById('btn-close-json').addEventListener('click', () => {
-        document.getElementById('json-modal').style.display = 'none';
-    });
+
 
     // 7. Image Library
     async function loadImages() {
