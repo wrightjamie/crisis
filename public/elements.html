@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crisis UI Elements & Component Library</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Catalog-specific presentation wrapper */
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .catalog-sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: var(--space-lg) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .catalog-brand {
+      font-size: var(--text-md);
+      font-weight: var(--font-bold);
+      color: var(--accent-blue);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .catalog-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .catalog-nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-sm);
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+
+    .catalog-nav a:hover {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .catalog-main {
+      padding: var(--space-xl) var(--space-2xl);
+      overflow-y: auto;
+      max-width: 1200px;
+    }
+
+    .catalog-header {
+      margin-bottom: var(--space-2xl);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: var(--space-lg);
+    }
+
+    .catalog-header h1 {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .catalog-header p {
+      color: var(--text-secondary);
+      font-size: var(--text-base);
+    }
+
+    .catalog-section {
+      margin-bottom: var(--space-2xl);
+      scroll-margin-top: var(--space-xl);
+    }
+
+    .catalog-section-title {
+      font-size: var(--text-lg);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+      padding-bottom: var(--space-xs);
+      border-bottom: 2px solid var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .catalog-section-desc {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .catalog-item {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-lg);
+      overflow: hidden;
+    }
+
+    .catalog-item-header {
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .catalog-item-title {
+      font-size: var(--text-sm);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+    }
+
+    .catalog-preview {
+      padding: var(--space-lg);
+      background-color: var(--bg-primary);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-md);
+      min-height: 80px;
+    }
+
+    .catalog-code-wrapper {
+      position: relative;
+      background-color: #0d0f12;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .catalog-code {
+      margin: 0;
+      padding: var(--space-md);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: var(--text-xs);
+      color: #9cdcfe;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .catalog-copy-btn {
+      position: absolute;
+      top: var(--space-xs);
+      right: var(--space-xs);
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 3px 8px;
+      font-size: var(--text-xs);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .catalog-copy-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-blue);
+    }
+
+    .catalog-copy-btn.copied {
+      background-color: var(--status-1);
+      color: #000;
+      border-color: var(--status-1);
+    }
+
+    /* Swatches Grid */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-md);
+      width: 100%;
+    }
+
+    .swatch-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-color {
+      height: 60px;
+      width: 100%;
+    }
+
+    .swatch-info {
+      padding: var(--space-xs) var(--space-sm);
+      font-size: var(--text-xs);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .swatch-name {
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+    }
+
+    .swatch-value {
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    /* Table helpers */
+    .utility-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+    }
+
+    .utility-table th, .utility-table td {
+      border: 1px solid var(--border-color);
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+    }
+
+    .utility-table th {
+      background-color: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-weight: var(--font-bold);
+    }
+
+    .utility-table code {
+      color: var(--accent-blue);
+      font-family: monospace;
+    }
+
+    @media (max-width: 768px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+      .catalog-sidebar {
+        display: none;
+      }
+      .catalog-main {
+        padding: var(--space-md);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="catalog-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="catalog-sidebar">
+      <div class="catalog-brand">Crisis UI Library</div>
+      <nav class="catalog-nav">
+        <a href="#tokens-colors">Tokens: Color Palette</a>
+        <a href="#tokens-status">Tokens: Status Scale (1-5)</a>
+        <a href="#tokens-typography">Tokens: Typography</a>
+        <a href="#tokens-spacing">Tokens: Spacing & Radii</a>
+        <a href="#buttons">Buttons & Actions</a>
+        <a href="#button-groups">Button Groups & Icons</a>
+        <a href="#forms">Form Inputs & Controls</a>
+        <a href="#cards">Cards & Containers</a>
+        <a href="#dialogs">Dialogs & Overlays</a>
+        <a href="#badges">Badges & Indicators</a>
+        <a href="#toasts">Toasts & Feedback</a>
+        <a href="#utilities">Utility Classes</a>
+      </nav>
+      <div class="mt-auto pt-md" style="border-top: 1px solid var(--border-color);">
+        <a href="/admin" class="btn btn-secondary w-100 text-center" style="display: block; font-size: var(--text-xs);">Back to Admin</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="catalog-main">
+      <header class="catalog-header">
+        <h1>Living UI Component Library</h1>
+        <p>Canonical design tokens, HTML patterns, and CSS classes for the Crisis Wargame. AI agents and developers must reference and reuse these elements directly.</p>
+      </header>
+
+      <!-- SECTION 1: Colors & Theme Tokens -->
+      <section id="tokens-colors" class="catalog-section">
+        <div class="catalog-section-title">Color Palette Tokens</div>
+        <div class="catalog-section-desc">Defined in <code>public/css/tokens.css</code>. Always use CSS variables rather than hardcoded hex values.</div>
+
+        <div class="swatch-grid mb-md">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--bg-primary);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--bg-primary</span>
+              <span class="swatch-value">#0f1115 (App Base)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--bg-secondary);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--bg-secondary</span>
+              <span class="swatch-value">#1a1d24 (Cards/Panels)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--bg-tertiary);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--bg-tertiary</span>
+              <span class="swatch-value">#2a2e37 (Headers/Sub)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--text-primary);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--text-primary</span>
+              <span class="swatch-value">#e2e8f0 (Main text)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--text-secondary);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--text-secondary</span>
+              <span class="swatch-value">#94a3b8 (Muted labels)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--text-muted);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--text-muted</span>
+              <span class="swatch-value">#64748b (Dim text)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--accent-blue);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--accent-blue</span>
+              <span class="swatch-value">#3b82f6 (Interactive)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--accent-red);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">--accent-red</span>
+              <span class="swatch-value">#ef4444 (Danger/Alert)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Status Scale 1-5 -->
+      <section id="tokens-status" class="catalog-section">
+        <div class="catalog-section-title">Crisis Status Scale (1–5)</div>
+        <div class="catalog-section-desc">The standardized national crisis rating scale across state scores, events, and asset statuses.</div>
+
+        <div class="swatch-grid mb-md">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--status-1);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">1: Stable</span>
+              <span class="swatch-value">var(--status-1)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--status-2);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">2: Managed</span>
+              <span class="swatch-value">var(--status-2)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--status-3);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">3: Strained</span>
+              <span class="swatch-value">var(--status-3)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--status-4);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">4: Crisis</span>
+              <span class="swatch-value">var(--status-4)</span>
+            </div>
+          </div>
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: var(--status-5);"></div>
+            <div class="swatch-info">
+              <span class="swatch-name">5: Critical</span>
+              <span class="swatch-value">var(--status-5)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Typography -->
+      <section id="tokens-typography" class="catalog-section">
+        <div class="catalog-section-title">Typography & Text Scales</div>
+        <div class="catalog-section-desc">Font size and weight tokens from <code>tokens.css</code> and utility classes from <code>style.css</code>.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Type Sizes & Weights</span>
+          </div>
+          <div class="catalog-preview d-flex flex-col items-start gap-sm">
+            <div class="text-xs"><code>.text-xs</code> (0.65rem) - Secondary timestamp or meta tag</div>
+            <div class="text-sm"><code>.text-sm</code> (0.75rem) - Button labels and form instructions</div>
+            <div class="text-base"><code>.text-base</code> (0.90rem) - Body text and card descriptions</div>
+            <div class="text-md font-bold"><code>.text-md</code> (1.10rem) - Panel headers and subheadings</div>
+            <div class="text-lg font-bold"><code>.text-lg</code> (1.50rem) - Screen titles and hero numbers</div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;p class="text-xs text-muted"&gt;Timestamp: 14:00Z&lt;/p&gt;
+&lt;p class="text-sm text-secondary"&gt;Enter your station code below.&lt;/p&gt;
+&lt;p class="text-base text-primary"&gt;Standard body description.&lt;/p&gt;
+&lt;h2 class="text-md font-bold text-primary"&gt;Section Subheading&lt;/h2&gt;
+&lt;h1 class="text-lg font-bold text-primary"&gt;Major Screen Header&lt;/h1&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Buttons & Actions -->
+      <section id="buttons" class="catalog-section">
+        <div class="catalog-section-title">Buttons & Actions</div>
+        <div class="catalog-section-desc">Interactive buttons using <code>.btn</code> with variant and state classes.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Standard Button Variants</span>
+          </div>
+          <div class="catalog-preview">
+            <button class="btn btn-primary">Primary Action</button>
+            <button class="btn btn-secondary">Secondary Action</button>
+            <button class="btn btn-danger">Danger / Destructive</button>
+            <button class="btn btn-muted">Muted / Inactive</button>
+            <button class="btn btn-ghost">Ghost Action</button>
+            <button class="btn btn-primary" disabled>Disabled State</button>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;button class="btn btn-primary"&gt;Primary Action&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Secondary Action&lt;/button&gt;
+&lt;button class="btn btn-danger"&gt;Danger Action&lt;/button&gt;
+&lt;button class="btn btn-muted"&gt;Muted Action&lt;/button&gt;
+&lt;button class="btn btn-ghost"&gt;Ghost Action&lt;/button&gt;
+&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</pre>
+          </div>
+        </div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Animated Notification States (.btn-new-event, .btn-score-changed)</span>
+          </div>
+          <div class="catalog-preview">
+            <button class="btn btn-primary btn-new-event">New Event Pulsing</button>
+            <button class="btn btn-secondary btn-score-changed">Score Changed Pulse</button>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;!-- Flash highlight for newly triggered event --&gt;
+&lt;button class="btn btn-primary btn-new-event"&gt;New Event&lt;/button&gt;
+
+&lt;!-- Amber pulse when associated metric changed --&gt;
+&lt;button class="btn btn-secondary btn-score-changed"&gt;Score Changed&lt;/button&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: Button Groups & Icons -->
+      <section id="button-groups" class="catalog-section">
+        <div class="catalog-section-title">Button Groups & Icon Controls</div>
+        <div class="catalog-section-desc">Attached button groups and specialized circular action controls.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Segmented Button Groups</span>
+          </div>
+          <div class="catalog-preview">
+            <div class="btn-group">
+              <button class="btn btn-secondary">Tree View</button>
+              <button class="btn btn-primary">Card View</button>
+              <button class="btn btn-secondary">Timeline</button>
+            </div>
+            <div class="btn-group inline ml-2">
+              <button class="btn btn-primary">Opt A</button>
+              <button class="btn btn-secondary">Opt B</button>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;div class="btn-group"&gt;
+  &lt;button class="btn btn-secondary"&gt;Tree View&lt;/button&gt;
+  &lt;button class="btn btn-primary"&gt;Card View&lt;/button&gt;
+  &lt;button class="btn btn-secondary"&gt;Timeline&lt;/button&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Circular Action Icons (.btn-icon)</span>
+          </div>
+          <div class="catalog-preview">
+            <button class="btn-icon action-approve" title="Approve">✓</button>
+            <button class="btn-icon action-reject" title="Reject">✕</button>
+            <button class="btn-icon action-kick" title="Kick Player">⏏</button>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;button class="btn-icon action-approve" title="Approve"&gt;✓&lt;/button&gt;
+&lt;button class="btn-icon action-reject" title="Reject"&gt;✕&lt;/button&gt;
+&lt;button class="btn-icon action-kick" title="Kick Player"&gt;⏏&lt;/button&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Form Inputs & Controls -->
+      <section id="forms" class="catalog-section">
+        <div class="catalog-section-title">Form Controls & Inputs</div>
+        <div class="catalog-section-desc">Unified <code>.form-control</code> styling for inputs, selects, and textareas.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Standard Inputs, Selects & Textarea</span>
+          </div>
+          <div class="catalog-preview d-flex flex-col items-start gap-md w-100" style="max-width: 500px;">
+            <input type="text" class="form-control w-100" placeholder="Standard text input...">
+            <input type="text" class="form-control w-100" value="Prefilled input value">
+            <select class="form-control w-100">
+              <option value="">Select a role or target...</option>
+              <option value="home">Home Secretary (UK Domestic)</option>
+              <option value="defence">Defence Minister (MOD)</option>
+              <option value="foreign">Foreign Secretary (FCDO)</option>
+            </select>
+            <textarea class="form-control w-100" rows="3" placeholder="Provide notes or situation assessment..."></textarea>
+            <label class="d-flex items-center gap-sm cursor-pointer text-sm">
+              <input type="checkbox" class="form-checkbox" checked>
+              <span>Enable automatic escalation triggers</span>
+            </label>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;input type="text" class="form-control w-100" placeholder="Search..."&gt;
+
+&lt;select class="form-control w-100"&gt;
+  &lt;option value="1"&gt;Option 1&lt;/option&gt;
+  &lt;option value="2"&gt;Option 2&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;textarea class="form-control w-100" rows="3" placeholder="Enter text..."&gt;&lt;/textarea&gt;
+
+&lt;label class="d-flex items-center gap-sm cursor-pointer text-sm"&gt;
+  &lt;input type="checkbox" class="form-checkbox"&gt;
+  &lt;span&gt;Option Label&lt;/span&gt;
+&lt;/label&gt;</pre>
+          </div>
+        </div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Join Game PIN Input (.join-form-group)</span>
+          </div>
+          <div class="catalog-preview">
+            <div class="join-form-group d-flex flex-col gap-sm">
+              <input type="text" class="form-control text-center text-lg w-100 uppercase" placeholder="e.g. 1234" maxlength="4">
+              <button class="btn btn-primary w-100">Join Game</button>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;div class="join-form-group d-flex flex-col gap-sm"&gt;
+  &lt;input type="text" class="form-control text-center text-lg w-100 uppercase" placeholder="e.g. 1234" maxlength="4"&gt;
+  &lt;button class="btn btn-primary w-100"&gt;Join Game&lt;/button&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: Cards & Containers -->
+      <section id="cards" class="catalog-section">
+        <div class="catalog-section-title">Cards & Containers</div>
+        <div class="catalog-section-desc">Containers for events, tasks, decisions, and administrative accordions.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Decision Task Card (.task-card)</span>
+          </div>
+          <div class="catalog-preview w-100" style="max-width: 520px;">
+            <div class="card task-card w-100">
+              <div class="card-title text-accent-blue">COBRA Urgent Decision</div>
+              <div class="task-text">Reports of subsea data cable tampering near North Sea platforms. Confirm maritime reconnaissance dispatch.</div>
+              <div class="task-options d-flex flex-col gap-xs mt-sm">
+                <button class="btn btn-primary w-100">Deploy P-8A Poseidon MPA</button>
+                <button class="btn btn-secondary w-100">Request NATO Maritime Surveillance</button>
+                <button class="btn btn-ghost w-100">Hold Position / Monitor Sensors</button>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;div class="card task-card"&gt;
+  &lt;div class="card-title text-accent-blue"&gt;Urgent Decision Title&lt;/div&gt;
+  &lt;div class="task-text"&gt;Description of the crisis choice required.&lt;/div&gt;
+  &lt;div class="task-options d-flex flex-col gap-xs mt-sm"&gt;
+    &lt;button class="btn btn-primary w-100"&gt;Option A&lt;/button&gt;
+    &lt;button class="btn btn-secondary w-100"&gt;Option B&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Standard Event Info Card</span>
+          </div>
+          <div class="catalog-preview w-100" style="max-width: 520px;">
+            <div class="card w-100">
+              <div class="card-title">Airspace Violation - Shetland Sector</div>
+              <div class="card-desc">Two unidentified high-speed radar contacts detected entering UK Flight Information Region without transponder.</div>
+              <div class="card-role-desc">Defence Ministry has scrambled RAF Typhoons from RAF Lossiemouth on QRA scramble.</div>
+              <div class="card-meta text-xs text-muted mt-sm">Sector: North Sea | Status: Active | Time: +12m</div>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;div class="card"&gt;
+  &lt;div class="card-title"&gt;Event Title&lt;/div&gt;
+  &lt;div class="card-desc"&gt;Global event description.&lt;/div&gt;
+  &lt;div class="card-role-desc"&gt;Role-specific intelligence briefing.&lt;/div&gt;
+  &lt;div class="card-meta text-xs text-muted mt-sm"&gt;Meta tags or timestamps&lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Admin Card Accordion (.admin-card details)</span>
+          </div>
+          <div class="catalog-preview w-100" style="max-width: 520px;">
+            <div class="card admin-card w-100">
+              <details open>
+                <summary>
+                  <h2 class="text-md">Scenario Control & Options</h2>
+                </summary>
+                <div class="p-2 text-sm text-secondary">
+                  Content inside the collapsible admin panel accordion. Automatically handles toggles and disclosure arrows.
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;div class="card admin-card"&gt;
+  &lt;details open&gt;
+    &lt;summary&gt;
+      &lt;h2 class="text-md"&gt;Section Title&lt;/h2&gt;
+    &lt;/summary&gt;
+    &lt;div class="p-2"&gt;
+      &lt;!-- Collapsible content --&gt;
+    &lt;/div&gt;
+  &lt;/details&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: Dialogs & Overlays -->
+      <section id="dialogs" class="catalog-section">
+        <div class="catalog-section-title">Dialogs & Overlays</div>
+        <div class="catalog-section-desc">Standardized modal dialogs and holding screens using native HTML <code>&lt;dialog&gt;</code> elements.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Client Holding / Pause Overlay Screen</span>
+          </div>
+          <div class="catalog-preview w-100">
+            <!-- Rendered inline without backdrop for preview -->
+            <div class="client-holding-overlay relative p-md w-100 text-center" style="position: relative; inset: auto; max-width: 480px; margin: 0 auto; border-radius: var(--radius-md);">
+              <div class="holding-content text-center">
+                <h1 class="mb-1 text-primary">Game Paused</h1>
+                <p class="text-secondary mb-2">The facilitator has paused the simulation.</p>
+                <p class="text-muted text-sm">Please stand by at your station for instructions.</p>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;dialog id="holding-screen" class="client-holding-overlay"&gt;
+  &lt;div class="holding-content text-center"&gt;
+    &lt;h1 class="mb-1 text-primary"&gt;Waiting for Game to Start&lt;/h1&gt;
+    &lt;p class="text-secondary"&gt;The facilitator is selecting a scenario...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9: Badges & Status Indicators -->
+      <section id="badges" class="catalog-section">
+        <div class="catalog-section-title">Badges & Status Indicators</div>
+        <div class="catalog-section-desc">Pills, role badges, and status color backgrounds.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Role & Status Badges</span>
+          </div>
+          <div class="catalog-preview">
+            <span class="role-badge">DEFENCE</span>
+            <span class="role-badge">HOME SECRETARY</span>
+            <span class="role-badge">CYBER COMMAND</span>
+            <span class="role-badge role-badge-small">SMALL BADGE</span>
+            <span class="role-badge bg-status-1 text-bold" style="color: #000;">STABLE</span>
+            <span class="role-badge bg-status-fail text-bold">CRITICAL</span>
+            <span class="role-badge bg-status-warning text-bold" style="color: #000;">WARNING</span>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;span class="role-badge"&gt;DEFENCE&lt;/span&gt;
+&lt;span class="role-badge role-badge-small"&gt;TAG&lt;/span&gt;
+&lt;span class="role-badge bg-status-1" style="color: #000;"&gt;STABLE&lt;/span&gt;
+&lt;span class="role-badge bg-status-fail"&gt;CRITICAL&lt;/span&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 10: Toasts & Feedback -->
+      <section id="toasts" class="catalog-section">
+        <div class="catalog-section-title">Toasts & Notifications</div>
+        <div class="catalog-section-desc">Transient floating toast messages and feedback notifications.</div>
+
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-title">Toast Messages</span>
+          </div>
+          <div class="catalog-preview d-flex flex-col gap-sm items-start">
+            <div class="toast" style="animation: none;">⚡ New Event Dispatched: Critical Infrastructure Alert</div>
+            <div class="toast text-status-1" style="animation: none;">✓ Decision registered successfully</div>
+          </div>
+          <div class="catalog-code-wrapper">
+            <button class="catalog-copy-btn">Copy HTML</button>
+            <pre class="catalog-code">&lt;!-- Toast container anchored at the bottom center of viewport --&gt;
+&lt;div class="toast-container"&gt;
+  &lt;div class="toast"&gt;Notification message here&lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 11: Utility Classes Quick Reference -->
+      <section id="utilities" class="catalog-section">
+        <div class="catalog-section-title">Utility Classes Reference</div>
+        <div class="catalog-section-desc">Unified helpers in <code>style.css</code>. Always prefer these over writing custom styles.</div>
+
+        <div class="catalog-item">
+          <div class="p-2">
+            <table class="utility-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Class Names</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Flexbox</strong></td>
+                  <td><code>.d-flex</code>, <code>.flex-row</code>, <code>.flex-col</code>, <code>.flex-center</code>, <code>.flex-between</code></td>
+                  <td>Layout and alignment shorthand</td>
+                </tr>
+                <tr>
+                  <td><strong>Alignment</strong></td>
+                  <td><code>.items-center</code>, <code>.items-start</code>, <code>.justify-center</code>, <code>.justify-between</code></td>
+                  <td>Flex cross/main axis distribution</td>
+                </tr>
+                <tr>
+                  <td><strong>Gaps</strong></td>
+                  <td><code>.gap-xs</code> (0.25rem), <code>.gap-sm</code> (0.5rem), <code>.gap-md</code> (1rem), <code>.gap-lg</code> (1.5rem)</td>
+                  <td>Spacing between flex items</td>
+                </tr>
+                <tr>
+                  <td><strong>Margins</strong></td>
+                  <td><code>.m-0</code>, <code>.mt-sm</code>, <code>.mt-md</code>, <code>.mb-sm</code>, <code>.mb-md</code>, <code>.mb-lg</code>, <code>.ml-auto</code></td>
+                  <td>Margin utilities using design tokens</td>
+                </tr>
+                <tr>
+                  <td><strong>Paddings</strong></td>
+                  <td><code>.p-0</code>, <code>.p-sm</code>, <code>.p-md</code>, <code>.pt-sm</code>, <code>.pt-md</code></td>
+                  <td>Padding utilities using design tokens</td>
+                </tr>
+                <tr>
+                  <td><strong>Widths</strong></td>
+                  <td><code>.w-100</code>, <code>.max-w-200</code>, <code>.max-w-300</code>, <code>.max-w-500</code>, <code>.max-w-600</code></td>
+                  <td>Width and container sizing constraints</td>
+                </tr>
+                <tr>
+                  <td><strong>Text Colors</strong></td>
+                  <td><code>.text-primary</code>, <code>.text-secondary</code>, <code>.text-muted</code>, <code>.text-red</code>, <code>.text-accent-blue</code></td>
+                  <td>Color tokens mapped to text</td>
+                </tr>
+                <tr>
+                  <td><strong>Visual States</strong></td>
+                  <td><code>.opacity-50</code>, <code>.grayscale</code>, <code>.cursor-pointer</code>, <code>.cursor-not-allowed</code>, <code>.d-none</code></td>
+                  <td>Visual state overrides</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // 1-Click Copy HTML Snippets
+    document.querySelectorAll('.catalog-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pre = btn.nextElementSibling;
+        if (!pre) return;
+        const code = pre.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const original = btn.textContent;
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy', err);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

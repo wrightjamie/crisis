@@ -205,6 +205,32 @@ A playable system where:
 
 ---
 
+## UI Design System & Styling Rules
+
+To prevent style duplication, visual inconsistency, and CSS bloat, all AI agents modifying or generating UI code MUST follow these rules:
+
+1. **Single Source of Truth:**
+   - Design tokens: `public/css/tokens.css`
+   - Component classes & utilities: `public/css/style.css`
+   - Canonical component catalog: `public/elements.html`
+
+2. **No Ad-Hoc CSS or Inline Styles:**
+   - NEVER add ad-hoc `<style>` tags or inline `style="..."` attributes to HTML or JS files.
+   - NEVER create new CSS classes in `style.css` if an existing component class or utility combination (`.d-flex`, `.flex-col`, `.gap-sm`, `.mt-md`, `.btn-*`, `.form-control`) can achieve the layout.
+
+3. **Color & Status Discipline:**
+   - NEVER use hardcoded hex, RGB, or HSL color literals in stylesheets or templates.
+   - Always reference CSS custom properties: `var(--bg-primary)`, `var(--text-secondary)`, `var(--accent-blue)`, etc.
+   - Always use the 1–5 status tokens (`var(--status-1)` to `var(--status-5)` or `.bg-status-1`) for all status indicators.
+
+4. **Component Reuse:**
+   - Before writing any new UI markup, inspect `public/elements.html` and copy the canonical HTML structure for that element type (buttons, cards, forms, dialogs, badges).
+
+5. **Maintaining the Library:**
+   - If a genuinely new UI component or utility is approved and added, the agent MUST update `public/elements.html` to document and display the new element.
+
+---
+
 ## Agent Git Workflow Rules
 
 When making changes to this codebase, the AI Agent must follow this Git workflow strictly:

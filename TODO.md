@@ -16,6 +16,7 @@
 - [x] Kick player and allow a new player to join
 - [x] Move to a shared image library (`data/image-library.json` and `public/images/library/`) with title, description, and freeform tags across all scenarios
 - [x] Populate and assign 100% image coverage across all 13 scenarios in the game (including generating 11 new assets for Global Pandemic, Project Icarus, and Mars Colony Rebellion)
+- [x] Create living UI component library (`public/elements.html`) and add strict design system rules in `AGENT.md` to prevent AI agents from generating redundant styles
 
 ## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
 
