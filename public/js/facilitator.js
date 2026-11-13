@@ -1,5 +1,10 @@
-const socket = io();
+const socket = window.common ? window.common.getSocket() : io();
 let gameId = new URLSearchParams(window.location.search).get('game');
+
+// Verify facilitator auth via common
+if (window.common) {
+    window.common.checkAuth('facilitator');
+}
 
 const scoreAdjustContainer = document.getElementById('score-adjust-container');
 const eventsList = document.getElementById('facilitator-events-list');
@@ -87,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('fac-game-id-display').textContent = gameId;
         socket.emit('join_game', gameId);
 
-        socket.emit('register_role', 'facilitator');
+        socket.emit('register_role', { role: 'facilitator', token: localStorage.getItem('auth_token') });
     } else {
         dashboardView.classList.remove('d-none');
         dashboardView.style.display = 'block';
@@ -414,6 +419,13 @@ const holdingEl = document.getElementById('facilitator-holding-screen');
 const scenariosListEl = document.getElementById('scenarios-list');
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-fac-logout').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.common) window.common.logout();
+            else window.location.href = '/login';
+        });
+    });
+
     const lobbyEl = document.getElementById('facilitator-lobby-screen');
 
     // Setup filter slider
@@ -435,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 socket.on('connect', () => {
-    socket.emit('register_role', 'facilitator');
+    socket.emit('register_role', { role: 'facilitator', token: localStorage.getItem('auth_token') });
 });
 
 socket.on('scenario_error', (msg) => {

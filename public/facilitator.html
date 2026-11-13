@@ -6,7 +6,6 @@
     <title>Wargame Facilitator</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/bug-reporter.css">
     <style>
         /* Facilitator Specific Overrides */
         body { overflow-y: auto; }
@@ -77,6 +76,10 @@
     <div id="dashboard-view" style="display: none;">
         <header class="top-bar">
             <div class="role-badge">WARGAME MANAGEMENT DASHBOARD</div>
+            <div style="margin-left: auto; display: flex; gap: 0.75rem; align-items: center;">
+                <a href="/admin" class="btn btn-secondary text-sm text-decoration-none">🛡️ Admin Console</a>
+                <button class="btn btn-secondary text-sm btn-fac-logout">Log Out</button>
+            </div>
         </header>
         <div class="facilitator-container">
             <div class="admin-card mb-3">
@@ -199,8 +202,10 @@
                         </div>
                     </div>
                     <button class="dropdown-item" onclick="window.copyBugReportsForAi()">📋 Copy Reports for AI</button>
+                    <a href="/admin" class="dropdown-item top-bar-border text-decoration-none">🛡️ Admin Console</a>
                     <button class="dropdown-item text-danger top-bar-border" onclick="resetGame()">Reset Scenario</button>
                     <button class="dropdown-item text-danger top-bar-border" onclick="endScenario()">End Scenario</button>
+                    <button class="dropdown-item btn-fac-logout top-bar-border">Log Out</button>
                 </div>
             </div>
         </div>
@@ -373,6 +378,7 @@
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="js/common.js"></script>
     <script type="module" src="js/ai-core.js"></script>
     <script src="js/shared.js"></script>
     <script src="js/utils.js"></script>

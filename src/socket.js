@@ -1,4 +1,5 @@
 const bugReports = require('./bug-reports');
+const accessControl = require('./auth/access-control');
 
 module.exports = function setupSockets(io, gameManager) {
     // Socket.io connection handling
@@ -155,15 +156,30 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         // Client registers their role
-        socket.on('register_role', (role) => {
+        socket.on('register_role', (roleData) => {
             const gameId = socket.data.gameId;
             const engine = gameId ? gameManager.getGame(gameId) : null;
             if (!engine) return;
             engine.updateActivity();
+
+            const role = typeof roleData === 'string' ? roleData : (roleData && roleData.role);
             if (!role) {
                 engine.connectedClients[socket.id] = null;
                 delete engine.pendingPlayers[socket.id];
                 return;
+            }
+
+            // Facilitator access control verification
+            if (role === 'facilitator') {
+                const token = (typeof roleData === 'object' && roleData.token) ||
+                              socket.handshake.auth?.token ||
+                              socket.handshake.headers?.cookie?.match(/(?:^|;\s*)auth_token=([^;]+)/)?.[1];
+
+                const session = accessControl.verifySession(token);
+                if (!session.authenticated || !accessControl.checkCapability(session.user, 'facilitator')) {
+                    socket.emit('role_error', 'Facilitator authentication required. Please log in.');
+                    return;
+                }
             }
 
             const takenRoles = engine.getActiveRoles();

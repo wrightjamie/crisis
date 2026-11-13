@@ -1,21 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-const { resolveScenarioImages } = require('../../src/image-library');
+const scenarioService = require('../../src/db/scenario-service');
 
-const scenarios = [];
-fs.readdirSync(__dirname, { withFileTypes: true }).forEach(dirent => {
-    if (dirent.isDirectory()) {
-        const scenarioPath = path.join(__dirname, dirent.name, 'scenario.js');
-        if (fs.existsSync(scenarioPath)) {
-            const scenario = require(scenarioPath);
-            resolveScenarioImages(scenario);
-            const guidePath = path.join(__dirname, dirent.name, 'guide.html');
-            if (!scenario.guideUrl && fs.existsSync(guidePath)) {
-                scenario.guideUrl = `/scenarios/${dirent.name}/guide.html`;
-            }
-            // Optionally, load acronyms and wiki if we want the server to have them
-            scenarios.push(scenario);
-        }
+// Load scenarios dynamically from SQLite database
+function loadScenariosFromDb() {
+    try {
+        const summaries = scenarioService.listScenarios();
+        return summaries.map(s => scenarioService.getScenario(s.id)).filter(Boolean);
+    } catch (err) {
+        console.error('Failed to load scenarios from database:', err.message);
+        return [];
     }
-});
+}
+
+const scenarios = loadScenariosFromDb();
+
 module.exports = scenarios;
+module.exports.loadScenariosFromDb = loadScenariosFromDb;

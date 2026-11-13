@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Wargame - Admin Console</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <h1>
+            <span>🛡️</span>
+            <span>Crisis Admin Console</span>
+        </h1>
+        <div class="admin-nav">
+            <button class="nav-tab active" data-tab="scenarios">Scenarios</button>
+            <button class="nav-tab" data-tab="images">Image Library</button>
+            <button id="btn-toggle-bugs" class="btn-icon" onclick="window.toggleBugReporting && window.toggleBugReporting()" title="Toggle Bug & Feedback System">
+                <span>🐞</span>
+                <span>Bugs:</span> <span id="header-bug-status" style="font-weight: 600;">OFF</span>
+                <span id="header-sync-dot" class="bug-sync-dot amber" title="Local Storage Only"></span>
+            </button>
+            <a href="/facilitator" class="btn-icon" title="Go to Facilitator Console">🎮 Facilitator</a>
+            <div class="user-pill" id="user-pill">
+                <span>👤</span>
+                <span id="username-display">admin</span>
+            </div>
+            <button id="btn-logout" class="btn-icon btn-danger" title="Log out">Log Out</button>
+        </div>
+    </header>
+
+    <main class="admin-container">
+        <!-- SCENARIOS TAB -->
+        <section id="tab-scenarios">
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <input type="text" id="scenario-search" class="search-input" placeholder="Search scenarios by name or ID...">
+                </div>
+                <div class="toolbar-right">
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="scenario-file-input" accept=".zip" style="display: none;">
+                        <button type="button" class="btn btn-secondary text-sm" id="btn-choose-file">📁 Select ZIP File</button>
+                        <span id="selected-file-label" class="text-xs text-muted" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No file chosen</span>
+                        <label class="text-xs inline-flex items-center gap-xs cursor-pointer" title="Automatically overwrite existing scenario with the same ID">
+                            <input type="checkbox" id="overwrite-checkbox"> Overwrite
+                        </label>
+                        <button type="button" class="btn btn-primary text-sm" id="btn-import-scenario" disabled>Import</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="import-status-banner" style="display: none; padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;"></div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Roles / Players</th>
+                            <th>Guide</th>
+                            <th>Last Updated</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scenarios-table-body">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted" style="padding: 2rem;">Loading scenarios...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- IMAGE LIBRARY TAB -->
+        <section id="tab-images" style="display: none;">
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <input type="text" id="image-search" class="search-input" placeholder="Search images by title, ID, or description...">
+                    <select id="image-tag-filter" class="search-input" style="min-width: 160px;">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
+                <div class="toolbar-right">
+                    <span id="image-count-label" class="text-sm text-muted">0 images loaded</span>
+                </div>
+            </div>
+
+            <div class="images-grid" id="images-grid">
+                <div class="text-center text-muted" style="grid-column: 1 / -1; padding: 3rem;">Loading image library...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- JSON Preview Modal -->
+    <div class="modal-overlay" id="json-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="json-modal-title">Scenario Definition</h2>
+                <button type="button" class="btn-close" id="btn-close-json">&times;</button>
+            </div>
+            <pre class="json-viewer" id="json-modal-content"></pre>
+        </div>
+    </div>
+
+    <!-- Conflict Confirmation Modal -->
+    <div class="modal-overlay" id="conflict-modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2>Scenario Already Exists</h2>
+                <button type="button" class="btn-close" id="btn-close-conflict">&times;</button>
+            </div>
+            <p id="conflict-modal-message" class="text-sm text-muted" style="margin-bottom: 1.5rem;"></p>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" class="btn btn-secondary text-sm" id="btn-cancel-conflict">Cancel</button>
+                <button type="button" class="btn btn-primary text-sm" id="btn-confirm-overwrite">Overwrite Scenario</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bug-reporter.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

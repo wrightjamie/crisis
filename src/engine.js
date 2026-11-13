@@ -1,4 +1,5 @@
 const scenarios = require('../data/scenarios');
+const scenarioService = require('./db/scenario-service');
 const { validateScenario } = require('./validate-scenarios');
 const { checkConditions } = require('../public/js/shared.js');
 
@@ -72,10 +73,45 @@ class GameEngine {
         };
     }
 
+    getScenario(scenarioId = this.gameState?.scenarioId) {
+        if (!scenarioId) return null;
+        let scenario = scenarios.find(s => s.id === scenarioId);
+        if (!scenario) {
+            try {
+                scenario = scenarioService.getScenario(scenarioId);
+                if (scenario) {
+                    scenarios.push(scenario);
+                }
+            } catch {}
+        }
+        return scenario;
+    }
+
     getHoldingState() {
-        return {
-            status: 'holding',
-            availableScenarios: scenarios.map(s => {
+        let available = [];
+        try {
+            const list = scenarioService.listScenarios();
+            available = list.map(s => {
+                const full = this.getScenario(s.id);
+                const validation = full ? validateScenario(full) : { isValid: true, errors: [] };
+                return {
+                    id: s.id,
+                    name: s.name,
+                    description: s.description,
+                    guideUrl: s.guideUrl || null,
+                    minUsers: full ? full.minUsers : s.minPlayers,
+                    roles: full ? full.roles : [],
+                    isValid: validation.isValid,
+                    validationErrors: validation.errors,
+                    variantAxes: (full && full.variantAxes ? full.variantAxes : []).map(axis => ({
+                        id: axis.id,
+                        name: axis.name,
+                        options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
+                    }))
+                };
+            });
+        } catch {
+            available = scenarios.map(s => {
                 const validation = validateScenario(s);
                 return {
                     id: s.id,
@@ -92,7 +128,12 @@ class GameEngine {
                         options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
                     }))
                 };
-            })
+            });
+        }
+
+        return {
+            status: 'holding',
+            availableScenarios: available
         };
     }
 
@@ -187,7 +228,7 @@ class GameEngine {
     }
 
     validateScenarioStart(scenarioId) {
-        const scenario = scenarios.find(s => s.id === scenarioId);
+        const scenario = this.getScenario(scenarioId);
         if (!scenario) return { valid: false, error: 'Scenario not found.' };
 
         const activeRoles = this.getActiveRoles().filter(r => r !== 'display' && r !== 'facilitator');
@@ -208,7 +249,7 @@ class GameEngine {
     }
 
     createLobby(scenarioId, selectedVariants, aiEnabled = true) {
-        const scenario = scenarios.find(s => s.id === scenarioId);
+        const scenario = this.getScenario(scenarioId);
         if (!scenario) return null;
 
         const scores = { ...scenario.initialScores };
@@ -291,7 +332,7 @@ class GameEngine {
     triggerScenarioEvent(eventId) {
         if (this.gameState.status !== 'active') return false;
         
-        const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+        const scenario = this.getScenario();
         if (!scenario) return false;
 
         const template = scenario.eventTemplates.find(e => e.id === eventId);
@@ -522,7 +563,7 @@ class GameEngine {
         }
 
         if (effects.triggerEvents) {
-            const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+            const scenario = this.getScenario();
             effects.triggerEvents.forEach(te => {
                 const template = scenario?.eventTemplates?.find(e => e.id === te.id);
                 if (template && !template.repeatable) {
@@ -546,7 +587,7 @@ class GameEngine {
         }
 
         if (effects.randomEvents) {
-            const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+            const scenario = this.getScenario();
             const totalWeight = effects.randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
             let roll = Math.random() * totalWeight;
             for (const re of effects.randomEvents) {
@@ -586,7 +627,7 @@ class GameEngine {
     triggerManualAction(actionId, initiatorRole) {
         if (this.gameState.status !== 'active') return false;
         
-        const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+        const scenario = this.getScenario();
         if (!scenario || !scenario.manualActions) return false;
 
         const action = scenario.manualActions.find(a => a.id === actionId);
@@ -664,7 +705,7 @@ class GameEngine {
 
     getScenarioTemplates() {
         if (this.gameState.status === 'active') {
-            const scenario = scenarios.find(s => s.id === this.gameState.scenarioId);
+            const scenario = this.getScenario();
             return scenario ? scenario.eventTemplates : [];
         }
         return [];

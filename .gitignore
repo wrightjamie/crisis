@@ -4,3 +4,7 @@ node_modules/
 data/github-token.txt
 *token.txt
 *.token
+*.db-shm
+*.db-wal
+data/scenarios_archive/
+*.zip

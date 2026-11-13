@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node src/engine-actions.test.js && node src/validate-scenarios.test.js && node src/tidy-brief.test.js && node src/bug-reports.test.js && node src/bug-reports-e2e.test.js",
+    "test": "node src/auth/access-control.test.js && node src/db/image-service.test.js && node src/db/scenario-service.test.js && node src/engine-actions.test.js && node src/validate-scenarios.test.js && node src/tidy-brief.test.js && node src/bug-reports.test.js && node src/bug-reports-e2e.test.js",
+    "set-admin": "node scripts/set-admin-password.js",
+    "db:migrate": "node scripts/migrate-scenarios-to-db.js",
     "audit": "node scripts/token-audit.js"
   },
   "keywords": [],
@@ -12,6 +14,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "adm-zip": "^0.6.1",
+    "better-sqlite3": "^13.1.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "socket.io": "^4.8.3"

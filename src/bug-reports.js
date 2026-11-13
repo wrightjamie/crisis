@@ -90,12 +90,19 @@ class BugReportManager {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
+            if (this.githubToken) {
+                try {
+                    const tokenTxtPath = path.join(dir, 'github-token.txt');
+                    fs.writeFileSync(tokenTxtPath, this.githubToken.trim(), 'utf8');
+                } catch (e) {
+                    // ignore write error
+                }
+            }
             const payload = {
                 enabled: this.enabled,
                 target: this.target || 'all',
                 counter: this.counter,
                 githubRepo: this.githubRepo,
-                githubToken: this.githubToken || undefined,
                 hasGithubToken: Boolean(this.githubToken),
                 lastUpdated: new Date().toISOString(),
                 reports: this.reports

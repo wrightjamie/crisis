@@ -2,6 +2,16 @@
 (function() {
     'use strict';
 
+    // Lazy-load CSS stylesheet ONLY when the bug reporting system is actively enabled
+    function loadBugReporterCss() {
+        if (typeof document !== 'undefined' && !document.querySelector('link[href*="bug-reporter.css"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/bug-reporter.css';
+            document.head.appendChild(link);
+        }
+    }
+
     // State
     let isEnabled = false;
     let targetAudience = 'all'; // 'all' or 'facilitator'
@@ -19,20 +29,23 @@
     }
     window.bugReporterSocket = socket;
 
-    // Helper to determine if on facilitator page
+    // Helper to determine if on facilitator or admin page
     function isFacilitatorPage() {
-        return window.location.pathname.includes('facilitator') || !!document.getElementById('facilitator-view');
+        return window.location.pathname.includes('facilitator') || window.location.pathname.includes('admin') || !!document.getElementById('facilitator-view');
     }
 
     // Get current user context
     function getUserContext() {
         const isFac = isFacilitatorPage();
+        const isAdmin = window.location.pathname.includes('admin');
         const urlGameId = new URLSearchParams(window.location.search).get('game');
         const storedRole = sessionStorage.getItem('crisis_role');
-        const role = isFac ? 'facilitator' : (storedRole || 'anonymous');
+        const role = isAdmin ? 'admin' : (isFac ? 'facilitator' : (storedRole || 'anonymous'));
         
         let sender = 'Anonymous';
-        if (isFac) {
+        if (isAdmin) {
+            sender = 'System Admin';
+        } else if (isFac) {
             sender = 'Facilitator (Admin)';
         } else if (storedRole) {
             sender = storedRole.toUpperCase();
@@ -189,6 +202,7 @@
 
     // Toggle Chat Panel visibility
     function togglePanel(explicitState) {
+        loadBugReporterCss();
         isOpen = typeof explicitState === 'boolean' ? explicitState : !isOpen;
         const panel = document.getElementById('bug-reporter-panel');
         if (!panel) return;
@@ -427,6 +441,10 @@
 
         const isFac = isFacilitatorPage();
         const visibleForMe = isEnabled && (targetAudience === 'all' || isFac);
+
+        if (visibleForMe) {
+            loadBugReporterCss();
+        }
 
         const launcher = document.getElementById('bug-reporter-launcher');
         const panel = document.getElementById('bug-reporter-panel');

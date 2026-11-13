@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+let imageService = null;
+try {
+    imageService = require('./db/image-service');
+} catch {}
 
 const IMAGE_LIBRARY_PATH = path.join(__dirname, '..', 'data', 'image-library.json');
 
@@ -15,11 +19,31 @@ function getImageLibrary(forceReload = false) {
 
 function getImage(id) {
     if (!id || typeof id !== 'string') return null;
+    if (imageService) {
+        try {
+            const dbImg = imageService.getImage(id);
+            if (dbImg) {
+                return {
+                    id: dbImg.id,
+                    file: dbImg.filename,
+                    title: dbImg.title,
+                    description: dbImg.description,
+                    tags: dbImg.tags
+                };
+            }
+        } catch {}
+    }
     const lib = getImageLibrary();
     return lib[id] || null;
 }
 
 function getAllTags() {
+    if (imageService) {
+        try {
+            const tags = imageService.getAllTags();
+            if (tags && tags.length > 0) return tags;
+        } catch {}
+    }
     const lib = getImageLibrary();
     const tagSet = new Set();
     for (const entry of Object.values(lib)) {
@@ -31,6 +55,12 @@ function getAllTags() {
 }
 
 function getAllImages({ tag, tags, query, q } = {}) {
+    if (imageService) {
+        try {
+            const dbImages = imageService.getAllImages({ tag, tags, query, q });
+            if (dbImages && dbImages.length > 0) return dbImages;
+        } catch {}
+    }
     const lib = getImageLibrary();
     let results = Object.values(lib);
 
