@@ -6,13 +6,41 @@
 ## Status Overview
 - **System Active:** 🟢 Enabled
 - **GitHub Sync:** 🟢 Active (wrightjamie/crisis)
-- **Total Reports:** 10
-- **Status:** 🟢 0 Open | 🟡 0 In Progress | 🟣 10 Resolved
-- **Breakdown:** 🐛 10 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
+- **Total Reports:** 13
+- **Status:** 🟢 3 Open | 🟡 0 In Progress | 🟣 10 Resolved
+- **Breakdown:** 🐛 13 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
 
 ---
 
 ## Reports List
+
+### [BR-13] 🐛 Bug: As we add more images, we probably need a pagination system....
+- **Reported:** 2026-11-14 16:59:33 UTC
+- **Reporter:** System Admin (`admin`) | [GitHub #63](https://github.com/wrightjamie/crisis/issues/63)
+- **Status:** 🟢 **Open**
+
+> As we add more images, we probably need a pagination system. Let's keep it re-usable - we might choose to add it to other elements.
+
+---
+
+### [BR-12] 🐛 Bug: The rounded 'admin' tag in the header doesn't look right - i...
+- **Reported:** 2026-11-14 16:58:07 UTC
+- **Reporter:** System Admin (`admin`) | [GitHub #62](https://github.com/wrightjamie/crisis/issues/62)
+- **Status:** 🟢 **Open**
+
+> The rounded 'admin' tag in the header doesn't look right - it doesn't align to the other buttons.
+
+---
+
+### [BR-11] 🐛 Bug: I've changed the tagify.css line 1 align-content to center. ...
+- **Reported:** 2026-11-14 16:57:15 UTC
+- **Reporter:** System Admin (`admin`) | [GitHub #61](https://github.com/wrightjamie/crisis/issues/61)
+- **Status:** 🟢 **Open**
+
+> I've changed the tagify.css line 1 align-content to center. This appears to have much better vertical alignment than the default baseline.
+> I also find it strange that we are over-riding a lot of styles for tagify in the admin.css. That feels strange
+
+---
 
 ### [BR-10] 🐛 Bug: The height and colour of the filter search is different to t...
 - **Reported:** 2026-11-13 23:35:47 UTC
