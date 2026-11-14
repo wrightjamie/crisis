@@ -27,14 +27,59 @@ body.view-map {
   width: 100vw;
 }
 
-/* Top Bar */
-.top-bar {
+/* Top Bar & Unified Header Component */
+.top-bar,
+.admin-header {
+  height: var(--top-bar-height);
+  min-height: var(--top-bar-height);
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  padding: 0 var(--space-md);
   justify-content: space-between;
+  padding: 0 var(--space-md);
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+  z-index: var(--z-panel);
+}
+
+.top-bar-left,
+.top-bar-brand-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.top-bar-right,
+.top-bar-actions,
+.admin-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.top-bar-brand {
+  font-size: var(--text-md);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.top-bar-brand h1 {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .role-badge {
@@ -45,6 +90,73 @@ body.view-map {
   text-transform: uppercase;
   font-size: var(--text-sm);
   letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* Header Navigation Tabs */
+.top-bar-tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  height: var(--top-bar-height);
+}
+
+.top-bar-tab,
+.nav-tab {
+  height: var(--top-bar-height);
+  padding: 0 var(--space-md);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  box-sizing: border-box;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.top-bar-tab:hover,
+.nav-tab:hover {
+  color: var(--text-primary);
+}
+
+.top-bar-tab.active,
+.nav-tab.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* User Identity Pill */
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: var(--accent-blue);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 9999px;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Compact Buttons inside Top Bar */
+.top-bar .btn,
+.admin-header .btn {
+  font-size: var(--text-sm);
+  padding: 0.4rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  line-height: 1.25;
 }
 
 /* Main Content Area */
