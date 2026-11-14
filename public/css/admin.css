@@ -26,13 +26,39 @@
 }
 
 .search-input {
+    height: 38px;
+    box-sizing: border-box;
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--text-primary);
     padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
+    font-size: var(--text-base);
+    font-family: inherit;
     min-width: 240px;
+    outline: none;
+    transition: border-color var(--transition-fast, 0.2s);
+}
+
+.search-input:focus {
+    border-color: var(--accent-blue);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.image-toolbar-search {
+    flex: 1;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.image-search-input {
+    flex: 1;
+    min-width: 220px;
 }
 
 .file-upload-wrapper {
@@ -246,13 +272,16 @@
 
 /* Tagify Dark Theme Customization */
 .tag-filter-container {
-    display: inline-flex;
+    position: relative;
+    display: flex;
     align-items: center;
+    flex: 1.5;
+    min-width: 260px;
 }
 
 .tagify {
     --tags-border-color: var(--border-color);
-    --tags-hover-border-color: var(--accent-blue);
+    --tags-hover-border-color: var(--border-color);
     --tags-focus-border-color: var(--accent-blue);
     --tag-bg: rgba(59, 130, 246, 0.15);
     --tag-hover: rgba(59, 130, 246, 0.25);
@@ -272,12 +301,15 @@
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
-    font-size: 0.85rem;
+    font-size: var(--text-base);
+    font-family: inherit;
     min-height: 38px;
-    padding: 0 0.5rem;
+    padding: 0 1.75rem 0 0.5rem;
     box-sizing: border-box;
     width: 100%;
-    transition: border-color 0.2s;
+    display: flex;
+    align-items: center;
+    transition: border-color var(--transition-fast, 0.2s);
 }
 
 .tagify:hover {
@@ -293,6 +325,9 @@
     border-radius: var(--radius-sm);
     border: 1px solid rgba(59, 130, 246, 0.35);
     font-weight: 500;
+    font-size: 0.75rem;
+    height: 24px;
+    line-height: 22px;
 }
 
 .tagify__tag > div {
@@ -311,12 +346,46 @@
 }
 
 .tagify__input {
-    margin: 3px 0;
-    line-height: 1.4;
+    margin: 0;
+    line-height: 24px;
+    min-height: 24px;
+    font-size: var(--text-base);
+    font-family: inherit;
+    color: var(--text-primary);
+    padding: 0 2px;
 }
 
 .tagify__input::before {
-    line-height: 1.4;
+    line-height: 24px;
+    font-size: var(--text-base);
+    color: var(--text-muted);
+}
+
+.tag-filter-clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.2s);
+}
+
+.tag-filter-clear-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: var(--accent-red);
 }
 
 /* Tagify Suggestions Dropdown */

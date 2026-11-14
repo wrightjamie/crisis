@@ -7,7 +7,7 @@
 - **System Active:** 🟢 Enabled
 - **GitHub Sync:** 🟢 Active (wrightjamie/crisis)
 - **Total Reports:** 10
-- **Status:** 🟢 1 Open | 🟡 0 In Progress | 🟣 9 Resolved
+- **Status:** 🟢 0 Open | 🟡 0 In Progress | 🟣 10 Resolved
 - **Breakdown:** 🐛 10 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
 
 ---
@@ -17,7 +17,7 @@
 ### [BR-10] 🐛 Bug: The height and colour of the filter search is different to t...
 - **Reported:** 2026-11-13 23:35:47 UTC
 - **Reporter:** System Admin (`admin`) | [GitHub #60](https://github.com/wrightjamie/crisis/issues/60)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > The height and colour of the filter search is different to the image search. The filter search also changes width (and also changes the generic search width) when a tag is added. This is caused by the addition of the 'clear tags' button
 

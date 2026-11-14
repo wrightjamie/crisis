@@ -41,7 +41,7 @@
         <section id="tab-scenarios">
             <div class="toolbar">
                 <div class="toolbar-left">
-                    <input type="text" id="scenario-search" class="search-input" placeholder="Search scenarios by name or description...">
+                    <input type="text" id="scenario-search" class="form-control search-input" placeholder="Search scenarios by name or description...">
                 </div>
                 <div class="toolbar-right">
                     <button type="button" class="btn btn-secondary text-sm" id="btn-export-all" title="Download all scenarios in a single archive">📦 Export All (.zip)</button>
@@ -85,12 +85,12 @@
         <!-- IMAGE LIBRARY TAB -->
         <section id="tab-images" style="display: none;">
             <div class="toolbar">
-                <div class="toolbar-left" style="flex: 1; max-width: 800px;">
-                    <input type="text" id="image-search" class="search-input" placeholder="Search images by title, ID, or description..." style="flex: 1; min-width: 220px;">
-                    <div class="tag-filter-container" style="flex: 1.5; min-width: 280px;">
-                        <input id="image-tag-filter" class="tagify-filter-input" placeholder="Filter by tags (type & Tab)...">
+                <div class="toolbar-left image-toolbar-search">
+                    <input type="text" id="image-search" class="form-control search-input image-search-input" placeholder="Search images by title, ID, or description...">
+                    <div class="tag-filter-container">
+                        <input id="image-tag-filter" class="form-control tagify-filter-input" placeholder="Filter by tags (type & Tab)...">
+                        <button type="button" id="btn-clear-tag-filters" class="tag-filter-clear-btn" title="Clear all tag filters" aria-label="Clear all tag filters" style="display: none;">&times;</button>
                     </div>
-                    <button type="button" id="btn-clear-tag-filters" class="btn btn-secondary text-sm" title="Clear all tag filters" style="display: none;">Clear Tags</button>
                 </div>
                 <div class="toolbar-right">
                     <span id="image-count-label" class="text-sm text-muted">0 images loaded</span>
