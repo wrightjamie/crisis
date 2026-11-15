@@ -1043,71 +1043,6 @@
         });
     }
 
-        const ensureCfg = (k) => {
-            if (!scenario.scoreConfigs) scenario.scoreConfigs = {};
-            if (!scenario.scoreConfigs[k]) scenario.scoreConfigs[k] = { min: 1, max: 5, unit: '', visibleToPlayers: true, promptAI: true };
-            return scenario.scoreConfigs[k];
-        };
-
-        container.querySelectorAll('.btn-move-score-up').forEach(btn => {
-            btn.addEventListener('click', () => {
-                reorderScoreKey(Number(btn.getAttribute('data-idx')), -1);
-            });
-        });
-
-        container.querySelectorAll('.btn-move-score-down').forEach(btn => {
-            btn.addEventListener('click', () => {
-                reorderScoreKey(Number(btn.getAttribute('data-idx')), 1);
-            });
-        });
-
-        container.querySelectorAll('.score-init-inp').forEach(inp => {
-            inp.addEventListener('input', () => {
-                scenario.initialScores[inp.getAttribute('data-key')] = Number(inp.value || 0);
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.score-min-inp').forEach(inp => {
-            inp.addEventListener('input', () => {
-                ensureCfg(inp.getAttribute('data-key')).min = Number(inp.value || 0);
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.score-max-inp').forEach(inp => {
-            inp.addEventListener('input', () => {
-                ensureCfg(inp.getAttribute('data-key')).max = Number(inp.value || 5);
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.score-unit-inp').forEach(inp => {
-            inp.addEventListener('input', () => {
-                ensureCfg(inp.getAttribute('data-key')).unit = inp.value;
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.score-vis-cb').forEach(cb => {
-            cb.addEventListener('change', () => {
-                ensureCfg(cb.getAttribute('data-key')).visibleToPlayers = cb.checked;
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.score-ai-cb').forEach(cb => {
-            cb.addEventListener('change', () => {
-                ensureCfg(cb.getAttribute('data-key')).promptAI = cb.checked;
-                scheduleAutoSave();
-            });
-        });
-        container.querySelectorAll('.btn-del-score').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const k = btn.getAttribute('data-key');
-                delete scenario.initialScores[k];
-                if (scenario.scoreConfigs) delete scenario.scoreConfigs[k];
-                renderScoresTab();
-                scheduleAutoSave();
-            });
-        });
-    }
-
     // 6. Tab 4: Map Assets & Pre-Defined Asset Library (BR-21, BR-31, BR-32, BR-33)
     let allAssetsCollapsed = false;
 
@@ -2185,9 +2120,6 @@
                 if (cloneDialog && cloneDialog.open) cloneDialog.close();
                 window.location.href = `/editor?id=${encodeURIComponent(data.id)}`;
             } catch (err) {
-                showToast(err.message, 'error');
-            }
-        });
                 showToast(err.message, 'error');
             }
         });
