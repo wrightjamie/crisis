@@ -1,11 +1,385 @@
 {
   "enabled": true,
   "target": "all",
-  "counter": 13,
+  "counter": 35,
   "githubRepo": "wrightjamie/crisis",
   "hasGithubToken": true,
-  "lastUpdated": "2026-11-14T16:59:34.773Z",
+  "lastUpdated": "2026-11-15T22:03:30.085Z",
   "reports": [
+    {
+      "id": "BR-35",
+      "timestamp": "2026-11-14T22:51:21.712Z",
+      "type": "bug",
+      "text": "Why aren't manual actions part of the canvas?\nTHey should be available as a result of activities on the tree",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 85,
+        "url": "https://github.com/wrightjamie/crisis/issues/85"
+      },
+      "updatedAt": "2026-11-15T22:03:28.989Z"
+    },
+    {
+      "id": "BR-34",
+      "timestamp": "2026-11-14T22:50:31.162Z",
+      "type": "bug",
+      "text": "On the Air Power scenario we have a comprehensive guide, but there's nothing in the facilitator guide box",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 84,
+        "url": "https://github.com/wrightjamie/crisis/issues/84"
+      },
+      "updatedAt": "2026-11-15T22:03:28.041Z"
+    },
+    {
+      "id": "BR-33",
+      "timestamp": "2026-11-14T22:47:56.827Z",
+      "type": "bug",
+      "text": "Clicking on an asset should scroll to it",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 83,
+        "url": "https://github.com/wrightjamie/crisis/issues/83"
+      },
+      "updatedAt": "2026-11-15T22:03:27.071Z"
+    },
+    {
+      "id": "BR-32",
+      "timestamp": "2026-11-14T22:47:09.197Z",
+      "type": "bug",
+      "text": "Asset cards should be collapsable",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 82,
+        "url": "https://github.com/wrightjamie/crisis/issues/82"
+      },
+      "updatedAt": "2026-11-15T22:03:26.012Z"
+    },
+    {
+      "id": "BR-31",
+      "timestamp": "2026-11-14T22:42:16.284Z",
+      "type": "bug",
+      "text": "The quick add palette takes up too much space. Could it be in a popover?",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 81,
+        "url": "https://github.com/wrightjamie/crisis/issues/81"
+      },
+      "updatedAt": "2026-11-15T22:03:24.954Z"
+    },
+    {
+      "id": "BR-30",
+      "timestamp": "2026-11-14T22:28:50.421Z",
+      "type": "bug",
+      "text": "Rather than having a bar down the left hand side of roles and scores, let's instead have a 'blank' card at the bottom of the list.\nPreset roles should be an option at the top of the page",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 80,
+        "url": "https://github.com/wrightjamie/crisis/issues/80"
+      },
+      "updatedAt": "2026-11-15T22:03:23.871Z"
+    },
+    {
+      "id": "BR-29",
+      "timestamp": "2026-11-14T22:25:14.558Z",
+      "type": "bug",
+      "text": "The AI text for each role is terrible. I'm not sure why. Here is the brief developed for the PM:\nCONFIDENTIAL BRIEFING — PRIME MINISTER: Represent your directorate within the Caribbean Hurricane: Ticking Clock command cell. Prioritize operational continuity, evaluate intelligence injects within your jurisdiction, and advise the chair on risk-adjusted response options.\nIt should just say what the role is",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 79,
+        "url": "https://github.com/wrightjamie/crisis/issues/79"
+      },
+      "updatedAt": "2026-11-15T22:03:22.991Z"
+    },
+    {
+      "id": "BR-28",
+      "timestamp": "2026-11-14T22:23:43.703Z",
+      "type": "bug",
+      "text": "Does the user need to see or edit the slug of the scenario? Should it not just be a lower case slug?",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 78,
+        "url": "https://github.com/wrightjamie/crisis/issues/78"
+      },
+      "updatedAt": "2026-11-15T22:03:22.026Z"
+    },
+    {
+      "id": "BR-27",
+      "timestamp": "2026-11-14T22:22:42.765Z",
+      "type": "bug",
+      "text": "The font size of the edit and export buttons on the scenario list is too big - it isn't consistent.\nCan we also go for a more obvious button choice",
+      "role": "admin",
+      "sender": "System Admin",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 77,
+        "url": "https://github.com/wrightjamie/crisis/issues/77"
+      },
+      "updatedAt": "2026-11-15T22:03:21.041Z"
+    },
+    {
+      "id": "BR-26",
+      "timestamp": "2026-11-14T20:45:20.748Z",
+      "type": "bug",
+      "text": "In the event editor, let's have triggered events and decisions collapsable",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 76,
+        "url": "https://github.com/wrightjamie/crisis/issues/76"
+      },
+      "updatedAt": "2026-11-15T22:03:19.919Z"
+    },
+    {
+      "id": "BR-25",
+      "timestamp": "2026-11-14T20:19:55.790Z",
+      "type": "bug",
+      "text": "Option IDs should be automatic and hidden from the user",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 75,
+        "url": "https://github.com/wrightjamie/crisis/issues/75"
+      },
+      "updatedAt": "2026-11-15T22:03:18.982Z"
+    },
+    {
+      "id": "BR-24",
+      "timestamp": "2026-11-14T20:18:17.695Z",
+      "type": "bug",
+      "text": "The sound cue should be from a drop down - there are only a small number of options",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 74,
+        "url": "https://github.com/wrightjamie/crisis/issues/74"
+      },
+      "updatedAt": "2026-11-15T22:03:17.913Z"
+    },
+    {
+      "id": "BR-23",
+      "timestamp": "2026-11-14T20:17:53.931Z",
+      "type": "bug",
+      "text": "Give the General Narrative Event more vertical space",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 73,
+        "url": "https://github.com/wrightjamie/crisis/issues/73"
+      },
+      "updatedAt": "2026-11-15T22:03:16.922Z"
+    },
+    {
+      "id": "BR-22",
+      "timestamp": "2026-11-14T20:16:21.191Z",
+      "type": "bug",
+      "text": "I have an auto-save error - but no reason why.",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 72,
+        "url": "https://github.com/wrightjamie/crisis/issues/72"
+      },
+      "updatedAt": "2026-11-15T22:03:15.818Z"
+    },
+    {
+      "id": "BR-21",
+      "timestamp": "2026-11-14T20:15:41.267Z",
+      "type": "bug",
+      "text": "In the asset editor, provide a list of pre-defined assets that can then be edited when added",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 71,
+        "url": "https://github.com/wrightjamie/crisis/issues/71"
+      },
+      "updatedAt": "2026-11-15T22:03:14.727Z"
+    },
+    {
+      "id": "BR-20",
+      "timestamp": "2026-11-14T20:13:58.859Z",
+      "type": "bug",
+      "text": "Can we add an AI button alongside most briefing inputs in the editor.",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 70,
+        "url": "https://github.com/wrightjamie/crisis/issues/70"
+      },
+      "updatedAt": "2026-11-15T22:03:13.696Z"
+    },
+    {
+      "id": "BR-19",
+      "timestamp": "2026-11-14T20:12:15.799Z",
+      "type": "bug",
+      "text": "Add re-ordering of scores",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 69,
+        "url": "https://github.com/wrightjamie/crisis/issues/69"
+      },
+      "updatedAt": "2026-11-15T22:03:12.492Z"
+    },
+    {
+      "id": "BR-18",
+      "timestamp": "2026-11-14T20:11:58.705Z",
+      "type": "bug",
+      "text": "It is unclear what the unit '/5' means",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 68,
+        "url": "https://github.com/wrightjamie/crisis/issues/68"
+      },
+      "updatedAt": "2026-11-15T22:03:11.480Z"
+    },
+    {
+      "id": "BR-17",
+      "timestamp": "2026-11-14T20:10:53.078Z",
+      "type": "bug",
+      "text": "There's no theatre presets",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 67,
+        "url": "https://github.com/wrightjamie/crisis/issues/67"
+      },
+      "updatedAt": "2026-11-15T22:03:10.514Z"
+    },
+    {
+      "id": "BR-16",
+      "timestamp": "2026-11-14T20:10:21.175Z",
+      "type": "bug",
+      "text": "The map is asking for an API?",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 66,
+        "url": "https://github.com/wrightjamie/crisis/issues/66"
+      },
+      "updatedAt": "2026-11-15T22:03:09.436Z"
+    },
+    {
+      "id": "BR-15",
+      "timestamp": "2026-11-14T20:10:06.922Z",
+      "type": "bug",
+      "text": "Add re-order of the roles.",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 65,
+        "url": "https://github.com/wrightjamie/crisis/issues/65"
+      },
+      "updatedAt": "2026-11-15T22:03:08.426Z"
+    },
+    {
+      "id": "BR-14",
+      "timestamp": "2026-11-14T20:09:51.820Z",
+      "type": "bug",
+      "text": "Let's put the role bundle on the left, not centre.\nThe role bundle drop down is slightly taller than the button - check the element heights are consistent",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Resolved",
+      "githubIssue": {
+        "number": 64,
+        "url": "https://github.com/wrightjamie/crisis/issues/64"
+      },
+      "updatedAt": "2026-11-15T22:03:07.181Z"
+    },
     {
       "id": "BR-13",
       "timestamp": "2026-11-14T16:59:33.725Z",

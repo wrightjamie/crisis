@@ -1,3 +1,16 @@
+const STAGE_1_ESCALATION_TRIGGERS = [
+    { id: 'ev_naval_skirmish', image: 'ev_sea_skimming_missiles', delayMs: 90000, probability: 1.0 },
+    { id: 'ev_ground_incursion', image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
+    { id: 'ev_political_pressure', image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
+    { id: 'ev_resistance_contact', image: 'ev_fidf_resistance', delayMs: 210000, probability: 1.0 },
+    { id: 'ev_cyber_attack', image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
+    { id: 'ev_sub_detected', image: 'ev_sub_detection', delayMs: 150000, probability: 0.8 },
+    { id: 'ev_supply_shortage', image: 'ev_logistics_failure', delayMs: 300000, probability: 0.85 },
+    { id: 'ev_pm_ultimatum', image: 'act_national_address', delayMs: 360000, probability: 1.0 },
+    { id: 'ev_us_support', image: 'ev_us_support_success', delayMs: 360000, probability: 0.8 },
+    { id: 'ev_un_sanctions', image: 'generic_un', delayMs: 360000, probability: 0.8 }
+];
+
 module.exports = {
     id: 'falklands_2',
     name: 'Falklands II: Southern Storm',
@@ -368,28 +381,7 @@ CRITICAL RULES:
                             effects: {
                                 assetStateChanges: { falklands_typhoons: 'intercepting' },
                                 scores: { military_readiness: 1, argentina_aggression: 1 },
-                                triggerEvents: [
-                                    { id: 'ev_naval_skirmish',
-            image: 'ev_sea_skimming_missiles', delayMs: 90000, probability: 1.0 },
-                                    { id: 'ev_ground_incursion',
-            image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
-                                    { id: 'ev_political_pressure',
-            image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
-                                    { id: 'ev_resistance_contact',
-            image: 'ev_fidf_resistance', delayMs: 210000, probability: 1.0 },
-                                    { id: 'ev_cyber_attack',
-            image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
-                                    { id: 'ev_sub_detected',
-            image: 'ev_sub_detection', delayMs: 150000, probability: 0.8 },
-                                    { id: 'ev_supply_shortage',
-            image: 'ev_logistics_failure', delayMs: 300000, probability: 0.85 },
-                                    { id: 'ev_pm_ultimatum',
-            image: 'act_national_address', delayMs: 360000, probability: 1.0 },
-                                    { id: 'ev_us_support',
-            image: 'ev_us_support_success', delayMs: 360000, probability: 0.8 },
-                                    { id: 'ev_un_sanctions',
-            image: 'generic_un', delayMs: 360000, probability: 0.8 }
-                                ]
+                                triggerEvents: STAGE_1_ESCALATION_TRIGGERS
                             }
                         },
                         {
@@ -397,28 +389,7 @@ CRITICAL RULES:
                             text: 'Maintain defensive posture and monitor.',
                             effects: {
                                 scores: { uk_public_support: -1, international_pressure: -1 },
-                                triggerEvents: [
-                                    { id: 'ev_naval_skirmish',
-            image: 'ev_sea_skimming_missiles', delayMs: 90000, probability: 1.0 },
-                                    { id: 'ev_ground_incursion',
-            image: 'ev_combat_recovery_medevac', delayMs: 180000, probability: 1.0 },
-                                    { id: 'ev_political_pressure',
-            image: 'ev_crisis_cabinet', delayMs: 270000, probability: 1.0 },
-                                    { id: 'ev_resistance_contact',
-            image: 'ev_fidf_resistance', delayMs: 210000, probability: 1.0 },
-                                    { id: 'ev_cyber_attack',
-            image: 'generic_cyber', delayMs: 240000, probability: 0.9 },
-                                    { id: 'ev_sub_detected',
-            image: 'ev_sub_detection', delayMs: 150000, probability: 0.8 },
-                                    { id: 'ev_supply_shortage',
-            image: 'ev_logistics_failure', delayMs: 300000, probability: 0.85 },
-                                    { id: 'ev_pm_ultimatum',
-            image: 'act_national_address', delayMs: 360000, probability: 1.0 },
-                                    { id: 'ev_us_support',
-            image: 'ev_us_support_success', delayMs: 360000, probability: 0.8 },
-                                    { id: 'ev_un_sanctions',
-            image: 'generic_un', delayMs: 360000, probability: 0.8 }
-                                ]
+                                triggerEvents: STAGE_1_ESCALATION_TRIGGERS
                             }
                         }
                     ]

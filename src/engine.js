@@ -50,6 +50,8 @@ class GameEngine {
         this.name = name;
         this.lastActivityTimestamp = Date.now();
         this.isPaused = false;
+        this.useDraft = false;
+        this.isTestSession = false;
 
         this.scheduleLoopInterval = null;
         this.connectedClients = {}; // socket.id -> role
@@ -75,60 +77,47 @@ class GameEngine {
 
     getScenario(scenarioId = this.gameState?.scenarioId) {
         if (!scenarioId) return null;
-        let scenario = scenarios.find(s => s.id === scenarioId);
+        let scenario = null;
+        try {
+            scenario = scenarioService.getScenario(scenarioId, { useDraft: Boolean(this.useDraft) });
+        } catch {}
         if (!scenario) {
-            try {
-                scenario = scenarioService.getScenario(scenarioId);
-                if (scenario) {
-                    scenarios.push(scenario);
-                }
-            } catch {}
+            scenario = scenarios.find(s => s.id === scenarioId) || null;
         }
         return scenario;
+    }
+
+    _formatScenarioHoldingSummary(summary, full = summary) {
+        const validation = full ? validateScenario(full) : { isValid: true, errors: [] };
+        const variantAxes = (full && Array.isArray(full.variantAxes) ? full.variantAxes : []).map(axis => ({
+            id: axis.id,
+            name: axis.name,
+            options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
+        }));
+        return {
+            id: summary.id,
+            name: summary.name,
+            description: summary.description,
+            guideUrl: summary.guideUrl || null,
+            minUsers: full ? full.minUsers : summary.minPlayers,
+            roles: full ? full.roles : [],
+            isValid: validation.isValid,
+            validationErrors: validation.errors,
+            variantAxes
+        };
     }
 
     getHoldingState() {
         let available = [];
         try {
-            const list = scenarioService.listScenarios();
-            available = list.map(s => {
-                const full = this.getScenario(s.id);
-                const validation = full ? validateScenario(full) : { isValid: true, errors: [] };
-                return {
-                    id: s.id,
-                    name: s.name,
-                    description: s.description,
-                    guideUrl: s.guideUrl || null,
-                    minUsers: full ? full.minUsers : s.minPlayers,
-                    roles: full ? full.roles : [],
-                    isValid: validation.isValid,
-                    validationErrors: validation.errors,
-                    variantAxes: (full && full.variantAxes ? full.variantAxes : []).map(axis => ({
-                        id: axis.id,
-                        name: axis.name,
-                        options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
-                    }))
-                };
-            });
-        } catch {
-            available = scenarios.map(s => {
-                const validation = validateScenario(s);
-                return {
-                    id: s.id,
-                    name: s.name,
-                    description: s.description,
-                    guideUrl: s.guideUrl || null,
-                    minUsers: s.minUsers,
-                    roles: s.roles,
-                    isValid: validation.isValid,
-                    validationErrors: validation.errors,
-                    variantAxes: (s.variantAxes || []).map(axis => ({
-                        id: axis.id,
-                        name: axis.name,
-                        options: axis.options.map(opt => ({ id: opt.id, name: opt.name }))
-                    }))
-                };
-            });
+            const list = scenarioService.listScenarios({ publishedOnly: !this.useDraft });
+            if (list && list.length > 0) {
+                available = list.map(s => this._formatScenarioHoldingSummary(s, this.getScenario(s.id)));
+            }
+        } catch {}
+
+        if (available.length === 0) {
+            available = scenarios.map(s => this._formatScenarioHoldingSummary(s, s));
         }
 
         return {
@@ -230,6 +219,10 @@ class GameEngine {
     validateScenarioStart(scenarioId) {
         const scenario = this.getScenario(scenarioId);
         if (!scenario) return { valid: false, error: 'Scenario not found.' };
+
+        if (this.isTestSession) {
+            return { valid: true };
+        }
 
         const activeRoles = this.getActiveRoles().filter(r => r !== 'display' && r !== 'facilitator');
         
@@ -497,31 +490,22 @@ class GameEngine {
         return option;
     }
 
-    applyEffects(effects) {
-        if (!effects) return;
-        
-        if (effects.scores) {
-            for (const [scoreName, change] of Object.entries(effects.scores)) {
-                if (this.gameState.scores[scoreName] !== undefined) {
-                    this.gameState.scores[scoreName] += change;
+    _applyScoreEffects(scores) {
+        if (!scores) return;
+        for (const [scoreName, change] of Object.entries(scores)) {
+            if (this.gameState.scores[scoreName] !== undefined) {
+                this.gameState.scores[scoreName] += change;
 
-                    const scoreConfig = this.gameState.scenarioConfig?.scoreConfigs?.[scoreName];
-                    const minVal = scoreConfig && scoreConfig.min !== undefined ? scoreConfig.min : 1;
-                    const maxVal = scoreConfig && scoreConfig.max !== undefined ? scoreConfig.max : 5;
+                const scoreConfig = this.gameState.scenarioConfig?.scoreConfigs?.[scoreName];
+                const minVal = scoreConfig && scoreConfig.min !== undefined ? scoreConfig.min : 1;
+                const maxVal = scoreConfig && scoreConfig.max !== undefined ? scoreConfig.max : 5;
 
-                    this.gameState.scores[scoreName] = Math.max(minVal, Math.min(maxVal, this.gameState.scores[scoreName]));
-                }
+                this.gameState.scores[scoreName] = Math.max(minVal, Math.min(maxVal, this.gameState.scores[scoreName]));
             }
         }
+    }
 
-        if (effects.unlockEvents) {
-            effects.unlockEvents.forEach(evtId => {
-                if (!this.gameState.unlockedEvents.includes(evtId)) {
-                    this.gameState.unlockedEvents.push(evtId);
-                }
-            });
-        }
-
+    _applyAssetEffects(effects) {
         if (effects.assetStateChanges) {
             for (const [assetId, newState] of Object.entries(effects.assetStateChanges)) {
                 const asset = this.gameState.assets.find(a => a.id === assetId);
@@ -561,57 +545,72 @@ class GameEngine {
                 }
             }
         }
+    }
 
-        if (effects.triggerEvents) {
-            const scenario = this.getScenario();
-            effects.triggerEvents.forEach(te => {
-                const template = scenario?.eventTemplates?.find(e => e.id === te.id);
-                if (template && !template.repeatable) {
-                    const alreadyTriggered = this.gameState.events.some(e => e.templateId === te.id);
-                    const alreadyScheduled = this.gameState.scheduledEvents.some(se => se.templateId === te.id);
-                    if (alreadyTriggered || alreadyScheduled) {
-                        return;
-                    }
+    _canScheduleEventTemplate(templateId, scenario) {
+        const template = scenario?.eventTemplates?.find(e => e.id === templateId);
+        if (template && !template.repeatable) {
+            const alreadyTriggered = this.gameState.events.some(e => e.templateId === templateId);
+            const alreadyScheduled = this.gameState.scheduledEvents.some(se => se.templateId === templateId);
+            if (alreadyTriggered || alreadyScheduled) return false;
+        }
+        return true;
+    }
+
+    _enqueueScheduledEvent(templateId, delayMs = 0) {
+        this.gameState.scheduledEvents.push({
+            uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+            templateId,
+            triggerTimeMs: Date.now() + (delayMs || 0),
+            paused: false,
+            timeRemainingMs: null
+        });
+    }
+
+    _scheduleTriggeredEvents(triggerEvents) {
+        if (!triggerEvents) return;
+        const scenario = this.getScenario();
+        triggerEvents.forEach(te => {
+            if (!this._canScheduleEventTemplate(te.id, scenario)) return;
+            const roll = Math.random();
+            if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
+                this._enqueueScheduledEvent(te.id, te.delayMs);
+            }
+        });
+    }
+
+    _scheduleRandomEvents(randomEvents) {
+        if (!randomEvents) return;
+        const scenario = this.getScenario();
+        const totalWeight = randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
+        let roll = Math.random() * totalWeight;
+        for (const re of randomEvents) {
+            if (roll < (re.weight || 1)) {
+                if (this._canScheduleEventTemplate(re.id, scenario)) {
+                    this._enqueueScheduledEvent(re.id, re.delayMs);
                 }
-                const roll = Math.random();
-                if (roll <= (te.probability !== undefined ? te.probability : 1.0)) {
-                    this.gameState.scheduledEvents.push({
-                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                        templateId: te.id,
-                        triggerTimeMs: Date.now() + (te.delayMs || 0),
-                        paused: false,
-                        timeRemainingMs: null
-                    });
+                break;
+            }
+            roll -= (re.weight || 1);
+        }
+    }
+
+    applyEffects(effects) {
+        if (!effects) return;
+
+        this._applyScoreEffects(effects.scores);
+
+        if (effects.unlockEvents) {
+            effects.unlockEvents.forEach(evtId => {
+                if (!this.gameState.unlockedEvents.includes(evtId)) {
+                    this.gameState.unlockedEvents.push(evtId);
                 }
             });
         }
 
-        if (effects.randomEvents) {
-            const scenario = this.getScenario();
-            const totalWeight = effects.randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
-            let roll = Math.random() * totalWeight;
-            for (const re of effects.randomEvents) {
-                if (roll < (re.weight || 1)) {
-                    const template = scenario?.eventTemplates?.find(e => e.id === re.id);
-                    if (template && !template.repeatable) {
-                        const alreadyTriggered = this.gameState.events.some(e => e.templateId === re.id);
-                        const alreadyScheduled = this.gameState.scheduledEvents.some(se => se.templateId === re.id);
-                        if (alreadyTriggered || alreadyScheduled) {
-                            break;
-                        }
-                    }
-                    this.gameState.scheduledEvents.push({
-                        uuid: `se_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-                        templateId: re.id,
-                        triggerTimeMs: Date.now() + (re.delayMs || 0),
-                        paused: false,
-                        timeRemainingMs: null
-                    });
-                    break;
-                }
-                roll -= (re.weight || 1);
-            }
-        }
+        this._applyAssetEffects(effects);
+        this._scheduleTriggeredEvents(effects.triggerEvents);
+        this._scheduleRandomEvents(effects.randomEvents);
     }
 
     dismissTask(taskId) {

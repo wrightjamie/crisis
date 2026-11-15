@@ -428,3 +428,32 @@
     background-color: var(--accent-blue) !important;
     color: #ffffff !important;
 }
+
+/* Scenario Table Action Buttons (BR-27) */
+.scenario-actions-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.scenario-actions-cell .btn-table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    height: 30px;
+    min-height: 30px;
+    padding: 0 0.7rem;
+    font-size: var(--text-xs, 0.75rem);
+    font-weight: 600;
+    line-height: 1;
+    border-radius: var(--radius-xs, 6px);
+    vertical-align: middle;
+    margin-left: 0.25rem;
+    box-sizing: border-box;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.scenario-actions-cell .btn-table-action.btn-delete {
+    padding: 0 0.55rem;
+}

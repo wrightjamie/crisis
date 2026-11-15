@@ -11,18 +11,17 @@ class ScenarioService {
         this.imageService = imgService;
     }
 
-    listScenarios() {
+    listScenarios({ publishedOnly = false } = {}) {
         const db = this.getDb();
-        const rows = db.prepare(`
-            SELECT id, name, is_builtin, guide_html, data, updated_at
-            FROM scenarios
-            ORDER BY name ASC
-        `).all();
+        const query = publishedOnly
+            ? `SELECT id, name, is_builtin, guide_html, data, draft_data, has_draft, status, updated_at FROM scenarios WHERE status = 'published' ORDER BY name ASC`
+            : `SELECT id, name, is_builtin, guide_html, data, draft_data, has_draft, status, updated_at FROM scenarios ORDER BY name ASC`;
+        const rows = db.prepare(query).all();
 
         return rows.map(r => {
             let parsed = {};
             try {
-                parsed = JSON.parse(r.data);
+                parsed = JSON.parse(r.status === 'draft' && r.draft_data ? r.draft_data : r.data);
             } catch {}
 
             const roles = Array.isArray(parsed.roles) ? parsed.roles : [];
@@ -34,11 +33,13 @@ class ScenarioService {
                 name: r.name || parsed.name || r.id,
                 description: parsed.description || '',
                 isBuiltin: Boolean(r.is_builtin),
+                hasDraft: Boolean(r.has_draft),
+                status: r.status || 'published',
                 hasGuide: Boolean(r.guide_html || parsed.guideUrl),
                 guideUrl: (r.guide_html || parsed.guideUrl) ? `/scenarios/${r.id}/guide.html` : null,
                 rolesCount: roles.length,
-                minPlayers: roles.length > 0 ? 1 : 1,
-                maxPlayers: roles.length > 0 ? roles.length : 10,
+                minPlayers: parsed.minUsers || (roles.length > 0 ? 1 : 1),
+                maxPlayers: parsed.maxUsers || (roles.length > 0 ? roles.length : 10),
                 eventCount: events.length,
                 assetCount: assets.length,
                 version: parsed.version || '1.0.0',
@@ -47,27 +48,63 @@ class ScenarioService {
         });
     }
 
-    getScenario(id) {
+    _resolveGuideHtml(id, dbGuideHtml) {
+        if (dbGuideHtml && typeof dbGuideHtml === 'string' && dbGuideHtml.trim().length > 0) {
+            return dbGuideHtml;
+        }
+        if (!id || typeof id !== 'string') return dbGuideHtml || null;
+        const safeId = path.basename(id);
+        const diskGuidePath = path.join(__dirname, '..', '..', 'data', 'scenarios', safeId, 'guide.html');
+        if (fs.existsSync(diskGuidePath)) {
+            try {
+                const diskHtml = fs.readFileSync(diskGuidePath, 'utf8');
+                if (diskHtml && diskHtml.trim().length > 0) {
+                    try {
+                        const db = this.getDb();
+                        db.prepare(`UPDATE scenarios SET guide_html = ? WHERE id = ? AND (guide_html IS NULL OR TRIM(guide_html) = '')`).run(diskHtml, id);
+                    } catch {}
+                    return diskHtml;
+                }
+            } catch {}
+        }
+        return dbGuideHtml || null;
+    }
+
+    getScenario(id, { useDraft = false } = {}) {
         if (!id || typeof id !== 'string') return null;
         const db = this.getDb();
         const row = db.prepare(`SELECT * FROM scenarios WHERE id = ?`).get(id);
         if (!row) return null;
 
+        const rawJson = (useDraft && row.draft_data) ? row.draft_data : row.data;
         let scenario = {};
         try {
-            scenario = JSON.parse(row.data);
+            scenario = JSON.parse(rawJson);
         } catch (err) {
             console.error(`Failed to parse scenario data for '${id}':`, err.message);
             return null;
         }
 
+        const resolvedGuideHtml = this._resolveGuideHtml(id, row.guide_html);
+
         // Attach guideUrl if guide_html exists
-        if (row.guide_html) {
+        if (resolvedGuideHtml) {
             scenario.guideUrl = `/scenarios/${id}/guide.html`;
         }
 
-        // Attach built-in flag
+        // Attach built-in flag and draft metadata
         scenario.isBuiltin = Boolean(row.is_builtin);
+        scenario._meta = {
+            isBuiltin: Boolean(row.is_builtin),
+            hasDraft: Boolean(row.has_draft),
+            status: row.status || 'published',
+            updatedAt: row.updated_at,
+            hasGuide: Boolean(resolvedGuideHtml)
+        };
+
+        if (resolvedGuideHtml) {
+            scenario._guideHtml = resolvedGuideHtml;
+        }
 
         // Resolve images through image service
         this.imageService.resolveScenarioImages(scenario);
@@ -79,43 +116,271 @@ class ScenarioService {
         if (!id) return null;
         const db = this.getDb();
         const row = db.prepare(`SELECT guide_html FROM scenarios WHERE id = ?`).get(id);
-        return row ? row.guide_html : null;
+        if (!row) return null;
+        return this._resolveGuideHtml(id, row.guide_html);
     }
 
-    saveScenario(scenarioData, { guideHtml = null, isBuiltin = 0, force = false } = {}) {
+    _normalizeForSave(scenarioData) {
+        const clean = JSON.parse(JSON.stringify(scenarioData));
+        delete clean._meta;
+        delete clean._guideHtml;
+        delete clean._validation;
+        delete clean.isBuiltin;
+
+        const unresolveItem = (item) => {
+            if (!item || typeof item !== 'object') return;
+            if (item.imageId) {
+                item.image = item.imageId;
+                delete item.imageId;
+            }
+            delete item.imageMeta;
+        };
+
+        imageService.forEachScenarioImageItem(clean, unresolveItem);
+        return clean;
+    }
+
+    _getScenarioRowOrThrow(id) {
+        if (!id) throw new Error('Scenario ID is required');
+        const db = this.getDb();
+        const row = db.prepare(`SELECT * FROM scenarios WHERE id = ?`).get(id);
+        if (!row) throw new Error(`Scenario '${id}' not found`);
+        return { db, row };
+    }
+
+    saveScenario(scenarioData, { guideHtml = null, isBuiltin = null, force = false, asDraft = false } = {}) {
         if (!scenarioData || typeof scenarioData !== 'object') {
             throw new Error('Scenario data must be a valid object');
         }
 
-        const validation = validateScenario(scenarioData);
-        if (!validation.isValid && !force) {
+        const cleanData = this._normalizeForSave(scenarioData);
+        const validation = validateScenario(cleanData);
+        if (!asDraft && !validation.isValid && !force) {
             throw new Error(`Scenario validation failed: ${validation.errors.join('; ')}`);
         }
 
-        const id = scenarioData.id;
-        const name = scenarioData.name;
-        const dataJson = JSON.stringify(scenarioData);
-        const db = this.getDb();
+        const id = cleanData.id;
+        if (asDraft && (!cleanData.name || !String(cleanData.name).trim())) {
+            cleanData.name = 'Untitled Crisis Scenario';
+        }
+        const name = cleanData.name;
+        if (!id || !name) {
+            throw new Error("Scenario 'id' and 'name' are required");
+        }
 
-        const imageIdentifiers = this.imageService.extractScenarioImageIds(scenarioData);
+        const dataJson = JSON.stringify(cleanData);
+        const db = this.getDb();
+        const existing = db.prepare(`SELECT id, is_builtin, status, guide_html FROM scenarios WHERE id = ?`).get(id);
+        const resolvedBuiltin = isBuiltin !== null ? (isBuiltin ? 1 : 0) : (existing ? existing.is_builtin : 0);
+
+        const imageIdentifiers = this.imageService.extractScenarioImageIds(cleanData);
+
+        if (asDraft) {
+            db.transaction(() => {
+                if (!existing) {
+                    db.prepare(`
+                        INSERT INTO scenarios (id, name, is_builtin, guide_html, data, draft_data, has_draft, status, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, 1, 'draft', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                    `).run(id, name, resolvedBuiltin, guideHtml, dataJson, dataJson);
+                } else if (existing.status === 'draft') {
+                    db.prepare(`
+                        UPDATE scenarios
+                        SET name = ?,
+                            guide_html = COALESCE(NULLIF(?, ''), guide_html),
+                            data = ?,
+                            draft_data = ?,
+                            has_draft = 1,
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE id = ?
+                    `).run(name, guideHtml, dataJson, dataJson, id);
+                } else {
+                    // Existing published scenario: update only draft_data so live games are unaffected
+                    db.prepare(`
+                        UPDATE scenarios
+                        SET draft_data = ?,
+                            guide_html = COALESCE(NULLIF(?, ''), guide_html),
+                            has_draft = 1,
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE id = ?
+                    `).run(dataJson, guideHtml, id);
+                }
+                this.imageService.linkScenarioImages(id, imageIdentifiers);
+            })();
+
+            const saved = this.getScenario(id, { useDraft: true });
+            if (saved) saved._validation = validation;
+            return saved;
+        }
 
         const stmt = db.prepare(`
-            INSERT INTO scenarios (id, name, is_builtin, guide_html, data, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            INSERT INTO scenarios (id, name, is_builtin, guide_html, data, draft_data, has_draft, status, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, 0, 'published', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
             ON CONFLICT(id) DO UPDATE SET
                 name = excluded.name,
                 is_builtin = excluded.is_builtin,
-                guide_html = COALESCE(excluded.guide_html, scenarios.guide_html),
+                guide_html = COALESCE(NULLIF(excluded.guide_html, ''), scenarios.guide_html),
                 data = excluded.data,
+                draft_data = excluded.draft_data,
+                has_draft = 0,
+                status = 'published',
                 updated_at = CURRENT_TIMESTAMP
         `);
 
         db.transaction(() => {
-            stmt.run(id, name, isBuiltin ? 1 : 0, guideHtml, dataJson);
+            stmt.run(id, name, resolvedBuiltin, guideHtml, dataJson, dataJson);
             this.imageService.linkScenarioImages(id, imageIdentifiers);
         })();
 
         return this.getScenario(id);
+    }
+
+    publishScenario(id) {
+        const { db, row } = this._getScenarioRowOrThrow(id);
+
+        const draftJson = row.draft_data || row.data;
+        let draftObj;
+        try {
+            draftObj = JSON.parse(draftJson);
+        } catch (err) {
+            throw new Error(`Invalid draft JSON: ${err.message}`);
+        }
+
+        const cleanData = this._normalizeForSave(draftObj);
+        const validation = validateScenario(cleanData);
+        if (!validation.isValid) {
+            const err = new Error(`Scenario validation failed: ${validation.errors.join('; ')}`);
+            err.validationErrors = validation.errors;
+            throw err;
+        }
+
+        const cleanJson = JSON.stringify(cleanData);
+        const imageIdentifiers = this.imageService.extractScenarioImageIds(cleanData);
+
+        db.transaction(() => {
+            db.prepare(`
+                UPDATE scenarios
+                SET name = ?,
+                    data = ?,
+                    draft_data = ?,
+                    has_draft = 0,
+                    status = 'published',
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            `).run(cleanData.name || row.name, cleanJson, cleanJson, id);
+            this.imageService.linkScenarioImages(id, imageIdentifiers);
+        })();
+
+        return this.getScenario(id);
+    }
+
+    discardDraft(id) {
+        const { db } = this._getScenarioRowOrThrow(id);
+
+        db.prepare(`
+            UPDATE scenarios
+            SET draft_data = data,
+                has_draft = 0,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `).run(id);
+
+        return this.getScenario(id, { useDraft: true });
+    }
+
+    cloneScenario(id, { newId, newName } = {}) {
+        if (!id) throw new Error('Source scenario ID is required');
+        const source = this.getScenario(id, { useDraft: true });
+        if (!source) throw new Error(`Source scenario '${id}' not found`);
+
+        const targetId = (newId || `${id}_copy_${Date.now().toString(36)}`).trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+        const targetName = (newName || `${source.name} (Copy)`).trim();
+
+        const db = this.getDb();
+        const exists = db.prepare(`SELECT id FROM scenarios WHERE id = ?`).get(targetId);
+        if (exists) {
+            throw new Error(`A scenario with ID '${targetId}' already exists`);
+        }
+
+        const guideHtml = this.getScenarioGuide(id);
+        const clonedData = this._normalizeForSave(source);
+        clonedData.id = targetId;
+        clonedData.name = targetName;
+        if (guideHtml) {
+            clonedData.guideUrl = `/scenarios/${targetId}/guide.html`;
+        }
+
+        return this.saveScenario(clonedData, {
+            guideHtml,
+            isBuiltin: 0,
+            asDraft: true
+        });
+    }
+
+    resetToBuiltin(id, { legacyScenariosDir = null } = {}) {
+        if (!id) throw new Error('Scenario ID is required');
+        const baseDir = legacyScenariosDir || path.join(__dirname, '..', '..', 'data', 'scenarios');
+        const scenarioFolder = path.join(baseDir, id);
+        const scenarioJsPath = path.join(scenarioFolder, 'scenario.js');
+
+        if (!fs.existsSync(scenarioJsPath)) {
+            throw new Error(`Factory default definition not found on disk for '${id}'`);
+        }
+
+        delete require.cache[require.resolve(scenarioJsPath)];
+        const factoryScenario = require(scenarioJsPath);
+        const guidePath = path.join(scenarioFolder, 'guide.html');
+        const guideHtml = fs.existsSync(guidePath) ? fs.readFileSync(guidePath, 'utf8') : null;
+
+        return this.saveScenario(factoryScenario, {
+            guideHtml,
+            isBuiltin: 1,
+            force: true,
+            asDraft: false
+        });
+    }
+
+    ensureCoreScenariosSeeded({ legacyScenariosDir = null } = {}) {
+        const db = this.getDb();
+        const imgCount = db.prepare(`SELECT COUNT(*) as cnt FROM images`).get().cnt;
+        if (imgCount === 0 && this.imageService && typeof this.imageService.seedBaseImages === 'function') {
+            this.imageService.seedBaseImages();
+        }
+
+        const baseDir = legacyScenariosDir || path.join(__dirname, '..', '..', 'data', 'scenarios');
+        if (!fs.existsSync(baseDir)) return 0;
+
+        const dirents = fs.readdirSync(baseDir, { withFileTypes: true });
+        let seededCount = 0;
+
+        for (const dirent of dirents) {
+            if (!dirent.isDirectory()) continue;
+            const scenarioId = dirent.name;
+            const existing = db.prepare(`SELECT id FROM scenarios WHERE id = ?`).get(scenarioId);
+            if (existing) continue;
+
+            const scenarioFolder = path.join(baseDir, scenarioId);
+            const scenarioJsPath = path.join(scenarioFolder, 'scenario.js');
+            if (!fs.existsSync(scenarioJsPath)) continue;
+
+            try {
+                delete require.cache[require.resolve(scenarioJsPath)];
+                const scenario = require(scenarioJsPath);
+                const guidePath = path.join(scenarioFolder, 'guide.html');
+                const guideHtml = fs.existsSync(guidePath) ? fs.readFileSync(guidePath, 'utf8') : null;
+
+                this.saveScenario(scenario, {
+                    guideHtml,
+                    isBuiltin: 1,
+                    force: true,
+                    asDraft: false
+                });
+                seededCount++;
+            } catch (err) {
+                console.error(`Failed to auto-seed core scenario '${scenarioId}':`, err.message);
+            }
+        }
+
+        return seededCount;
     }
 
     deleteScenario(id) {
@@ -159,10 +424,7 @@ class ScenarioService {
     }
 
     exportScenarioZip(id, publicDir = null) {
-        if (!id) throw new Error('Scenario ID is required');
-        const db = this.getDb();
-        const row = db.prepare(`SELECT * FROM scenarios WHERE id = ?`).get(id);
-        if (!row) throw new Error(`Scenario '${id}' not found`);
+        const { row } = this._getScenarioRowOrThrow(id);
 
         const pubDir = publicDir || path.join(__dirname, '..', '..', 'public');
         const zip = new AdmZip();
@@ -234,25 +496,15 @@ class ScenarioService {
         return zip.toBuffer();
     }
 
-    importScenarioZip(zipBuffer, { overwrite = false, publicDir = null } = {}) {
-        if (!zipBuffer || !Buffer.isBuffer(zipBuffer)) {
-            throw new Error('Valid zip buffer is required');
-        }
-
-        const pubDir = publicDir || path.join(__dirname, '..', '..', 'public');
-        const zip = new AdmZip(zipBuffer);
-        const zipEntries = zip.getEntries();
-
-        // 1. Locate scenario.json
+    _extractScenarioJsonFromZip(zipEntries) {
         let scenarioEntry = zipEntries.find(e => e.entryName.toLowerCase() === 'scenario.json');
         if (!scenarioEntry) {
-            // Check for any root .json file with id & name
-            scenarioEntry = zipEntries.find(e => {
-                if (!e.entryName.includes('/') && e.entryName.endsWith('.json') && e.entryName !== 'images.json' && e.entryName !== 'acronyms.json') {
-                    return true;
-                }
-                return false;
-            });
+            scenarioEntry = zipEntries.find(e =>
+                !e.entryName.includes('/') &&
+                e.entryName.endsWith('.json') &&
+                e.entryName !== 'images.json' &&
+                e.entryName !== 'acronyms.json'
+            );
         }
 
         if (!scenarioEntry) {
@@ -266,10 +518,68 @@ class ScenarioService {
             throw new Error(`Failed to parse 'scenario.json': ${err.message}`);
         }
 
-        // Validate basic structure
         if (!scenarioData || !scenarioData.id || !scenarioData.name) {
             throw new Error("Invalid scenario data: 'id' and 'name' are required.");
         }
+        return scenarioData;
+    }
+
+    _importZipCustomImages(zipEntries, scenarioId, pubDir) {
+        const imageManifestEntry = zipEntries.find(e => e.entryName.toLowerCase() === 'images.json');
+        let imageManifest = [];
+        if (imageManifestEntry) {
+            try {
+                imageManifest = JSON.parse(imageManifestEntry.getData().toString('utf8'));
+            } catch {}
+        }
+
+        const customImagesDir = path.join(pubDir, 'images', 'custom');
+        if (!fs.existsSync(customImagesDir)) {
+            fs.mkdirSync(customImagesDir, { recursive: true });
+        }
+
+        for (const entry of zipEntries) {
+            if (!entry.entryName.startsWith('images/') || entry.isDirectory) continue;
+            const imgBuffer = entry.getData();
+            if (!imgBuffer || imgBuffer.length === 0) continue;
+
+            const hash = this.imageService.constructor.name
+                ? require('crypto').createHash('sha256').update(imgBuffer).digest('hex')
+                : '';
+
+            if (this.imageService.findImageByHash(hash)) continue;
+
+            const baseName = path.basename(entry.entryName);
+            const safeFileName = `${scenarioId}_${baseName}`;
+            const destPath = path.join(customImagesDir, safeFileName);
+            fs.writeFileSync(destPath, imgBuffer);
+
+            const manifestInfo = imageManifest.find(m => path.basename(m.filename || '') === baseName) || {};
+            const imgId = manifestInfo.id || `${scenarioId}_${path.parse(baseName).name}`;
+
+            this.imageService.registerImage({
+                id: imgId,
+                filename: `/images/custom/${safeFileName}`,
+                hash,
+                title: manifestInfo.title || baseName,
+                description: manifestInfo.description || '',
+                tags: manifestInfo.tags || ['custom', scenarioId],
+                isBase: 0
+            });
+        }
+    }
+
+    importScenarioZip(zipBuffer, { overwrite = false, publicDir = null } = {}) {
+        if (!zipBuffer || !Buffer.isBuffer(zipBuffer)) {
+            throw new Error('Valid zip buffer is required');
+        }
+
+        const pubDir = publicDir || path.join(__dirname, '..', '..', 'public');
+        const zip = new AdmZip(zipBuffer);
+        const zipEntries = zip.getEntries();
+
+        // 1. Locate and validate scenario.json
+        const scenarioData = this._extractScenarioJsonFromZip(zipEntries);
 
         // 2. Check for conflict
         const db = this.getDb();
@@ -302,54 +612,7 @@ class ScenarioService {
         }
 
         // 5. Extract and process images in images/
-        const imageManifestEntry = zipEntries.find(e => e.entryName.toLowerCase() === 'images.json');
-        let imageManifest = [];
-        if (imageManifestEntry) {
-            try {
-                imageManifest = JSON.parse(imageManifestEntry.getData().toString('utf8'));
-            } catch {}
-        }
-
-        const customImagesDir = path.join(pubDir, 'images', 'custom');
-        if (!fs.existsSync(customImagesDir)) {
-            fs.mkdirSync(customImagesDir, { recursive: true });
-        }
-
-        for (const entry of zipEntries) {
-            if (entry.entryName.startsWith('images/') && !entry.isDirectory) {
-                const imgBuffer = entry.getData();
-                if (!imgBuffer || imgBuffer.length === 0) continue;
-
-                const hash = this.imageService.constructor.name ?
-                    require('crypto').createHash('sha256').update(imgBuffer).digest('hex') : '';
-
-                // Check if existing image with same hash exists in DB
-                const existingImg = this.imageService.findImageByHash(hash);
-                if (existingImg) {
-                    // Reuse existing image record
-                    continue;
-                }
-
-                // New image: save to disk and register in DB
-                const baseName = path.basename(entry.entryName);
-                const safeFileName = `${scenarioData.id}_${baseName}`;
-                const destPath = path.join(customImagesDir, safeFileName);
-                fs.writeFileSync(destPath, imgBuffer);
-
-                const manifestInfo = imageManifest.find(m => path.basename(m.filename || '') === baseName) || {};
-                const imgId = manifestInfo.id || `${scenarioData.id}_${path.parse(baseName).name}`;
-
-                this.imageService.registerImage({
-                    id: imgId,
-                    filename: `/images/custom/${safeFileName}`,
-                    hash,
-                    title: manifestInfo.title || baseName,
-                    description: manifestInfo.description || '',
-                    tags: manifestInfo.tags || ['custom', scenarioData.id],
-                    isBase: 0
-                });
-            }
-        }
+        this._importZipCustomImages(zipEntries, scenarioData.id, pubDir);
 
         // 6. Save scenario
         const saved = this.saveScenario(scenarioData, {

@@ -19,7 +19,11 @@ function initDatabase(customPath = null) {
     }
 
     const db = new Database(dbPath);
-    db.pragma('journal_mode = WAL');
+    try {
+        db.pragma('journal_mode = WAL');
+    } catch (err) {
+        // Fallback if WAL shared-memory mapping is restricted by the environment
+    }
     db.pragma('foreign_keys = ON');
 
     // Create system_config table (stores admin auth credentials & system parameters)
@@ -65,10 +69,26 @@ function initDatabase(customPath = null) {
             is_builtin INTEGER DEFAULT 0,
             guide_html TEXT,
             data TEXT NOT NULL,
+            draft_data TEXT,
+            has_draft INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'published',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     `);
+
+    // Migrate existing scenarios table if draft columns are missing
+    const cols = db.prepare(`PRAGMA table_info(scenarios)`).all().map(c => c.name);
+    if (!cols.includes('draft_data')) {
+        db.exec(`ALTER TABLE scenarios ADD COLUMN draft_data TEXT;`);
+    }
+    if (!cols.includes('has_draft')) {
+        db.exec(`ALTER TABLE scenarios ADD COLUMN has_draft INTEGER DEFAULT 0;`);
+    }
+    if (!cols.includes('status')) {
+        db.exec(`ALTER TABLE scenarios ADD COLUMN status TEXT DEFAULT 'published';`);
+    }
+    db.exec(`UPDATE scenarios SET draft_data = data WHERE draft_data IS NULL;`);
 
     // Create scenario_images junction table
     db.exec(`

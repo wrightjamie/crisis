@@ -231,6 +231,28 @@ To prevent style duplication, visual inconsistency, and CSS bloat, all AI agents
 
 ---
 
+## Pre-Feature Quality Gate (Fallow Review)
+
+To maintain code health and avoid accumulating structural debt, the AI Agent and developers MUST follow this quality review protocol:
+
+1. **Pre-Feature Assessment:**
+   - Before planning or building any major new feature, run:
+     ```bash
+     npm run fallow:check
+     ```
+     (or `npx fallow dead-code && npx fallow dupes`).
+   - Also run the test suite to ensure a clean starting state:
+     ```bash
+     npm test
+     ```
+   - Verify that there are **0 dead-code issues** and **0 duplicate clone groups**. If any pre-existing issues or regressions exist, resolve them before layering new code on top.
+
+2. **During & Post-Feature Verification:**
+   - Run `npx fallow audit` to review files changed on the branch against `main`. Ensure no new dead code, duplicate code blocks, or unnecessary complexity were introduced.
+   - Run `npx fallow` to confirm the full codebase remains clean and maintainability scores stay above 90.
+
+---
+
 ## Agent Git Workflow Rules
 
 When making changes to this codebase, the AI Agent must follow this Git workflow strictly:

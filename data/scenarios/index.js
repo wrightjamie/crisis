@@ -14,4 +14,3 @@ function loadScenariosFromDb() {
 const scenarios = loadScenariosFromDb();
 
 module.exports = scenarios;
-module.exports.loadScenariosFromDb = loadScenariosFromDb;

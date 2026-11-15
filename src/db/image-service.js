@@ -15,6 +15,46 @@ function computeBufferHash(buffer) {
     return crypto.createHash('sha256').update(buffer).digest('hex');
 }
 
+function parseRequestedTags({ tag, tags } = {}) {
+    const requestedTags = [];
+    if (Array.isArray(tags)) {
+        requestedTags.push(...tags);
+    } else if (typeof tags === 'string' && tags.trim()) {
+        requestedTags.push(...tags.split(',').map(t => t.trim()).filter(Boolean));
+    }
+    if (typeof tag === 'string' && tag.trim()) {
+        requestedTags.push(...tag.split(',').map(t => t.trim()).filter(Boolean));
+    }
+    return requestedTags.map(t => t.toLowerCase());
+}
+
+function forEachScenarioImageItem(scenario, callback) {
+    if (!scenario || typeof scenario !== 'object' || typeof callback !== 'function') return scenario;
+
+    if (Array.isArray(scenario.assets)) {
+        scenario.assets.forEach(callback);
+    }
+    if (Array.isArray(scenario.variantAxes)) {
+        scenario.variantAxes.forEach(axis => {
+            if (Array.isArray(axis.options)) {
+                axis.options.forEach(opt => {
+                    if (Array.isArray(opt.assetModifiers)) {
+                        opt.assetModifiers.forEach(callback);
+                    }
+                });
+            }
+        });
+    }
+    if (Array.isArray(scenario.eventTemplates)) {
+        scenario.eventTemplates.forEach(callback);
+    }
+    if (Array.isArray(scenario.manualActions)) {
+        scenario.manualActions.forEach(callback);
+    }
+
+    return scenario;
+}
+
 class ImageService {
     constructor(dbProvider = getDb) {
         this.getDb = dbProvider;
@@ -104,17 +144,7 @@ class ImageService {
         const db = this.getDb();
         const rows = db.prepare(`SELECT * FROM images ORDER BY title ASC`).all();
 
-        const requestedTags = [];
-        if (Array.isArray(tags)) {
-            requestedTags.push(...tags);
-        } else if (typeof tags === 'string' && tags.trim()) {
-            requestedTags.push(...tags.split(',').map(t => t.trim()).filter(Boolean));
-        }
-        if (typeof tag === 'string' && tag.trim()) {
-            requestedTags.push(...tag.split(',').map(t => t.trim()).filter(Boolean));
-        }
-
-        const normalizedTags = requestedTags.map(t => t.toLowerCase());
+        const normalizedTags = parseRequestedTags({ tag, tags });
         const search = (query || q || '').trim().toLowerCase();
 
         return rows.map(r => {
@@ -332,32 +362,15 @@ class ImageService {
     }
 
     resolveScenarioImages(scenario) {
-        if (!scenario || typeof scenario !== 'object') return scenario;
+        return forEachScenarioImageItem(scenario, (item) => this.resolveImageOnItem(item));
+    }
 
-        const resolve = (item) => this.resolveImageOnItem(item);
+    parseRequestedTags(opts) {
+        return parseRequestedTags(opts);
+    }
 
-        if (Array.isArray(scenario.assets)) {
-            scenario.assets.forEach(resolve);
-        }
-        if (Array.isArray(scenario.variantAxes)) {
-            scenario.variantAxes.forEach(axis => {
-                if (Array.isArray(axis.options)) {
-                    axis.options.forEach(opt => {
-                        if (Array.isArray(opt.assetModifiers)) {
-                            opt.assetModifiers.forEach(resolve);
-                        }
-                    });
-                }
-            });
-        }
-        if (Array.isArray(scenario.eventTemplates)) {
-            scenario.eventTemplates.forEach(resolve);
-        }
-        if (Array.isArray(scenario.manualActions)) {
-            scenario.manualActions.forEach(resolve);
-        }
-
-        return scenario;
+    forEachScenarioImageItem(scenario, callback) {
+        return forEachScenarioImageItem(scenario, callback);
     }
 }
 
@@ -367,3 +380,5 @@ module.exports = defaultInstance;
 module.exports.ImageService = ImageService;
 module.exports.computeFileHash = computeFileHash;
 module.exports.computeBufferHash = computeBufferHash;
+module.exports.parseRequestedTags = parseRequestedTags;
+module.exports.forEachScenarioImageItem = forEachScenarioImageItem;

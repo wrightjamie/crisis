@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Wargame - Scenario Editor</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="/vendor/tagify/tagify.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+    <!-- Primary Top Bar (Consistent with Admin Console) -->
+    <header class="top-bar">
+        <div class="top-bar-left flex-center gap-md">
+            <a href="/admin" class="btn btn-secondary text-sm text-decoration-none inline-flex items-center gap-xs" title="Back to Admin Console">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                <span>Admin Console</span>
+            </a>
+            <h1 class="top-bar-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Scenario Editor</span>
+            </h1>
+        </div>
+        <div class="top-bar-right flex-center gap-sm">
+            <button type="button" id="btn-open-wizard" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Open Quick Setup Wizard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                <span>Setup Wizard</span>
+            </button>
+            <div class="user-pill" id="user-pill">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span id="username-display">admin</span>
+            </div>
+            <button type="button" id="btn-logout" class="btn btn-secondary text-sm">Log Out</button>
+        </div>
+    </header>
+
+    <div class="editor-shell">
+        <!-- Sticky Scenario Status & Lifecycle Action Bar -->
+        <div class="editor-subbar">
+            <div class="editor-subbar-left">
+                <h2 class="editor-title-display" id="header-scenario-name">Loading Scenario...</h2>
+                <code class="editor-id-code" id="header-scenario-id" hidden style="display: none;">id</code>
+                <span class="status-pill draft" id="header-status-pill">Draft</span>
+                <div class="autosave-indicator" id="autosave-status" role="status" aria-live="polite">
+                    <span class="autosave-dot" id="autosave-dot"></span>
+                    <span id="autosave-text">All changes saved</span>
+                </div>
+            </div>
+            <div class="editor-subbar-right">
+                <button type="button" id="btn-test-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Launch a sandbox game session in a new tab using current draft data">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>Test Scenario</span>
+                </button>
+                <button type="button" id="btn-discard-draft" class="btn btn-secondary text-sm inline-flex items-center gap-xs" style="display: none;" title="Discard uncommitted draft edits and revert to published version">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    <span>Discard Draft</span>
+                </button>
+                <button type="button" id="btn-reset-builtin" class="btn btn-secondary text-sm inline-flex items-center gap-xs" style="display: none;" title="Restore built-in scenario to factory defaults">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                    <span>Factory Reset</span>
+                </button>
+                <button type="button" id="btn-clone-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Clone/Fork scenario into a new custom scenario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    <span>Clone</span>
+                </button>
+                <button type="button" id="btn-export-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Export portable scenario .zip archive">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Export</span>
+                </button>
+                <button type="button" id="btn-publish-scenario" class="btn btn-primary text-sm inline-flex items-center gap-xs" title="Validate and publish draft to make it live for games">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Publish Scenario</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Navigation Tabs -->
+        <nav class="editor-tabs-bar" aria-label="Scenario Editor Sections">
+            <button type="button" class="editor-tab-btn active" data-tab="overview">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                <span>1. Overview &amp; Map</span>
+            </button>
+            <button type="button" class="editor-tab-btn" data-tab="roles">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>2. Roles &amp; Briefings</span>
+                <span class="badge" id="tab-count-roles" style="background: var(--bg-tertiary);">0</span>
+            </button>
+            <button type="button" class="editor-tab-btn" data-tab="scores">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>3. Scores &amp; Metrics</span>
+                <span class="badge" id="tab-count-scores" style="background: var(--bg-tertiary);">0</span>
+            </button>
+            <button type="button" class="editor-tab-btn" data-tab="assets">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>4. Map Assets</span>
+                <span class="badge" id="tab-count-assets" style="background: var(--bg-tertiary);">0</span>
+            </button>
+            <button type="button" class="editor-tab-btn" data-tab="events">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                <span>5. Events &amp; Decision Canvas</span>
+                <span class="badge" id="tab-count-events" style="background: var(--bg-tertiary);">0</span>
+            </button>
+            <button type="button" class="editor-tab-btn" data-tab="advanced">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                <span>6. Facilitator Guide &amp; AI</span>
+            </button>
+        </nav>
+
+        <!-- ==============================================================
+             TAB 1: OVERVIEW & MAP
+             ============================================================== -->
+        <main id="panel-overview" class="editor-workspace">
+            <div class="editor-grid-2">
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Scenario Identity &amp; Parameters</h3>
+                    </div>
+                    <div class="field-group">
+                        <label for="inp-scenario-name">Scenario Name *</label>
+                        <input type="text" id="inp-scenario-name" class="form-control" placeholder="e.g. Operation Sovereign Sky" required>
+                    </div>
+                    <div class="field-group" hidden style="display: none;">
+                        <label for="inp-scenario-id">Scenario ID (Slug) *</label>
+                        <input type="text" id="inp-scenario-id" class="form-control" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="e.g. op_sovereign_sky" readonly>
+                    </div>
+                    <div class="field-group">
+                        <div class="label-with-ai">
+                            <label for="inp-scenario-desc">Scenario Description *</label>
+                            <button type="button" id="btn-ai-scenario-desc" class="btn-ai-brief" title="Draft scenario synopsis with AI">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                                <span>AI Draft</span>
+                            </button>
+                        </div>
+                        <textarea id="inp-scenario-desc" class="form-control" rows="3" placeholder="High-level summary shown in the game lobby and admin table..."></textarea>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-group">
+                            <label for="inp-scenario-version">Version</label>
+                            <input type="text" id="inp-scenario-version" class="form-control" autocorrect="off" spellcheck="false" placeholder="1.0.0">
+                        </div>
+                        <div class="field-group">
+                            <label for="inp-min-users">Minimum Active Players</label>
+                            <input type="number" id="inp-min-users" class="form-control" min="1" max="20" value="1">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <div class="label-with-ai">
+                            <label for="inp-general-briefing">General Opening Briefing (All Players)</label>
+                            <button type="button" id="btn-ai-general-briefing" class="btn-ai-brief" title="Draft general opening briefing with AI">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                                <span>AI Draft</span>
+                            </button>
+                        </div>
+                        <textarea id="inp-general-briefing" class="form-control" rows="5" placeholder="Opening intelligence briefing displayed to all connected roles at game start..."></textarea>
+                    </div>
+                </div>
+
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Default Map View &amp; Theatre</h3>
+                        <div class="inline-flex items-center gap-xs">
+                            <label for="sel-map-preset" class="text-xs text-muted">Theatre Preset:</label>
+                            <select id="sel-map-preset" class="form-control text-xs" style="width: auto; padding: 0 0.5rem;">
+                                <option value="">-- Jump to Theatre --</option>
+                                <option value="uk_national">United Kingdom (National)</option>
+                                <option value="london_metro">London &amp; Thames Estuary</option>
+                                <option value="north_sea">North Sea &amp; GIUK Gap</option>
+                                <option value="baltic_eastern_europe">Baltic Sea &amp; Eastern Flank</option>
+                                <option value="strait_of_hormuz">Persian Gulf &amp; Strait of Hormuz</option>
+                                <option value="indo_pacific">South China Sea &amp; Taiwan Strait</option>
+                                <option value="global_view">Global Strategic View</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="editor-map-hud">
+                        <span>Click anywhere on the map or drag the crosshair marker to set the scenario center.</span>
+                        <button type="button" id="btn-use-map-bounds" class="btn btn-secondary text-xs">Capture Current View &amp; Zoom</button>
+                    </div>
+                    <div class="field-row" style="margin-bottom: 0.75rem;">
+                        <div class="field-group" style="margin-bottom: 0;">
+                            <label for="inp-map-lat">Center Latitude</label>
+                            <input type="number" id="inp-map-lat" class="form-control" step="0.0001" value="51.5074">
+                        </div>
+                        <div class="field-group" style="margin-bottom: 0;">
+                            <label for="inp-map-lng">Center Longitude</label>
+                            <input type="number" id="inp-map-lng" class="form-control" step="0.0001" value="-0.1278">
+                        </div>
+                        <div class="field-group" style="margin-bottom: 0;">
+                            <label for="inp-map-zoom">Initial Zoom (1-18)</label>
+                            <input type="number" id="inp-map-zoom" class="form-control" min="1" max="18" value="10">
+                        </div>
+                    </div>
+                    <div id="overview-leaflet-map" class="editor-map-box"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==============================================================
+             TAB 2: ROLES & BRIEFINGS (TOP PRESETS + BOTTOM BLANK CARD)
+             ============================================================== -->
+        <section id="panel-roles" class="editor-workspace" style="display: none;">
+            <div class="editor-single-column">
+                <!-- Preset Roles & AI Suggestions Bar at Top of Page -->
+                <div class="editor-panel editor-top-preset-bar">
+                    <div class="flex-between items-center flex-wrap gap-md">
+                        <div class="d-flex items-center gap-sm flex-wrap">
+                            <label for="sel-role-bundle" class="text-sm" style="font-weight: 600; white-space: nowrap;">Preset Role Team:</label>
+                            <select id="sel-role-bundle" class="form-control text-sm" style="min-width: 240px; width: auto;">
+                                <option value="">-- Choose Preset Role Bundle --</option>
+                            </select>
+                            <button type="button" id="btn-apply-role-bundle" class="btn btn-secondary text-xs">Apply Preset Team</button>
+                        </div>
+                        <div class="d-flex items-center gap-xs">
+                            <button type="button" id="btn-suggest-roles-ai" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                                <span>Suggest Complementary Roles with AI</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="ai-role-suggestions-box" class="editor-item-list" style="margin-top: 0.75rem; display: none;"></div>
+                    <datalist id="common-roles-datalist"></datalist>
+                </div>
+
+                <!-- Configured Player Roles + Blank Add Card at Bottom -->
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Configured Player Roles</h3>
+                        <span class="field-hint">Edit existing roles below, or fill in the blank card at the bottom of the list to add a new role.</span>
+                    </div>
+                    <div id="roles-list-container" class="editor-item-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             TAB 3: SCORES & METRICS (TOP PRESETS + BOTTOM BLANK CARD)
+             ============================================================== -->
+        <section id="panel-scores" class="editor-workspace" style="display: none;">
+            <div class="editor-single-column">
+                <!-- Preset Scoring Bundle Bar at Top of Page -->
+                <div class="editor-panel editor-top-preset-bar">
+                    <div class="flex-between items-center flex-wrap gap-md">
+                        <div class="d-flex items-center gap-sm flex-wrap">
+                            <label for="sel-score-preset" class="text-sm" style="font-weight: 600; white-space: nowrap;">Preset Scoring Pack:</label>
+                            <select id="sel-score-preset" class="form-control text-sm" style="min-width: 240px; width: auto;">
+                                <option value="">-- Choose Metric Preset --</option>
+                            </select>
+                            <button type="button" id="btn-apply-score-preset" class="btn btn-secondary text-xs">Apply Preset Pack</button>
+                        </div>
+                        <span class="field-hint">Standard scales run from 1 (Minimal) to 5 (Critical).</span>
+                    </div>
+                </div>
+
+                <!-- Scenario Scoring Metrics + Blank Add Card at Bottom -->
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Scenario Scoring Metrics</h3>
+                        <span class="field-hint">Configure metric bounds below, or use the blank card at the bottom of the list to add a new metric.</span>
+                    </div>
+                    <div id="scores-list-container" class="editor-item-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             TAB 4: MAP ASSETS (POPOVER PALETTE + COLLAPSIBLE CARDS)
+             ============================================================== -->
+        <section id="panel-assets" class="editor-workspace" style="display: none;">
+            <div class="editor-grid-2">
+                <div class="editor-panel">
+                    <div class="editor-panel-header flex-wrap gap-sm">
+                        <h3 class="editor-panel-title">Interactive Asset Placement Map</h3>
+                        <div class="d-flex items-center gap-xs flex-wrap">
+                            <button type="button" id="btn-quick-assets-popover" popovertarget="quick-assets-popover" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                <span>Quick-Add Preset Asset ▾</span>
+                            </button>
+                            <button type="button" id="btn-add-custom-asset" class="btn btn-primary text-xs inline-flex items-center gap-xs">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <span>New Blank Asset</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="editor-map-hud">
+                        <span id="asset-map-hint">Click any asset marker to scroll to its card, drag markers to reposition, or click the map while a card is open.</span>
+                    </div>
+                    <div id="assets-leaflet-map" class="editor-map-box" style="height: 580px;"></div>
+                </div>
+
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Placed Scenario Assets</h3>
+                        <button type="button" id="btn-toggle-all-assets" class="btn btn-secondary text-xs">Collapse All</button>
+                    </div>
+                    <div id="assets-list-container" class="editor-item-list" style="max-height: 620px; overflow-y: auto; scroll-behavior: smooth;"></div>
+                </div>
+            </div>
+
+            <!-- Native HTML Popover for Quick-Add Asset Palette (BR-31) -->
+            <div id="quick-assets-popover" popover="auto" class="quick-assets-popover" aria-label="Quick-Add Preset Asset Palette">
+                <div class="quick-assets-popover-header">
+                    <div>
+                        <h4 class="editor-panel-title" style="margin: 0;">Quick-Add Preset Asset Palette</h4>
+                        <p class="field-hint" style="margin: 0.15rem 0 0 0;">Click any preset card below or select from the list to place it at the current map center.</p>
+                    </div>
+                    <div class="d-flex items-center gap-xs flex-wrap">
+                        <select id="sel-predefined-asset" class="form-control text-xs" style="min-width: 220px;" aria-label="Select a pre-defined asset template">
+                            <option value="">-- Choose Pre-Defined Asset --</option>
+                        </select>
+                        <button type="button" id="btn-add-predefined-asset" class="btn btn-secondary text-xs">Add Selected</button>
+                        <button type="button" popovertarget="quick-assets-popover" popovertargetaction="hide" class="btn btn-secondary text-xs" aria-label="Close Quick-Add Popover">Close</button>
+                    </div>
+                </div>
+                <div id="quick-assets-palette" class="quick-assets-popover-grid"></div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             TAB 5: EVENTS & DECISION CANVAS (WITH MANUAL ACTIONS ON TREE)
+             ============================================================== -->
+        <section id="panel-events" class="editor-workspace full-bleed" style="display: none;">
+            <div class="canvas-toolbar">
+                <div class="flex-center gap-sm flex-wrap">
+                    <div class="inline-flex" role="group" aria-label="Event View Mode">
+                        <button type="button" id="btn-view-canvas" class="btn btn-primary text-xs inline-flex items-center gap-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                            <span>Flow Canvas</span>
+                        </button>
+                        <button type="button" id="btn-view-accordion" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                            <span>List / Accordion</span>
+                        </button>
+                    </div>
+                    <button type="button" id="btn-add-event-node" class="btn btn-primary text-xs inline-flex items-center gap-xs">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>Add Event Node</span>
+                    </button>
+                    <button type="button" id="btn-add-action-node" class="btn btn-secondary text-xs inline-flex items-center gap-xs btn-canvas-action" title="Add a proactive Manual Action node that becomes available from activities on the tree">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <span>Add Manual Action</span>
+                    </button>
+                    <button type="button" id="btn-auto-layout-canvas" class="btn btn-secondary text-xs inline-flex items-center gap-xs" title="Automatically organize events and manual actions into logical predecessor-to-successor columns">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        <span>Auto-Arrange Tree</span>
+                    </button>
+                </div>
+
+                <div class="flex-center gap-sm">
+                    <span class="text-xs text-muted">Blue = Event Trigger • Green = Decision Branch • Amber = Manual Action • Dashed = Prerequisite</span>
+                    <button type="button" id="btn-zoom-out" class="btn btn-secondary text-xs" title="Zoom Out" aria-label="Zoom Out">-</button>
+                    <span id="canvas-zoom-label" class="text-xs text-muted" style="min-width: 42px; text-align: center;">100%</span>
+                    <button type="button" id="btn-zoom-in" class="btn btn-secondary text-xs" title="Zoom In" aria-label="Zoom In">+</button>
+                    <button type="button" id="btn-zoom-reset" class="btn btn-secondary text-xs">Reset View</button>
+                </div>
+            </div>
+
+            <!-- Interactive Visio-Style Stage -->
+            <div id="events-canvas-wrapper" class="canvas-stage-wrapper">
+                <div id="canvas-transform-plane" class="canvas-transform-plane">
+                    <svg id="canvas-svg-layer" class="canvas-svg-layer">
+                        <defs>
+                            <marker id="arrow-trigger" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#3b82f6"/>
+                            </marker>
+                            <marker id="arrow-decision" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                            </marker>
+                            <marker id="arrow-prereq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                            </marker>
+                            <marker id="arrow-action" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+                            </marker>
+                        </defs>
+                        <g id="canvas-edges-group"></g>
+                    </svg>
+                    <div id="canvas-nodes-layer" class="canvas-nodes-layer"></div>
+                </div>
+
+                <!-- Slide-Out Popout Inspector Drawer -->
+                <aside id="event-inspector-drawer" class="inspector-drawer" aria-label="Event and Decision Inspector">
+                    <div class="inspector-header">
+                        <div>
+                            <h3 class="editor-panel-title" id="inspector-title">Event Inspector</h3>
+                            <code class="text-xs text-muted" id="inspector-subtitle" hidden style="display: none;">evt_id</code>
+                        </div>
+                        <button type="button" id="btn-close-inspector" class="btn btn-secondary text-xs" aria-label="Close Inspector">Close</button>
+                    </div>
+                    <div id="inspector-body" class="inspector-body"></div>
+                    <div class="inspector-footer">
+                        <button type="button" id="btn-delete-event" class="btn btn-danger text-xs inline-flex items-center gap-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            <span id="btn-delete-node-label">Delete Event</span>
+                        </button>
+                        <button type="button" id="btn-done-inspector" class="btn btn-primary text-xs">Done</button>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Alternative Structured Accordion List View -->
+            <div id="events-accordion-wrapper" style="display: none; padding: 1.5rem; overflow-y: auto; flex: 1;">
+                <div id="events-accordion-list" style="max-width: 1100px; margin: 0 auto;"></div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             TAB 6: FACILITATOR GUIDE, VARIANTS & AI
+             ============================================================== -->
+        <section id="panel-advanced" class="editor-workspace" style="display: none;">
+            <div class="editor-grid-2">
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Facilitator Guide (HTML)</h3>
+                        <a id="link-open-guide-tab" href="#" target="_blank" rel="noopener" class="btn btn-secondary text-xs text-decoration-none" style="display: none;">Open Live Guide ↗</a>
+                    </div>
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <textarea id="inp-guide-html" class="form-control" rows="20" style="font-family: monospace; font-size: 0.82rem; line-height: 1.5;" placeholder="<h1>Facilitator Guide</h1><p>Teaching notes, learning objectives, and timeline...</p>"></textarea>
+                        <span class="field-hint">Served at <code>/scenarios/&lt;id&gt;/guide.html</code> and bundled when exporting to ZIP.</span>
+                    </div>
+                </div>
+
+                <div class="editor-panel">
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">AI Intelligence Config &amp; Scenario Variants</h3>
+                    </div>
+                    <div class="field-group">
+                        <div class="label-with-ai">
+                            <label for="inp-ai-system-prompt">AI Briefing System Prompt</label>
+                            <button type="button" id="btn-ai-system-prompt" class="btn-ai-brief" title="Draft AI system prompt">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                                <span>AI Draft</span>
+                            </button>
+                        </div>
+                        <textarea id="inp-ai-system-prompt" class="form-control" rows="4" placeholder="Instructions for the automated intelligence briefing engine..."></textarea>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+
+                    <div class="editor-panel-header">
+                        <h3 class="editor-panel-title">Scenario Variant Axes</h3>
+                        <button type="button" id="btn-add-variant-axis" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Add Variant Axis</span>
+                        </button>
+                    </div>
+                    <div id="variant-axes-container" class="editor-item-list"></div>
+
+                    <!-- Hidden legacy manual actions container for compatibility; Manual Actions live on Tab 5 Canvas -->
+                    <div id="manual-actions-container" class="editor-item-list" hidden style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================================================================
+         MODAL 1: SETUP WIZARD (OPTIONAL ONBOARDING)
+         ================================================================== -->
+    <dialog id="setup-wizard-dialog" class="editor-dialog" aria-labelledby="wizard-dialog-title">
+        <div class="editor-dialog-header">
+            <h2 id="wizard-dialog-title" class="editor-panel-title">Scenario Quick-Setup Wizard</h2>
+            <button type="button" id="btn-skip-wizard" class="btn btn-secondary text-xs">Skip / Close to Editor</button>
+        </div>
+        <div class="editor-dialog-body">
+            <nav aria-label="Setup Wizard Progress">
+                <ol class="wizard-steps-nav">
+                    <li class="wizard-step-pill" data-step="1" aria-current="step">1. Identity &amp; Roles</li>
+                    <li class="wizard-step-pill" data-step="2">2. Scoring Metrics</li>
+                    <li class="wizard-step-pill" data-step="3">3. Map Theatre</li>
+                    <li class="wizard-step-pill" data-step="4">4. Quick-Add Assets</li>
+                </ol>
+            </nav>
+
+            <!-- Step 1 -->
+            <div id="wizard-step-1" class="wizard-step-pane">
+                <div class="field-group">
+                    <label for="wiz-name">Scenario Title</label>
+                    <input type="text" id="wiz-name" class="form-control" placeholder="e.g. Operation Atlantic Shield" autofocus>
+                </div>
+                <div class="field-group" hidden style="display: none;">
+                    <label for="wiz-id">Scenario ID (Auto-generated or Custom)</label>
+                    <input type="text" id="wiz-id" class="form-control" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="e.g. op_atlantic_shield">
+                </div>
+                <div class="field-group">
+                    <div class="label-with-ai">
+                        <label for="wiz-desc">Scenario Synopsis</label>
+                        <button type="button" id="btn-ai-wiz-desc" class="btn-ai-brief" title="Draft scenario synopsis with AI">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                            <span>AI Draft</span>
+                        </button>
+                    </div>
+                    <textarea id="wiz-desc" class="form-control" rows="2" placeholder="Describe the crisis situation..."></textarea>
+                </div>
+                <div class="field-group">
+                    <div class="flex-between items-center mb-1">
+                        <label for="wiz-role-bundle">Choose a Default Player Role Team (or add below)</label>
+                        <button type="button" id="btn-wiz-ai-roles" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                            <span>Suggest Roles with AI</span>
+                        </button>
+                    </div>
+                    <select id="wiz-role-bundle" class="form-control">
+                        <option value="">-- Select a Role Preset Bundle --</option>
+                    </select>
+                </div>
+                <div id="wiz-roles-preview" class="editor-item-list" style="max-height: 190px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- Step 2 -->
+            <div id="wizard-step-2" class="wizard-step-pane" hidden>
+                <div class="field-group">
+                    <label for="wiz-score-preset">Select a Scoring Metric Pack</label>
+                    <select id="wiz-score-preset" class="form-control">
+                        <option value="">-- Select Scoring Preset --</option>
+                    </select>
+                </div>
+                <div id="wiz-scores-preview" class="editor-item-list"></div>
+            </div>
+
+            <!-- Step 3 -->
+            <div id="wizard-step-3" class="wizard-step-pane" hidden>
+                <div class="field-group">
+                    <label for="wiz-map-preset">Select Starting Theatre Region</label>
+                    <select id="wiz-map-preset" class="form-control">
+                        <option value="">-- Choose Geographic Region --</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label for="wiz-lat">Latitude</label>
+                        <input type="number" id="wiz-lat" class="form-control" step="0.0001" value="51.5074">
+                    </div>
+                    <div class="field-group">
+                        <label for="wiz-lng">Longitude</label>
+                        <input type="number" id="wiz-lng" class="form-control" step="0.0001" value="-0.1278">
+                    </div>
+                    <div class="field-group">
+                        <label for="wiz-zoom">Zoom</label>
+                        <input type="number" id="wiz-zoom" class="form-control" min="1" max="18" value="10">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div id="wizard-step-4" class="wizard-step-pane" hidden>
+                <p class="text-sm text-secondary mb-2">Click any preset assets below to include them in your scenario's starting map:</p>
+                <div id="wiz-quick-assets" class="quick-assets-strip" style="max-height: 300px;"></div>
+            </div>
+        </div>
+        <div class="editor-dialog-footer">
+            <button type="button" id="btn-wiz-prev" class="btn btn-secondary text-sm" disabled>Previous</button>
+            <div class="inline-flex items-center gap-xs">
+                <button type="button" id="btn-wiz-next" class="btn btn-primary text-sm">Next Step</button>
+                <button type="button" id="btn-wiz-finish" class="btn btn-primary text-sm" style="display: none;">Finish &amp; Open Editor</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- ==================================================================
+         MODAL 2: SHARED IMAGE LIBRARY PICKER
+         ================================================================== -->
+    <dialog id="image-picker-dialog" class="editor-dialog" aria-labelledby="image-picker-title">
+        <div class="editor-dialog-header">
+            <h2 id="image-picker-title" class="editor-panel-title">Select Image from Shared Library</h2>
+            <button type="button" id="btn-close-image-picker" class="btn btn-secondary text-xs">Cancel</button>
+        </div>
+        <div class="editor-dialog-body">
+            <search class="flex-center gap-sm flex-wrap">
+                <input type="search" id="picker-search-input" class="form-control" style="flex: 1; min-width: 220px;" aria-label="Search images by title, ID, or tag" placeholder="Search images by title, ID, or description...">
+                <select id="picker-tag-select" class="form-control" style="width: 200px;" aria-label="Filter by tag">
+                    <option value="">All Tags</option>
+                </select>
+            </search>
+            <div id="picker-image-grid" class="picker-image-grid"></div>
+        </div>
+    </dialog>
+
+    <!-- ==================================================================
+         MODAL 3: CLONE / FORK SCENARIO
+         ================================================================== -->
+    <dialog id="clone-scenario-dialog" class="editor-dialog" style="max-width: 460px;" aria-labelledby="clone-dialog-title">
+        <div class="editor-dialog-header">
+            <h2 id="clone-dialog-title" class="editor-panel-title">Clone / Fork Scenario</h2>
+            <button type="button" id="btn-cancel-clone" class="btn btn-secondary text-xs">Cancel</button>
+        </div>
+        <div class="editor-dialog-body">
+            <div class="field-group">
+                <label for="inp-clone-name">New Scenario Name</label>
+                <input type="text" id="inp-clone-name" class="form-control" required>
+            </div>
+            <div class="field-group" hidden style="display: none;">
+                <label for="inp-clone-id">New Scenario ID (Slug)</label>
+                <input type="text" id="inp-clone-id" class="form-control" autocorrect="off" autocapitalize="none" spellcheck="false" required>
+            </div>
+        </div>
+        <div class="editor-dialog-footer">
+            <span></span>
+            <button type="button" id="btn-confirm-clone" class="btn btn-primary text-sm">Create Clone</button>
+        </div>
+    </dialog>
+
+    <!-- ==================================================================
+         MODAL 4: VALIDATION REPORT
+         ================================================================== -->
+    <dialog id="validation-errors-dialog" class="editor-dialog" style="max-width: 560px;" aria-labelledby="validation-dialog-title">
+        <div class="editor-dialog-header">
+            <h2 id="validation-dialog-title" class="editor-panel-title">Scenario Validation Report</h2>
+            <button type="button" id="btn-close-validation" class="btn btn-secondary text-xs">Close</button>
+        </div>
+        <div class="editor-dialog-body">
+            <p class="text-sm text-secondary mb-2">Please resolve the following schema issues before publishing:</p>
+            <ul id="validation-errors-list" class="text-sm" style="color: #f87171; padding-left: 1.25rem; line-height: 1.6;"></ul>
+        </div>
+    </dialog>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/vendor/tagify/tagify.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/bug-reporter.js"></script>
+    <script src="js/editor-image-picker.js"></script>
+    <script src="js/editor-canvas.js"></script>
+    <script src="js/editor-wizard.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+</html>

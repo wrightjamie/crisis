@@ -122,6 +122,91 @@ function runTests() {
     fs.rmSync(exportTempDir, { recursive: true, force: true });
     fs.rmSync(dummyPubDir, { recursive: true, force: true });
 
+    // 9. Test Draft vs Published Separation
+    const draftUpdate = {
+        ...mockScenario,
+        name: 'Operation Northern Light (Draft v2)',
+        description: 'Updated description in draft.'
+    };
+    const savedDraft = scenarioService.saveScenario(draftUpdate, { asDraft: true });
+    assert.strictEqual(savedDraft.name, 'Operation Northern Light (Draft v2)');
+    assert.strictEqual(savedDraft._meta.hasDraft, true);
+    assert.strictEqual(savedDraft._meta.status, 'published');
+
+    // Live version should remain untouched
+    const liveVersion = scenarioService.getScenario('test_mission', { useDraft: false });
+    assert.strictEqual(liveVersion.name, 'Operation Northern Light');
+
+    // Draft version should reflect the draft changes
+    const draftVersion = scenarioService.getScenario('test_mission', { useDraft: true });
+    assert.strictEqual(draftVersion.name, 'Operation Northern Light (Draft v2)');
+
+    // 10. Test Discard Draft
+    const afterDiscard = scenarioService.discardDraft('test_mission');
+    assert.strictEqual(afterDiscard.name, 'Operation Northern Light');
+    assert.strictEqual(afterDiscard._meta.hasDraft, false);
+
+    // 11. Test Publish Draft
+    // 11. Test Publish Scenario (promotes draft_data -> data, preserves canvasLayout & _canvasPos)
+    draftUpdate.eventTemplates[0]._canvasPos = { x: 420, y: 185 };
+    draftUpdate.canvasLayout = {
+        panX: 80,
+        panY: 50,
+        scale: 1.15,
+        positions: {
+            [draftUpdate.eventTemplates[0].id]: { x: 420, y: 185 }
+        }
+    };
+    scenarioService.saveScenario(draftUpdate, { asDraft: true });
+    const published = scenarioService.publishScenario('test_mission');
+    assert.strictEqual(published.name, 'Operation Northern Light (Draft v2)');
+    assert.strictEqual(published._meta.hasDraft, false);
+    assert.deepStrictEqual(published.eventTemplates[0]._canvasPos, { x: 420, y: 185 });
+    assert.deepStrictEqual(published.canvasLayout.positions[draftUpdate.eventTemplates[0].id], { x: 420, y: 185 });
+    assert.strictEqual(scenarioService.getScenario('test_mission').name, 'Operation Northern Light (Draft v2)');
+
+    // 12. Test Clone Scenario
+    const cloned = scenarioService.cloneScenario('test_mission', {
+        newId: 'test_mission_fork',
+        newName: 'Operation Northern Light (Fork)'
+    });
+    assert.strictEqual(cloned.id, 'test_mission_fork');
+    assert.strictEqual(cloned.name, 'Operation Northern Light (Fork)');
+    assert.strictEqual(cloned._meta.status, 'draft');
+    assert.strictEqual(cloned._meta.isBuiltin, false);
+
+    // Published-only list should exclude the unpublished fork
+    const pubList = scenarioService.listScenarios({ publishedOnly: true });
+    assert.strictEqual(pubList.some(s => s.id === 'test_mission_fork'), false);
+    const allList = scenarioService.listScenarios({ publishedOnly: false });
+    assert.strictEqual(allList.some(s => s.id === 'test_mission_fork'), true);
+
+    // 13. Test Reset to Built-in & Core Auto-Seeding using a temp legacy scenarios dir
+    const tempLegacyDir = fs.mkdtempSync(path.join(os.tmpdir(), 'crisis-legacy-seed-'));
+    const sampleDir = path.join(tempLegacyDir, 'test_mission');
+    fs.mkdirSync(sampleDir, { recursive: true });
+    fs.writeFileSync(
+        path.join(sampleDir, 'scenario.js'),
+        `module.exports = ${JSON.stringify(mockScenario, null, 2)};`
+    );
+
+    const resetResult = scenarioService.resetToBuiltin('test_mission', { legacyScenariosDir: tempLegacyDir });
+    assert.strictEqual(resetResult.name, 'Operation Northern Light');
+    assert.strictEqual(resetResult._meta.hasDraft, false);
+
+    // Add another directory to test ensureCoreScenariosSeeded
+    const secondDir = path.join(tempLegacyDir, 'core_seeded_one');
+    fs.mkdirSync(secondDir, { recursive: true });
+    fs.writeFileSync(
+        path.join(secondDir, 'scenario.js'),
+        `module.exports = ${JSON.stringify({ ...mockScenario, id: 'core_seeded_one', name: 'Core Seeded Scenario' }, null, 2)};`
+    );
+    const seededCount = scenarioService.ensureCoreScenariosSeeded({ legacyScenariosDir: tempLegacyDir });
+    assert.strictEqual(seededCount, 1);
+    assert.ok(scenarioService.getScenario('core_seeded_one'));
+
+    fs.rmSync(tempLegacyDir, { recursive: true, force: true });
+
     closeDb();
     console.log("✅ Scenario Service unit tests passed successfully!");
 }

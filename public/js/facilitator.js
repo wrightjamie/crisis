@@ -261,6 +261,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
+function emitFallbackAiBriefing(targetRole, baseline, contextText = null) {
+    const currentScores = currentState.scores;
+    const config = currentState.scenarioConfig.aiConfig;
+    const fallbackSeeds = [];
+    if (contextText) fallbackSeeds.push({ type: 'context', text: contextText });
+
+    for (const [key, currentVal] of Object.entries(currentScores)) {
+        const prevVal = baseline[key];
+        if (prevVal !== undefined && prevVal !== currentVal && config.scores[key] && config.scores[key].roles.includes(targetRole)) {
+            const labelLower = config.scoreLabels[currentVal].toLowerCase();
+            const diff = currentVal - prevVal;
+            fallbackSeeds.push({
+                type: 'score_change',
+                scoreId: key,
+                text: `The ${config.scores[key].label} score has ${diff > 0 ? 'improved' : 'worsened'} to '${labelLower}' (was '${config.scoreLabels[prevVal].toLowerCase()}').`
+            });
+        }
+    }
+
+    socket.emit('submit_ai_briefing', {
+        role: targetRole,
+        text: "",
+        seeds: fallbackSeeds,
+        timestamp: Date.now()
+    });
+
+    aiBaselineScores[targetRole] = JSON.parse(JSON.stringify(currentScores));
+}
+
 socket.on('generate_ai_briefing', (data) => {
     if (!currentState || !currentState.scenarioConfig || !currentState.scenarioConfig.aiConfig) return;
     if (data.role === 'display' || data.role === 'facilitator') return;
@@ -272,34 +301,11 @@ socket.on('generate_ai_briefing', (data) => {
         }
 
         let baseline = data.mode === 'initial' ? null : (aiBaselineScores[data.role] || null);
-        const currentScores = currentState.scores;
         if (!baseline) {
-            baseline = currentState.scenarioConfig.initialScores || currentScores;
+            baseline = currentState.scenarioConfig.initialScores || currentState.scores;
         }
 
-        const config = currentState.scenarioConfig.aiConfig;
-        let fallbackSeeds = [];
-        for (const [key, currentVal] of Object.entries(currentScores)) {
-            const prevVal = baseline[key];
-            if (prevVal !== undefined && prevVal !== currentVal && config.scores[key] && config.scores[key].roles.includes(data.role)) {
-                const labelLower = config.scoreLabels[currentVal].toLowerCase();
-                const diff = currentVal - prevVal;
-                fallbackSeeds.push({
-                    type: 'score_change',
-                    scoreId: key,
-                    text: `The ${config.scores[key].label} score has ${diff > 0 ? 'improved' : 'worsened'} to '${labelLower}' (was '${config.scoreLabels[prevVal].toLowerCase()}').`
-                });
-            }
-        }
-
-        socket.emit('submit_ai_briefing', {
-            role: data.role,
-            text: "",
-            seeds: fallbackSeeds,
-            timestamp: Date.now()
-        });
-
-        aiBaselineScores[data.role] = JSON.parse(JSON.stringify(currentScores));
+        emitFallbackAiBriefing(data.role, baseline);
         return;
     }
 
@@ -329,33 +335,8 @@ socket.on('generate_ai_briefing_all', (data) => {
         currentActiveRoles
             .filter(r => r !== 'display' && r !== 'facilitator')
             .forEach(r => {
-                let baseline = aiBaselineScores[r] || currentState.scenarioConfig.initialScores || currentState.scores;
-                const currentScores = currentState.scores;
-                const config = currentState.scenarioConfig.aiConfig;
-                let fallbackSeeds = [];
-                if (context) fallbackSeeds.push({ type: 'context', text: context });
-
-                for (const [key, currentVal] of Object.entries(currentScores)) {
-                    const prevVal = baseline[key];
-                    if (prevVal !== undefined && prevVal !== currentVal && config.scores[key] && config.scores[key].roles.includes(r)) {
-                        const labelLower = config.scoreLabels[currentVal].toLowerCase();
-                        const diff = currentVal - prevVal;
-                        fallbackSeeds.push({
-                            type: 'score_change',
-                            scoreId: key,
-                            text: `The ${config.scores[key].label} score has ${diff > 0 ? 'improved' : 'worsened'} to '${labelLower}' (was '${config.scoreLabels[prevVal].toLowerCase()}').`
-                        });
-                    }
-                }
-
-                socket.emit('submit_ai_briefing', {
-                    role: r,
-                    text: "",
-                    seeds: fallbackSeeds,
-                    timestamp: Date.now()
-                });
-
-                aiBaselineScores[r] = JSON.parse(JSON.stringify(currentScores));
+                const baseline = aiBaselineScores[r] || currentState.scenarioConfig.initialScores || currentState.scores;
+                emitFallbackAiBriefing(r, baseline, context);
             });
         return;
     }

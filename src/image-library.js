@@ -64,18 +64,11 @@ function getAllImages({ tag, tags, query, q } = {}) {
     const lib = getImageLibrary();
     let results = Object.values(lib);
 
-    const requestedTags = [];
-    if (Array.isArray(tags)) {
-        requestedTags.push(...tags);
-    } else if (typeof tags === 'string' && tags.trim()) {
-        requestedTags.push(...tags.split(',').map(t => t.trim()).filter(Boolean));
-    }
-    if (typeof tag === 'string' && tag.trim()) {
-        requestedTags.push(...tag.split(',').map(t => t.trim()).filter(Boolean));
-    }
+    const normalizedTags = imageService && imageService.parseRequestedTags
+        ? imageService.parseRequestedTags({ tag, tags })
+        : [];
 
-    if (requestedTags.length > 0) {
-        const normalizedTags = requestedTags.map(t => t.toLowerCase());
+    if (normalizedTags.length > 0) {
         results = results.filter(entry => {
             const entryTags = (entry.tags || []).map(t => t.toLowerCase());
             return normalizedTags.every(reqTag => entryTags.includes(reqTag));
@@ -116,31 +109,9 @@ function resolveImageOnItem(item) {
 
 function resolveScenarioImages(scenario) {
     if (!scenario || typeof scenario !== 'object') return scenario;
-
-    if (Array.isArray(scenario.assets)) {
-        scenario.assets.forEach(resolveImageOnItem);
+    if (imageService && imageService.forEachScenarioImageItem) {
+        return imageService.forEachScenarioImageItem(scenario, resolveImageOnItem);
     }
-
-    if (Array.isArray(scenario.variantAxes)) {
-        scenario.variantAxes.forEach(axis => {
-            if (Array.isArray(axis.options)) {
-                axis.options.forEach(opt => {
-                    if (Array.isArray(opt.assetModifiers)) {
-                        opt.assetModifiers.forEach(resolveImageOnItem);
-                    }
-                });
-            }
-        });
-    }
-
-    if (Array.isArray(scenario.eventTemplates)) {
-        scenario.eventTemplates.forEach(resolveImageOnItem);
-    }
-
-    if (Array.isArray(scenario.manualActions)) {
-        scenario.manualActions.forEach(resolveImageOnItem);
-    }
-
     return scenario;
 }
 

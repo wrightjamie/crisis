@@ -8,7 +8,10 @@
     "set-admin": "node scripts/set-admin-password.js",
     "db:migrate": "node scripts/migrate-scenarios-to-db.js",
     "export-all": "node scripts/export-all-scenarios.js",
-    "audit": "node scripts/token-audit.js"
+    "audit": "node scripts/token-audit.js",
+    "fallow": "npx --yes fallow",
+    "fallow:check": "npx --yes fallow dead-code && npx --yes fallow dupes",
+    "fallow:audit": "npx --yes fallow audit"
   },
   "keywords": [],
   "author": "",

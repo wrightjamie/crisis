@@ -175,15 +175,35 @@ socket.on('role_registered', (registeredRole) => {
     if (localState.status === 'lobby') {
         switchView('lobby');
     } else {
-        if (sessionStorage.getItem('crisis_view_state') === 'map') {
-            switchView('map');
-        } else if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
-            showBriefing();
-        } else {
-            switchView('map');
-        }
+        showActiveViewOrBriefing();
     }
 });
+
+function showActiveViewOrBriefing() {
+    if (sessionStorage.getItem('crisis_view_state') === 'map') {
+        switchView('map');
+    } else if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
+        showBriefing();
+    } else {
+        switchView('map');
+    }
+}
+
+function resetClientRoleState() {
+    role = null;
+    sessionStorage.removeItem('crisis_role');
+    sessionStorage.removeItem('crisis_view_state');
+    updateGlobalLeaveButton();
+    if (localState && localState.status === 'holding') {
+        switchView('holding');
+        handleHoldingState();
+    } else {
+        switchView('role_selection');
+        if (localState && localState.status === 'lobby') {
+            renderRoleSelection();
+        }
+    }
+}
 
 socket.on('role_error', (msg) => {
     alert(msg);
@@ -219,19 +239,7 @@ socket.on('role_rejected', () => {
 
 socket.on('kicked', () => {
     alert("You have been removed from your station by the facilitator.");
-    role = null;
-    sessionStorage.removeItem('crisis_role');
-    sessionStorage.removeItem('crisis_view_state');
-    updateGlobalLeaveButton();
-    if (localState && localState.status === 'holding') {
-        switchView('holding');
-        handleHoldingState();
-    } else {
-        switchView('role_selection');
-        if (localState && localState.status === 'lobby') {
-            renderRoleSelection();
-        }
-    }
+    resetClientRoleState();
 });
 
 function updateGlobalLeaveButton() {
@@ -246,19 +254,7 @@ if (btnGlobalLeave) {
     btnGlobalLeave.addEventListener('click', () => {
         if (confirm("Are you sure you want to leave your station?")) {
             socket.emit('leave_role');
-            role = null;
-            sessionStorage.removeItem('crisis_role');
-            sessionStorage.removeItem('crisis_view_state');
-            updateGlobalLeaveButton();
-            if (localState && localState.status === 'holding') {
-                switchView('holding');
-                handleHoldingState();
-            } else {
-                switchView('role_selection');
-                if (localState && localState.status === 'lobby') {
-                    renderRoleSelection();
-                }
-            }
+            resetClientRoleState();
         }
     });
 }
@@ -391,20 +387,25 @@ function showBriefing() {
     setTimeout(() => {
         const aiSummaryText = document.getElementById('briefing-ai-summary-text');
         if (aiSummaryText && aiSummaryText.innerHTML.includes('Writing your brief')) {
-            const config = localState.scenarioConfig;
-            const general = config.briefings._general || '';
-            const roleSpecific = config.briefings[role] || '';
-            const variants = (config.variantBriefings || []).map(vb => {
-                const genVar = vb.briefingText || '';
-                const roleVar = (vb.roleBriefings && vb.roleBriefings[role]) ? vb.roleBriefings[role] : '';
-                return (genVar + '\n' + roleVar).trim();
-            }).filter(t => t).join('\n\n');
-            
-            const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
-            
-            aiSummaryText.innerHTML = window.renderBriefingMarkdown ? window.renderBriefingMarkdown(combinedText) : p(combinedText).replace(/\n/g, '<br>');
+            renderCombinedBriefingFallback(aiSummaryText, p);
         }
     }, 45000);
+}
+
+function renderCombinedBriefingFallback(aiSummaryText, p) {
+    const config = localState.scenarioConfig;
+    const general = config.briefings._general || '';
+    const roleSpecific = config.briefings[role] || '';
+    const variants = (config.variantBriefings || []).map(vb => {
+        const genVar = vb.briefingText || '';
+        const roleVar = (vb.roleBriefings && vb.roleBriefings[role]) ? vb.roleBriefings[role] : '';
+        return (genVar + '\n' + roleVar).trim();
+    }).filter(t => t).join('\n\n');
+
+    const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
+    aiSummaryText.innerHTML = window.renderBriefingMarkdown
+        ? window.renderBriefingMarkdown(combinedText)
+        : p(combinedText).replace(/\n/g, '<br>');
 }
 
 function enterMap() {
@@ -899,13 +900,7 @@ function handleActiveState() {
         renderRoleSelection();
     } else {
         if (appEl.style.display === 'none' && !briefingScreen.open) {
-            if (sessionStorage.getItem('crisis_view_state') === 'map') {
-                switchView('map');
-            } else if (localState.scenarioConfig && localState.scenarioConfig.briefings) {
-                showBriefing();
-            } else {
-                switchView('map');
-            }
+            showActiveViewOrBriefing();
         }
         updateUI();
     }
@@ -1009,18 +1004,7 @@ function updateUI() {
                     ? window.renderBriefingMarkdown(summaryData.text)
                     : p(summaryData.text).replace(/\n/g, '<br>');
             } else if (localState.aiEnabled === false) {
-                const config = localState.scenarioConfig;
-                const general = config.briefings._general || '';
-                const roleSpecific = config.briefings[role] || '';
-                const variants = (config.variantBriefings || []).map(vb => {
-                    const genVar = vb.briefingText || '';
-                    const roleVar = (vb.roleBriefings && vb.roleBriefings[role]) ? vb.roleBriefings[role] : '';
-                    return (genVar + '\n' + roleVar).trim();
-                }).filter(t => t).join('\n\n');
-                const combinedText = [general, variants, roleSpecific].filter(t => t).join('\n\n');
-                aiSummaryText.innerHTML = window.renderBriefingMarkdown
-                    ? window.renderBriefingMarkdown(combinedText)
-                    : p(combinedText).replace(/\n/g, '<br>');
+                renderCombinedBriefingFallback(aiSummaryText, p);
             }
         }
     }
@@ -1272,15 +1256,7 @@ function renderMap(events, assets) {
                     .openOn(map);
             } else {
                 window.activeCluster = null;
-                const activeItem = cluster.items[0];
-                if (activeItem.type === 'event') {
-                    viewedEvents.add(activeItem.id);
-                    if (window.updateEventsBadge) window.updateEventsBadge();
-                }
-                currentInfoView = { type: activeItem.type, id: activeItem.id };
-                openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
-                refreshInfoPanel();
-                renderMap(localState.events, localState.assets);
+                openClusterItemDetails(cluster.items[0]);
             }
         });
 
@@ -1290,6 +1266,17 @@ function renderMap(events, assets) {
 
     window.currentClusters = clusters;
     updateEdgeMarkers();
+}
+
+function openClusterItemDetails(activeItem) {
+    if (activeItem.type === 'event') {
+        viewedEvents.add(activeItem.id);
+        if (window.updateEventsBadge) window.updateEventsBadge();
+    }
+    currentInfoView = { type: activeItem.type, id: activeItem.id };
+    openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
+    refreshInfoPanel();
+    renderMap(localState.events, localState.assets);
 }
 
 window.selectClusterItem = function(clusterIndex, itemIndex) {
@@ -1302,15 +1289,7 @@ window.selectClusterItem = function(clusterIndex, itemIndex) {
         currentIndex: itemIndex
     };
 
-    const activeItem = cluster.items[itemIndex];
-    if (activeItem.type === 'event') {
-        viewedEvents.add(activeItem.id);
-        if (window.updateEventsBadge) window.updateEventsBadge();
-    }
-    currentInfoView = { type: activeItem.type, id: activeItem.id };
-    openPanel(activeItem.type === 'event' ? 'Event Details' : 'Asset Details');
-    refreshInfoPanel();
-    renderMap(localState.events, localState.assets);
+    openClusterItemDetails(cluster.items[itemIndex]);
     map.closePopup();
 };
 

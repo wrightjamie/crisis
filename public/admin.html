@@ -13,26 +13,29 @@
     <header class="top-bar">
         <div class="top-bar-left flex-center gap-md">
             <h1 class="top-bar-brand">
-                <span>🛡️</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <span>Crisis Admin Console</span>
             </h1>
             <nav class="top-bar-tabs">
-                <button class="top-bar-tab nav-tab active" data-tab="scenarios">Scenarios</button>
-                <button class="top-bar-tab nav-tab" data-tab="images">Image Library</button>
+                <button type="button" class="top-bar-tab nav-tab active" data-tab="scenarios">Scenarios</button>
+                <button type="button" class="top-bar-tab nav-tab" data-tab="images">Image Library</button>
             </nav>
         </div>
         <div class="top-bar-right flex-center gap-sm">
-            <button id="btn-toggle-bugs" class="btn btn-secondary text-sm flex-center gap-1" onclick="window.toggleBugReporting && window.toggleBugReporting()" title="Toggle Bug & Feedback System">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>
+            <button type="button" id="btn-toggle-bugs" class="btn btn-secondary text-sm flex-center gap-1" onclick="window.toggleBugReporting && window.toggleBugReporting()" title="Toggle Bug & Feedback System">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>
                 <span>Bugs:</span> <span id="header-bug-status" class="text-bold">OFF</span>
                 <span id="header-sync-dot" class="bug-sync-dot amber" title="Local Storage Only"></span>
             </button>
-            <a href="/facilitator" class="btn btn-secondary text-sm text-decoration-none" title="Go to Facilitator Console">🎮 Facilitator</a>
+            <a href="/facilitator" class="btn btn-secondary text-sm text-decoration-none inline-flex items-center gap-xs" title="Go to Facilitator Console">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <span>Facilitator</span>
+            </a>
             <div class="user-pill" id="user-pill">
-                <span>👤</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 <span id="username-display">admin</span>
             </div>
-            <button id="btn-logout" class="btn btn-secondary text-sm" title="Log out">Log Out</button>
+            <button type="button" id="btn-logout" class="btn btn-secondary text-sm" title="Log out">Log Out</button>
         </div>
     </header>
 
@@ -41,13 +44,25 @@
         <section id="tab-scenarios">
             <div class="toolbar">
                 <div class="toolbar-left">
-                    <input type="text" id="scenario-search" class="form-control search-input" placeholder="Search scenarios by name or description...">
+                    <search>
+                        <input type="search" id="scenario-search" class="form-control search-input" aria-label="Search scenarios by name or description" placeholder="Search scenarios by name or description...">
+                    </search>
                 </div>
                 <div class="toolbar-right">
-                    <button type="button" class="btn btn-secondary text-sm" id="btn-export-all" title="Download all scenarios in a single archive">📦 Export All (.zip)</button>
+                    <a href="/editor?new=true" class="btn btn-primary text-sm text-decoration-none inline-flex items-center gap-xs" id="btn-create-scenario" title="Create a new scenario in the Scenario Editor">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>Create Scenario</span>
+                    </a>
+                    <button type="button" class="btn btn-secondary text-sm inline-flex items-center gap-xs" id="btn-export-all" title="Download all scenarios in a single archive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        <span>Export All (.zip)</span>
+                    </button>
                     <div class="file-upload-wrapper">
                         <input type="file" id="scenario-file-input" accept=".zip" style="display: none;">
-                        <button type="button" class="btn btn-secondary text-sm" id="btn-choose-file">📁 Select ZIP File</button>
+                        <button type="button" class="btn btn-secondary text-sm inline-flex items-center gap-xs" id="btn-choose-file">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                            <span>Select ZIP File</span>
+                        </button>
                         <span id="selected-file-label" class="text-xs text-muted" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">No file chosen</span>
                         <label class="text-xs inline-flex items-center gap-xs cursor-pointer" title="Automatically overwrite existing scenario with the same ID">
                             <input type="checkbox" id="overwrite-checkbox"> Overwrite
@@ -64,6 +79,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th style="text-align: center;">Status</th>
                             <th style="text-align: center;">Min Players</th>
                             <th style="text-align: center;">Max Players</th>
                             <th style="text-align: center;">Events</th>
@@ -75,7 +91,7 @@
                     </thead>
                     <tbody id="scenarios-table-body">
                         <tr>
-                            <td colspan="8" class="text-center text-muted" style="padding: 2rem;">Loading scenarios...</td>
+                            <td colspan="9" class="text-center text-muted" style="padding: 2rem;">Loading scenarios...</td>
                         </tr>
                     </tbody>
                 </table>

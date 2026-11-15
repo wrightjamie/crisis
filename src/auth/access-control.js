@@ -134,19 +134,31 @@ class AccessControl {
         return false;
     }
 
+    extractToken(req) {
+        if (!req) return null;
+        if (req.headers && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+            return req.headers.authorization.substring(7).trim();
+        }
+        if (req.query && req.query.token) {
+            return req.query.token;
+        }
+        if (req.body && req.body.token) {
+            return req.body.token;
+        }
+        if (req.headers && req.headers.cookie) {
+            const match = req.headers.cookie.match(/(?:^|;\s*)auth_token=([^;]+)/);
+            if (match) return match[1];
+        }
+        return null;
+    }
+
+    verifyRequest(req) {
+        return this.verifySession(this.extractToken(req));
+    }
+
     requireAuth(capability = 'admin') {
         return (req, res, next) => {
-            let token = null;
-
-            if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-                token = req.headers.authorization.substring(7).trim();
-            } else if (req.query && req.query.token) {
-                token = req.query.token;
-            } else if (req.headers.cookie) {
-                const match = req.headers.cookie.match(/(?:^|;\s*)auth_token=([^;]+)/);
-                if (match) token = match[1];
-            }
-
+            const token = this.extractToken(req);
             const result = this.verifySession(token);
             if (!result.authenticated) {
                 if (req.accepts('html') && !req.xhr && !req.path.startsWith('/api/')) {

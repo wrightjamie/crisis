@@ -367,7 +367,8 @@ class BugReportManager {
         return newReport;
     }
 
-    updateReportStatus(id, newStatus) {
+    async updateReportStatus(id, newStatus) {
+        this.load();
         const report = this.reports.find(r => r.id === id);
         if (!report) return null;
 
@@ -375,6 +376,24 @@ class BugReportManager {
         if (validStatuses.includes(newStatus)) {
             report.status = newStatus;
             report.updatedAt = new Date().toISOString();
+
+            if (newStatus === 'Resolved' && report.githubIssue && report.githubIssue.number && this.githubToken && this.githubRepo) {
+                try {
+                    await fetch(`https://api.github.com/repos/${this.githubRepo}/issues/${report.githubIssue.number}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Accept': 'application/vnd.github+json',
+                            'Authorization': `Bearer ${this.githubToken}`,
+                            'User-Agent': 'Crisis-Bug-Reporter',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ state: 'closed', state_reason: 'completed' })
+                    });
+                } catch (e) {
+                    console.warn(`Failed to close GitHub issue #${report.githubIssue.number}:`, e.message);
+                }
+            }
+
             this.save();
         }
         return report;
@@ -386,7 +405,7 @@ class BugReportManager {
         this.save();
     }
 
-    generateMarkdown() {
+    _getReportStats() {
         const total = this.reports.length;
         const bugs = this.reports.filter(r => r.type === 'bug').length;
         const features = this.reports.filter(r => r.type === 'feature').length;
@@ -394,6 +413,33 @@ class BugReportManager {
         const openCount = this.reports.filter(r => r.status === 'Open').length;
         const inProgressCount = this.reports.filter(r => r.status === 'In Progress').length;
         const resolvedCount = this.reports.filter(r => r.status === 'Resolved').length;
+        return { total, bugs, features, issues, openCount, inProgressCount, resolvedCount };
+    }
+
+    _formatReportMarkdownItem(r) {
+        const icon = r.type === 'bug' ? '🐛' : (r.type === 'feature' ? '✨' : '💡');
+        const statusEmoji = r.status === 'Resolved' ? '🟣' : (r.status === 'In Progress' ? '🟡' : '🟢');
+        const typeLabel = r.type.charAt(0).toUpperCase() + r.type.slice(1);
+        const formattedDate = new Date(r.timestamp).toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+
+        let contextDetails = [];
+        if (r.gameId) contextDetails.push(`Game: \`${r.gameId}\``);
+        if (r.scenarioId) contextDetails.push(`Scenario: \`${r.scenarioId}\``);
+        if (r.stage !== null && r.stage !== undefined) contextDetails.push(`Stage: ${r.stage}`);
+        if (r.githubIssue) contextDetails.push(`[GitHub #${r.githubIssue.number}](${r.githubIssue.url})`);
+        const contextStr = contextDetails.length > 0 ? ` | ${contextDetails.join(' | ')}` : '';
+
+        let item = `### [${r.id}] ${icon} ${typeLabel}: ${r.text.slice(0, 60)}${r.text.length > 60 ? '...' : ''}\n`;
+        item += `- **Reported:** ${formattedDate}\n`;
+        item += `- **Reporter:** ${r.sender} (\`${r.role}\`)${contextStr}\n`;
+        item += `- **Status:** ${statusEmoji} **${r.status}**\n\n`;
+        item += `> ${r.text.split('\n').join('\n> ')}\n\n`;
+        item += `---\n\n`;
+        return item;
+    }
+
+    generateMarkdown() {
+        const stats = this._getReportStats();
 
         let md = `# Bug Reports & Feature Requests\n\n`;
         md += `> Automatically synchronized with the Crisis in-game feedback system (\`data/bug-reports.json\`).\n`;
@@ -402,9 +448,9 @@ class BugReportManager {
         md += `## Status Overview\n`;
         md += `- **System Active:** ${this.enabled ? '🟢 Enabled' : '⚪ Disabled'}\n`;
         md += `- **GitHub Sync:** ${this.githubToken ? `🟢 Active (${this.githubRepo})` : '⚪ Not Configured'}\n`;
-        md += `- **Total Reports:** ${total}\n`;
-        md += `- **Status:** 🟢 ${openCount} Open | 🟡 ${inProgressCount} In Progress | 🟣 ${resolvedCount} Resolved\n`;
-        md += `- **Breakdown:** 🐛 ${bugs} Bugs | ✨ ${features} Features | 💡 ${issues} Issues/Feedback\n\n`;
+        md += `- **Total Reports:** ${stats.total}\n`;
+        md += `- **Status:** 🟢 ${stats.openCount} Open | 🟡 ${stats.inProgressCount} In Progress | 🟣 ${stats.resolvedCount} Resolved\n`;
+        md += `- **Breakdown:** 🐛 ${stats.bugs} Bugs | ✨ ${stats.features} Features | 💡 ${stats.issues} Issues/Feedback\n\n`;
 
         md += `---\n\n`;
         md += `## Reports List\n\n`;
@@ -413,24 +459,7 @@ class BugReportManager {
             md += `*No bug reports or feature requests recorded yet.*\n`;
         } else {
             for (const r of this.reports) {
-                const icon = r.type === 'bug' ? '🐛' : (r.type === 'feature' ? '✨' : '💡');
-                const statusEmoji = r.status === 'Resolved' ? '🟣' : (r.status === 'In Progress' ? '🟡' : '🟢');
-                const typeLabel = r.type.charAt(0).toUpperCase() + r.type.slice(1);
-                const formattedDate = new Date(r.timestamp).toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
-
-                let contextDetails = [];
-                if (r.gameId) contextDetails.push(`Game: \`${r.gameId}\``);
-                if (r.scenarioId) contextDetails.push(`Scenario: \`${r.scenarioId}\``);
-                if (r.stage !== null && r.stage !== undefined) contextDetails.push(`Stage: ${r.stage}`);
-                if (r.githubIssue) contextDetails.push(`[GitHub #${r.githubIssue.number}](${r.githubIssue.url})`);
-                const contextStr = contextDetails.length > 0 ? ` | ${contextDetails.join(' | ')}` : '';
-
-                md += `### [${r.id}] ${icon} ${typeLabel}: ${r.text.slice(0, 60)}${r.text.length > 60 ? '...' : ''}\n`;
-                md += `- **Reported:** ${formattedDate}\n`;
-                md += `- **Reporter:** ${r.sender} (\`${r.role}\`)${contextStr}\n`;
-                md += `- **Status:** ${statusEmoji} **${r.status}**\n\n`;
-                md += `> ${r.text.split('\n').join('\n> ')}\n\n`;
-                md += `---\n\n`;
+                md += this._formatReportMarkdownItem(r);
             }
         }
         return md;

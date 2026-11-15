@@ -2,8 +2,19 @@
   "entry": [
     "server.js",
     "public/**/*.js",
-    "public/**/*.html",
     "scripts/**/*.js",
-    "src/**/*.js"
+    "src/**/*.js",
+    "data/scenarios/**/*.js"
+  ],
+  "ignorePatterns": [
+    "public/vendor/**",
+    "public/css/**",
+    "scratch/**"
+  ],
+  "ignoreDependencies": [
+    "@yaireo/tagify"
+  ],
+  "ignoreUnresolvedImports": [
+    "/socket.io/socket.io.js"
   ]
 }

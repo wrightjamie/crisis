@@ -4,7 +4,7 @@
     let allImages = [];
     let pendingZipFile = null;
 
-    const { apiFetch, escapeHtml, showToast, logout, checkAuth } = window.common;
+    const { apiFetch, escapeHtml, showToast, logout, checkAuth, renderIcon } = window.common;
 
     // 1. Initial Authentication Check
     async function initAuth() {
@@ -53,14 +53,21 @@
     function renderScenariosTable(scenarios) {
         const tbody = document.getElementById('scenarios-table-body');
         if (!scenarios || scenarios.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted" style="padding: 2rem;">No scenarios found matching your criteria.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted" style="padding: 2rem;">No scenarios found matching your criteria.</td></tr>`;
             return;
         }
 
         tbody.innerHTML = scenarios.map(s => {
             const guideBadge = s.hasGuide ?
-                `<a href="/scenarios/${encodeURIComponent(s.id)}/guide.html" target="_blank" rel="noopener" class="badge badge-guide text-decoration-none" title="Open Facilitator Guide">📄 Guide</a>` :
+                `<a href="/scenarios/${encodeURIComponent(s.id)}/guide.html" target="_blank" rel="noopener" class="badge badge-guide text-decoration-none inline-flex items-center gap-xs" title="Open Facilitator Guide">${renderIcon('file-text', 12)} <span>Guide</span></a>` :
                 `<span class="text-xs text-muted">-</span>`;
+
+            let statusBadge = `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35);">Published</span>`;
+            if (s.status === 'draft') {
+                statusBadge = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">Unpublished Draft</span>`;
+            } else if (s.hasDraft) {
+                statusBadge = `<span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35);" title="Live version is published; uncommitted draft edits exist">Draft Changes</span>`;
+            }
 
             const updatedDate = s.updatedAt ? new Date(s.updatedAt).toLocaleDateString() : '-';
 
@@ -70,15 +77,17 @@
                         <div>${escapeHtml(s.name)}</div>
                         ${s.description ? `<div class="text-xs text-muted" style="margin-top: 2px; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(s.description)}</div>` : ''}
                     </td>
+                    <td style="text-align: center;">${statusBadge}</td>
                     <td style="text-align: center;">${s.minPlayers || 1}</td>
                     <td style="text-align: center;">${s.maxPlayers || 1}</td>
                     <td style="text-align: center;"><span class="badge" style="background: var(--bg-tertiary); color: var(--text-primary); font-weight: 500;">${s.eventCount || 0}</span></td>
                     <td style="text-align: center;"><code style="font-size: 0.8rem;">v${escapeHtml(s.version || '1.0.0')}</code></td>
                     <td style="text-align: center;">${guideBadge}</td>
                     <td class="text-xs text-muted">${updatedDate}</td>
-                    <td style="text-align: right; white-space: nowrap;">
-                        <button type="button" class="btn-icon btn-export" data-id="${s.id}" title="Export .zip package">📥 Export</button>
-                        <button type="button" class="btn-icon btn-danger btn-delete" data-id="${s.id}" data-name="${escapeHtml(s.name)}" title="Delete scenario">🗑️</button>
+                    <td class="scenario-actions-cell">
+                        <a href="/editor?id=${encodeURIComponent(s.id)}" class="btn btn-primary btn-table-action text-decoration-none" title="Edit scenario in Scenario Editor">${renderIcon('edit', 13)} <span>Edit</span></a>
+                        <button type="button" class="btn btn-secondary btn-table-action btn-export" data-id="${s.id}" title="Export .zip package">${renderIcon('download', 13)} <span>Export</span></button>
+                        <button type="button" class="btn btn-danger btn-table-action btn-delete" data-id="${s.id}" data-name="${escapeHtml(s.name)}" title="Delete scenario" aria-label="Delete scenario ${escapeHtml(s.name)}">${renderIcon('trash', 13)}</button>
                     </td>
                 </tr>
             `;

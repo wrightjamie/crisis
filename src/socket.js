@@ -6,6 +6,19 @@ module.exports = function setupSockets(io, gameManager) {
     io.on('connection', (socket) => {
         console.log(`Client connected: ${socket.id}`);
 
+        const getActiveGame = ({ requireFacilitator = false, requireActiveOrLobby = false, scheduledUuid = null } = {}) => {
+            const gameId = socket.data.gameId;
+            const engine = gameId ? gameManager.getGame(gameId) : null;
+            if (!engine) return null;
+            engine.updateActivity();
+            if (requireFacilitator && engine.connectedClients[socket.id] !== 'facilitator') return null;
+            if (requireActiveOrLobby && engine.gameState.status !== 'active' && engine.gameState.status !== 'lobby') return null;
+            const scheduledEvent = scheduledUuid
+                ? engine.gameState.scheduledEvents.find(s => s.uuid === scheduledUuid)
+                : null;
+            return { gameId, engine, scheduledEvent };
+        };
+
         // Send current bug reporting status & reports on connection
         socket.emit('bug_reporting_config', bugReports.getConfig());
 
@@ -249,11 +262,9 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('approve_player', (targetSocketId) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            if (engine.connectedClients[socket.id] !== 'facilitator') return;
+            const ctx = getActiveGame({ requireFacilitator: true });
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
             const role = engine.pendingPlayers[targetSocketId];
             if (role) {
                 delete engine.pendingPlayers[targetSocketId];
@@ -266,11 +277,9 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('reject_player', (targetSocketId) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            if (engine.connectedClients[socket.id] !== 'facilitator') return;
+            const ctx = getActiveGame({ requireFacilitator: true });
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
             if (engine.pendingPlayers[targetSocketId]) {
                 delete engine.pendingPlayers[targetSocketId];
                 io.to(targetSocketId).emit('role_rejected');
@@ -314,11 +323,9 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('pause_scheduled_event', (uuid) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            const se = engine.gameState.scheduledEvents.find(s => s.uuid === uuid);
+            const ctx = getActiveGame({ scheduledUuid: uuid });
+            if (!ctx) return;
+            const { gameId, engine, scheduledEvent: se } = ctx;
             if (se && !se.paused) {
                 se.paused = true;
                 se.timeRemainingMs = se.triggerTimeMs - Date.now();
@@ -327,11 +334,9 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('resume_scheduled_event', (uuid) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            const se = engine.gameState.scheduledEvents.find(s => s.uuid === uuid);
+            const ctx = getActiveGame({ scheduledUuid: uuid });
+            if (!ctx) return;
+            const { gameId, engine, scheduledEvent: se } = ctx;
             if (se && se.paused) {
                 se.paused = false;
                 se.triggerTimeMs = Date.now() + se.timeRemainingMs;
@@ -406,19 +411,16 @@ module.exports = function setupSockets(io, gameManager) {
 
         // Facilitator submits an AI generated executive summary of the scenario
         socket.on('submit_scenario_summary', (data) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            if (engine.gameState.status === 'active' || engine.gameState.status === 'lobby') {
-                console.log(`Received AI scenario summary for ${data.role}`);
-                engine.gameState.aiScenarioSummaries[data.role] = {
-                    text: data.text,
-                    prompt: data.prompt,
-                    timestamp: data.timestamp || Date.now()
-                };
-                io.to(gameId).emit('state_update', engine.gameState);
-            }
+            const ctx = getActiveGame({ requireActiveOrLobby: true });
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
+            console.log(`Received AI scenario summary for ${data.role}`);
+            engine.gameState.aiScenarioSummaries[data.role] = {
+                text: data.text,
+                prompt: data.prompt,
+                timestamp: data.timestamp || Date.now()
+            };
+            io.to(gameId).emit('state_update', engine.gameState);
         });
 
         // Facilitator manually updates scores
@@ -475,11 +477,9 @@ module.exports = function setupSockets(io, gameManager) {
         });
 
         socket.on('submit_ai_briefing', (data) => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            if (engine.gameState.status !== 'active' && engine.gameState.status !== 'lobby') return;
+            const ctx = getActiveGame({ requireActiveOrLobby: true });
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
             if (!engine.gameState.aiBriefings) engine.gameState.aiBriefings = {};
             engine.gameState.aiBriefings[data.role] = data;
             io.to(gameId).emit('state_update', engine.gameState);

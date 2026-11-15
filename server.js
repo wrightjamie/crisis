@@ -8,14 +8,33 @@ const { getAllImages, getAllTags, getImage } = require('./src/image-library');
 const bugReports = require('./src/bug-reports');
 const accessControl = require('./src/auth/access-control');
 const scenarioService = require('./src/db/scenario-service');
+const { validateScenario } = require('./src/validate-scenarios');
+const {
+    ROLE_PRESETS,
+    SCORE_PRESETS,
+    MAP_PRESETS,
+    getAssetPresetsWithResolvedImages,
+    suggestComplementaryRoles,
+    generateBriefingSuggestion
+} = require('./src/asset-presets');
 const AdmZip = require('adm-zip');
+
+// Ensure core built-in scenarios and base images are seeded into SQLite on any fresh deployment
+try {
+    const seeded = scenarioService.ensureCoreScenariosSeeded();
+    if (seeded > 0) {
+        console.log(`Seeded ${seeded} core scenario(s) into SQLite.`);
+    }
+} catch (err) {
+    console.warn('Core scenario auto-seed check warning:', err.message);
+}
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Parse JSON bodies for API endpoints
-app.use(express.json());
+// Parse JSON bodies for API endpoints (allow up to 5MB for rich scenarios & guides)
+app.use(express.json({ limit: '5mb' }));
 
 // Dynamic scenario guide route from SQLite
 app.get('/scenarios/:id/guide.html', (req, res, next) => {
@@ -29,17 +48,7 @@ app.get('/scenarios/:id/guide.html', (req, res, next) => {
 
 // Protect /facilitator and /admin routes with Access Control
 function checkPageAuth(req, res, next) {
-    let token = null;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        token = req.headers.authorization.substring(7).trim();
-    } else if (req.query && req.query.token) {
-        token = req.query.token;
-    } else if (req.headers.cookie) {
-        const match = req.headers.cookie.match(/(?:^|;\s*)auth_token=([^;]+)/);
-        if (match) token = match[1];
-    }
-
-    const session = accessControl.verifySession(token);
+    const session = accessControl.verifyRequest(req);
     if (!session.authenticated) {
         return res.redirect(`/login?redirect=${encodeURIComponent(req.originalUrl)}`);
     }
@@ -48,6 +57,8 @@ function checkPageAuth(req, res, next) {
 
 app.get('/facilitator', checkPageAuth);
 app.get('/admin', checkPageAuth);
+app.get('/editor', checkPageAuth);
+app.get('/editor.html', checkPageAuth);
 
 // Serve static vendor files
 app.use('/vendor/tagify', express.static(path.join(__dirname, 'node_modules/@yaireo/tagify/dist')));
@@ -74,32 +85,14 @@ app.post('/api/auth/login', (req, res) => {
 });
 
 app.post('/api/auth/logout', (req, res) => {
-    let token = null;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        token = req.headers.authorization.substring(7).trim();
-    } else if (req.body && req.body.token) {
-        token = req.body.token;
-    } else if (req.headers.cookie) {
-        const match = req.headers.cookie.match(/(?:^|;\s*)auth_token=([^;]+)/);
-        if (match) token = match[1];
-    }
+    const token = accessControl.extractToken(req);
     accessControl.invalidateSession(token);
     res.clearCookie('auth_token');
     res.json({ success: true });
 });
 
 app.get('/api/auth/me', (req, res) => {
-    let token = null;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        token = req.headers.authorization.substring(7).trim();
-    } else if (req.query && req.query.token) {
-        token = req.query.token;
-    } else if (req.headers.cookie) {
-        const match = req.headers.cookie.match(/(?:^|;\s*)auth_token=([^;]+)/);
-        if (match) token = match[1];
-    }
-    const session = accessControl.verifySession(token);
-    res.json(session);
+    res.json(accessControl.verifyRequest(req));
 });
 
 // Helper to extract uploaded zip buffer
@@ -136,7 +129,8 @@ function extractZipBuffer(req) {
 
 // Scenarios API Endpoints
 app.get('/api/scenarios', (req, res) => {
-    res.json(scenarioService.listScenarios());
+    const publishedOnly = req.query.publishedOnly === 'true';
+    res.json(scenarioService.listScenarios({ publishedOnly }));
 });
 
 app.get('/api/scenarios/export-all', (req, res) => {
@@ -156,10 +150,160 @@ app.get('/api/scenarios/export-all', (req, res) => {
     }
 });
 
+// Scenario Editor Presets & AI Role Suggester
+app.get('/api/editor/presets', (req, res) => {
+    res.json({
+        assets: getAssetPresetsWithResolvedImages(),
+        roles: ROLE_PRESETS,
+        scores: SCORE_PRESETS,
+        maps: MAP_PRESETS
+    });
+});
+
+app.post('/api/ai/suggest-roles', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const suggestions = suggestComplementaryRoles(req.body || {});
+        res.json({ suggestions });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/ai/generate-briefing', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const text = generateBriefingSuggestion(req.body || {});
+        res.json({ text });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/validate', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const result = validateScenario(req.body || {});
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ isValid: false, errors: [err.message] });
+    }
+});
+
+app.post('/api/scenarios', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const scenarioData = req.body;
+        if (!scenarioData || !scenarioData.id || !scenarioData.name) {
+            return res.status(400).json({ error: "Scenario 'id' and 'name' are required" });
+        }
+        const existing = scenarioService.getScenario(scenarioData.id, { useDraft: true });
+        if (existing) {
+            return res.status(409).json({ error: `Scenario '${scenarioData.id}' already exists` });
+        }
+        const guideHtml = scenarioData._guideHtml || null;
+        const saved = scenarioService.saveScenario(scenarioData, {
+            guideHtml,
+            isBuiltin: 0,
+            asDraft: true
+        });
+        res.status(201).json(saved);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 app.get('/api/scenarios/:id', (req, res) => {
-    const scenario = scenarioService.getScenario(req.params.id);
+    const useDraft = req.query.draft === 'true';
+    const scenario = scenarioService.getScenario(req.params.id, { useDraft });
     if (!scenario) return res.status(404).json({ error: 'Scenario not found' });
     res.json(scenario);
+});
+
+app.put('/api/scenarios/:id/draft', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const scenarioData = { ...req.body, id: req.params.id };
+        const guideHtml = scenarioData._guideHtml !== undefined ? scenarioData._guideHtml : null;
+        const saved = scenarioService.saveScenario(scenarioData, {
+            guideHtml,
+            asDraft: true
+        });
+        res.json(saved);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/:id/publish', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        if (req.body && req.body.id) {
+            const guideHtml = req.body._guideHtml !== undefined ? req.body._guideHtml : null;
+            scenarioService.saveScenario({ ...req.body, id: req.params.id }, { guideHtml, asDraft: true });
+        }
+        const published = scenarioService.publishScenario(req.params.id);
+        res.json(published);
+    } catch (err) {
+        res.status(400).json({
+            error: err.message,
+            validationErrors: err.validationErrors || [err.message]
+        });
+    }
+});
+
+app.post('/api/scenarios/:id/discard-draft', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const restored = scenarioService.discardDraft(req.params.id);
+        res.json(restored);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/:id/clone', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const { newId, newName } = req.body || {};
+        const cloned = scenarioService.cloneScenario(req.params.id, { newId, newName });
+        res.status(201).json(cloned);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/:id/reset-builtin', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const reset = scenarioService.resetToBuiltin(req.params.id);
+        res.json(reset);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/:id/test-session', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const id = req.params.id;
+        if (req.body && req.body.id) {
+            const guideHtml = req.body._guideHtml !== undefined ? req.body._guideHtml : null;
+            scenarioService.saveScenario({ ...req.body, id }, { guideHtml, asDraft: true });
+        }
+        const draftScenario = scenarioService.getScenario(id, { useDraft: true });
+        if (!draftScenario) {
+            return res.status(404).json({ error: `Scenario '${id}' not found` });
+        }
+
+        const suffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+        const testGameId = `TEST-${suffix}`;
+        const engine = gameManager.createGame(testGameId, `[TEST] ${draftScenario.name}`);
+        if (!engine) {
+            return res.status(500).json({ error: 'Could not allocate test game session' });
+        }
+        engine.useDraft = true;
+        engine.isTestSession = true;
+        engine.createLobby(id, {}, true);
+
+        res.status(201).json({
+            gameId: testGameId,
+            scenarioId: id,
+            redirectUrl: `/facilitator?game=${encodeURIComponent(testGameId)}`
+        });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
 app.get('/api/scenarios/:id/export', (req, res) => {
@@ -257,6 +401,20 @@ app.post('/api/bug-reports/github-config', async (req, res) => {
     io.emit('bug_reporting_github_updated', status);
     io.emit('bug_sync_status_updated', bugReports.syncStatus);
     res.json({ ...status, syncStatus: bugReports.syncStatus });
+});
+
+app.patch('/api/bug-reports/:id', async (req, res) => {
+    try {
+        const { status } = req.body;
+        const report = await bugReports.updateReportStatus(req.params.id, status);
+        if (!report) {
+            return res.status(404).json({ error: 'Report not found' });
+        }
+        io.emit('bug_report_updated', report);
+        res.json(report);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
 const setupSockets = require('./src/socket');

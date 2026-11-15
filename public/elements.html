@@ -6,6 +6,7 @@
   <title>Crisis UI Elements & Component Library</title>
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/editor.css">
   <style>
     /* Catalog-specific presentation wrapper */
     .catalog-layout {
@@ -274,6 +275,7 @@
         <a href="#dialogs">Dialogs & Overlays</a>
         <a href="#badges">Badges & Indicators</a>
         <a href="#toasts">Toasts & Feedback</a>
+        <a href="#scenario-editor">Scenario Editor & Canvas</a>
         <a href="#utilities">Utility Classes</a>
       </nav>
     </aside>
@@ -918,7 +920,137 @@
         </div>
       </section>
 
-      <!-- SECTION 11: Utility Classes Quick Reference -->
+      <!-- SECTION 11: Scenario Editor & Visio Decision Canvas -->
+      <section id="scenario-editor" class="catalog-section">
+        <div class="catalog-section-title">Scenario Editor & Visio Decision Canvas</div>
+        <div class="catalog-section-desc">Defined in <code>public/css/editor.css</code>. Components for the multi-tab Scenario Editor, Draft vs. Published status badges, Quick-Add Asset Cards, and Visio-style Event & Decision flow nodes.</div>
+
+        <!-- Status Pills & Auto-Save Indicators -->
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-label">Draft / Published Status Pills & Auto-Save Indicator</span>
+            <span class="catalog-item-usage">Used in Admin Console and Scenario Editor header</span>
+          </div>
+          <div class="catalog-preview">
+            <span class="editor-status-pill published">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Published</span>
+            </span>
+            <span class="editor-status-pill draft-pending">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Draft Changes Pending</span>
+            </span>
+            <span class="editor-status-pill unpublished">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Unpublished Draft</span>
+            </span>
+            <span class="autosave-indicator saved">
+              <span class="autosave-dot"></span>
+              <span>All changes saved to draft</span>
+            </span>
+          </div>
+          <div class="catalog-code">
+            <button type="button" class="catalog-copy-btn">Copy HTML</button>
+            <pre>&lt;span class="editor-status-pill published"&gt;Published&lt;/span&gt;
+&lt;span class="editor-status-pill draft-pending"&gt;Draft Changes Pending&lt;/span&gt;
+&lt;span class="editor-status-pill unpublished"&gt;Unpublished Draft&lt;/span&gt;
+&lt;span class="autosave-indicator saved"&gt;
+  &lt;span class="autosave-dot"&gt;&lt;/span&gt;
+  &lt;span&gt;All changes saved to draft&lt;/span&gt;
+&lt;/span&gt;</pre>
+          </div>
+        </div>
+
+        <!-- Visio Canvas Event Node & Decision Branch Pills -->
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-label">Visio Decision Canvas Event Node</span>
+            <span class="catalog-item-usage">Interactive graph node in <code>editor-canvas.js</code> with input/output ports and decision branch pills</span>
+          </div>
+          <div class="catalog-preview" style="min-height: 220px; position: relative; background: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px); background-size: 20px 20px;">
+            <div class="canvas-node selected" style="position: relative; left: 0; top: 0;">
+              <div class="canvas-port in" title="Incoming trigger"></div>
+              <div class="canvas-port out" title="Outgoing triggerEvents"></div>
+              <div class="canvas-node-header">
+                <span class="canvas-node-id">ev_airspace_incursion</span>
+                <div class="canvas-node-badges">
+                  <span class="canvas-badge root">Initial</span>
+                  <span class="canvas-badge decision">Decision</span>
+                </div>
+              </div>
+              <div class="canvas-node-body">
+                <div class="canvas-node-title">Unidentified Radar Contact Enters Sector 4</div>
+                <div class="canvas-node-meta">
+                  <span>Delay: 1t</span>
+                  <span>Prob: 100%</span>
+                  <span>2 asset update(s)</span>
+                </div>
+              </div>
+              <div class="canvas-node-decisions">
+                <div class="canvas-decision-prompt">Authorize QRA Intercept Rules of Engagement?</div>
+                <div class="canvas-option-pill">
+                  <span class="canvas-option-text">1. Scramble Typhoon QRA (Visual ID)</span>
+                  <span class="canvas-option-target">→ 1</span>
+                  <span class="canvas-option-port"></span>
+                </div>
+                <div class="canvas-option-pill">
+                  <span class="canvas-option-text">2. Issue Ground-to-Air Warning Only</span>
+                  <span class="canvas-option-target">→ 1</span>
+                  <span class="canvas-option-port"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-code">
+            <button type="button" class="catalog-copy-btn">Copy HTML</button>
+            <pre>&lt;div class="canvas-node selected"&gt;
+  &lt;div class="canvas-port in"&gt;&lt;/div&gt;
+  &lt;div class="canvas-port out"&gt;&lt;/div&gt;
+  &lt;div class="canvas-node-header"&gt;
+    &lt;span class="canvas-node-id"&gt;ev_airspace_incursion&lt;/span&gt;
+    &lt;div class="canvas-node-badges"&gt;
+      &lt;span class="canvas-badge root"&gt;Initial&lt;/span&gt;
+      &lt;span class="canvas-badge decision"&gt;Decision&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="canvas-node-body"&gt;
+    &lt;div class="canvas-node-title"&gt;Unidentified Radar Contact Enters Sector 4&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+
+        <!-- Quick-Add Asset Preset Card -->
+        <div class="catalog-item">
+          <div class="catalog-item-header">
+            <span class="catalog-item-label">Quick-Add Asset Preset Card</span>
+            <span class="catalog-item-usage">Used in Setup Wizard Step 4 and Map Assets Tab sidebar</span>
+          </div>
+          <div class="catalog-preview">
+            <div class="preset-asset-card" style="width: 280px;">
+              <img class="preset-asset-thumb" src="/api/images/preset_typhoon_qra/file" alt="Typhoon QRA Flight" onerror="this.style.display='none'">
+              <div class="preset-asset-info">
+                <div class="preset-asset-name">Typhoon QRA Flight</div>
+                <div class="preset-asset-cat">Military • Air Defense</div>
+              </div>
+              <span class="preset-asset-add">+ Add</span>
+            </div>
+          </div>
+          <div class="catalog-code">
+            <button type="button" class="catalog-copy-btn">Copy HTML</button>
+            <pre>&lt;div class="preset-asset-card"&gt;
+  &lt;img class="preset-asset-thumb" src="/api/images/preset_typhoon_qra/file" alt="Typhoon QRA Flight"&gt;
+  &lt;div class="preset-asset-info"&gt;
+    &lt;div class="preset-asset-name"&gt;Typhoon QRA Flight&lt;/div&gt;
+    &lt;div class="preset-asset-cat"&gt;Military&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;span class="preset-asset-add"&gt;+ Add&lt;/span&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 12: Utility Classes Quick Reference -->
       <section id="utilities" class="catalog-section">
         <div class="catalog-section-title">Utility Classes Reference</div>
         <div class="catalog-section-desc">Unified helpers in <code>style.css</code>. Always prefer these over writing custom styles.</div>

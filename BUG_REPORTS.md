@@ -6,13 +6,219 @@
 ## Status Overview
 - **System Active:** 🟢 Enabled
 - **GitHub Sync:** 🟢 Active (wrightjamie/crisis)
-- **Total Reports:** 13
-- **Status:** 🟢 3 Open | 🟡 0 In Progress | 🟣 10 Resolved
-- **Breakdown:** 🐛 13 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
+- **Total Reports:** 35
+- **Status:** 🟢 3 Open | 🟡 0 In Progress | 🟣 32 Resolved
+- **Breakdown:** 🐛 35 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
 
 ---
 
 ## Reports List
+
+### [BR-35] 🐛 Bug: Why aren't manual actions part of the canvas?
+THey should be...
+- **Reported:** 2026-11-14 22:51:21 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #85](https://github.com/wrightjamie/crisis/issues/85)
+- **Status:** 🟣 **Resolved**
+
+> Why aren't manual actions part of the canvas?
+> THey should be available as a result of activities on the tree
+
+---
+
+### [BR-34] 🐛 Bug: On the Air Power scenario we have a comprehensive guide, but...
+- **Reported:** 2026-11-14 22:50:31 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #84](https://github.com/wrightjamie/crisis/issues/84)
+- **Status:** 🟣 **Resolved**
+
+> On the Air Power scenario we have a comprehensive guide, but there's nothing in the facilitator guide box
+
+---
+
+### [BR-33] 🐛 Bug: Clicking on an asset should scroll to it
+- **Reported:** 2026-11-14 22:47:56 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #83](https://github.com/wrightjamie/crisis/issues/83)
+- **Status:** 🟣 **Resolved**
+
+> Clicking on an asset should scroll to it
+
+---
+
+### [BR-32] 🐛 Bug: Asset cards should be collapsable
+- **Reported:** 2026-11-14 22:47:09 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #82](https://github.com/wrightjamie/crisis/issues/82)
+- **Status:** 🟣 **Resolved**
+
+> Asset cards should be collapsable
+
+---
+
+### [BR-31] 🐛 Bug: The quick add palette takes up too much space. Could it be i...
+- **Reported:** 2026-11-14 22:42:16 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #81](https://github.com/wrightjamie/crisis/issues/81)
+- **Status:** 🟣 **Resolved**
+
+> The quick add palette takes up too much space. Could it be in a popover?
+
+---
+
+### [BR-30] 🐛 Bug: Rather than having a bar down the left hand side of roles an...
+- **Reported:** 2026-11-14 22:28:50 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #80](https://github.com/wrightjamie/crisis/issues/80)
+- **Status:** 🟣 **Resolved**
+
+> Rather than having a bar down the left hand side of roles and scores, let's instead have a 'blank' card at the bottom of the list.
+> Preset roles should be an option at the top of the page
+
+---
+
+### [BR-29] 🐛 Bug: The AI text for each role is terrible. I'm not sure why. Her...
+- **Reported:** 2026-11-14 22:25:14 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #79](https://github.com/wrightjamie/crisis/issues/79)
+- **Status:** 🟣 **Resolved**
+
+> The AI text for each role is terrible. I'm not sure why. Here is the brief developed for the PM:
+> CONFIDENTIAL BRIEFING — PRIME MINISTER: Represent your directorate within the Caribbean Hurricane: Ticking Clock command cell. Prioritize operational continuity, evaluate intelligence injects within your jurisdiction, and advise the chair on risk-adjusted response options.
+> It should just say what the role is
+
+---
+
+### [BR-28] 🐛 Bug: Does the user need to see or edit the slug of the scenario? ...
+- **Reported:** 2026-11-14 22:23:43 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #78](https://github.com/wrightjamie/crisis/issues/78)
+- **Status:** 🟣 **Resolved**
+
+> Does the user need to see or edit the slug of the scenario? Should it not just be a lower case slug?
+
+---
+
+### [BR-27] 🐛 Bug: The font size of the edit and export buttons on the scenario...
+- **Reported:** 2026-11-14 22:22:42 UTC
+- **Reporter:** System Admin (`admin`) | [GitHub #77](https://github.com/wrightjamie/crisis/issues/77)
+- **Status:** 🟣 **Resolved**
+
+> The font size of the edit and export buttons on the scenario list is too big - it isn't consistent.
+> Can we also go for a more obvious button choice
+
+---
+
+### [BR-26] 🐛 Bug: In the event editor, let's have triggered events and decisio...
+- **Reported:** 2026-11-14 20:45:20 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #76](https://github.com/wrightjamie/crisis/issues/76)
+- **Status:** 🟣 **Resolved**
+
+> In the event editor, let's have triggered events and decisions collapsable
+
+---
+
+### [BR-25] 🐛 Bug: Option IDs should be automatic and hidden from the user
+- **Reported:** 2026-11-14 20:19:55 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #75](https://github.com/wrightjamie/crisis/issues/75)
+- **Status:** 🟣 **Resolved**
+
+> Option IDs should be automatic and hidden from the user
+
+---
+
+### [BR-24] 🐛 Bug: The sound cue should be from a drop down - there are only a ...
+- **Reported:** 2026-11-14 20:18:17 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #74](https://github.com/wrightjamie/crisis/issues/74)
+- **Status:** 🟣 **Resolved**
+
+> The sound cue should be from a drop down - there are only a small number of options
+
+---
+
+### [BR-23] 🐛 Bug: Give the General Narrative Event more vertical space
+- **Reported:** 2026-11-14 20:17:53 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #73](https://github.com/wrightjamie/crisis/issues/73)
+- **Status:** 🟣 **Resolved**
+
+> Give the General Narrative Event more vertical space
+
+---
+
+### [BR-22] 🐛 Bug: I have an auto-save error - but no reason why.
+- **Reported:** 2026-11-14 20:16:21 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #72](https://github.com/wrightjamie/crisis/issues/72)
+- **Status:** 🟣 **Resolved**
+
+> I have an auto-save error - but no reason why.
+
+---
+
+### [BR-21] 🐛 Bug: In the asset editor, provide a list of pre-defined assets th...
+- **Reported:** 2026-11-14 20:15:41 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #71](https://github.com/wrightjamie/crisis/issues/71)
+- **Status:** 🟣 **Resolved**
+
+> In the asset editor, provide a list of pre-defined assets that can then be edited when added
+
+---
+
+### [BR-20] 🐛 Bug: Can we add an AI button alongside most briefing inputs in th...
+- **Reported:** 2026-11-14 20:13:58 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #70](https://github.com/wrightjamie/crisis/issues/70)
+- **Status:** 🟣 **Resolved**
+
+> Can we add an AI button alongside most briefing inputs in the editor.
+
+---
+
+### [BR-19] 🐛 Bug: Add re-ordering of scores
+- **Reported:** 2026-11-14 20:12:15 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #69](https://github.com/wrightjamie/crisis/issues/69)
+- **Status:** 🟣 **Resolved**
+
+> Add re-ordering of scores
+
+---
+
+### [BR-18] 🐛 Bug: It is unclear what the unit '/5' means
+- **Reported:** 2026-11-14 20:11:58 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #68](https://github.com/wrightjamie/crisis/issues/68)
+- **Status:** 🟣 **Resolved**
+
+> It is unclear what the unit '/5' means
+
+---
+
+### [BR-17] 🐛 Bug: There's no theatre presets
+- **Reported:** 2026-11-14 20:10:53 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #67](https://github.com/wrightjamie/crisis/issues/67)
+- **Status:** 🟣 **Resolved**
+
+> There's no theatre presets
+
+---
+
+### [BR-16] 🐛 Bug: The map is asking for an API?
+- **Reported:** 2026-11-14 20:10:21 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #66](https://github.com/wrightjamie/crisis/issues/66)
+- **Status:** 🟣 **Resolved**
+
+> The map is asking for an API?
+
+---
+
+### [BR-15] 🐛 Bug: Add re-order of the roles.
+- **Reported:** 2026-11-14 20:10:06 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #65](https://github.com/wrightjamie/crisis/issues/65)
+- **Status:** 🟣 **Resolved**
+
+> Add re-order of the roles.
+
+---
+
+### [BR-14] 🐛 Bug: Let's put the role bundle on the left, not centre.
+The role ...
+- **Reported:** 2026-11-14 20:09:51 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #64](https://github.com/wrightjamie/crisis/issues/64)
+- **Status:** 🟣 **Resolved**
+
+> Let's put the role bundle on the left, not centre.
+> The role bundle drop down is slightly taller than the button - check the element heights are consistent
+
+---
 
 ### [BR-13] 🐛 Bug: As we add more images, we probably need a pagination system....
 - **Reported:** 2026-11-14 16:59:33 UTC
