@@ -10,24 +10,25 @@
 
     const DEFAULT_PRESETS = {
         assets: [
-            { presetId: 'water_treatment_plant', category: 'Infrastructure', name: 'Water Treatment Plant', imageId: 'evt_water_plant', imageUrl: '/scenarios/contaminated_water/images/water_plant.png', state: 'operational', tags: ['infrastructure', 'water', 'utility'], briefing: 'Primary municipal water filtration and treatment facility.' },
-            { presetId: 'power_substation', category: 'Infrastructure', name: 'Regional Power Substation', imageId: 'evt_grid_failure', imageUrl: '/scenarios/cyber_attack/images/grid_failure.png', state: 'operational', tags: ['infrastructure', 'energy', 'grid'], briefing: 'High-voltage transmission substation supplying critical municipal power.' },
-            { presetId: 'pumping_station', category: 'Infrastructure', name: 'Main Pumping Station', imageId: 'evt_pipe_burst', imageUrl: '/scenarios/contaminated_water/images/pipe_burst.png', state: 'operational', tags: ['infrastructure', 'water'], briefing: 'High-capacity distribution pumping station.' },
-            { presetId: 'Port_Terminal', category: 'Infrastructure', name: 'Commercial Port Terminal', imageId: 'evt_strait_map', imageUrl: '/scenarios/strait_crisis/images/strait_map.png', state: 'operational', tags: ['infrastructure', 'maritime', 'logistics'], briefing: 'Deep-water container and energy import terminal.' },
-            { presetId: 'general_hospital', category: 'Emergency', name: 'Regional General Hospital', imageId: 'evt_hospital_crowding', imageUrl: '/scenarios/contaminated_water/images/hospital_crowding.png', state: 'operational', tags: ['medical', 'emergency', 'civilian'], briefing: 'Major acute care hospital and trauma center.' },
-            { presetId: 'emergency_depot', category: 'Emergency', name: 'Emergency Logistics Depot', imageId: 'evt_water_trucks', imageUrl: '/scenarios/contaminated_water/images/water_trucks.png', state: 'operational', tags: ['logistics', 'emergency', 'supply'], briefing: 'Strategic stockpile and emergency distribution hub.' },
-            { presetId: 'hazmat_containment', category: 'Emergency', name: 'HAZMAT Containment Unit', imageId: 'evt_ecoli_lab', imageUrl: '/scenarios/contaminated_water/images/ecoli_lab.png', state: 'operational', tags: ['emergency', 'scientific', 'hazmat'], briefing: 'Mobile biological and chemical testing and decontamination unit.' },
-            { presetId: 'police_cordon', category: 'Emergency', name: 'Civil Security Cordon', imageId: 'evt_civil_unrest', imageUrl: '/scenarios/cyber_attack/images/civil_unrest.png', state: 'deployed', tags: ['security', 'police', 'civilian'], briefing: 'Public order perimeter and traffic control checkpoint.' },
-            { presetId: 'naval_task_group', category: 'Military & Naval', name: 'Carrier Strike Task Group', imageId: 'evt_naval_standoff', imageUrl: '/scenarios/strait_crisis/images/naval_standoff.png', state: 'deployed', tags: ['military', 'naval', 'maritime'], briefing: 'Surface combatants and fleet air defence task group.' },
-            { presetId: 'guided_missile_destroyer', category: 'Military & Naval', name: 'Air-Defence Destroyer', imageId: 'evt_drone_swarm', imageUrl: '/scenarios/strait_crisis/images/drone_swarm.png', state: 'operational', tags: ['military', 'naval', 'air-defence'], briefing: 'Forward-deployed surface warship providing radar picket and escort.' },
-            { presetId: 'coastal_missile_battery', category: 'Military & Naval', name: 'Coastal Anti-Ship Battery', imageId: 'evt_tanker_seizure', imageUrl: '/scenarios/strait_crisis/images/tanker_seizure.png', state: 'operational', tags: ['military', 'threat', 'coastal'], briefing: 'Land-based mobile anti-ship cruise missile battery.' },
-            { presetId: 'merchant_convoy', category: 'Military & Naval', name: 'Energy Tanker Convoy', imageId: 'evt_oil_terminal_fire', imageUrl: '/scenarios/strait_crisis/images/oil_terminal_fire.png', state: 'operational', tags: ['maritime', 'energy', 'civilian'], briefing: 'Commercial LNG and crude oil tanker group transiting chokepoint.' },
-            { presetId: 'cyber_soc', category: 'Command & Comms', name: 'National Cyber Operations Centre', imageId: 'evt_ransomware', imageUrl: '/scenarios/cyber_attack/images/ransomware_screen.png', state: 'operational', tags: ['cyber', 'command', 'intelligence'], briefing: '24/7 network defence and threat attribution headquarters.' },
-            { presetId: 'data_center', category: 'Command & Comms', name: 'Core Government Data Centre', imageId: 'evt_data_breach', imageUrl: '/scenarios/cyber_attack/images/data_breach.png', state: 'operational', tags: ['cyber', 'infrastructure', 'comms'], briefing: 'Primary cloud infrastructure and secure communications hub.' },
-            { presetId: 'emergency_broadcast_hub', category: 'Command & Comms', name: 'Emergency Broadcast Centre', imageId: 'evt_press_conference', imageUrl: '/scenarios/contaminated_water/images/press_conference.png', state: 'operational', tags: ['media', 'comms', 'public'], briefing: 'National public alert and media briefing transmission centre.' },
-            { presetId: 'command_hq', category: 'Command & Comms', name: 'COBR / Joint Command HQ', imageId: 'evt_emergency_council', imageUrl: '/scenarios/contaminated_water/images/emergency_council.png', state: 'operational', tags: ['command', 'government'], briefing: 'Central inter-agency crisis coordination bunker.' },
-            { presetId: 'reservoir_dam', category: 'Environment', name: 'Upstream Reservoir & Dam', imageId: 'evt_river_dumping', imageUrl: '/scenarios/contaminated_water/images/river_dumping.png', state: 'operational', tags: ['environment', 'water', 'infrastructure'], briefing: 'Primary raw water catchment reservoir.' },
-            { presetId: 'industrial_chemical_site', category: 'Environment', name: 'Petrochemical Refinery', imageId: 'evt_oil_terminal_fire', imageUrl: '/scenarios/strait_crisis/images/oil_terminal_fire.png', state: 'operational', tags: ['industrial', 'energy', 'hazmat'], briefing: 'High-hazard coastal chemical processing and storage complex.' }
+            { presetId: 'water_treatment', category: 'Infrastructure', name: 'Water Treatment Plant', imageId: 'evt_water_plant', imageUrl: '/images/library/evt_water_plant.jpg', state: 'operational', tags: ['infrastructure', 'civilian'], briefing: 'Primary municipal water treatment facility. Critical for public health and sanitation.' },
+            { presetId: 'power_substation', category: 'Infrastructure', name: 'Power Substation Alpha', imageId: 'substation_alpha', imageUrl: '/images/library/substation_alpha.jpg', state: 'operational', tags: ['infrastructure', 'grid'], briefing: 'High-voltage power routing hub supplying the metropolitan sector.' },
+            { presetId: 'national_grid', category: 'Infrastructure', name: 'National Grid Control', imageId: 'national_grid', imageUrl: '/images/library/national_grid.png', state: 'operational', tags: ['civilian', 'infrastructure'], briefing: 'Central transmission control centre balancing regional electricity and gas supply.' },
+            { presetId: 'regional_airport', category: 'Infrastructure', name: 'International Airport', imageId: 'bvi_airport', imageUrl: '/images/library/bvi_airport.jpg', state: 'operational', tags: ['infrastructure', 'transport'], briefing: 'Primary regional aviation hub for civilian evacuation and relief airlifts.' },
+            { presetId: 'gov_hq', category: 'Infrastructure', name: 'Government House', imageId: 'bvi_gov_house', imageUrl: '/images/library/bvi_gov_house.jpg', state: 'operational', tags: ['civilian', 'government'], briefing: 'Seat of executive administration and emergency coordination.' },
+            { presetId: 'main_hospital', category: 'Emergency', name: 'Metro General Hospital', imageId: 'evt_hospital_power_failure', imageUrl: '/images/library/evt_hospital_power_failure.jpg', state: 'operational', tags: ['infrastructure', 'ems', 'medical'], briefing: 'Regional Level-1 trauma center and emergency triage hub.' },
+            { presetId: 'police_precinct', category: 'Emergency', name: 'Central Police Precinct', imageId: 'evt_precinct_vulnerable', imageUrl: '/images/library/evt_precinct_vulnerable.jpg', state: 'operational', tags: ['security', 'emergency'], briefing: 'Command headquarters for rapid response and civil order units.' },
+            { presetId: 'rescue_heli', category: 'Emergency', name: 'Search & Rescue Helicopter', imageId: 'rescue_heli', imageUrl: '/images/library/rescue_heli.jpg', state: 'operational', tags: ['emergency', 'air'], briefing: 'Rotary-wing SAR unit ready for rapid deployment and medevac.' },
+            { presetId: 'nato_airbase', category: 'Military', name: 'Main Operating Airbase', imageId: 'nato_air_base', imageUrl: '/images/library/nato_air_base.png', state: 'operational', tags: ['military', 'airbase'], briefing: 'Hardened airbase with early-warning radar arrays and Quick Reaction Alert (QRA) hangars.' },
+            { presetId: 'typhoon_flight', category: 'Military', name: 'Eurofighter Typhoon Detachment', imageId: 'typhoon_aircraft', imageUrl: '/images/library/typhoon_aircraft.png', state: 'operational', tags: ['military', 'air', 'combat'], briefing: 'Multi-role fourth-generation combat aircraft on Quick Reaction Alert for airspace interception.' },
+            { presetId: 'air_mobility_hub', category: 'Military', name: 'Strategic Air Transport Hub', imageId: 'raf_brize_norton', imageUrl: '/images/library/raf_brize_norton.jpg', state: 'operational', tags: ['military', 'hub', 'mobility'], briefing: 'Main Operating Base for strategic airlift (C-17, A400M) and air-to-air refueling tankers.' },
+            { presetId: 'mech_brigade', category: 'Military', name: '72nd Mechanized Brigade', imageId: 'brigade_alpha', imageUrl: '/images/library/brigade_alpha.jpg', state: 'operational', tags: ['military', 'frontline'], briefing: 'Armored and mechanized infantry formation holding the primary defensive sector.' },
+            { presetId: 'supply_depot', category: 'Military', name: 'Forward Logistics & Supply Hub', imageId: 'us_v_corps', imageUrl: '/images/library/us_v_corps.png', state: 'operational', tags: ['military', 'logistics'], briefing: 'Central ammunition, fuel, and medical sustainment depot.' },
+            { presetId: 'naval_base', category: 'Naval', name: 'Strategic Naval Base', imageId: 'hmnb_clyde', imageUrl: '/images/library/hmnb_clyde.png', state: 'operational', tags: ['military', 'naval'], briefing: 'Deep-water naval operating base supporting submarine and surface fleet deployments.' },
+            { presetId: 'carrier_group', category: 'Naval', name: 'Carrier Strike Task Force', imageId: 'as_truman', imageUrl: '/images/library/as_truman.png', state: 'operational', tags: ['military', 'naval'], briefing: 'Forward-deployed naval task force providing maritime interdiction and air projection.' },
+            { presetId: 'amphibious_ship', category: 'Naval', name: 'Amphibious Support Vessel', imageId: 'rfa_mounts_bay', imageUrl: '/images/library/rfa_mounts_bay.jpg', state: 'operational', tags: ['naval', 'logistics'], briefing: 'Landing ship dock capable of offloading heavy engineering equipment and disaster relief supplies.' },
+            { presetId: 'sigint_station', category: 'Intelligence', name: 'GCHQ / SIGINT Ground Station', imageId: 'gchq_bude', imageUrl: '/images/library/gchq_bude.png', state: 'operational', tags: ['intel', 'cyber'], briefing: 'Satellite ground station and cyber telemetry interception facility.' },
+            { presetId: 'isr_wing', category: 'Intelligence', name: 'ISR Reconnaissance Wing', imageId: 'raf_waddington', imageUrl: '/images/library/raf_waddington.jpg', state: 'operational', tags: ['intel', 'isr', 'air'], briefing: 'Intelligence, Surveillance, and Reconnaissance wing operating SIGINT and remotely piloted aircraft.' },
+            { presetId: 'drone_recon', category: 'Intelligence', name: 'Tactical Drone Reconnaissance Unit', imageId: 'drone_squad', imageUrl: '/images/library/drone_squad.jpg', state: 'operational', tags: ['drone', 'recon'], briefing: 'Unmanned aerial tactical reconnaissance squad providing real-time battlefield overwatch.' }
         ],
         roles: {
             bundles: [
@@ -1053,11 +1054,12 @@
         const jitterLat = (Math.random() - 0.5) * 0.025;
         const jitterLng = (Math.random() - 0.5) * 0.025;
 
+        const imgKey = preset.imageId || preset.image || '';
         const newAsset = {
             id: `${preset.presetId.toLowerCase()}_${scenario.assets.length + 1}`,
             name: preset.name,
-            image: preset.imageId,
-            imageId: preset.imageId,
+            image: imgKey,
+            imageId: imgKey,
             location: [+(mapCenter[0] + jitterLat).toFixed(4), +(mapCenter[1] + jitterLng).toFixed(4)],
             state: preset.state || 'operational',
             tags: [...(preset.tags || [])],
@@ -1093,15 +1095,18 @@
         const palette = document.getElementById('quick-assets-palette');
         if (!palette || !Array.isArray(presets.assets)) return;
 
-        palette.innerHTML = presets.assets.map(p => `
+        palette.innerHTML = presets.assets.map(p => {
+            const rawUrl = p.imageUrl || (window.EditorImagePicker ? window.EditorImagePicker.resolveImageUrl(p.imageId || p.image) : '') || '/images/favicon.png';
+            return `
             <button type="button" class="quick-asset-card" data-preset-id="${escapeHtml(p.presetId)}" title="Click to add ${escapeHtml(p.name)}">
-                <img src="${escapeHtml(p.imageUrl)}" alt="" class="quick-asset-thumb" width="36" height="36" loading="lazy">
+                <img src="${escapeHtml(rawUrl)}" alt="" class="quick-asset-thumb" width="36" height="36" loading="lazy" onerror="this.onerror=null;this.src='/images/favicon.png';">
                 <div class="quick-asset-meta">
                     <div class="quick-asset-name">${escapeHtml(p.name)}</div>
-                    <div class="quick-asset-cat">${escapeHtml(p.category)}</div>
+                    <div class="quick-asset-cat">${escapeHtml(p.category || 'Asset')}</div>
                 </div>
             </button>
-        `).join('');
+        `;
+        }).join('');
 
         palette.querySelectorAll('.quick-asset-card').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1432,33 +1437,181 @@
             });
         }
 
-        // Variant Axes
+        // Variant Axes (BR-37: Interactive Axis & Option Manager)
         const axesContainer = document.getElementById('variant-axes-container');
         if (axesContainer) {
             const axes = scenario.variantAxes || [];
-            axesContainer.innerHTML = axes.map((ax, idx) => `
-                <div class="editor-item-card">
+            axesContainer.innerHTML = axes.map((ax, aIdx) => {
+                const options = Array.isArray(ax.options) ? ax.options : [];
+                return `
+                <div class="editor-item-card" data-axis-idx="${aIdx}">
                     <div class="flex-between items-center mb-1">
-                        <code>${escapeHtml(ax.id)}</code>
-                        <button type="button" class="btn btn-danger text-xs btn-del-axis" data-idx="${idx}">${renderIcon('trash', 12)}</button>
+                        <span class="inline-flex items-center gap-xs">
+                            <span class="text-xs text-bold">Axis #${aIdx + 1}:</span>
+                            <code>${escapeHtml(ax.id || 'axis_' + (aIdx + 1))}</code>
+                        </span>
+                        <button type="button" class="btn btn-danger text-xs btn-del-axis" data-aidx="${aIdx}" title="Delete Axis">${renderIcon('trash', 12)} <span>Delete Axis</span></button>
                     </div>
-                    <div class="field-group" style="margin-bottom: 0.4rem;">
-                        <label>Axis Name</label>
-                        <input type="text" class="form-control text-xs axis-name-inp" data-idx="${idx}" value="${escapeHtml(ax.name || '')}">
+
+                    <div class="field-row">
+                        <div class="field-group" style="margin-bottom: 0.5rem;">
+                            <label>Axis Name *</label>
+                            <input type="text" class="form-control text-xs axis-name-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.name || '')}" placeholder="e.g. Initial Storm Intensity">
+                        </div>
+                        <div class="field-group" style="margin-bottom: 0.5rem;">
+                            <label>Axis ID *</label>
+                            <input type="text" class="form-control text-xs axis-id-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.id || '')}" placeholder="e.g. storm_intensity">
+                        </div>
                     </div>
-                    <div class="text-xs text-muted">Options: ${(ax.options || []).map(o => escapeHtml(o.name)).join(', ') || 'None'}</div>
+
+                    <!-- Axis Options -->
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.65rem; margin-top: 0.35rem;">
+                        <div class="flex-between items-center mb-xs">
+                            <label class="text-xs text-bold">Condition Options (${options.length})</label>
+                            <button type="button" class="btn btn-secondary text-xs btn-add-axis-option" data-aidx="${aIdx}">+ Add Option</button>
+                        </div>
+
+                        <div class="editor-item-list" style="gap: 0.5rem;">
+                            ${options.map((opt, oIdx) => {
+                                const scoreSummary = opt.scoreModifiers ? Object.entries(opt.scoreModifiers).map(([k, v]) => `${k}:${v}`).join(', ') : '';
+                                return `
+                                    <div class="editor-item-card" style="padding: 0.55rem; background: var(--bg-primary);" data-axis-idx="${aIdx}" data-opt-idx="${oIdx}">
+                                        <div class="field-row" style="margin-bottom: 0.35rem; align-items: flex-end;">
+                                            <div class="field-group" style="margin-bottom: 0;">
+                                                <label class="text-xs">Option Name *</label>
+                                                <input type="text" class="form-control text-xs opt-name-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.name || '')}" placeholder="e.g. Severe Storm">
+                                            </div>
+                                            <div class="field-group" style="margin-bottom: 0;">
+                                                <label class="text-xs">Option ID *</label>
+                                                <input type="text" class="form-control text-xs opt-id-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.id || '')}" placeholder="e.g. severe">
+                                            </div>
+                                            <button type="button" class="btn btn-danger text-xs btn-del-opt" data-aidx="${aIdx}" data-oidx="${oIdx}" title="Remove Option" style="height: 32px; padding: 0 0.5rem;">${renderIcon('trash', 12)}</button>
+                                        </div>
+
+                                        <div class="field-group" style="margin-bottom: 0.35rem;">
+                                            <label class="text-xs">Player Briefing Text</label>
+                                            <textarea class="form-control text-xs opt-briefing-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" rows="2" placeholder="Briefing notes shown to players when this variant condition is active...">${escapeHtml(opt.briefingText || '')}</textarea>
+                                        </div>
+
+                                        <div class="field-group" style="margin-bottom: 0;">
+                                            <label class="text-xs">Score Modifiers (e.g. public_panic:1, emergency_capacity:-1)</label>
+                                            <input type="text" class="form-control text-xs opt-scores-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(scoreSummary)}" placeholder="metric:delta, metric2:delta">
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('') || '<div class="text-xs text-muted">No options configured for this axis.</div>'}
+                        </div>
+                    </div>
                 </div>
-            `).join('') || '<div class="text-xs text-muted">No starting variant axes configured.</div>';
+            `;
+            }).join('') || '<div class="text-xs text-muted">No starting variant axes configured.</div>';
 
             axesContainer.querySelectorAll('.axis-name-inp').forEach(inp => {
                 inp.addEventListener('input', () => {
-                    scenario.variantAxes[Number(inp.getAttribute('data-idx'))].name = inp.value;
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const ax = scenario.variantAxes[aIdx];
+                    if (!ax) return;
+                    ax.name = inp.value;
                     scheduleAutoSave();
                 });
             });
+
+            axesContainer.querySelectorAll('.axis-id-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const ax = scenario.variantAxes[aIdx];
+                    if (!ax) return;
+                    ax.id = slugifyId(inp.value, 'axis');
+                    scheduleAutoSave();
+                });
+            });
+
             axesContainer.querySelectorAll('.btn-del-axis').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    scenario.variantAxes.splice(Number(btn.getAttribute('data-idx')), 1);
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    scenario.variantAxes.splice(aIdx, 1);
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                    showToast('Variant axis removed', 'info');
+                });
+            });
+
+            axesContainer.querySelectorAll('.btn-add-axis-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const ax = scenario.variantAxes[aIdx];
+                    if (!ax) return;
+                    if (!Array.isArray(ax.options)) ax.options = [];
+                    const oNum = ax.options.length + 1;
+                    ax.options.push({
+                        id: `opt_${oNum}`,
+                        name: `Condition Option ${oNum}`,
+                        briefingText: '',
+                        scoreModifiers: {}
+                    });
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-name-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    opt.name = inp.value;
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-id-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    opt.id = slugifyId(inp.value, 'opt');
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-briefing-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    opt.briefingText = inp.value;
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-scores-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    const sc = {};
+                    inp.value.split(',').forEach(part => {
+                        const [k, v] = part.split(':').map(s => s.trim());
+                        if (k && v !== undefined && !isNaN(Number(v))) {
+                            sc[k] = Number(v);
+                        }
+                    });
+                    opt.scoreModifiers = sc;
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.btn-del-opt').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const oIdx = Number(btn.getAttribute('data-oidx'));
+                    const ax = scenario.variantAxes[aIdx];
+                    if (!ax || !ax.options) return;
+                    ax.options.splice(oIdx, 1);
                     renderAdvancedTab();
                     scheduleAutoSave();
                 });

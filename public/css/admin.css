@@ -270,7 +270,15 @@
     color: var(--text-primary);
 }
 
-/* Tagify Dark Theme Customization */
+/* Tagify Dark Theme Customization (BR-11) */
+:root {
+    --tagify-dd-color-primary: var(--accent-blue);
+    --tagify-dd-bg-color: var(--bg-secondary);
+    --tagify-dd-text-color: var(--text-primary);
+    --tagify-dd-item-pad: 0.4rem 0.75rem;
+    --tagify-dd-max-height: 240px;
+}
+
 .tag-filter-container {
     position: relative;
     display: flex;
@@ -288,6 +296,7 @@
     --tag-text-color: var(--accent-blue);
     --tag-text-color--edit: var(--text-primary);
     --tag-pad: 0.15rem 0.5rem;
+    --tag-border-radius: var(--radius-sm);
     --tag-inset-shadow-size: 1.1em;
     --tag-invalid-color: var(--accent-red);
     --tag-invalid-bg: rgba(239, 68, 68, 0.15);
@@ -390,22 +399,22 @@
 
 /* Tagify Suggestions Dropdown */
 .tagify__dropdown {
-    background-color: var(--bg-secondary) !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
     border-radius: var(--radius-sm);
     z-index: 1050;
     padding: 4px;
 }
 
 .tagify__dropdown__wrapper {
-    background: transparent !important;
-    border: none !important;
+    background: transparent;
+    border: none;
     max-height: 240px;
 }
 
 .tagify__dropdown__item {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
     padding: 0.4rem 0.75rem;
     font-size: 0.85rem;
     border-radius: var(--radius-sm);
@@ -415,18 +424,13 @@
 }
 
 .tagify__dropdown__item--active {
-    background-color: var(--accent-blue) !important;
-    color: #ffffff !important;
+    background-color: var(--accent-blue);
+    color: #ffffff;
 }
 
 .tagify__dropdown__item:hover:not(.tagify__dropdown__item--active) {
-    background-color: rgba(59, 130, 246, 0.2) !important;
-    color: var(--text-primary) !important;
-}
-
-.tagify__dropdown__item--active:hover {
-    background-color: var(--accent-blue) !important;
-    color: #ffffff !important;
+    background-color: rgba(59, 130, 246, 0.2);
+    color: var(--text-primary);
 }
 
 /* Scenario Table Action Buttons (BR-27) */

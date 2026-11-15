@@ -332,9 +332,11 @@
         btn.style.display = count > 0 ? 'inline-flex' : 'none';
     }
 
-    function renderImagesGrid(images) {
+    let imagePaginator = null;
+
+    function renderImageCardElements(images) {
         const grid = document.getElementById('images-grid');
-        document.getElementById('image-count-label').textContent = `${images.length} images`;
+        if (!grid) return;
 
         if (!images || images.length === 0) {
             grid.innerHTML = `<div class="text-center text-muted" style="grid-column: 1 / -1; padding: 3rem;">No images found.</div>`;
@@ -350,7 +352,7 @@
             return `
                 <div class="image-card" style="position: relative;">
                     ${baseBadge}
-                    <img src="${escapeHtml(img.file)}" alt="${escapeHtml(img.title || img.id)}" class="image-thumb" loading="lazy" onerror="this.src='/images/favicon.png'">
+                    <img src="${escapeHtml(img.file)}" alt="${escapeHtml(img.title || img.id)}" class="image-thumb" loading="lazy" onerror="this.onerror=null;this.src='/images/favicon.png'">
                     <div class="image-info">
                         <div class="image-title" title="${escapeHtml(img.title || img.id)}">${escapeHtml(img.title || img.id)}</div>
                         <div class="image-meta"><code>${escapeHtml(img.id)}</code></div>
@@ -359,6 +361,27 @@
                 </div>
             `;
         }).join('');
+    }
+
+    function renderImagesGrid(images, resetPage = false) {
+        const label = document.getElementById('image-count-label');
+        if (label) label.textContent = `${images.length} images`;
+
+        if (!imagePaginator && window.common?.createPaginator) {
+            imagePaginator = window.common.createPaginator({
+                items: images,
+                pageSize: 30,
+                containerEl: document.getElementById('admin-images-pagination'),
+                onPageChange: (pageItems) => {
+                    renderImageCardElements(pageItems);
+                }
+            });
+        } else if (imagePaginator) {
+            imagePaginator.setItems(images, resetPage);
+        }
+
+        const itemsToShow = imagePaginator ? imagePaginator.getPageItems() : images;
+        renderImageCardElements(itemsToShow);
     }
 
     // Filter Images
@@ -389,7 +412,7 @@
                 (img.description && img.description.toLowerCase().includes(query))
             );
         }
-        renderImagesGrid(filtered);
+        renderImagesGrid(filtered, true);
     }
 
     document.getElementById('image-search').addEventListener('input', filterImages);

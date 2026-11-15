@@ -230,6 +230,117 @@
             .replace(/'/g, '&#039;');
     }
 
+    // 10. Reusable Pagination Component (BR-13)
+    function createPaginator({
+        items = [],
+        pageSize = 24,
+        currentPage = 1,
+        containerEl = null,
+        onPageChange = null
+    } = {}) {
+        let _items = Array.isArray(items) ? items : [];
+        let _pageSize = Math.max(1, Number(pageSize) || 24);
+        let _currentPage = Math.max(1, Number(currentPage) || 1);
+        let _container = containerEl;
+        let _onPageChange = typeof onPageChange === 'function' ? onPageChange : null;
+
+        function getTotalPages() {
+            return Math.max(1, Math.ceil(_items.length / _pageSize));
+        }
+
+        function getCurrentPage() {
+            return Math.min(_currentPage, getTotalPages());
+        }
+
+        function getPageItems() {
+            const page = getCurrentPage();
+            const start = (page - 1) * _pageSize;
+            return _items.slice(start, start + _pageSize);
+        }
+
+        function setPage(newPage) {
+            const maxPage = getTotalPages();
+            _currentPage = Math.max(1, Math.min(newPage, maxPage));
+            render();
+            if (_onPageChange) {
+                _onPageChange(getPageItems(), {
+                    page: _currentPage,
+                    totalPages: maxPage,
+                    totalItems: _items.length,
+                    pageSize: _pageSize
+                });
+            }
+        }
+
+        function setItems(newItems, resetToFirstPage = false) {
+            _items = Array.isArray(newItems) ? newItems : [];
+            if (resetToFirstPage) _currentPage = 1;
+            else _currentPage = getCurrentPage();
+            render();
+            if (_onPageChange) {
+                _onPageChange(getPageItems(), {
+                    page: _currentPage,
+                    totalPages: getTotalPages(),
+                    totalItems: _items.length,
+                    pageSize: _pageSize
+                });
+            }
+        }
+
+        function render() {
+            if (!_container) return;
+            const totalPages = getTotalPages();
+            const page = getCurrentPage();
+            const total = _items.length;
+
+            if (total <= _pageSize) {
+                _container.innerHTML = '';
+                _container.style.display = 'none';
+                return;
+            }
+
+            _container.style.display = 'flex';
+            const startItem = (page - 1) * _pageSize + 1;
+            const endItem = Math.min(page * _pageSize, total);
+
+            _container.innerHTML = `
+                <div class="pagination-bar flex-between items-center gap-sm flex-wrap w-100" style="padding: 0.75rem 0.25rem;">
+                    <div class="text-xs text-muted">
+                        Showing <strong>${startItem}–${endItem}</strong> of <strong>${total}</strong> items
+                    </div>
+                    <div class="inline-flex items-center gap-xs">
+                        <button type="button" class="btn btn-secondary text-xs btn-pag-prev" ${page <= 1 ? 'disabled' : ''} title="Previous Page">
+                            ← Prev
+                        </button>
+                        <span class="text-xs text-bold" style="padding: 0 0.4rem;">
+                            Page ${page} of ${totalPages}
+                        </span>
+                        <button type="button" class="btn btn-secondary text-xs btn-pag-next" ${page >= totalPages ? 'disabled' : ''} title="Next Page">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            _container.querySelector('.btn-pag-prev')?.addEventListener('click', () => {
+                if (page > 1) setPage(page - 1);
+            });
+            _container.querySelector('.btn-pag-next')?.addEventListener('click', () => {
+                if (page < totalPages) setPage(page + 1);
+            });
+        }
+
+        return {
+            setItems,
+            setPage,
+            getPageItems,
+            getCurrentPage,
+            getTotalPages,
+            render,
+            setContainer: (el) => { _container = el; render(); }
+        };
+    }
+
     // Export to global scope
     const common = {
         getToken,
@@ -241,7 +352,8 @@
         getSocket,
         showToast,
         escapeHtml,
-        renderIcon
+        renderIcon,
+        createPaginator
     };
 
     window.common = common;

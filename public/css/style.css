@@ -132,7 +132,7 @@ body.view-map {
   border-bottom-color: var(--accent-blue);
 }
 
-/* User Identity Pill */
+/* User Identity Pill (BR-12) */
 .user-pill {
   display: inline-flex;
   align-items: center;
@@ -140,12 +140,14 @@ body.view-map {
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.3);
   color: var(--accent-blue);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 9999px;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   letter-spacing: 0.02em;
+  line-height: 1.25;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 /* Compact Buttons inside Top Bar */
@@ -1624,5 +1626,24 @@ body:has(dialog[open]) {
   border-color: var(--accent-blue);
   color: var(--text-primary);
 }
+
+/* Reusable Pagination Bar (BR-13) */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--space-sm);
+  box-sizing: border-box;
+}
+
+.pagination-bar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 
 

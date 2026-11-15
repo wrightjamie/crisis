@@ -8,6 +8,7 @@
     let cachedTags = [];
     let activeCallback = null;
     let selectedId = null;
+    let paginator = null;
 
     async function ensureLoaded() {
         if (cachedImages.length > 0) return;
@@ -38,30 +39,18 @@
         return found ? found.file : '/images/favicon.png';
     }
 
-    function renderGrid() {
+    function renderGridItems(items) {
         const grid = document.getElementById('picker-image-grid');
         if (!grid) return;
 
-        const q = (document.getElementById('picker-search-input')?.value || '').trim().toLowerCase();
-        const tag = (document.getElementById('picker-tag-select')?.value || '').trim().toLowerCase();
-
-        const filtered = cachedImages.filter(img => {
-            if (tag && !(img.tags || []).some(t => t.toLowerCase() === tag)) return false;
-            if (q) {
-                const hay = `${img.id} ${img.title} ${img.description || ''} ${(img.tags || []).join(' ')}`.toLowerCase();
-                if (!hay.includes(q)) return false;
-            }
-            return true;
-        });
-
-        if (filtered.length === 0) {
+        if (items.length === 0) {
             grid.innerHTML = `<div class="text-muted text-sm" style="grid-column: 1 / -1; text-align: center; padding: 2rem;">No matching images found.</div>`;
             return;
         }
 
-        grid.innerHTML = filtered.map(img => `
+        grid.innerHTML = items.map(img => `
             <button type="button" class="picker-image-card ${img.id === selectedId ? 'selected' : ''}" data-id="${escapeHtml(img.id)}" data-file="${escapeHtml(img.file)}">
-                <img src="${escapeHtml(img.file)}" alt="${escapeHtml(img.title || img.id)}" loading="lazy" width="150" height="96">
+                <img src="${escapeHtml(img.file)}" alt="${escapeHtml(img.title || img.id)}" loading="lazy" width="150" height="96" onerror="this.onerror=null;this.src='/images/favicon.png';">
                 <div class="picker-image-card-info">
                     <div class="picker-image-card-title" title="${escapeHtml(img.title || img.id)}">${escapeHtml(img.title || img.id)}</div>
                     <div class="text-xs text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(img.id)}</div>
@@ -82,11 +71,40 @@
         });
     }
 
+    function renderGrid(resetPage = false) {
+        const q = (document.getElementById('picker-search-input')?.value || '').trim().toLowerCase();
+        const tag = (document.getElementById('picker-tag-select')?.value || '').trim().toLowerCase();
+
+        const filtered = cachedImages.filter(img => {
+            if (tag && !(img.tags || []).some(t => t.toLowerCase() === tag)) return false;
+            if (q) {
+                const hay = `${img.id} ${img.title} ${img.description || ''} ${(img.tags || []).join(' ')}`.toLowerCase();
+                if (!hay.includes(q)) return false;
+            }
+            return true;
+        });
+
+        if (!paginator) {
+            paginator = window.common.createPaginator({
+                items: filtered,
+                pageSize: 24,
+                containerEl: document.getElementById('picker-pagination-container'),
+                onPageChange: (pageItems) => {
+                    renderGridItems(pageItems);
+                }
+            });
+        } else {
+            paginator.setItems(filtered, resetPage);
+        }
+
+        renderGridItems(paginator.getPageItems());
+    }
+
     async function open(currentId, onSelect) {
         await ensureLoaded();
         selectedId = currentId || null;
         activeCallback = onSelect;
-        renderGrid();
+        renderGrid(true);
         const dialog = document.getElementById('image-picker-dialog');
         if (dialog && !dialog.open) {
             dialog.showModal();
@@ -101,8 +119,8 @@
         const closeBtn = document.getElementById('btn-close-image-picker');
         const dialog = document.getElementById('image-picker-dialog');
 
-        if (searchInp) searchInp.addEventListener('input', renderGrid);
-        if (tagSel) tagSel.addEventListener('change', renderGrid);
+        if (searchInp) searchInp.addEventListener('input', () => renderGrid(true));
+        if (tagSel) tagSel.addEventListener('change', () => renderGrid(true));
         if (closeBtn && dialog) {
             closeBtn.addEventListener('click', () => {
                 if (dialog.open) dialog.close();

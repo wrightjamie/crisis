@@ -7,7 +7,7 @@
 - **System Active:** 🟢 Enabled
 - **GitHub Sync:** 🟢 Active (wrightjamie/crisis)
 - **Total Reports:** 37
-- **Status:** 🟢 5 Open | 🟡 0 In Progress | 🟣 32 Resolved
+- **Status:** 🟢 0 Open | 🟡 0 In Progress | 🟣 37 Resolved
 - **Breakdown:** 🐛 37 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
 
 ---
@@ -17,7 +17,7 @@
 ### [BR-37] 🐛 Bug: The variant axis selection (editor tab 6) don't seem to be w...
 - **Reported:** 2026-11-15 22:18:40 UTC
 - **Reporter:** Anonymous (`anonymous`) | [GitHub #87](https://github.com/wrightjamie/crisis/issues/87)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > The variant axis selection (editor tab 6) don't seem to be working.
 
@@ -26,7 +26,7 @@
 ### [BR-36] 🐛 Bug: There are no thumbnail images showing in the quick add pre-s...
 - **Reported:** 2026-11-15 22:16:44 UTC
 - **Reporter:** Anonymous (`anonymous`) | [GitHub #86](https://github.com/wrightjamie/crisis/issues/86)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > There are no thumbnail images showing in the quick add pre-set asset
 
@@ -241,7 +241,7 @@ The role ...
 ### [BR-13] 🐛 Bug: As we add more images, we probably need a pagination system....
 - **Reported:** 2026-11-14 16:59:33 UTC
 - **Reporter:** System Admin (`admin`) | [GitHub #63](https://github.com/wrightjamie/crisis/issues/63)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > As we add more images, we probably need a pagination system. Let's keep it re-usable - we might choose to add it to other elements.
 
@@ -250,7 +250,7 @@ The role ...
 ### [BR-12] 🐛 Bug: The rounded 'admin' tag in the header doesn't look right - i...
 - **Reported:** 2026-11-14 16:58:07 UTC
 - **Reporter:** System Admin (`admin`) | [GitHub #62](https://github.com/wrightjamie/crisis/issues/62)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > The rounded 'admin' tag in the header doesn't look right - it doesn't align to the other buttons.
 
@@ -259,7 +259,7 @@ The role ...
 ### [BR-11] 🐛 Bug: I've changed the tagify.css line 1 align-content to center. ...
 - **Reported:** 2026-11-14 16:57:15 UTC
 - **Reporter:** System Admin (`admin`) | [GitHub #61](https://github.com/wrightjamie/crisis/issues/61)
-- **Status:** 🟢 **Open**
+- **Status:** 🟣 **Resolved**
 
 > I've changed the tagify.css line 1 align-content to center. This appears to have much better vertical alignment than the default baseline.
 > I also find it strange that we are over-riding a lot of styles for tagify in the admin.css. That feels strange

@@ -4,7 +4,7 @@
   "counter": 37,
   "githubRepo": "wrightjamie/crisis",
   "hasGithubToken": true,
-  "lastUpdated": "2026-11-15T22:19:52.176Z",
+  "lastUpdated": "2026-11-15T23:01:39.438Z",
   "reports": [
     {
       "id": "BR-37",
@@ -16,11 +16,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 87,
         "url": "https://github.com/wrightjamie/crisis/issues/87"
-      }
+      },
+      "updatedAt": "2026-11-15T23:01:35.488Z"
     },
     {
       "id": "BR-36",
@@ -32,11 +33,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 86,
         "url": "https://github.com/wrightjamie/crisis/issues/86"
-      }
+      },
+      "updatedAt": "2026-11-15T23:01:34.361Z"
     },
     {
       "id": "BR-35",
@@ -422,11 +424,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 63,
         "url": "https://github.com/wrightjamie/crisis/issues/63"
-      }
+      },
+      "updatedAt": "2026-11-15T23:01:38.447Z"
     },
     {
       "id": "BR-12",
@@ -438,11 +441,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 62,
         "url": "https://github.com/wrightjamie/crisis/issues/62"
-      }
+      },
+      "updatedAt": "2026-11-15T23:01:37.518Z"
     },
     {
       "id": "BR-11",
@@ -454,11 +458,12 @@
       "gameId": null,
       "scenarioId": null,
       "stage": null,
-      "status": "Open",
+      "status": "Resolved",
       "githubIssue": {
         "number": 61,
         "url": "https://github.com/wrightjamie/crisis/issues/61"
-      }
+      },
+      "updatedAt": "2026-11-15T23:01:36.608Z"
     },
     {
       "id": "BR-10",
