@@ -1,11 +1,43 @@
 {
   "enabled": true,
   "target": "all",
-  "counter": 35,
+  "counter": 37,
   "githubRepo": "wrightjamie/crisis",
   "hasGithubToken": true,
-  "lastUpdated": "2026-11-15T22:03:30.085Z",
+  "lastUpdated": "2026-11-15T22:19:52.176Z",
   "reports": [
+    {
+      "id": "BR-37",
+      "timestamp": "2026-11-15T22:18:40.393Z",
+      "type": "bug",
+      "text": "The variant axis selection (editor tab 6) don't seem to be working.",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Open",
+      "githubIssue": {
+        "number": 87,
+        "url": "https://github.com/wrightjamie/crisis/issues/87"
+      }
+    },
+    {
+      "id": "BR-36",
+      "timestamp": "2026-11-15T22:16:44.995Z",
+      "type": "bug",
+      "text": "There are no thumbnail images showing in the quick add pre-set asset",
+      "role": "anonymous",
+      "sender": "Anonymous",
+      "gameId": null,
+      "scenarioId": null,
+      "stage": null,
+      "status": "Open",
+      "githubIssue": {
+        "number": 86,
+        "url": "https://github.com/wrightjamie/crisis/issues/86"
+      }
+    },
     {
       "id": "BR-35",
       "timestamp": "2026-11-14T22:51:21.712Z",
@@ -21,7 +53,7 @@
         "number": 85,
         "url": "https://github.com/wrightjamie/crisis/issues/85"
       },
-      "updatedAt": "2026-11-15T22:03:28.989Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-34",
@@ -38,7 +70,7 @@
         "number": 84,
         "url": "https://github.com/wrightjamie/crisis/issues/84"
       },
-      "updatedAt": "2026-11-15T22:03:28.041Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-33",
@@ -55,7 +87,7 @@
         "number": 83,
         "url": "https://github.com/wrightjamie/crisis/issues/83"
       },
-      "updatedAt": "2026-11-15T22:03:27.071Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-32",
@@ -72,7 +104,7 @@
         "number": 82,
         "url": "https://github.com/wrightjamie/crisis/issues/82"
       },
-      "updatedAt": "2026-11-15T22:03:26.012Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-31",
@@ -89,7 +121,7 @@
         "number": 81,
         "url": "https://github.com/wrightjamie/crisis/issues/81"
       },
-      "updatedAt": "2026-11-15T22:03:24.954Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-30",
@@ -106,7 +138,7 @@
         "number": 80,
         "url": "https://github.com/wrightjamie/crisis/issues/80"
       },
-      "updatedAt": "2026-11-15T22:03:23.871Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-29",
@@ -123,7 +155,7 @@
         "number": 79,
         "url": "https://github.com/wrightjamie/crisis/issues/79"
       },
-      "updatedAt": "2026-11-15T22:03:22.991Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-28",
@@ -140,7 +172,7 @@
         "number": 78,
         "url": "https://github.com/wrightjamie/crisis/issues/78"
       },
-      "updatedAt": "2026-11-15T22:03:22.026Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-27",
@@ -157,7 +189,7 @@
         "number": 77,
         "url": "https://github.com/wrightjamie/crisis/issues/77"
       },
-      "updatedAt": "2026-11-15T22:03:21.041Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-26",
@@ -174,7 +206,7 @@
         "number": 76,
         "url": "https://github.com/wrightjamie/crisis/issues/76"
       },
-      "updatedAt": "2026-11-15T22:03:19.919Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-25",
@@ -191,7 +223,7 @@
         "number": 75,
         "url": "https://github.com/wrightjamie/crisis/issues/75"
       },
-      "updatedAt": "2026-11-15T22:03:18.982Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-24",
@@ -208,7 +240,7 @@
         "number": 74,
         "url": "https://github.com/wrightjamie/crisis/issues/74"
       },
-      "updatedAt": "2026-11-15T22:03:17.913Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-23",
@@ -225,7 +257,7 @@
         "number": 73,
         "url": "https://github.com/wrightjamie/crisis/issues/73"
       },
-      "updatedAt": "2026-11-15T22:03:16.922Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-22",
@@ -242,7 +274,7 @@
         "number": 72,
         "url": "https://github.com/wrightjamie/crisis/issues/72"
       },
-      "updatedAt": "2026-11-15T22:03:15.818Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-21",
@@ -259,7 +291,7 @@
         "number": 71,
         "url": "https://github.com/wrightjamie/crisis/issues/71"
       },
-      "updatedAt": "2026-11-15T22:03:14.727Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-20",
@@ -276,7 +308,7 @@
         "number": 70,
         "url": "https://github.com/wrightjamie/crisis/issues/70"
       },
-      "updatedAt": "2026-11-15T22:03:13.696Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-19",
@@ -293,7 +325,7 @@
         "number": 69,
         "url": "https://github.com/wrightjamie/crisis/issues/69"
       },
-      "updatedAt": "2026-11-15T22:03:12.492Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-18",
@@ -310,7 +342,7 @@
         "number": 68,
         "url": "https://github.com/wrightjamie/crisis/issues/68"
       },
-      "updatedAt": "2026-11-15T22:03:11.480Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-17",
@@ -327,7 +359,7 @@
         "number": 67,
         "url": "https://github.com/wrightjamie/crisis/issues/67"
       },
-      "updatedAt": "2026-11-15T22:03:10.514Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-16",
@@ -344,7 +376,7 @@
         "number": 66,
         "url": "https://github.com/wrightjamie/crisis/issues/66"
       },
-      "updatedAt": "2026-11-15T22:03:09.436Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-15",
@@ -361,7 +393,7 @@
         "number": 65,
         "url": "https://github.com/wrightjamie/crisis/issues/65"
       },
-      "updatedAt": "2026-11-15T22:03:08.426Z"
+      "updatedAt": "2026-11-15T22:19:52.175Z"
     },
     {
       "id": "BR-14",
@@ -378,7 +410,7 @@
         "number": 64,
         "url": "https://github.com/wrightjamie/crisis/issues/64"
       },
-      "updatedAt": "2026-11-15T22:03:07.181Z"
+      "updatedAt": "2026-11-15T22:19:52.173Z"
     },
     {
       "id": "BR-13",

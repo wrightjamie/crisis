@@ -6,13 +6,31 @@
 ## Status Overview
 - **System Active:** 🟢 Enabled
 - **GitHub Sync:** 🟢 Active (wrightjamie/crisis)
-- **Total Reports:** 35
-- **Status:** 🟢 3 Open | 🟡 0 In Progress | 🟣 32 Resolved
-- **Breakdown:** 🐛 35 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
+- **Total Reports:** 37
+- **Status:** 🟢 5 Open | 🟡 0 In Progress | 🟣 32 Resolved
+- **Breakdown:** 🐛 37 Bugs | ✨ 0 Features | 💡 0 Issues/Feedback
 
 ---
 
 ## Reports List
+
+### [BR-37] 🐛 Bug: The variant axis selection (editor tab 6) don't seem to be w...
+- **Reported:** 2026-11-15 22:18:40 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #87](https://github.com/wrightjamie/crisis/issues/87)
+- **Status:** 🟢 **Open**
+
+> The variant axis selection (editor tab 6) don't seem to be working.
+
+---
+
+### [BR-36] 🐛 Bug: There are no thumbnail images showing in the quick add pre-s...
+- **Reported:** 2026-11-15 22:16:44 UTC
+- **Reporter:** Anonymous (`anonymous`) | [GitHub #86](https://github.com/wrightjamie/crisis/issues/86)
+- **Status:** 🟢 **Open**
+
+> There are no thumbnail images showing in the quick add pre-set asset
+
+---
 
 ### [BR-35] 🐛 Bug: Why aren't manual actions part of the canvas?
 THey should be...
