@@ -76,23 +76,38 @@ app.get('/ping', (req, res) => {
 
 // Access Control Endpoints
 app.post('/api/auth/login', (req, res) => {
-    const result = accessControl.authenticate(req.body);
-    if (result.success) {
-        res.cookie('auth_token', result.token, { httpOnly: false, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000 });
-        return res.json(result);
+    try {
+        const result = accessControl.authenticate(req.body);
+        if (result.success) {
+            res.cookie('auth_token', result.token, { httpOnly: false, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000 });
+            return res.json(result);
+        }
+        res.status(401).json(result);
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ success: false, error: 'Authentication failed due to internal error' });
     }
-    res.status(401).json(result);
 });
 
 app.post('/api/auth/logout', (req, res) => {
-    const token = accessControl.extractToken(req);
-    accessControl.invalidateSession(token);
-    res.clearCookie('auth_token');
-    res.json({ success: true });
+    try {
+        const token = accessControl.extractToken(req);
+        accessControl.invalidateSession(token);
+        res.clearCookie('auth_token');
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Logout error:', err);
+        res.json({ success: true });
+    }
 });
 
 app.get('/api/auth/me', (req, res) => {
-    res.json(accessControl.verifyRequest(req));
+    try {
+        res.json(accessControl.verifyRequest(req));
+    } catch (err) {
+        console.error('Auth verification error:', err);
+        res.json({ authenticated: false });
+    }
 });
 
 // Helper to extract uploaded zip buffer

@@ -25,6 +25,7 @@ function initDatabase(customPath = null) {
         // Fallback if WAL shared-memory mapping is restricted by the environment
     }
     db.pragma('foreign_keys = ON');
+    db.pragma('busy_timeout = 5000');
 
     // Create system_config table (stores admin auth credentials & system parameters)
     db.exec(`
