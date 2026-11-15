@@ -1437,81 +1437,203 @@
             });
         }
 
-        // Variant Axes (BR-37: Interactive Axis & Option Manager)
+        // Variant Axes (BR-37: Collapsible Axes & Options with Snake_Case IDs & Multi-Modifiers)
         const axesContainer = document.getElementById('variant-axes-container');
         if (axesContainer) {
+            // Track open states before rewriting HTML so collapsibles stay open/closed as user interacted
+            const openAxes = new Set();
+            const openOpts = new Set();
+            axesContainer.querySelectorAll('details.variant-axis-collapsible[open]').forEach(el => {
+                openAxes.add(el.getAttribute('data-axis-idx'));
+            });
+            axesContainer.querySelectorAll('details.variant-opt-collapsible[open]').forEach(el => {
+                openOpts.add(`${el.getAttribute('data-axis-idx')}_${el.getAttribute('data-opt-idx')}`);
+            });
+            const hasPriorAxesState = axesContainer.querySelectorAll('details.variant-axis-collapsible').length > 0;
+
             const axes = scenario.variantAxes || [];
+            const availableScoreKeys = Object.keys(scenario.initialScores || {});
+            if (availableScoreKeys.length === 0 && scenario.scores && typeof scenario.scores === 'object') {
+                availableScoreKeys.push(...Object.keys(scenario.scores));
+            }
+            if (availableScoreKeys.length === 0 && presets.scorePresets?.[0]?.scores) {
+                availableScoreKeys.push(...Object.keys(presets.scorePresets[0].scores));
+            }
+            const availableAssets = Array.isArray(scenario.assets) ? scenario.assets : [];
+
             axesContainer.innerHTML = axes.map((ax, aIdx) => {
                 const options = Array.isArray(ax.options) ? ax.options : [];
+                const isAxisOpen = !hasPriorAxesState || openAxes.has(String(aIdx));
+
                 return `
-                <div class="editor-item-card" data-axis-idx="${aIdx}">
-                    <div class="flex-between items-center mb-1">
-                        <span class="inline-flex items-center gap-xs">
-                            <span class="text-xs text-bold">Axis #${aIdx + 1}:</span>
+                <details class="variant-axis-collapsible" data-axis-idx="${aIdx}" ${isAxisOpen ? 'open' : ''}>
+                    <summary class="variant-axis-summary" data-aidx="${aIdx}">
+                        <div class="inline-flex items-center gap-xs" style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <span class="summary-caret">▶</span>
+                            <span class="text-xs text-bold">${escapeHtml(ax.name || 'Axis #' + (aIdx + 1))}</span>
                             <code>${escapeHtml(ax.id || 'axis_' + (aIdx + 1))}</code>
-                        </span>
-                        <button type="button" class="btn btn-danger text-xs btn-del-axis" data-aidx="${aIdx}" title="Delete Axis">${renderIcon('trash', 12)} <span>Delete Axis</span></button>
-                    </div>
-
-                    <div class="field-row">
-                        <div class="field-group" style="margin-bottom: 0.5rem;">
-                            <label>Axis Name *</label>
-                            <input type="text" class="form-control text-xs axis-name-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.name || '')}" placeholder="e.g. Initial Storm Intensity">
+                            <span class="text-xs text-muted" style="margin-left: 0.25rem;">(${options.length} ${options.length === 1 ? 'option' : 'options'})</span>
                         </div>
-                        <div class="field-group" style="margin-bottom: 0.5rem;">
-                            <label>Axis ID *</label>
-                            <input type="text" class="form-control text-xs axis-id-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.id || '')}" placeholder="e.g. storm_intensity">
-                        </div>
-                    </div>
+                        <button type="button" class="btn btn-danger text-xs btn-del-axis" data-aidx="${aIdx}" title="Delete Axis" style="height: 28px; padding: 0 0.6rem; flex-shrink: 0;">${renderIcon('trash', 12)} <span>Delete Axis</span></button>
+                    </summary>
 
-                    <!-- Axis Options -->
-                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.65rem; margin-top: 0.35rem;">
-                        <div class="flex-between items-center mb-xs">
-                            <label class="text-xs text-bold">Condition Options (${options.length})</label>
-                            <button type="button" class="btn btn-secondary text-xs btn-add-axis-option" data-aidx="${aIdx}">+ Add Option</button>
+                    <div class="variant-axis-body">
+                        <div class="field-row">
+                            <div class="field-group" style="margin-bottom: 0.5rem;">
+                                <label>Axis Name *</label>
+                                <input type="text" class="form-control text-xs axis-name-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.name || '')}" placeholder="e.g. Initial Storm Intensity">
+                            </div>
+                            <div class="field-group" style="margin-bottom: 0.5rem;">
+                                <label>Axis ID * <span class="text-xs text-muted">(snake_case)</span></label>
+                                <input type="text" class="form-control text-xs axis-id-inp" data-aidx="${aIdx}" value="${escapeHtml(ax.id || '')}" placeholder="e.g. storm_intensity">
+                            </div>
                         </div>
 
-                        <div class="editor-item-list" style="gap: 0.5rem;">
-                            ${options.map((opt, oIdx) => {
-                                const scoreSummary = opt.scoreModifiers ? Object.entries(opt.scoreModifiers).map(([k, v]) => `${k}:${v}`).join(', ') : '';
-                                return `
-                                    <div class="editor-item-card" style="padding: 0.55rem; background: var(--bg-primary);" data-axis-idx="${aIdx}" data-opt-idx="${oIdx}">
-                                        <div class="field-row" style="margin-bottom: 0.35rem; align-items: flex-end;">
-                                            <div class="field-group" style="margin-bottom: 0;">
-                                                <label class="text-xs">Option Name *</label>
-                                                <input type="text" class="form-control text-xs opt-name-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.name || '')}" placeholder="e.g. Severe Storm">
+                        <!-- Axis Options Container -->
+                        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.75rem; margin-top: 0.5rem;">
+                            <div class="flex-between items-center mb-xs">
+                                <label class="text-xs text-bold">Condition Options (${options.length})</label>
+                                <button type="button" class="btn btn-secondary text-xs btn-add-axis-option" data-aidx="${aIdx}">+ Add Option</button>
+                            </div>
+
+                            <div class="variant-options-list">
+                                ${options.map((opt, oIdx) => {
+                                    const isOptOpen = !hasPriorAxesState || openOpts.has(`${aIdx}_${oIdx}`);
+                                    const scoreEntries = Object.entries(opt.scoreModifiers || {});
+                                    const assetMods = Array.isArray(opt.assetModifiers) ? opt.assetModifiers : [];
+
+                                    const scoreBadgesHtml = scoreEntries.map(([k, v]) => `
+                                        <span class="modifier-badge" title="${escapeHtml(k)}: ${v > 0 ? '+' + v : v}">
+                                            ${escapeHtml(formatMetricDisplayTitle(k))}: ${v > 0 ? '+' + v : v}
+                                        </span>
+                                    `).join('');
+
+                                    const assetBadgesHtml = assetMods.map(m => {
+                                        const ast = availableAssets.find(a => a.id === m.id);
+                                        const label = ast ? (ast.name || ast.id) : m.id;
+                                        const details = [m.state, m.hidden === true ? 'hidden' : (m.hidden === false ? 'visible' : '')].filter(Boolean).join(', ');
+                                        return `<span class="modifier-badge asset" title="${escapeHtml(label)}${details ? ' (' + details + ')' : ''}">${escapeHtml(label)}${details ? ': ' + details : ''}</span>`;
+                                    }).join('');
+
+                                    return `
+                                    <details class="variant-opt-collapsible" data-axis-idx="${aIdx}" data-opt-idx="${oIdx}" ${isOptOpen ? 'open' : ''}>
+                                        <summary class="variant-opt-summary" data-aidx="${aIdx}" data-oidx="${oIdx}">
+                                            <div class="inline-flex items-center gap-xs" style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                <span class="summary-caret">▶</span>
+                                                <span class="text-xs text-bold">${escapeHtml(opt.name || 'Option #' + (oIdx + 1))}</span>
+                                                <code>${escapeHtml(opt.id || 'opt_' + (oIdx + 1))}</code>
+                                                ${scoreBadgesHtml}
+                                                ${assetBadgesHtml}
                                             </div>
-                                            <div class="field-group" style="margin-bottom: 0;">
-                                                <label class="text-xs">Option ID *</label>
-                                                <input type="text" class="form-control text-xs opt-id-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.id || '')}" placeholder="e.g. severe">
+                                            <button type="button" class="btn btn-danger text-xs btn-del-opt" data-aidx="${aIdx}" data-oidx="${oIdx}" title="Remove Option" style="height: 26px; padding: 0 0.5rem; flex-shrink: 0;">${renderIcon('trash', 12)}</button>
+                                        </summary>
+
+                                        <div class="variant-opt-body">
+                                            <div class="field-row" style="margin-bottom: 0.5rem;">
+                                                <div class="field-group" style="margin-bottom: 0;">
+                                                    <label class="text-xs">Option Name *</label>
+                                                    <input type="text" class="form-control text-xs opt-name-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.name || '')}" placeholder="e.g. Severe Storm">
+                                                </div>
+                                                <div class="field-group" style="margin-bottom: 0;">
+                                                    <label class="text-xs">Option ID * <span class="text-xs text-muted">(snake_case)</span></label>
+                                                    <input type="text" class="form-control text-xs opt-id-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.id || '')}" placeholder="e.g. severe_storm">
+                                                </div>
                                             </div>
-                                            <button type="button" class="btn btn-danger text-xs btn-del-opt" data-aidx="${aIdx}" data-oidx="${oIdx}" title="Remove Option" style="height: 32px; padding: 0 0.5rem;">${renderIcon('trash', 12)}</button>
-                                        </div>
 
-                                        <div class="field-group" style="margin-bottom: 0.35rem;">
-                                            <label class="text-xs">Player Briefing Text</label>
-                                            <textarea class="form-control text-xs opt-briefing-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" rows="2" placeholder="Briefing notes shown to players when this variant condition is active...">${escapeHtml(opt.briefingText || '')}</textarea>
-                                        </div>
+                                            <div class="field-group" style="margin-bottom: 0.5rem;">
+                                                <label class="text-xs">Player Briefing Addendum</label>
+                                                <textarea class="form-control text-xs opt-briefing-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" rows="2" placeholder="Briefing text shown to players when this variant condition is active...">${escapeHtml(opt.briefingText || '')}</textarea>
+                                            </div>
 
-                                        <div class="field-group" style="margin-bottom: 0;">
-                                            <label class="text-xs">Score Modifiers (e.g. public_panic:1, emergency_capacity:-1)</label>
-                                            <input type="text" class="form-control text-xs opt-scores-inp" data-aidx="${aIdx}" data-oidx="${oIdx}" value="${escapeHtml(scoreSummary)}" placeholder="metric:delta, metric2:delta">
+                                            <!-- Score Modifiers Section -->
+                                            <div class="variant-modifier-section">
+                                                <div class="flex-between items-center mb-xs">
+                                                    <label class="text-xs text-bold">Score Modifiers (${scoreEntries.length})</label>
+                                                    <button type="button" class="btn btn-secondary text-xs btn-add-score-mod" data-aidx="${aIdx}" data-oidx="${oIdx}">+ Add Score Modifier</button>
+                                                </div>
+                                                ${scoreEntries.length === 0 ? '<div class="text-xs text-muted">No score modifiers applied for this condition.</div>' : `
+                                                    <div class="score-mod-list">
+                                                        ${scoreEntries.map(([k, v]) => `
+                                                            <div class="modifier-row">
+                                                                <select class="form-control text-xs opt-score-metric-sel" style="flex: 2;" data-aidx="${aIdx}" data-oidx="${oIdx}" data-oldkey="${escapeHtml(k)}">
+                                                                    ${availableScoreKeys.map(sk => `<option value="${escapeHtml(sk)}" ${sk === k ? 'selected' : ''}>${escapeHtml(formatMetricDisplayTitle(sk))} (${escapeHtml(sk)})</option>`).join('')}
+                                                                </select>
+                                                                <input type="number" step="1" class="form-control text-xs opt-score-delta-inp" style="width: 110px; flex-shrink: 0;" data-aidx="${aIdx}" data-oidx="${oIdx}" data-key="${escapeHtml(k)}" value="${v}" placeholder="Delta (e.g. +1, -1)">
+                                                                <button type="button" class="btn btn-danger text-xs btn-del-score-mod" data-aidx="${aIdx}" data-oidx="${oIdx}" data-key="${escapeHtml(k)}" title="Remove Score Modifier" style="height: 30px; padding: 0 0.5rem;">✕</button>
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                `}
+                                            </div>
+
+                                            <!-- Asset Status & Visibility Modifiers Section -->
+                                            <div class="variant-modifier-section">
+                                                <div class="flex-between items-center mb-xs">
+                                                    <label class="text-xs text-bold">Asset Status &amp; Visibility Modifiers (${assetMods.length})</label>
+                                                    <button type="button" class="btn btn-secondary text-xs btn-add-asset-mod" data-aidx="${aIdx}" data-oidx="${oIdx}">+ Add Asset Modifier</button>
+                                                </div>
+                                                ${availableAssets.length === 0 ? '<div class="text-xs text-muted">No scenario assets defined yet. Add assets in Tab 3 (Assets &amp; Map) to override their state here.</div>' : (
+                                                    assetMods.length === 0 ? '<div class="text-xs text-muted">No asset status modifications applied for this condition.</div>' : `
+                                                    <div class="asset-mod-list">
+                                                        ${assetMods.map((mod, mIdx) => `
+                                                            <div class="modifier-row">
+                                                                <select class="form-control text-xs opt-asset-target-sel" style="flex: 2;" data-aidx="${aIdx}" data-oidx="${oIdx}" data-midx="${mIdx}">
+                                                                    ${availableAssets.map(ast => `<option value="${escapeHtml(ast.id)}" ${ast.id === mod.id ? 'selected' : ''}>${escapeHtml(ast.name || ast.id)} (${escapeHtml(ast.id)})</option>`).join('')}
+                                                                </select>
+                                                                <select class="form-control text-xs opt-asset-state-sel" style="flex: 1.5;" data-aidx="${aIdx}" data-oidx="${oIdx}" data-midx="${mIdx}">
+                                                                    <option value="" ${!mod.state ? 'selected' : ''}>State: (Unchanged)</option>
+                                                                    <option value="operational" ${mod.state === 'operational' ? 'selected' : ''}>State: Operational</option>
+                                                                    <option value="damaged" ${mod.state === 'damaged' ? 'selected' : ''}>State: Damaged</option>
+                                                                    <option value="offline" ${mod.state === 'offline' ? 'selected' : ''}>State: Offline / Disabled</option>
+                                                                    <option value="destroyed" ${mod.state === 'destroyed' ? 'selected' : ''}>State: Destroyed</option>
+                                                                    <option value="deployed" ${mod.state === 'deployed' ? 'selected' : ''}>State: Deployed</option>
+                                                                </select>
+                                                                <select class="form-control text-xs opt-asset-vis-sel" style="flex: 1.3;" data-aidx="${aIdx}" data-oidx="${oIdx}" data-midx="${mIdx}">
+                                                                    <option value="" ${mod.hidden === undefined ? 'selected' : ''}>Visibility: (Unchanged)</option>
+                                                                    <option value="visible" ${mod.hidden === false ? 'selected' : ''}>Visibility: Visible</option>
+                                                                    <option value="hidden" ${mod.hidden === true ? 'selected' : ''}>Visibility: Hidden</option>
+                                                                </select>
+                                                                <button type="button" class="btn btn-danger text-xs btn-del-asset-mod" data-aidx="${aIdx}" data-oidx="${oIdx}" data-midx="${mIdx}" title="Remove Asset Modifier" style="height: 30px; padding: 0 0.5rem;">✕</button>
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                `)}
+                                            </div>
                                         </div>
-                                    </div>
-                                `;
-                            }).join('') || '<div class="text-xs text-muted">No options configured for this axis.</div>'}
+                                    </details>
+                                    `;
+                                }).join('') || '<div class="text-xs text-muted">No options configured for this axis.</div>'}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                </details>
+                `;
             }).join('') || '<div class="text-xs text-muted">No starting variant axes configured.</div>';
 
+            // Prevent summary header buttons from toggling <details>
+            axesContainer.querySelectorAll('.btn-del-axis, .btn-del-opt').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            });
+
+            // Axis Name & ID Listeners
             axesContainer.querySelectorAll('.axis-name-inp').forEach(inp => {
                 inp.addEventListener('input', () => {
                     const aIdx = Number(inp.getAttribute('data-aidx'));
                     const ax = scenario.variantAxes[aIdx];
                     if (!ax) return;
+                    const prevSlug = slugifyId(ax.name, 'axis');
                     ax.name = inp.value;
+                    if (!ax.id || ax.id === prevSlug || ax.id.startsWith('axis_') || ax.id.startsWith('condition_axis_')) {
+                        ax.id = slugifyId(inp.value, 'axis');
+                        const idInp = axesContainer.querySelector(`.axis-id-inp[data-aidx="${aIdx}"]`);
+                        if (idInp) idInp.value = ax.id;
+                        const codeEl = axesContainer.querySelector(`.variant-axis-summary[data-aidx="${aIdx}"] code`);
+                        if (codeEl) codeEl.textContent = ax.id;
+                    }
+                    const titleEl = axesContainer.querySelector(`.variant-axis-summary[data-aidx="${aIdx}"] .text-bold`);
+                    if (titleEl) titleEl.textContent = ax.name || `Axis #${aIdx + 1}`;
                     scheduleAutoSave();
                 });
             });
@@ -1522,12 +1644,20 @@
                     const ax = scenario.variantAxes[aIdx];
                     if (!ax) return;
                     ax.id = slugifyId(inp.value, 'axis');
+                    const codeEl = axesContainer.querySelector(`.variant-axis-summary[data-aidx="${aIdx}"] code`);
+                    if (codeEl) codeEl.textContent = ax.id;
                     scheduleAutoSave();
+                });
+                inp.addEventListener('blur', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const ax = scenario.variantAxes[aIdx];
+                    if (ax) inp.value = ax.id;
                 });
             });
 
             axesContainer.querySelectorAll('.btn-del-axis').forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const aIdx = Number(btn.getAttribute('data-aidx'));
                     scenario.variantAxes.splice(aIdx, 1);
                     renderAdvancedTab();
@@ -1543,24 +1673,37 @@
                     if (!ax) return;
                     if (!Array.isArray(ax.options)) ax.options = [];
                     const oNum = ax.options.length + 1;
+                    const optName = `Condition Option ${oNum}`;
                     ax.options.push({
-                        id: `opt_${oNum}`,
-                        name: `Condition Option ${oNum}`,
+                        id: slugifyId(optName, 'opt'),
+                        name: optName,
                         briefingText: '',
-                        scoreModifiers: {}
+                        scoreModifiers: {},
+                        assetModifiers: []
                     });
                     renderAdvancedTab();
                     scheduleAutoSave();
                 });
             });
 
+            // Option Name & ID Listeners
             axesContainer.querySelectorAll('.opt-name-inp').forEach(inp => {
                 inp.addEventListener('input', () => {
                     const aIdx = Number(inp.getAttribute('data-aidx'));
                     const oIdx = Number(inp.getAttribute('data-oidx'));
                     const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
                     if (!opt) return;
+                    const prevSlug = slugifyId(opt.name, 'opt');
                     opt.name = inp.value;
+                    if (!opt.id || opt.id === prevSlug || opt.id.startsWith('opt_') || opt.id.startsWith('condition_option_')) {
+                        opt.id = slugifyId(inp.value, 'opt');
+                        const idInp = axesContainer.querySelector(`.opt-id-inp[data-aidx="${aIdx}"][data-oidx="${oIdx}"]`);
+                        if (idInp) idInp.value = opt.id;
+                        const codeEl = axesContainer.querySelector(`.variant-opt-summary[data-aidx="${aIdx}"][data-oidx="${oIdx}"] code`);
+                        if (codeEl) codeEl.textContent = opt.id;
+                    }
+                    const titleEl = axesContainer.querySelector(`.variant-opt-summary[data-aidx="${aIdx}"][data-oidx="${oIdx}"] .text-bold`);
+                    if (titleEl) titleEl.textContent = opt.name || `Option #${oIdx + 1}`;
                     scheduleAutoSave();
                 });
             });
@@ -1572,7 +1715,15 @@
                     const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
                     if (!opt) return;
                     opt.id = slugifyId(inp.value, 'opt');
+                    const codeEl = axesContainer.querySelector(`.variant-opt-summary[data-aidx="${aIdx}"][data-oidx="${oIdx}"] code`);
+                    if (codeEl) codeEl.textContent = opt.id;
                     scheduleAutoSave();
+                });
+                inp.addEventListener('blur', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (opt) inp.value = opt.id;
                 });
             });
 
@@ -1587,31 +1738,158 @@
                 });
             });
 
-            axesContainer.querySelectorAll('.opt-scores-inp').forEach(inp => {
-                inp.addEventListener('input', () => {
-                    const aIdx = Number(inp.getAttribute('data-aidx'));
-                    const oIdx = Number(inp.getAttribute('data-oidx'));
-                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
-                    if (!opt) return;
-                    const sc = {};
-                    inp.value.split(',').forEach(part => {
-                        const [k, v] = part.split(':').map(s => s.trim());
-                        if (k && v !== undefined && !isNaN(Number(v))) {
-                            sc[k] = Number(v);
-                        }
-                    });
-                    opt.scoreModifiers = sc;
-                    scheduleAutoSave();
-                });
-            });
-
             axesContainer.querySelectorAll('.btn-del-opt').forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const aIdx = Number(btn.getAttribute('data-aidx'));
                     const oIdx = Number(btn.getAttribute('data-oidx'));
                     const ax = scenario.variantAxes[aIdx];
                     if (!ax || !ax.options) return;
                     ax.options.splice(oIdx, 1);
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            // Score Modifiers Listeners
+            axesContainer.querySelectorAll('.btn-add-score-mod').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const oIdx = Number(btn.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    if (!opt.scoreModifiers || typeof opt.scoreModifiers !== 'object') {
+                        opt.scoreModifiers = {};
+                    }
+                    const existingKeys = Object.keys(opt.scoreModifiers);
+                    const unusedKey = availableScoreKeys.find(k => !existingKeys.includes(k)) || availableScoreKeys[0] || 'public_panic';
+                    opt.scoreModifiers[unusedKey] = 1;
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-score-metric-sel').forEach(sel => {
+                sel.addEventListener('change', () => {
+                    const aIdx = Number(sel.getAttribute('data-aidx'));
+                    const oIdx = Number(sel.getAttribute('data-oidx'));
+                    const oldKey = sel.getAttribute('data-oldkey');
+                    const newKey = sel.value;
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.scoreModifiers) return;
+                    const val = opt.scoreModifiers[oldKey] ?? 1;
+                    delete opt.scoreModifiers[oldKey];
+                    opt.scoreModifiers[newKey] = val;
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-score-delta-inp').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const aIdx = Number(inp.getAttribute('data-aidx'));
+                    const oIdx = Number(inp.getAttribute('data-oidx'));
+                    const key = inp.getAttribute('data-key');
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.scoreModifiers) return;
+                    const val = parseInt(inp.value, 10);
+                    opt.scoreModifiers[key] = isNaN(val) ? 0 : val;
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.btn-del-score-mod').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const oIdx = Number(btn.getAttribute('data-oidx'));
+                    const key = btn.getAttribute('data-key');
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.scoreModifiers) return;
+                    delete opt.scoreModifiers[key];
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            // Asset Status & Visibility Modifiers Listeners
+            axesContainer.querySelectorAll('.btn-add-asset-mod').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const oIdx = Number(btn.getAttribute('data-oidx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt) return;
+                    if (!Array.isArray(opt.assetModifiers)) {
+                        opt.assetModifiers = [];
+                    }
+                    if (availableAssets.length === 0) {
+                        showToast('Please add assets in Tab 3 (Assets & Map) first', 'warning');
+                        return;
+                    }
+                    const existingIds = opt.assetModifiers.map(m => m.id);
+                    const unusedAsset = availableAssets.find(a => !existingIds.includes(a.id)) || availableAssets[0];
+                    opt.assetModifiers.push({
+                        id: unusedAsset.id,
+                        state: 'damaged'
+                    });
+                    renderAdvancedTab();
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-asset-target-sel').forEach(sel => {
+                sel.addEventListener('change', () => {
+                    const aIdx = Number(sel.getAttribute('data-aidx'));
+                    const oIdx = Number(sel.getAttribute('data-oidx'));
+                    const mIdx = Number(sel.getAttribute('data-midx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.assetModifiers?.[mIdx]) return;
+                    opt.assetModifiers[mIdx].id = sel.value;
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-asset-state-sel').forEach(sel => {
+                sel.addEventListener('change', () => {
+                    const aIdx = Number(sel.getAttribute('data-aidx'));
+                    const oIdx = Number(sel.getAttribute('data-oidx'));
+                    const mIdx = Number(sel.getAttribute('data-midx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.assetModifiers?.[mIdx]) return;
+                    if (sel.value) {
+                        opt.assetModifiers[mIdx].state = sel.value;
+                    } else {
+                        delete opt.assetModifiers[mIdx].state;
+                    }
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.opt-asset-vis-sel').forEach(sel => {
+                sel.addEventListener('change', () => {
+                    const aIdx = Number(sel.getAttribute('data-aidx'));
+                    const oIdx = Number(sel.getAttribute('data-oidx'));
+                    const mIdx = Number(sel.getAttribute('data-midx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.assetModifiers?.[mIdx]) return;
+                    if (sel.value === 'visible') {
+                        opt.assetModifiers[mIdx].hidden = false;
+                    } else if (sel.value === 'hidden') {
+                        opt.assetModifiers[mIdx].hidden = true;
+                    } else {
+                        delete opt.assetModifiers[mIdx].hidden;
+                    }
+                    scheduleAutoSave();
+                });
+            });
+
+            axesContainer.querySelectorAll('.btn-del-asset-mod').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const aIdx = Number(btn.getAttribute('data-aidx'));
+                    const oIdx = Number(btn.getAttribute('data-oidx'));
+                    const mIdx = Number(btn.getAttribute('data-midx'));
+                    const opt = scenario.variantAxes[aIdx]?.options?.[oIdx];
+                    if (!opt || !opt.assetModifiers) return;
+                    opt.assetModifiers.splice(mIdx, 1);
                     renderAdvancedTab();
                     scheduleAutoSave();
                 });
@@ -2131,11 +2409,11 @@
             if (!Array.isArray(scenario.variantAxes)) scenario.variantAxes = [];
             const n = scenario.variantAxes.length + 1;
             scenario.variantAxes.push({
-                id: `axis_${n}`,
+                id: `condition_axis_${n}`,
                 name: `Condition Axis ${n}`,
                 options: [
-                    { id: 'standard', name: 'Standard Conditions', briefingText: 'Normal operating baseline.' },
-                    { id: 'severe', name: 'Severe Conditions', briefingText: 'Elevated threat environment.' }
+                    { id: 'standard_conditions', name: 'Standard Conditions', briefingText: 'Normal operating baseline.', scoreModifiers: {}, assetModifiers: [] },
+                    { id: 'severe_conditions', name: 'Severe Conditions', briefingText: 'Elevated threat environment.', scoreModifiers: {}, assetModifiers: [] }
                 ]
             });
             renderAdvancedTab();

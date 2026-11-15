@@ -1179,3 +1179,139 @@ details.asset-card-collapsible[open] > .asset-card-summary .collapsible-caret {
     border: 1px solid rgba(245, 158, 11, 0.35);
     color: #fde68a;
 }
+
+/* ==========================================================================
+   COLLAPSIBLE SCENARIO VARIANT AXES & OPTIONS (BR-37 ENHANCEMENTS)
+   ========================================================================== */
+details.variant-axis-collapsible {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+details.variant-axis-collapsible:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.variant-axis-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    background: var(--bg-secondary);
+    transition: background 0.15s ease;
+}
+
+.variant-axis-summary::-webkit-details-marker {
+    display: none;
+}
+
+details.variant-axis-collapsible > .variant-axis-summary .summary-caret,
+details.variant-opt-collapsible > .variant-opt-summary .summary-caret {
+    display: inline-block;
+    transition: transform 0.18s ease;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    user-select: none;
+}
+
+details.variant-axis-collapsible[open] > .variant-axis-summary .summary-caret,
+details.variant-opt-collapsible[open] > .variant-opt-summary .summary-caret {
+    transform: rotate(90deg);
+    color: var(--accent-blue);
+}
+
+details.variant-axis-collapsible[open] > .variant-axis-summary {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.variant-axis-body {
+    padding: 1rem 1.15rem;
+}
+
+details.variant-opt-collapsible {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+details.variant-opt-collapsible:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.variant-opt-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    background: rgba(15, 23, 42, 0.5);
+    transition: background 0.15s ease;
+}
+
+.variant-opt-summary::-webkit-details-marker {
+    display: none;
+}
+
+details.variant-opt-collapsible[open] > .variant-opt-summary {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.variant-opt-body {
+    padding: 0.85rem 1rem;
+    background: var(--bg-primary);
+}
+
+.variant-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.75rem;
+}
+
+.variant-modifier-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.85rem;
+    margin-top: 0.65rem;
+}
+
+.modifier-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.45rem;
+}
+
+.modifier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: var(--accent-blue);
+}
+
+.modifier-badge.asset {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #fde68a;
+}
+

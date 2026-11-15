@@ -312,6 +312,43 @@ if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
     assert.strictEqual(engine.isManualPause, false);
     assert.strictEqual(engine.gameState.isPaused, false);
     console.log("✅ Event deduplication and pause/resume tests passed.");
+
+    // Testing Variant Axes and Modifiers (BR-37)
+    testScenario.variantAxes = [
+        {
+            id: 'weather_conditions',
+            name: 'Weather Conditions',
+            options: [
+                {
+                    id: 'severe_storm',
+                    name: 'Severe Storm',
+                    briefingText: 'A massive storm front has rolled in.',
+                    scoreModifiers: { uk_us: 1, military_readiness: -1 },
+                    assetModifiers: [
+                        { id: 'test_asset', state: 'damaged', hidden: true },
+                        { id: 'new_support_unit', name: 'Support Unit', state: 'deployed' }
+                    ]
+                }
+            ]
+        }
+    ];
+
+    testScenario.assets = [{ id: 'test_asset', name: 'Test Asset', location: [0,0], state: 'operational', tags: [] }];
+    engine.createLobby('test_scenario', { weather_conditions: 'severe_storm' });
+
+    assert.strictEqual(engine.gameState.scores.uk_us, 4, "Variant score modifier (+1) should be applied");
+    assert.strictEqual(engine.gameState.scores.military_readiness, 2, "Variant score modifier (-1) should be applied");
+    const testAsset = engine.gameState.assets.find(a => a.id === 'test_asset');
+    assert.strictEqual(testAsset.state, 'damaged', "Variant asset modifier should change asset state to damaged");
+    assert.strictEqual(testAsset.hidden, true, "Variant asset modifier should change asset visibility to hidden");
+    const newUnit = engine.gameState.assets.find(a => a.id === 'new_support_unit');
+    assert.ok(newUnit, "Variant asset modifier should inject new asset if not existing");
+    assert.strictEqual(newUnit.state, 'deployed', "New asset state should match variant modifier");
+    assert.strictEqual(engine.gameState.scenarioConfig.selectedVariantNames.length, 1);
+    assert.strictEqual(engine.gameState.scenarioConfig.variantBriefings[0].briefingText, 'A massive storm front has rolled in.');
+    engine.startGame();
+    assert.strictEqual(engine.gameState.status, 'active');
+    console.log("✅ Variant axes score and asset modifier tests passed.");
 }
 
 // Cleanup
