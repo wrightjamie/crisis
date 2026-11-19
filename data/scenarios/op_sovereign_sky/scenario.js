@@ -578,7 +578,8 @@ module.exports = {
                         }
                     ]
                 }
-            ]
+            ],
+            "prerequisites": []
         },
         {
             "id": "ev_2_osint_finint",
@@ -979,6 +980,9 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "prerequisites": [
+                "ev_5_isr_collection"
             ]
         },
         {
@@ -1203,7 +1207,10 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_10_bai_convoy"
-                                ]
+                                ],
+                                "assetStateChanges": {
+                                    "a_crimson_sam_battery": "destroyed"
+                                }
                             }
                         },
                         {
@@ -1277,7 +1284,7 @@ module.exports = {
                 },
                 {
                     "role": "control",
-                    "text": "With the missile convoy destroyed, what status have our forces achieved across the coastal airspace?",
+                    "text": "Following our air interdiction mission against the enemy missile convoy, what status should we declare across the coastal airspace?",
                     "options": [
                         {
                             "id": "opt_10_supremacy",
@@ -1338,7 +1345,10 @@ module.exports = {
                                 ],
                                 "unlockEvents": [
                                     "ev_12_counter_land"
-                                ]
+                                ],
+                                "assetStateChanges": {
+                                    "a_hostile_sub": "destroyed"
+                                }
                             }
                         },
                         {
@@ -1381,7 +1391,15 @@ module.exports = {
                         }
                     ]
                 }
-            ]
+            ],
+            "prerequisites": [
+                "ev_10_bai_convoy"
+            ],
+            "autoEffects": {
+                "revealAssets": [
+                    "a_hostile_sub"
+                ]
+            }
         },
         {
             "id": "ev_12_counter_land",
@@ -1527,6 +1545,9 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "sustainability": 1
+                                },
+                                "assetStateChanges": {
+                                    "a_typhoon": "operational"
                                 }
                             }
                         },
@@ -1742,6 +1763,9 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "prerequisites": [
+                "ev_15_urban_roe"
             ]
         },
         {
@@ -1905,12 +1929,30 @@ module.exports = {
                         {
                             "id": "opt_19_csar_medevac_plan",
                             "text": "Send armed Chinooks with fighter top-cover to rescue the pilot, while flying casualties via medical helicopter to hospital",
-                            "effects": {}
+                            "effects": {
+                                "scores": {
+                                    "force_protection": 2,
+                                    "joint_effect": 1,
+                                    "coalition_support": 1
+                                },
+                                "unlockEvents": [
+                                    "ev_20_space_jamming"
+                                ]
+                            }
                         },
                         {
                             "id": "opt_19_abandon",
                             "text": "Tell the ejected pilot to walk back alone across 80 miles of occupied enemy territory",
-                            "effects": {}
+                            "effects": {
+                                "scores": {
+                                    "force_protection": -2,
+                                    "coalition_support": -2,
+                                    "joint_effect": -1
+                                },
+                                "unlockEvents": [
+                                    "ev_20_space_jamming"
+                                ]
+                            }
                         }
                     ]
                 }
@@ -1967,6 +2009,9 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "prerequisites": [
+                "ev_19_csar_medevac"
             ]
         },
         {
@@ -2067,8 +2112,7 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "air_control": 4,
-                    "joint_effect": 4,
-                    "sustainability": 3
+                    "joint_effect": 4
                 }
             },
             "location": [
@@ -2077,7 +2121,7 @@ module.exports = {
             ],
             "image": "ev_eu_success",
             "description": "CAMPAIGN VICTORY! By mastering the four core roles of Air Power—Control of the Air, Intelligence, Air Attack, and Air Mobility—and working seamlessly with our ground troops and Navy warships, your team compelled an enemy surrender and restored peace.",
-            "facilitatorNotes": "Trigger this Endgame if the cadets achieved strong scores across Air Control (4+), Joint Effect (4+), and Sustainability (3+). Congratulate them on passing the practical application of the Senior/Master Air Power syllabus!",
+            "facilitatorNotes": "Trigger this Endgame if the cadets achieved strong scores across Air Control (4+) and Joint Effect (4+). Congratulate them on passing the practical application of the Senior/Master Air Power syllabus!",
             "roleDescriptions": {
                 "jfac": "Outstanding leadership. You proved how air command and control acts as the catalyst for joint military success.",
                 "control": "You systematically defended friendly bases and won control of the airspace.",
@@ -2156,7 +2200,8 @@ module.exports = {
                 "mobility": "Helicopter pilots flew low through the canyons using night-vision goggles to avoid enemy radar.",
                 "isr": "The captured equipment provides vital cryptographic intelligence on the enemy's battle plans."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         },
         {
             "id": "ev_humanitarian_drop",
@@ -2172,7 +2217,8 @@ module.exports = {
             "roleDescriptions": {
                 "joint": "This relief mission proves how Air Power can deliver life-saving aid to remote areas within hours."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         },
         {
             "id": "ev_combat_air_patrol_surge",
@@ -2188,7 +2234,8 @@ module.exports = {
             "roleDescriptions": {
                 "control": "Continuous fighter patrols have forced enemy aircraft to stay grounded on their own airfields."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         },
         {
             "id": "ev_link16_sync",
@@ -2204,7 +2251,8 @@ module.exports = {
             "roleDescriptions": {
                 "isr": "Sensors, commanders, and pilots now share radar and drone video in real time."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         },
         {
             "id": "ev_raf_regt_sweep",
@@ -2220,7 +2268,8 @@ module.exports = {
             "roleDescriptions": {
                 "jfac": "The airfield perimeter is secure, allowing transport and fighter sorties to launch safely."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         },
         {
             "id": "ev_psyops_broadcast",
@@ -2236,7 +2285,8 @@ module.exports = {
             "roleDescriptions": {
                 "strike": "Non-kinetic psychological operations successfully weakened the enemy's will to fight."
             },
-            "decisions": []
+            "decisions": [],
+            "requiresUnlock": true
         }
     ],
     "manualActions": [
