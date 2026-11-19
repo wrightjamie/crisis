@@ -273,7 +273,8 @@ class GameEngine {
                 scoreConfigs: scenario.scoreConfigs || {},
                 aiConfig: scenario.aiConfig,
                 stages: scenario.stages || [],
-                manualActions: scenario.manualActions || []
+                manualActions: scenario.manualActions || [],
+                canvasLayout: scenario.canvasLayout || null
             },
             scores: scores,
             events: [],
@@ -367,6 +368,7 @@ class GameEngine {
             visibleTo: template.visibleTo,
             hiddenFrom: template.hiddenFrom,
             sound: template.sound,
+            isEndGame: Boolean(template.isEndGame),
             timestamp: Date.now()
         };
 

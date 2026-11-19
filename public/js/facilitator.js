@@ -935,9 +935,12 @@ function renderGlobalView() {
         if (evt.visibleTo || evt.hiddenFrom) {
             secretBadge = `<span class="bg-primary p-1 radius-sm border-color text-xs uppercase secret-badge-left">Secret</span>`;
         }
+        const tpl = allTemplates.find(t => t.id === evt.templateId);
+        const isEndGame = Boolean(evt.isEndGame || (tpl && tpl.isEndGame));
+        const endGameBadge = isEndGame ? `<span class="badge badge-endgame ml-xs">🏁 End Game</span>` : '';
         eventsList.innerHTML += `
-            <div class="card mb-1 p-1">
-                <strong>${p(evt.name)}</strong>${secretBadge}<br>
+            <div class="card mb-1 p-1${isEndGame ? ' endgame-card' : ''}">
+                <strong>${p(evt.name)}</strong>${endGameBadge}${secretBadge}<br>
                 <small>${new Date(evt.timestamp).toLocaleTimeString()}</small>
             </div>
         `;
@@ -1050,6 +1053,46 @@ window.openEventDetails = function(templateId) {
     if (!dialog.open) dialog.showModal();
 };
 
+window.openManualActionDetails = function(actionId) {
+    if (!currentState || !currentState.scenarioConfig) return;
+    const act = (currentState.scenarioConfig.manualActions || []).find(a => a.id === actionId);
+    if (!act) return;
+
+    currentEventDetailsId = null;
+    const titleEl = document.getElementById('fac-info-title');
+    const contentEl = document.getElementById('fac-info-content');
+    const p = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+    const esc = (s) => (window.common && window.common.escapeHtml) ? window.common.escapeHtml(s) : String(s ?? '');
+
+    titleEl.textContent = 'Manual Action Details';
+
+    const initiators = Array.isArray(act.initiator) ? act.initiator.join(', ').toUpperCase() : (act.initiator ? String(act.initiator).toUpperCase() : 'ANY');
+    const approvers = Array.isArray(act.approver) ? act.approver.join(', ').toUpperCase() : (act.approver ? String(act.approver).toUpperCase() : 'None (Immediate)');
+    const triggered = (act.effects && Array.isArray(act.effects.triggerEvents)) ? act.effects.triggerEvents : [];
+    const conditionsMet = checkConditions(act, currentState.scores, currentState.assets, currentState.unlockedEvents, (currentState.events || []).map(e => e.templateId), currentActiveRoles);
+
+    let html = `
+        <div class="card mb-2">
+            <div class="flex-between items-center mb-1">
+                <span class="badge badge-action">⚡ Manual Action</span>
+                <span class="badge badge-${conditionsMet ? 'available' : 'pending'}">${conditionsMet ? '🟢 READY FOR PLAYERS' : '⏳ CONDITIONS NOT MET'}</span>
+            </div>
+            <div class="card-title">${p(act.name || act.id)}</div>
+            <div class="card-desc">${p(act.description || 'No description provided.')}</div>
+        </div>
+        <div class="card mb-2">
+            <div class="text-sm"><strong>Initiator Role(s):</strong> ${esc(initiators)}</div>
+            <div class="text-sm mt-xs"><strong>Approver(s):</strong> ${esc(approvers)}</div>
+            ${triggered.length > 0 ? `<div class="text-sm mt-xs"><strong>Triggers Events:</strong> ${esc(triggered.map(t => typeof t === 'string' ? t : t.id).join(', '))}</div>` : ''}
+        </div>
+        <p class="text-xs text-muted">Manual actions are initiated directly by players from their station when available.</p>
+    `;
+
+    contentEl.innerHTML = html;
+    const dialog = document.getElementById('fac-info-panel');
+    if (!dialog.open) dialog.showModal();
+};
+
 window.closeFacilitatorPanel = function() {
     const dialog = document.getElementById('fac-info-panel');
     if (dialog.open) dialog.close();
@@ -1144,13 +1187,14 @@ function buildFacilitatorEventConditionsWarning(template, currentState) {
 function buildFacilitatorEventDetailsHtml(template, meetsConditions, currentState, p) {
     const triggerBtnText = meetsConditions ? 'TRIGGER EVENT' : 'FORCE TRIGGER';
     
-    let html = `<div class="card btn btn-secondary wiki-back-btn">`;
+    let html = `<div class="card btn btn-secondary wiki-back-btn${template.isEndGame ? ' endgame-card' : ''}">`;
     if (template.image) {
         const altText = template.imageMeta?.title || template.name;
         const titleText = template.imageMeta?.description || altText;
         html += `<img src="${template.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
     }
     html += `
+            ${template.isEndGame ? `<div class="mb-1"><span class="badge badge-endgame">🏁 End Game Event</span></div>` : ''}
             <div class="card-title">${p(template.name)}</div>
             <div class="card-desc">${p(template.description)}</div>
         </div>
@@ -1271,7 +1315,8 @@ function renderScheduledEvents() {
         const name = template ? template.name : se.templateId;
         
         const card = document.createElement('div');
-        card.className = 'card';
+        const isEndGame = Boolean(template && template.isEndGame);
+        card.className = isEndGame ? 'card endgame-card' : 'card';
         card.style.marginBottom = '0.5rem';
         card.style.padding = '0.5rem';
         
@@ -1279,10 +1324,11 @@ function renderScheduledEvents() {
         if (timeRemaining < 0) timeRemaining = 0;
         
         const statusHtml = se.paused ? '<span class="text-status-4">PAUSED</span>' : `<span class="countdown-timer text-status-1" data-trigger-time="${se.triggerTimeMs}">${Math.ceil(timeRemaining/1000)}s</span>`;
+        const endGameBadge = isEndGame ? '<span class="badge badge-endgame ml-xs">🏁 End Game</span>' : '';
         
         card.innerHTML = `
             <div class="flex-between">
-                <strong>${name}</strong>
+                <strong>${name}${endGameBadge}</strong>
                 ${statusHtml}
             </div>
             <div class="btn-group mt-sm">

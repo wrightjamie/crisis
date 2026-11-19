@@ -5,6 +5,7 @@
 - [x] Refactor scenario event structure into a branching tree with prerequisites
 - [x] Implement score-based gating for event unlocking
 - [x] Create a "Scenario Explorer" tree view for the Facilitator interface
+- [x] Upgrade Facilitator Display Event Explorer to reuse the Editor's interactive network diagram (`FlowGraph`) with live status filtering (Active, Available, Pending, Locked, Complete, End Game) and cross-view End Game event highlights
 - [ ] Remove Masonry.js polyfill from facilitator.html once CSS grid-lanes is widely supported
 - [x] Create a knowledge wiki covering game assets and terminology
 - [x] Add a mechanism for users to take manual actions outside of a structured scenario (which might trigger otherwise disabled scenarios)

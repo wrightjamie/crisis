@@ -274,8 +274,8 @@
         <div class="grid">
             
             <!-- Controls -->
-            <!-- Interactive Event Explorer (Replacing Available Events) -->
-            <div class="admin-card span-2 flex-col" >
+            <!-- Interactive Event Explorer -->
+            <div id="event-explorer-card" class="admin-card span-2 flex-col">
                 <div class="fac-list-item-header">
                     <h2>Event Explorer</h2>
                     <div id="stage-controls" class="flex-row items-center gap-md">
@@ -284,7 +284,7 @@
                         <button class="btn btn-secondary text-sm" onclick="window.changeStage(1)">&gt;</button>
                     </div>
                 </div>
-                <p class="text-sm text-secondary mb-1">Click nodes or cards to view details and trigger events. Events from future stages are hidden.</p>
+                <p class="text-sm text-secondary mb-1">Drag background to pan, scroll to zoom, and click any node or card to inspect and trigger events. Future stages are hidden.</p>
                 
                 <!-- Filter and Search Toolbar -->
                 <div class="fac-event-toolbar mb-2">
@@ -292,33 +292,39 @@
                         <button class="btn-filter active" id="filter-btn-all" onclick="window.setEventFilter('all')" title="Show all events">
                             <span>🌐 All</span> <span class="badge" id="count-all">0</span>
                         </button>
-                        <button class="btn-filter btn-filter-available" id="filter-btn-available" onclick="window.setEventFilter('available')" title="Show only events ready to trigger right now">
+                        <button class="btn-filter btn-filter-active" id="filter-btn-active" onclick="window.setEventFilter('active')" title="Highlight triggered events with pending decisions or scheduled countdowns">
+                            <span>⚡ Active</span> <span class="badge" id="count-active">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-available" id="filter-btn-available" onclick="window.setEventFilter('available')" title="Highlight events ready to trigger right now">
                             <span>🟢 Available</span> <span class="badge" id="count-available">0</span>
                         </button>
-                        <button class="btn-filter btn-filter-pending" id="filter-btn-pending" onclick="window.setEventFilter('pending')" title="Show events waiting on scores, assets, or unlocks">
+                        <button class="btn-filter btn-filter-pending" id="filter-btn-pending" onclick="window.setEventFilter('pending')" title="Highlight events waiting on scores, assets, or unlocks">
                             <span>⏳ Pending</span> <span class="badge" id="count-pending">0</span>
                         </button>
-                        <button class="btn-filter btn-filter-locked" id="filter-btn-locked" onclick="window.setEventFilter('locked')" title="Show events with unfulfilled prerequisites">
+                        <button class="btn-filter btn-filter-locked" id="filter-btn-locked" onclick="window.setEventFilter('locked')" title="Highlight events with unfulfilled prerequisites">
                             <span>🔒 Locked</span> <span class="badge" id="count-locked">0</span>
                         </button>
-                        <button class="btn-filter btn-filter-triggered" id="filter-btn-triggered" onclick="window.setEventFilter('triggered')" title="Show events that have already triggered">
-                            <span>✅ Triggered</span> <span class="badge" id="count-triggered">0</span>
+                        <button class="btn-filter btn-filter-complete" id="filter-btn-complete" onclick="window.setEventFilter('complete')" title="Highlight triggered events whose decisions are all resolved">
+                            <span>✅ Complete</span> <span class="badge" id="count-complete">0</span>
+                        </button>
+                        <button class="btn-filter btn-filter-endgame" id="filter-btn-endgame" onclick="window.setEventFilter('endgame')" title="Highlight scenario end-game events">
+                            <span>🏁 End Game</span> <span class="badge" id="count-endgame">0</span>
                         </button>
                     </div>
                     <div class="flex-row items-center gap-sm mt-1">
                         <div class="fac-search-box">
-                            <input type="text" id="fac-event-search" placeholder="🔍 Filter events by name, role, or description..." class="form-control text-sm w-100" oninput="window.setEventSearch(this.value)">
+                            <input type="text" id="fac-event-search" placeholder="🔍 Filter events by name, notes, or description..." class="form-control text-sm w-100" oninput="window.setEventSearch(this.value)">
                             <button id="fac-event-search-clear" class="btn-search-clear" onclick="window.clearEventSearch()" style="display: none;" title="Clear search">&times;</button>
                         </div>
                         <div class="flex-row items-center gap-xs">
-                            <button id="btn-view-tree" class="btn btn-secondary btn-sm active" title="Prerequisite Tree View" onclick="window.setExplorerView('tree')">🌳 Tree</button>
+                            <button id="btn-view-network" class="btn btn-secondary btn-sm active" title="Interactive Network Diagram" onclick="window.setExplorerView('network')">🕸️ Network</button>
                             <button id="btn-view-list" class="btn btn-secondary btn-sm" title="Flat Card List View" onclick="window.setExplorerView('list')">📋 Cards</button>
                         </div>
                     </div>
                 </div>
 
                 <div id="scenario-explorer-container" class="fac-event-list">
-                    <!-- Tree or Cards injected via JS -->
+                    <!-- Network Diagram or Cards injected via JS -->
                 </div>
             </div>
 
@@ -396,6 +402,7 @@
     <script src="js/shared.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/acronyms.js"></script>
+    <script src="js/flow-graph.js"></script>
     <script src="js/scenario-explorer.js"></script>
     <script src="js/facilitator.js"></script>
     <script src="js/bug-reporter.js"></script>

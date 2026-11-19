@@ -13,6 +13,8 @@
   --accent-green: #10b981;
   --accent-orange: #f59e0b;
   --accent-orange-dark: #f97316;
+  --accent-purple: #a855f7;
+  --accent-crimson: #e11d48;
   
   /* Status Colors (1-5 scale) */
   --status-1: var(--accent-green); /* Stable */
