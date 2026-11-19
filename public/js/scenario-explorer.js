@@ -1,77 +1,175 @@
-// Scenario Explorer with Filtering, Search, and Dual Tree/Card Views
+// Scenario Explorer with Interactive Network Diagram (FlowGraph), Filtering, Search, and Card View
+(function() {
+    'use strict';
 
-let currentEventFilter = 'all'; // 'all', 'available', 'pending', 'locked', 'triggered'
-let currentEventSearch = '';
-let currentExplorerView = 'tree'; // 'tree' or 'list'
+    let currentEventFilter = 'all'; // 'all', 'active', 'available', 'pending', 'locked', 'complete', 'endgame'
+    let currentEventSearch = '';
+    let currentExplorerView = 'network'; // 'network' or 'list'
+    let showManualActions = true;
+    let isExpanded = false;
 
-window.setEventFilter = function(filter) {
-    currentEventFilter = filter;
-    renderScenarioExplorer();
-};
+    // Persistent canvas state across live state_update broadcasts
+    let panZoomController = null;
+    let lastFittedScenarioId = null;
+    let lastPositionsMap = new Map();
 
-window.setEventSearch = function(query) {
-    currentEventSearch = (query || '').toLowerCase().trim();
-    const clearBtn = document.getElementById('fac-event-search-clear');
-    if (clearBtn) {
-        clearBtn.style.display = currentEventSearch.length > 0 ? 'block' : 'none';
+    const escapeHtml = (str) => {
+        if (window.common && typeof window.common.escapeHtml === 'function') {
+            return window.common.escapeHtml(str);
+        }
+        return String(str ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    };
+
+    window.setEventFilter = function(filter) {
+        currentEventFilter = filter;
+        renderScenarioExplorer();
+    };
+
+    window.setEventSearch = function(query) {
+        currentEventSearch = (query || '').toLowerCase().trim();
+        const clearBtn = document.getElementById('fac-event-search-clear');
+        if (clearBtn) {
+            clearBtn.style.display = currentEventSearch.length > 0 ? 'block' : 'none';
+        }
+        renderScenarioExplorer();
+    };
+
+    window.clearEventSearch = function() {
+        const searchInput = document.getElementById('fac-event-search');
+        if (searchInput) searchInput.value = '';
+        window.setEventSearch('');
+    };
+
+    window.setExplorerView = function(mode) {
+        if (mode !== 'network' && mode !== 'list') mode = 'network';
+        currentExplorerView = mode;
+        if (mode !== 'network' && panZoomController) {
+            panZoomController.destroy();
+            panZoomController = null;
+        }
+        renderScenarioExplorer();
+    };
+
+    function toggleExpandedView(forceState) {
+        const card = document.getElementById('event-explorer-card');
+        if (!card) return;
+        isExpanded = typeof forceState === 'boolean' ? forceState : !isExpanded;
+        card.classList.toggle('fac-explorer-expanded', isExpanded);
+
+        const btn = document.getElementById('fac-btn-expand');
+        if (btn) {
+            btn.textContent = isExpanded ? '⤡ Collapse' : '⤢ Expand';
+            btn.title = isExpanded ? 'Exit full-viewport mode (Esc)' : 'Expand network diagram to full viewport';
+        }
+
+        if (panZoomController && lastPositionsMap.size > 0) {
+            requestAnimationFrame(() => panZoomController.fitToView(lastPositionsMap));
+        }
     }
-    renderScenarioExplorer();
-};
 
-window.clearEventSearch = function() {
-    const searchInput = document.getElementById('fac-event-search');
-    if (searchInput) searchInput.value = '';
-    window.setEventSearch('');
-};
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isExpanded) {
+            const infoDialog = document.getElementById('fac-info-panel');
+            if (!infoDialog || !infoDialog.open) {
+                toggleExpandedView(false);
+            }
+        }
+    });
 
-window.setExplorerView = function(mode) {
-    currentExplorerView = mode;
-    renderScenarioExplorer();
-};
+    function buildRuntimeMaps() {
+        const triggeredIds = new Set();
+        const eventInstancesByTemplate = new Map();
+        (currentState.events || []).forEach(ev => {
+            if (!ev.templateId) return;
+            triggeredIds.add(ev.templateId);
+            if (!eventInstancesByTemplate.has(ev.templateId)) {
+                eventInstancesByTemplate.set(ev.templateId, []);
+            }
+            eventInstancesByTemplate.get(ev.templateId).push(ev.id);
+        });
 
-function renderScenarioExplorer() {
-    const container = document.getElementById('scenario-explorer-container');
-    if (!container) return;
-    
-    if (typeof allTemplates === 'undefined' || typeof currentState === 'undefined') return;
-    
-    const triggeredIds = new Set(currentState.events.map(e => e.templateId));
-    const stages = currentState.scenarioConfig.stages || [];
-    const currentStageIndex = currentState.currentStageIndex || 0;
-    const p = (t) => (window.parseAcronyms ? window.parseAcronyms(t) : t);
-    
-    function getStageIndex(stageId) {
-        if (!stageId) return 0;
-        const idx = stages.findIndex(s => s.id === stageId);
-        return idx !== -1 ? idx : 0;
+        const scheduledIds = new Set((currentState.scheduledEvents || []).map(se => se.templateId));
+
+        // Map eventInstanceId -> tasks, and templateId -> { hasPending, chosenOptions: Set }
+        const tasksByEventId = new Map();
+        (currentState.decisionTasks || []).forEach(task => {
+            if (!tasksByEventId.has(task.eventId)) tasksByEventId.set(task.eventId, []);
+            tasksByEventId.get(task.eventId).push(task);
+        });
+
+        const templateTaskState = new Map();
+        eventInstancesByTemplate.forEach((eventIds, templateId) => {
+            let hasPending = false;
+            const chosenOptions = new Set();
+            eventIds.forEach(eid => {
+                (tasksByEventId.get(eid) || []).forEach(t => {
+                    if (t.status !== 'resolved') hasPending = true;
+                    if (t.status === 'resolved' && t.selectedOption) chosenOptions.add(t.selectedOption);
+                });
+            });
+            templateTaskState.set(templateId, { hasPending, chosenOptions });
+        });
+
+        return { triggeredIds, scheduledIds, templateTaskState };
     }
 
-    function getNodeStatus(template) {
+    function getNodeStatus(template, maps) {
+        const { triggeredIds, scheduledIds, templateTaskState } = maps;
+
         if (triggeredIds.has(template.id)) {
+            const taskInfo = templateTaskState.get(template.id);
+            if (taskInfo && taskInfo.hasPending) {
+                return {
+                    key: 'active',
+                    text: 'ACTIVE',
+                    borderColor: 'var(--accent-blue)',
+                    icon: '⚡'
+                };
+            }
             return {
-                key: 'triggered',
-                text: 'TRIGGERED',
-                color: 'var(--status-1)',
-                borderColor: 'var(--status-1)',
+                key: 'complete',
+                text: 'COMPLETE',
+                borderColor: 'var(--accent-purple)',
                 icon: '✅'
             };
         }
-        const prereqsMet = !template.prerequisites || template.prerequisites.every(p => triggeredIds.has(p));
-        const conditionsMet = checkConditions(template, currentState.scores, currentState.assets, currentState.unlockedEvents, currentState.events.map(e => e.templateId), currentActiveRoles);
-        
+
+        if (scheduledIds.has(template.id)) {
+            return {
+                key: 'active',
+                text: 'SCHEDULED',
+                borderColor: 'var(--accent-blue)',
+                icon: '⏱️'
+            };
+        }
+
+        const prereqsMet = !template.prerequisites || template.prerequisites.every(pId => triggeredIds.has(pId));
+        const conditionsMet = checkConditions(
+            template,
+            currentState.scores,
+            currentState.assets,
+            currentState.unlockedEvents,
+            (currentState.events || []).map(e => e.templateId),
+            typeof currentActiveRoles !== 'undefined' ? currentActiveRoles : []
+        );
+
         if (prereqsMet && conditionsMet) {
             return {
                 key: 'available',
                 text: 'AVAILABLE',
-                color: 'var(--accent-blue)',
-                borderColor: 'var(--accent-blue)',
+                borderColor: 'var(--accent-green)',
                 icon: '🟢'
             };
-        } else if (prereqsMet && !conditionsMet) {
+        }
+        if (prereqsMet && !conditionsMet) {
             return {
                 key: 'pending',
-                text: 'PENDING CONDITIONS',
-                color: 'var(--accent-orange)',
+                text: 'PENDING',
                 borderColor: 'var(--accent-orange)',
                 icon: '⏳'
             };
@@ -79,87 +177,312 @@ function renderScenarioExplorer() {
         return {
             key: 'locked',
             text: 'LOCKED',
-            color: 'var(--text-muted)',
             borderColor: 'var(--border-color)',
             icon: '🔒'
         };
     }
 
+    function getActionStatus(act) {
+        const conditionsMet = checkConditions(
+            act,
+            currentState.scores,
+            currentState.assets,
+            currentState.unlockedEvents,
+            (currentState.events || []).map(e => e.templateId),
+            typeof currentActiveRoles !== 'undefined' ? currentActiveRoles : []
+        );
+        return conditionsMet
+            ? { key: 'available', text: 'READY', icon: '🟢' }
+            : { key: 'pending', text: 'GATED', icon: '⏳' };
+    }
+
     function templateMatchesFilter(template, statusObj) {
-        if (currentEventFilter !== 'all' && statusObj.key !== currentEventFilter) {
+        if (currentEventFilter === 'endgame') {
+            if (!template.isEndGame) return false;
+        } else if (currentEventFilter !== 'all' && statusObj.key !== currentEventFilter) {
             return false;
         }
+
         if (currentEventSearch) {
             const q = currentEventSearch;
+            const id = (template.id || '').toLowerCase();
             const name = (template.name || '').toLowerCase();
             const desc = (typeof template.description === 'string' ? template.description : '').toLowerCase();
             const notes = (template.facilitatorNotes || '').toLowerCase();
             const stage = (template.stage || '').toLowerCase();
-            if (!name.includes(q) && !desc.includes(q) && !notes.includes(q) && !stage.includes(q)) {
+            if (!id.includes(q) && !name.includes(q) && !desc.includes(q) && !notes.includes(q) && !stage.includes(q)) {
                 return false;
             }
         }
         return true;
     }
 
-    // 1. Calculate counts for active stages
-    const activeStageEvents = allTemplates.filter(t => !t.hidden && getStageIndex(t.stage) <= currentStageIndex);
-    let countAll = activeStageEvents.length;
-    let countAvailable = 0;
-    let countPending = 0;
-    let countLocked = 0;
-    let countTriggered = 0;
-
-    activeStageEvents.forEach(t => {
-        const st = getNodeStatus(t);
-        if (st.key === 'triggered') countTriggered++;
-        else if (st.key === 'available') countAvailable++;
-        else if (st.key === 'pending') countPending++;
-        else countLocked++;
-    });
-
-    // Update count badges in toolbar
-    const countAllEl = document.getElementById('count-all');
-    const countAvailEl = document.getElementById('count-available');
-    const countPendingEl = document.getElementById('count-pending');
-    const countLockedEl = document.getElementById('count-locked');
-    const countTriggeredEl = document.getElementById('count-triggered');
-
-    if (countAllEl) countAllEl.textContent = countAll;
-    if (countAvailEl) countAvailEl.textContent = countAvailable;
-    if (countPendingEl) countPendingEl.textContent = countPending;
-    if (countLockedEl) countLockedEl.textContent = countLocked;
-    if (countTriggeredEl) countTriggeredEl.textContent = countTriggered;
-
-    // Update active filter button styling
-    ['all', 'available', 'pending', 'locked', 'triggered'].forEach(f => {
-        const btn = document.getElementById(`filter-btn-${f}`);
-        if (btn) {
-            if (currentEventFilter === f) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
+    function buildConditionSummary(template) {
+        if (!template.conditions) return '';
+        const parts = [];
+        if (template.conditions.minScores) {
+            for (const [k, v] of Object.entries(template.conditions.minScores)) {
+                parts.push(`Min ${formatName(k)}: ${v}`);
             }
         }
-    });
+        if (template.conditions.maxScores) {
+            for (const [k, v] of Object.entries(template.conditions.maxScores)) {
+                parts.push(`Max ${formatName(k)}: ${v}`);
+            }
+        }
+        if (template.conditions.visibleAssets) {
+            parts.push(`Visible: ${template.conditions.visibleAssets.join(', ')}`);
+        }
+        return parts.join(' • ');
+    }
 
-    // Update view toggle buttons
-    const btnTree = document.getElementById('btn-view-tree');
-    const btnList = document.getElementById('btn-view-list');
-    if (btnTree && btnList) {
-        if (currentExplorerView === 'tree') {
-            btnTree.classList.add('active');
-            btnList.classList.remove('active');
-        } else {
-            btnTree.classList.remove('active');
-            btnList.classList.add('active');
+    function ensureNetworkShell(container) {
+        let shell = document.getElementById('fac-canvas-shell');
+        if (shell && container.contains(shell)) return shell;
+
+        if (panZoomController) {
+            panZoomController.destroy();
+            panZoomController = null;
+        }
+
+        const defsMarkup = window.FlowGraph ? window.FlowGraph.getSvgDefsMarkup('fac-') : '';
+
+        container.innerHTML = `
+            <div id="fac-canvas-shell" class="fac-canvas-shell">
+                <div class="canvas-toolbar">
+                    <div class="canvas-legend">
+                        <span><span class="canvas-legend-dot trigger"></span>Trigger</span>
+                        <span><span class="canvas-legend-dot decision"></span>Decision</span>
+                        <span><span class="canvas-legend-dot action"></span>Manual Action</span>
+                        <span><span class="canvas-legend-dot prereq"></span>Prereq</span>
+                        <span><span class="canvas-legend-dot endgame"></span>End Game</span>
+                    </div>
+                    <div class="flex-center gap-xs flex-wrap">
+                        <button type="button" id="fac-btn-toggle-actions" class="btn btn-secondary btn-sm${showManualActions ? ' active' : ''}" title="Show or hide player Manual Action nodes">⚡ Actions</button>
+                        <button type="button" id="fac-btn-zoom-out" class="btn btn-secondary btn-sm" title="Zoom Out" aria-label="Zoom Out">-</button>
+                        <span id="fac-canvas-zoom-label" class="text-xs text-muted canvas-zoom-label">100%</span>
+                        <button type="button" id="fac-btn-zoom-in" class="btn btn-secondary btn-sm" title="Zoom In" aria-label="Zoom In">+</button>
+                        <button type="button" id="fac-btn-zoom-fit" class="btn btn-secondary btn-sm" title="Fit diagram to viewport">Fit</button>
+                        <button type="button" id="fac-btn-zoom-reset" class="btn btn-secondary btn-sm" title="Reset zoom to 100%">Reset</button>
+                        <button type="button" id="fac-btn-expand" class="btn btn-secondary btn-sm" title="Expand network diagram to full viewport">${isExpanded ? '⤡ Collapse' : '⤢ Expand'}</button>
+                    </div>
+                </div>
+                <div id="fac-canvas-wrapper" class="canvas-stage-wrapper fac-canvas-stage-wrapper">
+                    <div id="fac-canvas-plane" class="canvas-transform-plane">
+                        <svg id="fac-canvas-svg" class="canvas-svg-layer">
+                            ${defsMarkup}
+                            <g id="fac-canvas-edges-group"></g>
+                        </svg>
+                        <div id="fac-canvas-nodes-layer" class="canvas-nodes-layer"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const wrapperEl = document.getElementById('fac-canvas-wrapper');
+        const planeEl = document.getElementById('fac-canvas-plane');
+        const zoomLabelEl = document.getElementById('fac-canvas-zoom-label');
+
+        if (window.FlowGraph && wrapperEl && planeEl) {
+            panZoomController = window.FlowGraph.createPanZoomController({
+                wrapperEl,
+                planeEl,
+                zoomLabelEl,
+                canStartPan: (e) => !e.target.closest('.canvas-node')
+            });
+        }
+
+        document.getElementById('fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
+        document.getElementById('fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
+        document.getElementById('fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
+        document.getElementById('fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
+        document.getElementById('fac-btn-expand')?.addEventListener('click', () => toggleExpandedView());
+        document.getElementById('fac-btn-toggle-actions')?.addEventListener('click', (e) => {
+            showManualActions = !showManualActions;
+            e.currentTarget.classList.toggle('active', showManualActions);
+            renderScenarioExplorer();
+        });
+
+        return document.getElementById('fac-canvas-shell');
+    }
+
+    function renderNetworkView(container, activeStageEvents, stages, maps, p) {
+        if (!window.FlowGraph) return;
+
+        ensureNetworkShell(container);
+
+        const nodesLayer = document.getElementById('fac-canvas-nodes-layer');
+        const edgesGroup = document.getElementById('fac-canvas-edges-group');
+        if (!nodesLayer || !edgesGroup) return;
+
+        const manualActions = showManualActions ? (currentState.scenarioConfig?.manualActions || []) : [];
+        const savedPositions = currentState.scenarioConfig?.canvasLayout?.positions || {};
+
+        const posMap = window.FlowGraph.computeLayout(activeStageEvents, manualActions, { savedPositions });
+        lastPositionsMap = posMap;
+
+        const isFilterActive = currentEventFilter !== 'all' || currentEventSearch.length > 0;
+        const matchingIds = new Set();
+
+        const getStageIdx = (stageId) => {
+            if (!stageId || stages.length === 0) return 0;
+            const idx = stages.findIndex(s => s.id === stageId);
+            return idx !== -1 ? idx : 0;
+        };
+
+        const eventsHtml = activeStageEvents.map((ev) => {
+            const pos = posMap.get(ev.id) || { x: 60, y: 60 };
+            const status = getNodeStatus(ev, maps);
+            const matches = templateMatchesFilter(ev, status);
+            if (matches) matchingIds.add(ev.id);
+
+            const taskInfo = maps.templateTaskState.get(ev.id);
+            const chosenOptions = taskInfo ? taskInfo.chosenOptions : new Set();
+
+            const nodeClasses = [
+                'canvas-node',
+                `status-${status.key}`,
+                ev.isEndGame ? 'endgame-node' : '',
+                isFilterActive ? (matches ? 'filter-highlight' : 'filter-dimmed') : ''
+            ].filter(Boolean).join(' ');
+
+            const stageIdx = getStageIdx(ev.stage);
+            const condSummary = buildConditionSummary(ev);
+
+            let optionsHtml = '';
+            if (Array.isArray(ev.decisions) && ev.decisions.length > 0) {
+                const pills = [];
+                ev.decisions.forEach(dec => {
+                    (dec.options || []).forEach(opt => {
+                        const optTriggers = window.FlowGraph.getHelperTriggers(opt);
+                        const linkedCount = optTriggers.length;
+                        const isChosen = chosenOptions.has(opt.id);
+                        pills.push(`
+                            <div class="canvas-option-pill${isChosen ? ' chosen' : ''}" title="${escapeHtml(opt.text || opt.id)}">
+                                <span class="truncate">${isChosen ? '✓ ' : ''}${escapeHtml(opt.text || opt.id)}</span>
+                                ${linkedCount > 0 ? `<span class="badge badge-decision">→ ${linkedCount}</span>` : ''}
+                            </div>
+                        `);
+                    });
+                });
+                if (pills.length > 0) {
+                    optionsHtml = `<div class="canvas-decision-pills">${pills.join('')}</div>`;
+                }
+            }
+
+            return `
+                <div class="${nodeClasses}" data-event-id="${escapeHtml(ev.id)}" style="left: ${pos.x}px; top: ${pos.y}px;">
+                    <div class="canvas-node-header">
+                        <span class="badge badge-${status.key}">${status.icon} ${status.text}</span>
+                        <div class="inline-flex items-center gap-xs">
+                            ${ev.isEndGame ? `<span class="badge badge-endgame">🏁 End Game</span>` : ''}
+                            ${stages.length > 0 ? `<span class="badge badge-stage">S${stageIdx + 1}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="canvas-node-title">${p(ev.name || ev.title || ev.id)}</div>
+                    <div class="canvas-node-meta">
+                        ${ev.requiresUnlock ? `<span class="badge badge-inject">Inject</span>` : ''}
+                        ${ev.sound ? `<span class="badge badge-sound">🔊 ${escapeHtml(ev.sound)}</span>` : ''}
+                        ${(ev.visibleTo || ev.hiddenFrom) ? `<span class="badge badge-secret">Secret</span>` : ''}
+                    </div>
+                    ${condSummary ? `<div class="canvas-node-reqs">${escapeHtml(condSummary)}</div>` : ''}
+                    ${optionsHtml}
+                </div>
+            `;
+        }).join('');
+
+        const actionsHtml = manualActions.map((act) => {
+            const pos = posMap.get(act.id) || { x: 60, y: 260 };
+            const actStatus = getActionStatus(act);
+            const matchesSearch = !currentEventSearch ||
+                (act.name || '').toLowerCase().includes(currentEventSearch) ||
+                (act.id || '').toLowerCase().includes(currentEventSearch) ||
+                (act.description || '').toLowerCase().includes(currentEventSearch);
+
+            const matchesActionFilter = (currentEventFilter === 'all' || currentEventFilter === actStatus.key) && matchesSearch;
+            if (matchesActionFilter) matchingIds.add(act.id);
+
+            const nodeClasses = [
+                'canvas-node',
+                'action-node',
+                isFilterActive ? (matchesActionFilter ? 'filter-highlight' : 'filter-dimmed') : ''
+            ].filter(Boolean).join(' ');
+
+            const initiators = Array.isArray(act.initiator) ? act.initiator.join(', ').toUpperCase() : (act.initiator ? String(act.initiator).toUpperCase() : 'ANY');
+
+            return `
+                <div class="${nodeClasses}" data-action-id="${escapeHtml(act.id)}" style="left: ${pos.x}px; top: ${pos.y}px;">
+                    <div class="canvas-node-header">
+                        <span class="badge badge-action">⚡ Manual Action</span>
+                        <span class="badge badge-${actStatus.key}">${actStatus.icon} ${actStatus.text}</span>
+                    </div>
+                    <div class="canvas-node-title">${p(act.name || act.id)}</div>
+                    <div class="canvas-node-meta">
+                        <span class="badge badge-stage">Role: ${escapeHtml(initiators)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        nodesLayer.innerHTML = eventsHtml + actionsHtml;
+
+        edgesGroup.innerHTML = window.FlowGraph.buildEdgesSvg(activeStageEvents, manualActions, posMap, {
+            escapeHtml,
+            markerPrefix: 'fac-',
+            getEdgeClass: (edge) => {
+                const classes = [];
+                if (edge.type === 'decision' && edge.optionId) {
+                    const taskInfo = maps.templateTaskState.get(edge.sourceId);
+                    if (taskInfo && taskInfo.chosenOptions.has(edge.optionId)) {
+                        classes.push('edge-chosen');
+                    }
+                }
+                if (isFilterActive && !matchingIds.has(edge.sourceId) && !matchingIds.has(edge.targetId)) {
+                    classes.push('edge-dimmed');
+                }
+                return classes.join(' ');
+            }
+        });
+
+        nodesLayer.querySelectorAll('.canvas-node[data-event-id]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (panZoomController && panZoomController.wasPanning()) return;
+                const evId = el.getAttribute('data-event-id');
+                if (evId && typeof window.openEventDetails === 'function') {
+                    window.openEventDetails(evId);
+                }
+            });
+        });
+
+        nodesLayer.querySelectorAll('.canvas-node[data-action-id]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (panZoomController && panZoomController.wasPanning()) return;
+                const actId = el.getAttribute('data-action-id');
+                if (actId && typeof window.openManualActionDetails === 'function') {
+                    window.openManualActionDetails(actId);
+                }
+            });
+        });
+
+        // Auto-fit once when a new scenario loads
+        const scenarioId = currentState.scenarioId || currentState.scenarioConfig?.id || 'default';
+        if (lastFittedScenarioId !== scenarioId && panZoomController) {
+            lastFittedScenarioId = scenarioId;
+            requestAnimationFrame(() => panZoomController?.fitToView(posMap));
         }
     }
 
-    // 2. Render Card List View
-    if (currentExplorerView === 'list') {
-        const matchingEvents = activeStageEvents.filter(t => templateMatchesFilter(t, getNodeStatus(t)));
-        
+    function renderCardListView(container, activeStageEvents, stages, maps, p) {
+        const getStageIdx = (stageId) => {
+            if (!stageId || stages.length === 0) return 0;
+            const idx = stages.findIndex(s => s.id === stageId);
+            return idx !== -1 ? idx : 0;
+        };
+
+        const matchingEvents = activeStageEvents.filter(t => templateMatchesFilter(t, getNodeStatus(t, maps)));
+
         let listHtml = `<div class="scenario-explorer-container">`;
         if (matchingEvents.length === 0) {
             listHtml += `
@@ -171,40 +494,28 @@ function renderScenarioExplorer() {
         } else {
             listHtml += `<div class="scenario-card-grid">`;
             matchingEvents.forEach(template => {
-                const status = getNodeStatus(template);
-                const stageIdx = getStageIndex(template.stage);
-                const stageName = stages[stageIdx]?.name || `Stage ${stageIdx + 1}`;
-                
-                let secretBadge = '';
-                if (template.visibleTo || template.hiddenFrom) {
-                    secretBadge = `<span class="badge uppercase" style="background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid rgba(220, 38, 38, 0.4);">Secret</span>`;
-                }
-
-                let soundBadge = '';
-                if (template.sound) {
-                    soundBadge = `<span class="badge uppercase" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3);">🔊 ${template.sound}</span>`;
-                }
-
-                let condSummary = '';
-                if (template.conditions) {
-                    const parts = [];
-                    if (template.conditions.minScores) {
-                        for (const [k, v] of Object.entries(template.conditions.minScores)) parts.push(`Min ${formatName(k)}: ${v}`);
-                    }
-                    if (template.conditions.visibleAssets) {
-                        parts.push(`Visible: ${template.conditions.visibleAssets.join(', ')}`);
-                    }
-                    if (parts.length > 0) condSummary = parts.join(' • ');
-                }
-
+                const status = getNodeStatus(template, maps);
+                const stageIdx = getStageIdx(template.stage);
+                const secretBadge = (template.visibleTo || template.hiddenFrom)
+                    ? `<span class="badge badge-secret">Secret</span>`
+                    : '';
+                const soundBadge = template.sound
+                    ? `<span class="badge badge-sound">🔊 ${escapeHtml(template.sound)}</span>`
+                    : '';
+                const endGameBadge = template.isEndGame
+                    ? `<span class="badge badge-endgame">🏁 End Game</span>`
+                    : '';
+                const condSummary = buildConditionSummary(template);
                 const descText = typeof template.description === 'function' ? 'Dynamic description' : (template.description || '');
+                const cardClass = template.isEndGame ? 'fac-event-card endgame-card' : 'fac-event-card';
 
                 listHtml += `
-                    <div class="fac-event-card" style="--branch-color: ${status.borderColor};" onclick="openEventDetails('${template.id}')">
+                    <div class="${cardClass}" style="--branch-color: ${status.borderColor};" onclick="openEventDetails('${escapeHtml(template.id)}')">
                         <div>
                             <div class="fac-event-card-header">
-                                <span class="badge" style="background: var(--bg-tertiary); color: var(--text-secondary); font-size: 0.7rem;">Stage ${stageIdx + 1}</span>
-                                <div class="flex-row items-center gap-xs">
+                                <span class="badge badge-stage">Stage ${stageIdx + 1}</span>
+                                <div class="flex-row items-center gap-xs flex-wrap">
+                                    ${endGameBadge}
                                     ${soundBadge}
                                     ${secretBadge}
                                     <span class="badge event-status-pill badge-${status.key}">${status.icon} ${status.text}</span>
@@ -214,8 +525,8 @@ function renderScenarioExplorer() {
                             <div class="fac-event-card-desc">${p(descText)}</div>
                         </div>
                         <div class="fac-event-card-footer">
-                            <span class="text-muted text-xs truncate flex-1">${condSummary || 'No special conditions'}</span>
-                            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); openEventDetails('${template.id}')">View</button>
+                            <span class="text-muted text-xs truncate flex-1">${escapeHtml(condSummary) || 'No special conditions'}</span>
+                            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); openEventDetails('${escapeHtml(template.id)}')">View</button>
                         </div>
                     </div>
                 `;
@@ -224,230 +535,69 @@ function renderScenarioExplorer() {
         }
         listHtml += `</div>`;
         container.innerHTML = listHtml;
-        return;
     }
 
-    // 3. Render Tree View
-    const renderedNodes = new Set();
-    const isFilterActive = currentEventFilter !== 'all' || currentEventSearch.length > 0;
+    function renderScenarioExplorer() {
+        const container = document.getElementById('scenario-explorer-container');
+        if (!container) return;
+        if (typeof allTemplates === 'undefined' || typeof currentState === 'undefined' || !currentState) return;
 
-    function hasMatchingDescendant(templateId) {
-        const t = allTemplates.find(x => x.id === templateId);
-        if (!t) return false;
-        const status = getNodeStatus(t);
-        if (templateMatchesFilter(t, status)) return true;
-        const children = allTemplates.filter(c => !c.hidden && c.prerequisites && c.prerequisites.includes(templateId));
-        return children.some(c => hasMatchingDescendant(c.id));
-    }
+        const stages = currentState.scenarioConfig?.stages || [];
+        const currentStageIndex = currentState.currentStageIndex || 0;
+        const p = (t) => (window.parseAcronyms ? window.parseAcronyms(t) : t);
 
-    function renderNode(templateId, isRoot = false) {
-        if (renderedNodes.has(templateId)) return '';
-        
-        const template = allTemplates.find(t => t.id === templateId);
-        if (!template) return '';
+        const getStageIndex = (stageId) => {
+            if (!stageId) return 0;
+            const idx = stages.findIndex(s => s.id === stageId);
+            return idx !== -1 ? idx : 0;
+        };
 
-        const status = getNodeStatus(template);
-        const matchesCurrent = templateMatchesFilter(template, status);
-        const hasDescendantMatch = hasMatchingDescendant(templateId);
+        const maps = buildRuntimeMaps();
+        const activeStageEvents = allTemplates.filter(t => !t.hidden && getStageIndex(t.stage) <= currentStageIndex);
 
-        // If filtering is active and neither this node nor its descendants match, hide from tree
-        if (isFilterActive && !hasDescendantMatch) {
-            return '';
-        }
+        // 1. Update toolbar counts
+        const counts = {
+            all: activeStageEvents.length,
+            active: 0,
+            available: 0,
+            pending: 0,
+            locked: 0,
+            complete: 0,
+            endgame: 0
+        };
 
-        renderedNodes.add(templateId);
-
-        // Children filtered by stage
-        const children = allTemplates.filter(t => {
-            if (t.hidden || !t.prerequisites || !t.prerequisites.includes(templateId)) return false;
-            return getStageIndex(t.stage) <= currentStageIndex;
+        activeStageEvents.forEach(t => {
+            const st = getNodeStatus(t, maps);
+            if (counts[st.key] !== undefined) counts[st.key]++;
+            if (t.isEndGame) counts.endgame++;
         });
 
-        const hasChildren = children.length > 0;
-        const isTriggered = triggeredIds.has(templateId);
+        Object.entries(counts).forEach(([key, val]) => {
+            const el = document.getElementById(`count-${key}`);
+            if (el) el.textContent = val;
+        });
 
-        // Auto-expand branches when filtering is active and children contain matches
-        const shouldExpand = isFilterActive ? hasChildren : isTriggered;
+        // 2. Update active filter button styling
+        ['all', 'active', 'available', 'pending', 'locked', 'complete', 'endgame'].forEach(f => {
+            const btn = document.getElementById(`filter-btn-${f}`);
+            if (btn) btn.classList.toggle('active', currentEventFilter === f);
+        });
 
-        let toggleHtml = '';
-        if (hasChildren) {
-            const btnText = shouldExpand ? '[-]' : '[+]';
-            toggleHtml = `<button onclick="event.stopPropagation(); const ul = this.closest('li').querySelector(':scope > ul'); if(ul.classList.contains('d-none')){ul.classList.remove('d-none');this.textContent='[-]'}else{ul.classList.add('d-none');this.textContent='[+]'};" class="scenario-tree-toggle" title="Toggle branch">${btnText}</button>`;
+        // 3. Update view toggle buttons
+        const btnNetwork = document.getElementById('btn-view-network');
+        const btnList = document.getElementById('btn-view-list');
+        if (btnNetwork && btnList) {
+            btnNetwork.classList.toggle('active', currentExplorerView === 'network');
+            btnList.classList.toggle('active', currentExplorerView === 'list');
         }
 
-        const isClickable = status.key === 'available' || status.key === 'pending';
-        const clickHandler = isClickable ? `onclick="openEventDetails('${templateId}')"` : '';
-        const interactivity = isClickable ? 'cursor: pointer;' : 'cursor: not-allowed;';
-
-        const dimClass = (isFilterActive && !matchesCurrent) ? 'filter-dimmed' : '';
-        const highlightClass = (isFilterActive && matchesCurrent) ? 'filter-highlight' : '';
-
-        let soundBadge = '';
-        if (template.sound) {
-            soundBadge = `<span class="badge uppercase ml-1" style="font-size: 0.65rem; background: rgba(14, 165, 233, 0.2); color: #38bdf8;">🔊 ${template.sound}</span>`;
-        }
-
-        let nodeHtml = `
-            <li class="relative" style="--branch-color: ${status.borderColor};">
-                ${toggleHtml}
-                <div ${clickHandler} class="scenario-tree-node explorer-node border-color-dynamic ${isClickable ? 'clickable' : ''} ${dimClass} ${highlightClass}" style="--branch-color: ${status.borderColor}; ${interactivity}">
-                    <div class="scenario-node-title">${p(template.name)} ${soundBadge}</div>
-                    <div class="scenario-node-status status-color" style="--status-color: ${status.color};">${status.icon} ${status.text}</div>
-        `;
-
-        if (template.conditions) {
-            let condStrs = [];
-            if (template.conditions.minScores) {
-                for (const [k, v] of Object.entries(template.conditions.minScores)) condStrs.push(`Min ${formatName(k)}: ${v}`);
-            }
-            if (template.conditions.visibleAssets) {
-                condStrs.push(`Visible: ${template.conditions.visibleAssets.join(', ')}`);
-            }
-            if (condStrs.length > 0) {
-                nodeHtml += `<div class="scenario-node-reqs">Cond: ${condStrs.join(', ')}</div>`;
-            }
-        }
-
-        nodeHtml += `</div>`;
-
-        if (hasChildren) {
-            nodeHtml += `<ul class="${shouldExpand ? '' : 'd-none'}">`;
-            children.forEach(child => {
-                nodeHtml += renderNode(child.id, false);
-            });
-            nodeHtml += `</ul>`;
-        }
-
-        nodeHtml += `</li>`;
-        return nodeHtml;
-    }
-
-    let html = `<div class="scenario-explorer-container">`;
-
-    if (stages.length === 0) {
-        html += `<ul class="scenario-tree pl-lg">`;
-        const roots = allTemplates.filter(t => !t.hidden && (!t.prerequisites || t.prerequisites.length === 0));
-        roots.forEach(root => { html += renderNode(root.id, true); });
-        allTemplates.forEach(t => { if (!t.hidden && !renderedNodes.has(t.id)) html += renderNode(t.id, true); });
-        html += `</ul>`;
-    } else {
-        let totalRenderedInTree = 0;
-        for (let i = 0; i <= currentStageIndex; i++) {
-            const stage = stages[i];
-            if (!stage) continue;
-            
-            const stageEvents = allTemplates.filter(t => !t.hidden && getStageIndex(t.stage) === i);
-            const roots = stageEvents.filter(t => !t.prerequisites || t.prerequisites.length === 0);
-            
-            // Check if stage has any matching events under active filter
-            const stageHasMatches = !isFilterActive || stageEvents.some(t => hasMatchingDescendant(t.id));
-            if (!stageHasMatches) continue;
-
-            const isCurrentStage = i === currentStageIndex;
-            const toggleText = (isCurrentStage || isFilterActive) ? '[-]' : '[+]';
-            const contentDisplayClass = (isCurrentStage || isFilterActive) ? '' : 'd-none';
-
-            let stageContentHtml = '';
-            roots.forEach(root => {
-                stageContentHtml += renderNode(root.id, true);
-            });
-            stageEvents.forEach(t => {
-                if (!renderedNodes.has(t.id)) {
-                    stageContentHtml += renderNode(t.id, true);
-                }
-            });
-
-            if (stageContentHtml.trim().length > 0) {
-                totalRenderedInTree++;
-                html += `
-                    <div class="scenario-stage-group">
-                        <div onclick="const ul = this.nextElementSibling; if(ul.classList.contains('d-none')){ul.classList.remove('d-none');this.querySelector('.toggle').textContent='[-]'}else{ul.classList.add('d-none');this.querySelector('.toggle').textContent='[+]'}" class="scenario-stage-header">
-                            <span class="text-bold text-accent-blue">Stage ${i + 1}: ${stage.name}</span>
-                            <span class="toggle font-mono">${toggleText}</span>
-                        </div>
-                        <div class="scenario-stage-content ${contentDisplayClass}">
-                            <ul class="scenario-tree pl-md">
-                                ${stageContentHtml}
-                            </ul>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        if (totalRenderedInTree === 0) {
-            html += `
-                <div class="card p-3 text-center">
-                    <p class="text-secondary mb-1">No events match the current filter or search criteria.</p>
-                    <button class="btn btn-secondary btn-sm" onclick="window.setEventFilter('all'); window.clearEventSearch();">Reset Filters</button>
-                </div>
-            `;
+        // 4. Render selected view
+        if (currentExplorerView === 'list') {
+            renderCardListView(container, activeStageEvents, stages, maps, p);
+        } else {
+            renderNetworkView(container, activeStageEvents, stages, maps, p);
         }
     }
 
-    html += `</div>`;
-    container.innerHTML = html;
-}
-
-// Ensure style element is only injected once
-if (!document.getElementById('explorer-node-styles')) {
-    const styleEl = document.createElement('style');
-    styleEl.id = 'explorer-node-styles';
-    styleEl.textContent = `
-        .explorer-node:hover {
-            border-color: var(--text-muted) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .scenario-tree, .scenario-tree ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .scenario-tree {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .scenario-tree ul {
-            margin-left: 1.5rem;
-            padding-top: 1rem;
-        }
-        .scenario-tree li {
-            margin: 0;
-            padding: 0 0 1rem 1.5rem;
-            position: relative;
-        }
-        .scenario-tree li::before {
-            content: "";
-            position: absolute;
-            top: -1rem;
-            left: 0;
-            bottom: 0;
-            border-left: 2px solid var(--branch-color, var(--border-color));
-        }
-        .scenario-tree li::after {
-            content: "";
-            position: absolute;
-            top: 2rem;
-            left: 0;
-            width: 1.5rem;
-            border-top: 2px solid var(--branch-color, var(--border-color));
-        }
-        .scenario-tree li:last-child::before {
-            bottom: auto;
-            height: 3rem;
-        }
-        .scenario-tree > li::before,
-        .scenario-tree > li::after {
-            display: none;
-        }
-        .scenario-tree > li {
-            padding: 0;
-            margin-bottom: 0;
-        }
-    `;
-    document.head.appendChild(styleEl);
-}
-
-window.renderScenarioExplorer = renderScenarioExplorer;
+    window.renderScenarioExplorer = renderScenarioExplorer;
+})();
