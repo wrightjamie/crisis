@@ -3202,12 +3202,12 @@ module.exports = {
                     {
                         "id": "ev_combat_air_patrol_surge",
                         "delayMs": 2000,
-                        "weight": 75
+                        "probability": 0.75
                     },
                     {
                         "id": "ev_cap_fatigue_incident",
                         "delayMs": 2000,
-                        "weight": 25
+                        "probability": 0.25
                     }
                 ]
             },
@@ -3325,12 +3325,12 @@ module.exports = {
                     {
                         "id": "ev_sf_raid_success",
                         "delayMs": 2000,
-                        "weight": 75
+                        "probability": 0.75
                     },
                     {
                         "id": "ev_sf_raid_compromised",
                         "delayMs": 2000,
-                        "weight": 25
+                        "probability": 0.25
                     }
                 ]
             },

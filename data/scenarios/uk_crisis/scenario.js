@@ -3585,11 +3585,11 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_russia_deescalate",
-                        "weight": 50
+                        "probability": 0.5
                     },
                     {
                         "id": "ev_russia_leak",
-                        "weight": 50
+                        "probability": 0.5
                     }
                 ],
                 "scores": {
@@ -3633,21 +3633,21 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_us_support_success",
-                        "weight": 60,
                         "effects": {
                             "scores": {
                                 "military_readiness": 1
                             }
-                        }
+                        },
+                        "probability": 0.6
                     },
                     {
                         "id": "ev_us_support_fail",
-                        "weight": 40,
                         "effects": {
                             "scores": {
                                 "uk_europe": -1
                             }
-                        }
+                        },
+                        "probability": 0.4
                     }
                 ]
             },
@@ -3693,22 +3693,22 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_cyber_success",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "military_readiness": 1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     },
                     {
                         "id": "ev_cyber_fail",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "uk_europe": -1,
                                 "civilian_stability": -1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     }
                 ]
             },
@@ -3789,23 +3789,23 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_sf_success",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "military_readiness": 1,
                                 "uk_us": 1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     },
                     {
                         "id": "ev_sf_fail",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "civilian_stability": -1,
                                 "military_escalation": 1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     }
                 ]
             },
@@ -3852,17 +3852,17 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_strike_options_leak",
-                        "weight": 20,
                         "effects": {
                             "scores": {
                                 "military_escalation": 1,
                                 "uk_europe": -1
                             }
-                        }
+                        },
+                        "probability": 0.2
                     },
                     {
                         "id": "ev_strike_options_secured",
-                        "weight": 80
+                        "probability": 0.8
                     }
                 ],
                 "triggerEvents": [
@@ -3899,23 +3899,23 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_f35_success",
-                        "weight": 60,
                         "effects": {
                             "scores": {
                                 "military_escalation": -2,
                                 "uk_russia": 1
                             }
-                        }
+                        },
+                        "probability": 0.6
                     },
                     {
                         "id": "ev_f35_fail",
-                        "weight": 40,
                         "effects": {
                             "scores": {
                                 "military_escalation": 2,
                                 "civilian_stability": -1
                             }
-                        }
+                        },
+                        "probability": 0.4
                     }
                 ]
             },
@@ -3946,23 +3946,23 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_f35_success",
-                        "weight": 30,
                         "effects": {
                             "scores": {
                                 "military_escalation": -3,
                                 "uk_russia": 2
                             }
-                        }
+                        },
+                        "probability": 0.3
                     },
                     {
                         "id": "ev_f35_fail",
-                        "weight": 70,
                         "effects": {
                             "scores": {
                                 "military_escalation": 3,
                                 "civilian_stability": -2
                             }
-                        }
+                        },
+                        "probability": 0.7
                     }
                 ]
             },
@@ -4003,22 +4003,22 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_eu_success",
-                        "weight": 70,
                         "effects": {
                             "scores": {
                                 "uk_europe": 2,
                                 "military_escalation": -1
                             }
-                        }
+                        },
+                        "probability": 0.7
                     },
                     {
                         "id": "ev_eu_fail",
-                        "weight": 30,
                         "effects": {
                             "scores": {
                                 "uk_europe": -1
                             }
-                        }
+                        },
+                        "probability": 0.3
                     }
                 ]
             },

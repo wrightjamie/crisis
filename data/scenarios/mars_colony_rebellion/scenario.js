@@ -1020,23 +1020,23 @@ module.exports = {
                     {
                         "id": "ev_hack_success",
                         "image": "ev_cyber_success",
-                        "weight": 60,
                         "effects": {
                             "scores": {
                                 "propaganda_war": 1
                             }
-                        }
+                        },
+                        "probability": 0.6
                     },
                     {
                         "id": "ev_hack_traced",
                         "image": "ev_cyber_fail",
-                        "weight": 40,
                         "effects": {
                             "scores": {
                                 "tension": 1,
                                 "colony_morale": -1
                             }
-                        }
+                        },
+                        "probability": 0.4
                     }
                 ]
             },
@@ -1079,23 +1079,23 @@ module.exports = {
                     {
                         "id": "ev_drop_success",
                         "image": "ev_airborne_paratroop_drop",
-                        "weight": 80,
                         "effects": {
                             "scores": {
                                 "tension": -1
                             }
-                        }
+                        },
+                        "probability": 0.8
                     },
                     {
                         "id": "ev_drop_intercepted",
                         "image": "ev_airdrop_riot",
-                        "weight": 20,
                         "effects": {
                             "scores": {
                                 "mars_supply": 1,
                                 "earth_supply": -1
                             }
-                        }
+                        },
+                        "probability": 0.2
                     }
                 ]
             },

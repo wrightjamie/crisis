@@ -354,7 +354,7 @@ Presented to a specific role when an event is triggered.
                     {
                         id: "event_id",     // Mutually exclusive outcome
                         delayMs: number,    // (Optional) Milliseconds to wait before triggering
-                        probability: number // 0.0 to 1.0 (remaining probability below 1.0 = no event), OR use legacy `weight: number`
+                        probability: number // 0.0 to 1.0 (displayed as % in UI; remaining probability below 1.0 = no event)
                     }
                 ]
             }
@@ -409,9 +409,8 @@ Actions that players can trigger proactively from the "Actions" menu, stored dir
                 probability: number
             }
         ],
-        randomEvents: [       // Mutually exclusive outcome: use `probability` (0..1; remainder < 1.0 = no event) OR legacy `weight`
-            { id: "event_id", delayMs: number, probability: number },
-            { id: "event_id_alt", delayMs: number, weight: number }
+        randomEvents: [       // Mutually exclusive outcomes: `probability` (0.0..1.0, displayed as % in UI; remainder < 1.0 = no event)
+            { id: "event_id", delayMs: number, probability: number }
         ]
     }
 }

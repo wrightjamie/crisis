@@ -861,7 +861,7 @@
             if (!tr) return null;
             const tId = typeof tr === 'string' ? tr : (tr.id || '');
             const delaySec = Math.round(((tr.delayMs !== undefined ? tr.delayMs : 90000) / 1000));
-            const probVal = tr.probability !== undefined ? tr.probability : 1;
+            const probPct = Math.round((tr.probability !== undefined ? tr.probability : 1) * 100);
             return `
                 <div class="insp-subview-nav">
                     <button type="button" class="insp-back-btn" id="insp-btn-back-root">&larr; <span>${escapeHtml(evTitle)}</span></button>
@@ -889,8 +889,8 @@
                         <input type="number" class="form-control text-xs insp-tr-delay" data-idx="${idx}" value="${delaySec}" min="0" step="5">
                     </div>
                     <div class="field-group">
-                        <label>Probability (0&ndash;1)</label>
-                        <input type="number" class="form-control text-xs insp-tr-prob" data-idx="${idx}" value="${probVal}" min="0.05" max="1" step="0.05">
+                        <label>Probability (%)</label>
+                        <input type="number" class="form-control text-xs insp-tr-prob" data-idx="${idx}" value="${probPct}" min="1" max="100" step="5">
                     </div>
                 </div>
             `;
@@ -1022,8 +1022,7 @@
             : (Array.isArray(opt.triggerEvents) ? opt.triggerEvents : []);
         const optRandoms = Array.isArray(opt.effects?.randomEvents) ? opt.effects.randomEvents : [];
         const totalRandProb = optRandoms.reduce((sum, r) => sum + Math.max(0, Number(r?.probability ?? 0)), 0);
-        const usesRandProb = optRandoms.some(r => r && typeof r.probability === 'number');
-        const remNoEventPct = usesRandProb ? Math.max(0, Math.round((1 - totalRandProb) * 100)) : 0;
+        const remNoEventPct = Math.max(0, Math.round((1 - totalRandProb) * 100));
         const scoreEffects = (opt.effects && opt.effects.scores) ? opt.effects.scores : {};
         const revealList = Array.isArray(opt.effects?.revealAssets) ? opt.effects.revealAssets : [];
         const hideList = Array.isArray(opt.effects?.hideAssets) ? opt.effects.hideAssets : [];
@@ -1054,7 +1053,7 @@
                     ${optTriggers.length === 0 ? '<div class="text-xs text-muted">No independent downstream events linked.</div>' : optTriggers.map((tr, tIdx) => {
                         const targetId = typeof tr === 'string' ? tr : (tr.id || '');
                         const delaySec = (typeof tr === 'object' && tr && tr.delayMs !== undefined) ? Math.round(tr.delayMs / 1000) : 60;
-                        const probVal = (typeof tr === 'object' && tr && tr.probability !== undefined) ? tr.probability : 1;
+                        const probPct = Math.round(((typeof tr === 'object' && tr && tr.probability !== undefined) ? tr.probability : 1) * 100);
                         return `
                             <div class="insp-sublist-row">
                                 <select class="form-control text-xs insp-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" aria-label="Downstream Event">
@@ -1063,7 +1062,8 @@
                                 </select>
                                 <input type="number" class="form-control text-xs insp-opt-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
                                 <span class="insp-sublist-unit">s</span>
-                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${probVal}" min="0.05" max="1" step="0.05" aria-label="Probability 0 to 1" title="Probability (0–1)">
+                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${probPct}" min="1" max="100" step="5" aria-label="Probability percentage" title="Probability (%)">
+                                <span class="insp-sublist-unit">%</span>
                                 <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" title="Remove event link" aria-label="Remove event link">&times;</button>
                             </div>
                         `;
@@ -1073,14 +1073,14 @@
 
             <div class="field-group">
                 <div class="insp-sublist-header">
-                    <label>Exclusive Outcomes &mdash; A || B (${optRandoms.length})${optRandoms.length > 0 && usesRandProb ? ` <span class="text-xs text-muted">(${remNoEventPct}% no event)</span>` : ''}</label>
+                    <label>Exclusive Outcomes &mdash; A || B (${optRandoms.length})${optRandoms.length > 0 ? ` <span class="text-xs text-muted">(${remNoEventPct}% no event)</span>` : ''}</label>
                     <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-rand" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Outcome</button>
                 </div>
                 <div class="insp-sublist">
-                    ${optRandoms.length === 0 ? '<div class="text-xs text-muted">No mutually exclusive outcomes. Add outcomes with probabilities (0&ndash;1); any remainder results in no event.</div>' : optRandoms.map((rn, rIdx) => {
+                    ${optRandoms.length === 0 ? '<div class="text-xs text-muted">No mutually exclusive outcomes. Add outcomes with % probabilities; any remainder below 100% results in no event.</div>' : optRandoms.map((rn, rIdx) => {
                         const targetId = typeof rn === 'string' ? rn : (rn.id || rn.event || '');
                         const delaySec = (typeof rn === 'object' && rn && rn.delayMs !== undefined) ? Math.round(rn.delayMs / 1000) : 60;
-                        const probVal = (typeof rn === 'object' && rn && rn.probability !== undefined) ? rn.probability : 0.5;
+                        const probPct = Math.round(((typeof rn === 'object' && rn && rn.probability !== undefined) ? rn.probability : 0.5) * 100);
                         return `
                             <div class="insp-sublist-row">
                                 <select class="form-control text-xs insp-opt-rand-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" aria-label="Exclusive Outcome Event">
@@ -1089,7 +1089,8 @@
                                 </select>
                                 <input type="number" class="form-control text-xs insp-opt-rand-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
                                 <span class="insp-sublist-unit">s</span>
-                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-rand-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" value="${probVal}" min="0.05" max="1" step="0.05" aria-label="Exclusive Probability 0 to 1" title="Exclusive Probability (0–1)">
+                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-rand-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" value="${probPct}" min="1" max="100" step="5" aria-label="Exclusive Probability percentage" title="Exclusive Probability (%)">
+                                <span class="insp-sublist-unit">%</span>
                                 <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-rand" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" title="Remove exclusive outcome" aria-label="Remove exclusive outcome">&times;</button>
                             </div>
                         `;
@@ -1554,7 +1555,8 @@
             inp.addEventListener('input', () => {
                 const tr = ensureTriggerObj(Number(inp.getAttribute('data-idx')));
                 if (tr) {
-                    tr.probability = Math.min(1, Math.max(0.01, Number(inp.value || 1)));
+                    const pct = Math.min(100, Math.max(1, Number(inp.value || 100)));
+                    tr.probability = Math.round(pct) / 100;
                     renderCanvasEdges();
                     markDirty();
                 }
@@ -1778,7 +1780,8 @@
                 const opt = ev.decisions[dIdx].options[oIdx];
                 const arr = ensureOptionTriggerArray(opt);
                 if (arr[tIdx]) {
-                    arr[tIdx].probability = Math.min(1, Math.max(0.05, Number(inp.value || 1)));
+                    const pct = Math.min(100, Math.max(1, Number(inp.value || 100)));
+                    arr[tIdx].probability = Math.round(pct) / 100;
                     markDirty();
                 }
             });
@@ -1865,8 +1868,8 @@
                 const opt = ev.decisions[dIdx].options[oIdx];
                 const arr = ensureOptionRandomArray(opt);
                 if (arr[rIdx]) {
-                    arr[rIdx].probability = Math.min(1, Math.max(0.05, Number(inp.value || 0.5)));
-                    delete arr[rIdx].weight;
+                    const pct = Math.min(100, Math.max(1, Number(inp.value || 50)));
+                    arr[rIdx].probability = Math.round(pct) / 100;
                     openInspector(ev.id);
                     markDirty();
                 }

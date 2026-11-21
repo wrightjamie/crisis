@@ -25,7 +25,7 @@ assert.deepStrictEqual(
     'Should collect manual action predecessor events'
 );
 assert.deepStrictEqual(
-    FlowGraph.getActionTriggeredEvents({ effects: { triggerEvents: ['ev_3', { id: 'ev_5', delayMs: 5000, probability: 1.0 }], randomEvents: [{ event: 'ev_4' }, { id: 'ev_6', weight: 50 }] } }),
+    FlowGraph.getActionTriggeredEvents({ effects: { triggerEvents: ['ev_3', { id: 'ev_5', delayMs: 5000, probability: 1.0 }], randomEvents: [{ event: 'ev_4' }, { id: 'ev_6', probability: 0.5 }] } }),
     ['ev_3', 'ev_5', 'ev_4', 'ev_6'],
     'Should collect manual action triggered events (both strings and objects)'
 );

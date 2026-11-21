@@ -1183,23 +1183,23 @@ module.exports = {
                     {
                         "id": "ev_u2_success_manual",
                         "image": "ev_strike_options_ready",
-                        "weight": 70,
                         "effects": {
                             "scores": {
                                 "usa_momentum": 1
                             }
-                        }
+                        },
+                        "probability": 0.7
                     },
                     {
                         "id": "ev_u2_shot_down_manual",
                         "image": "ev_f35_fail",
-                        "weight": 30,
                         "effects": {
                             "scores": {
                                 "global_tension": 2,
                                 "diplomatic_progress": -1
                             }
-                        }
+                        },
+                        "probability": 0.3
                     }
                 ]
             },
@@ -1242,23 +1242,23 @@ module.exports = {
                     {
                         "id": "ev_sub_evades_manual",
                         "image": "ev_sub_detection",
-                        "weight": 60,
                         "effects": {
                             "scores": {
                                 "ussr_momentum": 1
                             }
-                        }
+                        },
+                        "probability": 0.6
                     },
                     {
                         "id": "ev_sub_depth_charge_manual",
                         "image": "ev_naval_strike",
-                        "weight": 40,
                         "effects": {
                             "scores": {
                                 "global_tension": 2,
                                 "diplomatic_progress": -1
                             }
-                        }
+                        },
+                        "probability": 0.4
                     }
                 ]
             },
@@ -1305,22 +1305,22 @@ module.exports = {
                     {
                         "id": "ev_backchannel_success",
                         "image": "ev_russia_deescalate",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "diplomatic_progress": 1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     },
                     {
                         "id": "ev_backchannel_fail",
                         "image": "ev_russia_leak",
-                        "weight": 50,
                         "effects": {
                             "scores": {
                                 "usa_momentum": -1
                             }
-                        }
+                        },
+                        "probability": 0.5
                     }
                 ]
             },

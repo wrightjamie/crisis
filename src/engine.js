@@ -585,36 +585,19 @@ class GameEngine {
         if (!Array.isArray(randomEvents) || randomEvents.length === 0) return;
         const scenario = this.getScenario();
 
-        const usesProbability = randomEvents.some(re => re && typeof re.probability === 'number');
-        if (usesProbability) {
-            const totalProb = randomEvents.reduce((sum, re) => sum + Math.max(0, Number(re?.probability) || 0), 0);
-            const upperBound = Math.max(1.0, totalProb);
-            let roll = Math.random() * upperBound;
-            for (const re of randomEvents) {
-                const p = Math.max(0, Number(re?.probability) || 0);
-                if (roll < p) {
-                    const targetId = re.id || re.event;
-                    if (this._canScheduleEventTemplate(targetId, scenario)) {
-                        this._enqueueScheduledEvent(targetId, re.delayMs);
-                    }
-                    break;
-                }
-                roll -= p;
-            }
-            return;
-        }
-
-        const totalWeight = randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
-        let roll = Math.random() * totalWeight;
+        const totalProb = randomEvents.reduce((sum, re) => sum + Math.max(0, Number(re?.probability) || 0), 0);
+        const upperBound = Math.max(1.0, totalProb);
+        let roll = Math.random() * upperBound;
         for (const re of randomEvents) {
-            if (roll < (re.weight || 1)) {
+            const p = Math.max(0, Number(re?.probability) || 0);
+            if (roll < p) {
                 const targetId = re.id || re.event;
                 if (this._canScheduleEventTemplate(targetId, scenario)) {
                     this._enqueueScheduledEvent(targetId, re.delayMs);
                 }
                 break;
             }
-            roll -= (re.weight || 1);
+            roll -= p;
         }
     }
 

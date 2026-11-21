@@ -1727,23 +1727,23 @@ module.exports = {
                     {
                         "id": "ev_hitler_wakes",
                         "image": "ev_crisis_cabinet",
-                        "weight": 30,
                         "effects": {
                             "scores": {
                                 "axis_reserves": 2,
                                 "beach_control": -1
                             }
-                        }
+                        },
+                        "probability": 0.3
                     },
                     {
                         "id": "ev_hitler_sleeps",
                         "image": "ev_crisis_cabinet",
-                        "weight": 70,
                         "effects": {
                             "scores": {
                                 "axis_reserves": -1
                             }
-                        }
+                        },
+                        "probability": 0.7
                     }
                 ]
             },
