@@ -94,22 +94,35 @@ The Admin panel (`/admin`) and Scenario Editor are protected by a hashed admin p
 
 1. Open **Dockhand** and navigate to **Containers**.
 2. Select your running Crisis container (e.g. `crisis_app`).
-3. Open the **Terminal** (Console / Exec) tab and connect with `/bin/sh`.
-4. Run the interactive password script:
+3. Open the **Terminal** (Console / Exec) tab and connect with `/bin/sh`. You will land in `/usr/src/app` (if not, run `cd /usr/src/app`).
+4. Run the password script directly (use single quotes if your password contains special characters):
+   ```sh
+   node scripts/set-admin-password.js --password 'YourNewPassword'
+   ```
+   *Or run interactively:*
    ```sh
    npm run set-admin
    ```
    Type your new password when prompted (`Enter new admin password:`) and press **Enter**.
-   
-   *Alternatively, pass the password directly in a single command:*
-   ```sh
-   node scripts/set-admin-password.js --password "YourNewPassword"
-   ```
 5. Confirm you see:
    ```text
    ✅ Admin password updated successfully in SQLite database.
    ```
-6. The new password takes effect **immediately** (no container restart required). Sign in at `http://<your_host>:3000/admin`.
+6. The new password takes effect **immediately** (no container restart required). Sign in at `http://<your_host>:3000/admin` with username `admin`.
+
+#### Troubleshooting: `database disk image is malformed`
+
+If setting the password fails with `database disk image is malformed`, the SQLite file or its WAL/SHM journal files on the mounted volume have fallen out of sync (often after an image update or unclean container stop). To recover cleanly:
+
+1. From `/usr/src/app` in the Dockhand Terminal, remove the corrupted database and journal files:
+   ```sh
+   rm -f data/crisis.db data/crisis.db-wal data/crisis.db-shm
+   ```
+2. **Restart the container** in Dockhand. On startup, `server.js` automatically recreates a fresh `data/crisis.db` and re-seeds all built-in scenarios and guides.
+3. Re-open the Dockhand Terminal (`/usr/src/app`) and re-run:
+   ```sh
+   node scripts/set-admin-password.js --password 'YourNewPassword'
+   ```
 
 ### Using Docker CLI
 
