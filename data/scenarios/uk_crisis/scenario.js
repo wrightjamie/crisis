@@ -530,6 +530,74 @@ module.exports = {
             ],
             "image": "ev_sub_detection",
             "briefing": "Russian Yasen-class nuclear-powered cruise missile submarine operating submerged near the entrance to the Clyde estuary."
+        },
+        {
+            "id": "a_gru_sabotage_cell",
+            "name": "GRU Sabotage Cell (UK Energy Grid)",
+            "location": [
+                52.95,
+                -1.15
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "intel",
+                "sabotage"
+            ],
+            "image": "substation_alpha",
+            "briefing": "Clandestine Russian GRU Unit 29155 sabotage team operating inside the UK, targeting high-voltage substations and rail signalling junctions."
+        },
+        {
+            "id": "a_rus_spy_trawler",
+            "name": "Russian Shadow-Fleet Spy Trawler",
+            "location": [
+                57.8,
+                1.4
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "naval",
+                "intel"
+            ],
+            "image": "ev_undersea_cable",
+            "briefing": "Commercial-flagged trawler outfitted with seabed-mapping sonar and ROV cutting gear loitering over North Sea gas pipelines and telecoms cables."
+        },
+        {
+            "id": "a_kaliningrad_iskander",
+            "name": "Kaliningrad Mobile Iskander Battery",
+            "location": [
+                54.71,
+                20.51
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "military",
+                "missile"
+            ],
+            "image": "rus_iskander",
+            "briefing": "Road-mobile Russian 9K720 Iskander-M ballistic missile launcher deployed out of garrison in Kaliningrad Oblast, threatening NATO logistics hubs and Baltic forces."
+        },
+        {
+            "id": "a_compromised_telecom_node",
+            "name": "Compromised UK Telecoms Core Node",
+            "location": [
+                51.52,
+                -0.14
+            ],
+            "state": "operational",
+            "hidden": true,
+            "tags": [
+                "hostile",
+                "cyber",
+                "infrastructure"
+            ],
+            "image": "generic_cyber",
+            "briefing": "Deeply embedded SVR/Sandworm implant inside a Tier-1 UK fibre exchange, enabling silent NHS ransomware cascades and emergency broadcast hijacking."
         }
     ],
     "stages": [
@@ -610,16 +678,13 @@ module.exports = {
                     ]
                 }
             ],
-            "prerequisites": []
+            "sound": "alert"
         },
         {
             "id": "ev_maritime_shadowing",
             "stage": "stage_1",
             "name": "Russian Warships Over Undersea Cables",
             "sound": "sonar",
-            "prerequisites": [
-                "ev_uk_casualty_leak"
-            ],
             "conditions": {
                 "triggeredEvents": [
                     "ev_uk_casualty_leak"
@@ -652,6 +717,18 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_undersea_cable",
                                     "ev_sub_detection"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_north_sea_pipeline",
+                                        "delayMs": 85000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_spy_trawler_anchor",
+                                        "delayMs": 90000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -667,6 +744,18 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_undersea_cable",
                                     "ev_sub_detection"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_giuk_tanker_collision",
+                                        "delayMs": 80000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_north_sea_pipeline",
+                                        "delayMs": 85000,
+                                        "probability": 0.4
+                                    }
                                 ]
                             }
                         }
@@ -707,7 +796,6 @@ module.exports = {
             "isOpeningEvent": true,
             "name": "British Soldier Casualties Leaked to Press",
             "image": "ev_uk_casualty_leak",
-            "prerequisites": [],
             "repeatable": false,
             "location": [
                 51.5,
@@ -731,7 +819,19 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_deepfake_pm",
+                                        "delayMs": 85000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_mi5_sleeper_cell",
+                                        "delayMs": 90000,
+                                        "probability": 0.35
+                                    }
+                                ]
                             }
                         },
                         {
@@ -740,7 +840,19 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -1
-                                }
+                                },
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_deepfake_pm",
+                                        "delayMs": 75000,
+                                        "probability": 0.6
+                                    },
+                                    {
+                                        "id": "ev_commons_no_confidence",
+                                        "delayMs": 95000,
+                                        "probability": 0.3
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -760,6 +872,18 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_russia_hub_explosion"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_baltic_drone_ambush",
+                                        "delayMs": 110000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_heathrow_gps_spoof",
+                                        "delayMs": 95000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -774,12 +898,25 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_russia_hub_explosion"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_heathrow_gps_spoof",
+                                        "delayMs": 95000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_mi5_sleeper_cell",
+                                        "delayMs": 100000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         }
                     ]
                 }
-            ]
+            ],
+            "sound": "teletype"
         },
         {
             "id": "ev_protest_london",
@@ -837,9 +974,7 @@ module.exports = {
                     ]
                 }
             ],
-            "prerequisites": [
-                "ev_protest_manchester"
-            ]
+            "sound": "alert"
         },
         {
             "id": "ev_protest_violence",
@@ -895,9 +1030,7 @@ module.exports = {
                     ]
                 }
             ],
-            "prerequisites": [
-                "ev_protest_london"
-            ]
+            "sound": "klaxon"
         },
         {
             "id": "ev_dissident_discovery",
@@ -932,7 +1065,7 @@ module.exports = {
                 "foreign": "The victim is a high-profile defector granted asylum in the UK."
             },
             "decisions": [],
-            "prerequisites": []
+            "sound": "teletype"
         },
         {
             "id": "ev_disinfo_campaign",
@@ -964,7 +1097,7 @@ module.exports = {
                 "media": "Mainstream TV channels are accidentally reporting some of the fake rumours as real news."
             },
             "decisions": [],
-            "prerequisites": []
+            "sound": "teletype"
         },
         {
             "id": "ev_bomber_intercept",
@@ -996,7 +1129,7 @@ module.exports = {
                 "foreign": "This flying intimidation is meant to remind the British public of Russia's long-range bombers."
             },
             "decisions": [],
-            "prerequisites": []
+            "sound": "klaxon"
         },
         {
             "id": "ev_gps_jamming",
@@ -1052,7 +1185,7 @@ module.exports = {
                     ]
                 }
             ],
-            "prerequisites": []
+            "sound": "alert"
         },
         {
             "id": "ev_black_sea_intercept",
@@ -1104,18 +1237,13 @@ module.exports = {
                 }
             ],
             "requiresUnlock": true,
-            "prerequisites": [
-                "ev_bomber_intercept"
-            ]
+            "sound": "klaxon"
         },
         {
             "id": "ev_cyber_london",
             "stage": "stage_2",
             "name": "Cyber Attack on London Banks",
             "sound": "teletype",
-            "prerequisites": [
-                "ev_gps_jamming"
-            ],
             "repeatable": true,
             "location": [
                 51.51,
@@ -1143,6 +1271,18 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_logistics_failure"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_nhs_ransomware",
+                                        "delayMs": 85000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_gchq_war_cabinet",
+                                        "delayMs": 90000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -1156,10 +1296,24 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_logistics_failure"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_nhs_ransomware",
+                                        "delayMs": 80000,
+                                        "probability": 0.65
+                                    },
+                                    {
+                                        "id": "ev_mi5_sleeper_cell",
+                                        "delayMs": 90000,
+                                        "probability": 0.25
+                                    }
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt2"
                 },
                 {
                     "role": "home",
@@ -1299,18 +1453,13 @@ module.exports = {
                 }
             ],
             "requiresUnlock": true,
-            "prerequisites": [
-                "ev_cyber_london"
-            ]
+            "sound": "alert"
         },
         {
             "id": "ev_cyber_exposure",
             "stage": "stage_2",
             "name": "Allied Leak: UK Cyber Strike Exposed",
             "requiresUnlock": true,
-            "prerequisites": [
-                "ev_logistics_failure"
-            ],
             "repeatable": false,
             "location": [
                 51.5,
@@ -1400,15 +1549,13 @@ module.exports = {
                         }
                     ]
                 }
-            ]
+            ],
+            "sound": "teletype"
         },
         {
             "id": "ev_russia_hub_explosion",
             "stage": "stage_2",
             "name": "Explosion at Russian Military Rail Hub",
-            "prerequisites": [
-                "ev_uk_casualty_leak"
-            ],
             "repeatable": false,
             "location": [
                 55.75,
@@ -1509,16 +1656,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "explosion"
         },
         {
             "id": "ev_undersea_cables",
             "stage": "stage_2",
             "name": "Undersea Internet Cables Cut",
             "image": "ev_undersea_cables",
-            "prerequisites": [
-                "ev_undersea_cable"
-            ],
             "conditions": {
                 "minScores": {
                     "uk_russia": 3
@@ -1571,7 +1716,8 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "sonar"
         },
         {
             "id": "ev_dissident_results",
@@ -1626,9 +1772,7 @@ module.exports = {
                     ]
                 }
             ],
-            "prerequisites": [
-                "ev_dissident_discovery"
-            ]
+            "sound": "teletype"
         },
         {
             "id": "ev_sub_detection",
@@ -1666,6 +1810,18 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_sub_surfaces"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_sub_breaks_contact",
+                                        "delayMs": 75000,
+                                        "probability": 0.35
+                                    },
+                                    {
+                                        "id": "ev_giuk_tanker_collision",
+                                        "delayMs": 85000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -1679,16 +1835,22 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_sub_surfaces"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_sub_breaks_contact",
+                                        "delayMs": 70000,
+                                        "probability": 0.65
+                                    }
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_sub2"
                 }
             ],
-            "requiresUnlock": true,
-            "prerequisites": [
-                "ev_maritime_shadowing"
-            ]
+            "requiresUnlock": true
         },
         {
             "id": "ev_oligarch_sanctions",
@@ -1740,9 +1902,7 @@ module.exports = {
                 }
             ],
             "requiresUnlock": true,
-            "prerequisites": [
-                "ev_dissident_results"
-            ]
+            "sound": "teletype"
         },
         {
             "id": "ev_undersea_cable",
@@ -1796,23 +1956,40 @@ module.exports = {
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "id": "opt_board_spy_trawler",
+                            "text": "Board and detain the identified shadow-fleet spy trawler with Royal Marines!",
+                            "conditions": {
+                                "visibleAssets": [
+                                    "a_rus_spy_trawler"
+                                ],
+                                "assetStates": {
+                                    "a_rus_spy_trawler": "operational"
+                                }
+                            },
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_rus_spy_trawler": "detained"
+                                },
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "uk_europe": 1,
+                                    "uk_russia": -1
+                                }
+                            }
                         }
                     ]
                 }
             ],
             "requiresUnlock": true,
-            "prerequisites": [
-                "ev_maritime_shadowing"
-            ]
+            "sound": "sonar"
         },
         {
             "id": "ev_airspace_intercept",
             "stage": "stage_3",
             "name": "Near-Miss Over the Atlantic",
             "sound": "klaxon",
-            "prerequisites": [
-                "ev_black_sea_intercept"
-            ],
             "repeatable": true,
             "location": [
                 60,
@@ -1897,9 +2074,6 @@ module.exports = {
             "stage": "stage_3",
             "name": "Russian Nuclear Submarine in the Channel",
             "image": "ev_sub_surfaces",
-            "prerequisites": [
-                "ev_sub_detection"
-            ],
             "conditions": {
                 "maxScores": {
                     "civilian_stability": 4
@@ -1975,16 +2149,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "sonar"
         },
         {
             "id": "ev_akrotiri_strike",
             "stage": "stage_3",
             "name": "Missile Strike on RAF Base in Cyprus",
             "image": "ev_akrotiri_strike",
-            "prerequisites": [
-                "ev_airspace_intercept"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 3
@@ -2017,6 +2189,18 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_raf_bases_strike",
                                     "ev_kinetic_strike"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_iskander_mobile",
+                                        "delayMs": 75000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_channel_tunnel_alert",
+                                        "delayMs": 80000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -2030,6 +2214,18 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_kinetic_strike"
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_secret_moscow_offer",
+                                        "delayMs": 80000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_iskander_mobile",
+                                        "delayMs": 85000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -2055,19 +2251,19 @@ module.exports = {
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 65000,
+                    "defaultOptionId": "opt_akr_2"
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "explosion"
         },
         {
             "id": "ev_kinetic_strike",
             "stage": "stage_4",
             "name": "Explosion at UK Military Supply Base",
             "sound": "explosion",
-            "prerequisites": [
-                "ev_russia_hub_explosion"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 3
@@ -2170,9 +2366,6 @@ module.exports = {
             "name": "Cruise Missile Strikes on UK Airbases",
             "sound": "explosion",
             "image": "ev_raf_bases_strike",
-            "prerequisites": [
-                "ev_kinetic_strike"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 4
@@ -2232,9 +2425,6 @@ module.exports = {
             "name": "Naval Base Portsmouth Struck",
             "sound": "explosion",
             "image": "ev_portsmouth_strike",
-            "prerequisites": [
-                "ev_sub_surfaces"
-            ],
             "repeatable": false,
             "location": [
                 50.81,
@@ -2292,9 +2482,6 @@ module.exports = {
             "stage": "stage_4",
             "name": "Drone Attack on Faslane Nuclear Base",
             "image": "ev_faslane_strike_1",
-            "prerequisites": [
-                "ev_portsmouth_strike"
-            ],
             "repeatable": false,
             "location": [
                 56.06,
@@ -2342,16 +2529,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "klaxon"
         },
         {
             "id": "ev_faslane_strike_2",
             "stage": "stage_4",
             "name": "Direct Missile Strike on Faslane",
             "image": "ev_faslane_strike_2",
-            "prerequisites": [
-                "ev_faslane_strike_1"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 4
@@ -2404,16 +2589,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "explosion"
         },
         {
             "id": "ev_power_grid_strike",
             "stage": "stage_4",
             "name": "National Power Grid Blackout",
             "image": "ev_power_grid_strike",
-            "prerequisites": [
-                "ev_logistics_failure"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 4
@@ -2464,10 +2647,13 @@ module.exports = {
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_pow_2"
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "klaxon"
         },
         {
             "id": "ev_airspace_incursion",
@@ -2475,9 +2661,6 @@ module.exports = {
             "name": "Mass Bomber Fleet Approaches UK Airspace",
             "sound": "klaxon",
             "image": "ev_airspace_incursion",
-            "prerequisites": [
-                "ev_raf_bases_strike"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 5
@@ -2531,7 +2714,9 @@ module.exports = {
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 55000,
+                    "defaultOptionId": "opt_inc_2"
                 }
             ],
             "requiresUnlock": true
@@ -2541,9 +2726,6 @@ module.exports = {
             "stage": "stage_4",
             "name": "Russian Nuclear Forces on High Alert",
             "image": "ev_nuclear_readiness",
-            "prerequisites": [
-                "ev_faslane_strike_2"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 5
@@ -2594,16 +2776,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "klaxon"
         },
         {
             "id": "ev_chemical_attempt",
             "stage": "stage_5",
             "name": "Chemical Weapon Threat Foil in Salisbury",
             "image": "ev_chemical_attempt",
-            "prerequisites": [
-                "ev_dissident_results"
-            ],
             "conditions": {
                 "minScores": {
                     "uk_russia": 3,
@@ -2645,7 +2825,9 @@ module.exports = {
                                 }
                             }
                         }
-                    ]
+                    ],
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_chem_2"
                 },
                 {
                     "role": "foreign",
@@ -2681,16 +2863,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "klaxon"
         },
         {
             "id": "ev_us_neutrality",
             "stage": "stage_5",
             "name": "US Pulls Back: Declares Neutrality",
             "image": "ev_us_neutrality",
-            "prerequisites": [
-                "ev_article5_ambiguity"
-            ],
             "conditions": {
                 "maxScores": {
                     "uk_us": 2
@@ -2767,16 +2947,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "teletype"
         },
         {
             "id": "ev_article5_ambiguity",
             "stage": "stage_5",
             "name": "NATO Allies Hesitate on Article 5",
             "image": "ev_article5_ambiguity",
-            "prerequisites": [
-                "ev_akrotiri_strike"
-            ],
             "repeatable": false,
             "location": [
                 50.84,
@@ -2822,16 +3000,14 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "teletype"
         },
         {
             "id": "ev_final_authorization",
             "stage": "stage_5",
             "name": "COBRA FINAL VOTE: War or Ceasefire",
             "image": "ev_final_authorization",
-            "prerequisites": [
-                "ev_nuclear_readiness"
-            ],
             "conditions": {
                 "minScores": {
                     "military_escalation": 5
@@ -2904,7 +3080,8 @@ module.exports = {
                     ]
                 }
             ],
-            "requiresUnlock": true
+            "requiresUnlock": true,
+            "sound": "klaxon"
         },
         {
             "id": "ev_endgame_diplomatic",
@@ -2927,7 +3104,8 @@ module.exports = {
                 "PM": "Your leadership prevented World War Three while keeping Britain strong, free, and secure.",
                 "foreign": "Allies praise British diplomacy for finding an off-ramp while standing firm on national security."
             },
-            "decisions": []
+            "decisions": [],
+            "sound": "alert"
         },
         {
             "id": "ev_endgame_domestic",
@@ -2949,7 +3127,8 @@ module.exports = {
                 "home": "Police stations and supply warehouses have been overrun. Order has broken down.",
                 "media": "International news reports that the British government has collapsed amid public revolt."
             },
-            "decisions": []
+            "decisions": [],
+            "sound": "explosion"
         },
         {
             "id": "ev_endgame_eu_defense",
@@ -2972,7 +3151,8 @@ module.exports = {
                 "defence": "Combined European armed forces held the line, deterring all further attacks.",
                 "foreign": "Britain stands at the head of a strong and united European defence network."
             },
-            "decisions": []
+            "decisions": [],
+            "sound": "alert"
         },
         {
             "id": "ev_cyber_success",
@@ -2995,7 +3175,8 @@ module.exports = {
                 "scores": {
                     "military_readiness": 1
                 }
-            }
+            },
+            "sound": "teletype"
         },
         {
             "id": "ev_cyber_fail",
@@ -3019,7 +3200,8 @@ module.exports = {
                     "uk_europe": -1,
                     "civilian_stability": -1
                 }
-            }
+            },
+            "sound": "alert"
         },
         {
             "id": "ev_sf_success",
@@ -3043,7 +3225,8 @@ module.exports = {
                     "military_readiness": 1,
                     "uk_us": 1
                 }
-            }
+            },
+            "sound": "alert"
         },
         {
             "id": "ev_sf_fail",
@@ -3067,7 +3250,8 @@ module.exports = {
                     "civilian_stability": -1,
                     "military_escalation": 1
                 }
-            }
+            },
+            "sound": "explosion"
         },
         {
             "id": "ev_us_support_success",
@@ -3137,7 +3321,8 @@ module.exports = {
                     "military_escalation": -2,
                     "uk_russia": 1
                 }
-            }
+            },
+            "sound": "explosion"
         },
         {
             "id": "ev_f35_fail",
@@ -3161,7 +3346,8 @@ module.exports = {
                     "military_escalation": 2,
                     "civilian_stability": -1
                 }
-            }
+            },
+            "sound": "klaxon"
         },
         {
             "id": "ev_eu_success",
@@ -3474,7 +3660,9 @@ module.exports = {
             "initiator": [
                 "cyber"
             ],
-            "requiresApprovalFrom": "home",
+            "requiresApprovalFrom": [
+                "home"
+            ],
             "conditions": {
                 "minScores": {
                     "military_readiness": 2
@@ -3533,7 +3721,9 @@ module.exports = {
             "initiator": [
                 "media"
             ],
-            "requiresApprovalFrom": "home",
+            "requiresApprovalFrom": [
+                "home"
+            ],
             "conditions": {
                 "maxScores": {
                     "civilian_stability": 3
@@ -3832,6 +4022,1188 @@ module.exports = {
                 ]
             },
             "isManualAction": true
+        },
+        {
+            "id": "ev_north_sea_pipeline",
+            "stage": "stage_2",
+            "name": "North Sea Gas Pipeline Pressure Drop",
+            "sound": "sonar",
+            "repeatable": false,
+            "location": [
+                57.8,
+                1.4
+            ],
+            "possibleLocations": [
+                [
+                    57.8,
+                    1.4
+                ],
+                [
+                    58.3,
+                    0.8
+                ],
+                [
+                    56.9,
+                    2.1
+                ]
+            ],
+            "image": "ev_undersea_cables_alt",
+            "description": "Operators at St Fergus terminal report a sudden pressure drop on the Langeled gas interconnector. A shadow-fleet trawler with switched-off AIS was spotted loitering directly overhead.",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_rus_spy_trawler"
+                ],
+                "scores": {
+                    "civilian_stability": -1
+                }
+            },
+            "roleDescriptions": {
+                "defence": "Type 26 frigate sonar has plotted the shadow-fleet trawler on our tactical map—she is still inside the North Sea sector.",
+                "home": "UK wholesale gas prices spiked 40% in ten minutes; emergency winter reserves are sufficient for 12 days.",
+                "foreign": "Norway is requesting an urgent joint naval protection patrol over shared North Sea energy infrastructure."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "How do we respond to the suspected pipeline sabotage?",
+                    "options": [
+                        {
+                            "id": "opt_pipe_board",
+                            "text": "Send Royal Navy Wildcat & Royal Marines to intercept and inspect the shadow trawler.",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_rus_spy_trawler": "detained"
+                                },
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "uk_europe": 1,
+                                    "military_escalation": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_pipe_escort",
+                            "text": "Establish a joint UK-Norwegian frigate patrol without boarding the vessel.",
+                            "effects": {
+                                "hideAssets": [
+                                    "a_rus_spy_trawler"
+                                ],
+                                "scores": {
+                                    "uk_europe": 1,
+                                    "civilian_stability": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_spy_trawler_anchor",
+            "stage": "stage_2",
+            "name": "Shadow-Fleet Trawler Drags Anchor Over Sea Cable",
+            "sound": "sonar",
+            "repeatable": false,
+            "location": [
+                57.4,
+                1.9
+            ],
+            "possibleLocations": [
+                [
+                    57.4,
+                    1.9
+                ],
+                [
+                    56.5,
+                    -1.2
+                ],
+                [
+                    58.1,
+                    -2.4
+                ]
+            ],
+            "image": "ev_undersea_cable",
+            "description": "Maritime Coastguard radar tracks an unflagged Russian-crewed trawler dragging its anchor across a major North Sea telecoms trunk.",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_rus_spy_trawler"
+                ]
+            },
+            "roleDescriptions": {
+                "cyber": "Packet loss to mainland Europe jumped 35%. Rerouting financial traffic via transatlantic links.",
+                "defence": "An Astute-class submarine and Type 23 frigate are within 40 nautical miles."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "Authorise forced interdiction of the shadow trawler?",
+                    "options": [
+                        {
+                            "id": "opt_trawler_seize",
+                            "text": "Order the Type 23 frigate to fire warning shots and seize the vessel.",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_rus_spy_trawler": "detained"
+                                },
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "military_escalation": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_trawler_shadow",
+                            "text": "Photograph the hull and pass evidence to maritime insurers and NATO.",
+                            "effects": {
+                                "hideAssets": [
+                                    "a_rus_spy_trawler"
+                                ],
+                                "scores": {
+                                    "uk_europe": 1,
+                                    "civilian_stability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_heathrow_gps_spoof",
+            "stage": "stage_2",
+            "name": "GPS Spoofing Disrupts Heathrow & Gatwick",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                51.47,
+                -0.45
+            ],
+            "image": "ev_gps_jamming",
+            "description": "Airliners approaching Heathrow and Gatwick report false cockpit terrain warnings and corrupted GPS navigation signals originating from electronic warfare jammers.",
+            "roleDescriptions": {
+                "cyber": "NCSC confirms high-power GNSS spoofing across south-east England—airlines are diverting to Manchester and Dublin.",
+                "media": "Passenger panic is spreading across social media with rumours of an imminent air attack on London."
+            },
+            "decisions": [
+                {
+                    "role": "cyber",
+                    "text": "Immediate NATS & NCSC response to the London GPS spoofing:",
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_gps_ground",
+                    "options": [
+                        {
+                            "id": "opt_gps_legacy",
+                            "text": "Switch NATS immediately to legacy ground-based ILS/VOR beacons and keep airports open at reduced flow.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_gps_ground",
+                            "text": "Impose a temporary UK airspace ground-stop while RAF/NCSC triangulate the spoofers.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_nhs_ransomware",
+            "stage": "stage_2",
+            "name": "NHS Trust Ransomware Cascade",
+            "sound": "teletype",
+            "repeatable": false,
+            "location": [
+                51.52,
+                -0.14
+            ],
+            "possibleLocations": [
+                [
+                    51.52,
+                    -0.14
+                ],
+                [
+                    53.48,
+                    -2.24
+                ],
+                [
+                    52.48,
+                    -1.89
+                ]
+            ],
+            "image": "evt_hospital_power_failure",
+            "description": "Twelve major NHS hospital trusts have been locked out of patient records and A&E triage systems by wiper malware traced to a compromised UK telecoms core node.",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_compromised_telecom_node"
+                ],
+                "scores": {
+                    "civilian_stability": -1
+                }
+            },
+            "roleDescriptions": {
+                "cyber": "NCSC has traced the command-and-control beacon to a compromised UK Telecoms Core Node—it is now visible on the map for a manual NCSC Purge!",
+                "home": "Ambulances are being diverted across three regions. Public anxiety is surging."
+            },
+            "decisions": [
+                {
+                    "role": "home",
+                    "text": "How do we stabilise emergency hospital operations?",
+                    "options": [
+                        {
+                            "id": "opt_nhs_military",
+                            "text": "Activate MACA (Military Aid to Civil Authorities) to deploy Army medics and paper-triage logistics.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "military_readiness": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_nhs_isolate",
+                            "text": "Sever regional NHS networks immediately and keep military units on combat standby.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_deepfake_pm",
+            "stage": "stage_1",
+            "name": "Deepfake PM Emergency Broadcast Goes Viral",
+            "sound": "teletype",
+            "repeatable": false,
+            "location": [
+                51.5,
+                -0.12
+            ],
+            "image": "ev_disinfo_campaign",
+            "description": "A hyper-realistic AI deepfake video of the Prime Minister announcing immediate military conscription and bank account freezes has racked up 8 million views in 20 minutes.",
+            "roleDescriptions": {
+                "media": "Queues are already forming outside high-street ATMs. We have seconds to kill this narrative before a bank run starts.",
+                "cyber": "Botnets routed through St Petersburg boosted the video across TikTok, X, and WhatsApp simultaneously."
+            },
+            "decisions": [
+                {
+                    "role": "media",
+                    "text": "How do we counter the viral deepfake broadcast?",
+                    "timeLimitMs": 50000,
+                    "defaultOptionId": "opt_df_statement",
+                    "options": [
+                        {
+                            "id": "opt_df_live",
+                            "text": "Put the Prime Minister live on BBC/Sky from Downing Street within 5 minutes to debunk it.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_df_statement",
+                            "text": "Issue a written Cabinet Office denial and ask social platforms to take the clip down.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_mi5_sleeper_cell",
+            "stage": "stage_2",
+            "name": "EYES ONLY: MI5 Tracks GRU Sabotage Cell",
+            "sound": "teletype",
+            "repeatable": false,
+            "visibleTo": [
+                "PM",
+                "home",
+                "cyber"
+            ],
+            "location": [
+                52.95,
+                -1.15
+            ],
+            "possibleLocations": [
+                [
+                    52.95,
+                    -1.15
+                ],
+                [
+                    53.79,
+                    -1.54
+                ],
+                [
+                    51.75,
+                    -1.25
+                ]
+            ],
+            "image": "substation_alpha",
+            "description": "CLASSIFICATION: UK EYES ONLY. MI5 surveillance has identified a four-person GRU Unit 29155 sabotage cell reconnoitring a major 400kV National Grid substation in the Midlands.",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_gru_sabotage_cell"
+                ]
+            },
+            "roleDescriptions": {
+                "home": "The GRU cell is now plotted on your map. You can raid them immediately via the MI5 Manual Action, or keep watching to roll up their handlers.",
+                "PM": "Remember: Media and Foreign cannot see this alert. Brief COBRA verbally if you want coordinated cover."
+            },
+            "decisions": [
+                {
+                    "role": "home",
+                    "text": "Immediate MI5 posture on the GRU sabotage cell:",
+                    "options": [
+                        {
+                            "id": "opt_mi5_cordon",
+                            "text": "Place covert armed police around the substation and prepare an immediate raid.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_mi5_watch",
+                            "text": "Keep deep surveillance only to map their full UK network (Risk of sabotage).",
+                            "effects": {
+                                "scores": {
+                                    "uk_us": 1,
+                                    "civilian_stability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_gchq_war_cabinet",
+            "stage": "stage_3",
+            "name": "EYES ONLY: GCHQ Intercepts Kremlin War-Cabinet Split",
+            "sound": "teletype",
+            "repeatable": false,
+            "visibleTo": [
+                "PM",
+                "foreign",
+                "cyber"
+            ],
+            "location": [
+                50.88,
+                -4.55
+            ],
+            "image": "gchq_bude",
+            "description": "CLASSIFICATION: TOP SECRET STRAP 1. GCHQ Bude has decrypted high-level Moscow traffic showing Russian Defence Ministry commanders warning the Kremlin that their Northern Fleet is overstretched.",
+            "roleDescriptions": {
+                "foreign": "This intelligence gives us massive diplomatic leverage—if we share it selectively with Washington and Brussels without burning the intercept source.",
+                "PM": "Defence and Media cannot see this alert. Decide whether to exploit it diplomatically or pass targeting leads to Defence."
+            },
+            "decisions": [
+                {
+                    "role": "foreign",
+                    "text": "How should we exploit the GCHQ Kremlin intercept?",
+                    "options": [
+                        {
+                            "id": "opt_gchq_share_allies",
+                            "text": "Brief Five Eyes and key NATO capitals privately to harden allied resolve.",
+                            "effects": {
+                                "scores": {
+                                    "uk_us": 1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_gchq_backchannel",
+                            "text": "Use the insight to press Moscow via secret diplomatic backchannels for a pause.",
+                            "effects": {
+                                "scores": {
+                                    "uk_russia": 1,
+                                    "military_escalation": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_giuk_tanker_collision",
+            "stage": "stage_3",
+            "name": "Allied Tanker Collision in GIUK Gap",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                60.2,
+                -7.4
+            ],
+            "possibleLocations": [
+                [
+                    60.2,
+                    -7.4
+                ],
+                [
+                    59.4,
+                    -5.8
+                ],
+                [
+                    61.1,
+                    -9.2
+                ]
+            ],
+            "image": "rfa_mounts_bay",
+            "description": "During aggressive Russian surface-group manoeuvres in heavy North Atlantic fog, an RFA fleet tanker has collided with a shadowed Russian destroyer in the GIUK Gap.",
+            "roleDescriptions": {
+                "defence": "Both ships are afloat, but Russian warships are boxing in our damaged tanker.",
+                "foreign": "Moscow is already claiming the Royal Navy rammed their warship in international waters."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "How do we recover the damaged RFA tanker?",
+                    "options": [
+                        {
+                            "id": "opt_giuk_escort",
+                            "text": "Dispatch Type 26 frigate and RAF Poseidon top-cover to escort the tanker back to Clyde.",
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "military_escalation": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_giuk_hotline",
+                            "text": "Activate the UK-Russia Incidents at Sea maritime hotline to de-conflict recovery.",
+                            "effects": {
+                                "scores": {
+                                    "military_escalation": -1,
+                                    "uk_russia": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_baltic_drone_ambush",
+            "stage": "stage_3",
+            "name": "Baltic UK Convoy Ambushed by Loitering Munitions",
+            "sound": "explosion",
+            "repeatable": false,
+            "location": [
+                58.37,
+                26.72
+            ],
+            "image": "ev_drone_swarm_perimeter",
+            "description": "A British Army logistics convoy reinforcing NATO Enhanced Forward Presence in Estonia has come under attack by Lancet-style loitering munitions launched from across the border.",
+            "roleDescriptions": {
+                "defence": "Two vehicles are burning. Ground commanders request immediate Typhoon close air support and electronic warfare cover.",
+                "media": "Helmet-cam footage is already circulating on Telegram."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "Authorise Rules of Engagement for the Baltic ambush:",
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_baltic_defend",
+                    "options": [
+                        {
+                            "id": "opt_baltic_counterfire",
+                            "text": "Authorise counter-battery artillery and RAF EW suppression against launch sites.",
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "military_escalation": 1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_baltic_defend",
+                            "text": "Restrict forces to point air-defence and rapid casualty evacuation without cross-border fire.",
+                            "effects": {
+                                "scores": {
+                                    "military_escalation": -1,
+                                    "civilian_stability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_commons_no_confidence",
+            "stage": "stage_3",
+            "name": "Parliamentary No-Confidence Rumours",
+            "sound": "teletype",
+            "repeatable": false,
+            "hiddenFrom": [
+                "defence"
+            ],
+            "location": [
+                51.499,
+                -0.124
+            ],
+            "image": "ev_crisis_cabinet",
+            "description": "Backbench MPs across Westminster are circulating letters demanding an emergency Commons vote on the government's handling of the crisis and cost-of-living fallout.",
+            "roleDescriptions": {
+                "PM": "A leadership revolt mid-crisis would signal fatal weakness to Moscow and NATO.",
+                "media": "Political editors at Westminster are running wall-to-wall speculation."
+            },
+            "decisions": [
+                {
+                    "role": "PM",
+                    "text": "How do you steady Parliament?",
+                    "options": [
+                        {
+                            "id": "opt_commons_bipartisan",
+                            "text": "Invite opposition leaders into a Privy Council briefing to forge national unity.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_commons_whip",
+                            "text": "Impose a three-line whip and warn rebels not to undermine British troops in theatre.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_sub_breaks_contact",
+            "stage": "stage_3",
+            "name": "Faslane Submarine Slips Sonar Net",
+            "sound": "sonar",
+            "repeatable": false,
+            "location": [
+                56,
+                -5.5
+            ],
+            "image": "ev_sub_detection",
+            "description": "The Russian Yasen-class submarine off Faslane has exploited deep acoustic layers in the North Channel and vanished from Royal Navy sonar screens.",
+            "autoEffects": {
+                "hideAssets": [
+                    "a_rus_sub_faslane"
+                ],
+                "scores": {
+                    "military_readiness": -1
+                }
+            },
+            "roleDescriptions": {
+                "defence": "Contact lost! Because she was not neutralised or driven off, she remains hidden and operational near the Clyde approaches."
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_sub_faslane_reemerges",
+            "stage": "stage_4",
+            "name": "Elusive Russian Sub Re-Emerges Off Clyde!",
+            "sound": "sonar",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                55.7,
+                -5.1
+            ],
+            "possibleLocations": [
+                [
+                    55.7,
+                    -5.1
+                ],
+                [
+                    56.2,
+                    -5.8
+                ],
+                [
+                    55.2,
+                    -5.4
+                ]
+            ],
+            "image": "ev_sub_surfaces",
+            "description": "The Russian Yasen-class submarine that slipped sonar earlier has re-emerged close to the Clyde submarine transit corridor, pinging actively on an outbound Royal Navy escort!",
+            "conditions": {
+                "assetStates": {
+                    "a_rus_sub_faslane": "operational"
+                },
+                "hiddenAssets": [
+                    "a_rus_sub_faslane"
+                ],
+                "triggeredEvents": [
+                    "ev_sub_breaks_contact",
+                    "ev_akrotiri_strike"
+                ]
+            },
+            "autoEffects": {
+                "revealAssets": [
+                    "a_rus_sub_faslane"
+                ],
+                "scores": {
+                    "military_escalation": 1
+                }
+            },
+            "roleDescriptions": {
+                "defence": "She came back right on our deterrent transit lane! P-8A Poseidon and HMS Ambush have a firing solution."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "Immediate anti-submarine response off the Clyde:",
+                    "timeLimitMs": 50000,
+                    "defaultOptionId": "opt_sub_re_ping",
+                    "options": [
+                        {
+                            "id": "opt_sub_re_engage",
+                            "text": "Drop warning depth charges and force her to surface or leave UK waters immediately.",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_rus_sub_faslane": "withdrawing"
+                                },
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "military_escalation": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_sub_re_ping",
+                            "text": "Hold active sonar lock and delay the Clyde sail-out until she clears the channel.",
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": -1,
+                                    "military_escalation": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_iskander_mobile",
+            "stage": "stage_4",
+            "name": "Kaliningrad Iskander Battery Goes Mobile",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                54.71,
+                20.51
+            ],
+            "possibleLocations": [
+                [
+                    54.71,
+                    20.51
+                ],
+                [
+                    54.88,
+                    20.15
+                ],
+                [
+                    54.52,
+                    21.05
+                ]
+            ],
+            "image": "rus_iskander",
+            "description": "NATO satellite imagery detects a Russian road-mobile Iskander-M ballistic missile battery dispersing out of Kaliningrad into forested launch sites within range of allied airbases.",
+            "autoEffects": {
+                "revealAssets": [
+                    "a_kaliningrad_iskander"
+                ]
+            },
+            "roleDescriptions": {
+                "defence": "The Iskander battery is plotted on our map—if we do not track or deter it, it will slip under canopy cover again.",
+                "foreign": "Poland and Lithuania are demanding immediate NATO air-defence reinforcement."
+            },
+            "decisions": [
+                {
+                    "role": "defence",
+                    "text": "How do we respond to the dispersed Kaliningrad Iskander battery?",
+                    "options": [
+                        {
+                            "id": "opt_isk_track",
+                            "text": "Keep RC-135W Rivet Joint and NATO AWACS locked on the battery and surge Patriot/Sky Sabre readiness.",
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_isk_standoff",
+                            "text": "Pull ISR patrols back to reduce provocation risk (Battery disappears into forest cover).",
+                            "effects": {
+                                "hideAssets": [
+                                    "a_kaliningrad_iskander"
+                                ],
+                                "scores": {
+                                    "military_escalation": -1,
+                                    "uk_europe": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_channel_tunnel_alert",
+            "stage": "stage_4",
+            "name": "Channel Tunnel Security & Sabotage Alert",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                51.09,
+                1.14
+            ],
+            "image": "ev_bridge_collapse",
+            "description": "French and British counter-terror police have intercepted credible chatter of an explosive sabotage attempt targeting the Folkestone Channel Tunnel freight terminal.",
+            "roleDescriptions": {
+                "home": "Closing the tunnel halts 25% of UK-EU food and medical freight instantly; keeping it open risks a catastrophic attack."
+            },
+            "decisions": [
+                {
+                    "role": "home",
+                    "text": "Order immediate closure of the Channel Tunnel?",
+                    "timeLimitMs": 55000,
+                    "defaultOptionId": "opt_tunnel_close",
+                    "options": [
+                        {
+                            "id": "opt_tunnel_close",
+                            "text": "Suspend all Eurostar and freight shuttles for a full 12-hour bomb sweep.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_tunnel_screen",
+                            "text": "Deploy armed police and military sniffer teams while keeping vital medical freight rolling.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "military_readiness": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_secret_moscow_offer",
+            "stage": "stage_5",
+            "name": "Secret Moscow Backchannel Pause Offer",
+            "sound": "teletype",
+            "repeatable": false,
+            "hiddenFrom": [
+                "media"
+            ],
+            "location": [
+                55.75,
+                37.61
+            ],
+            "image": "ev_russia_deescalate",
+            "description": "Through Swiss intermediaries, Moscow signals willingness to halt all naval and cyber operations for 72 hours if Britain quietly freezes Baltic troop reinforcements.",
+            "roleDescriptions": {
+                "foreign": "Media has been excluded from this alert. Accepting secretly could stop a wider war—but if leaked, European allies will call it betrayal."
+            },
+            "decisions": [
+                {
+                    "role": "foreign",
+                    "text": "How should Britain respond to the Swiss backchannel offer?",
+                    "options": [
+                        {
+                            "id": "opt_moscow_accept",
+                            "text": "Engage quietly for a 72-hour tactical pause while consulting Washington.",
+                            "effects": {
+                                "scores": {
+                                    "military_escalation": -1,
+                                    "uk_russia": 1,
+                                    "uk_europe": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_moscow_reject",
+                            "text": "Reject any side-deal that divides NATO and brief European partners openly.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": 1,
+                                    "military_escalation": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_civil_contingencies_panic",
+            "stage": "stage_3",
+            "name": "Civil Contingencies Act: Nationwide Fuel & Food Panic",
+            "sound": "klaxon",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                51.5,
+                -0.12
+            ],
+            "image": "ev_supermarket_looting",
+            "description": "With domestic stability at breaking point, panic buying has emptied petrol stations and supermarkets across Britain, prompting calls to invoke the Civil Contingencies Act.",
+            "conditions": {
+                "maxScores": {
+                    "civilian_stability": 1
+                }
+            },
+            "roleDescriptions": {
+                "home": "Police forces are overwhelmed by forecourt queues and sporadic looting. Emergency powers will restore order at a political cost.",
+                "PM": "Diverting Army logistics to fuel tankers will calm the streets but reduce frontline readiness."
+            },
+            "decisions": [
+                {
+                    "role": "home",
+                    "text": "Invoke emergency rationing and military logistics support?",
+                    "timeLimitMs": 60000,
+                    "defaultOptionId": "opt_cca_ration",
+                    "options": [
+                        {
+                            "id": "opt_cca_ration",
+                            "text": "Invoke Civil Contingencies fuel rationing and deploy Army tanker drivers.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 2,
+                                    "military_readiness": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_cca_voluntary",
+                            "text": "Avoid emergency powers and rely on supermarket voluntary purchase limits.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": -1,
+                                    "uk_europe": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_nato_rapid_response",
+            "stage": "stage_4",
+            "name": "NATO Article 4/5 Rapid Response Activation",
+            "sound": "klaxon",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                50.87,
+                4.42
+            ],
+            "image": "nato_air_base",
+            "description": "With military escalation at maximum level, SACEUR has placed the NATO Response Force on 24-hour war footing and asked Britain to commit RAF and Royal Navy assets to joint command.",
+            "conditions": {
+                "minScores": {
+                    "military_escalation": 5
+                }
+            },
+            "roleDescriptions": {
+                "PM": "Placing UK forces under full NATO command strengthens allied deterrence, though Britain loses unilateral control over de-escalation."
+            },
+            "decisions": [
+                {
+                    "role": "PM",
+                    "text": "Commit UK strike and naval assets to NATO Allied Command Operations?",
+                    "options": [
+                        {
+                            "id": "opt_nato_commit",
+                            "text": "Commit fully to NATO joint command—collective deterrence is our strongest shield.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": 2,
+                                    "uk_us": 1,
+                                    "military_readiness": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_nato_national",
+                            "text": "Coordinate closely with NATO while keeping UK forces under strict national command.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": -1,
+                                    "military_escalation": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_five_eyes_throttled",
+            "stage": "stage_4",
+            "name": "Five Eyes Intelligence Sharing Throttled",
+            "sound": "teletype",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                50.88,
+                -4.55
+            ],
+            "image": "ev_us_neutrality",
+            "description": "Due to severe strain in the UK-US relationship, Washington has temporarily restricted real-time US satellite targeting feeds to GCHQ and MoD.",
+            "conditions": {
+                "maxScores": {
+                    "uk_us": 1
+                }
+            },
+            "autoEffects": {
+                "hideAssets": [
+                    "a_kaliningrad_iskander"
+                ]
+            },
+            "roleDescriptions": {
+                "foreign": "Without US overhead imagery, we have lost live tracking on mobile Russian missile batteries in Kaliningrad until relations are repaired."
+            },
+            "decisions": [
+                {
+                    "role": "foreign",
+                    "text": "How do we restore intelligence coverage?",
+                    "options": [
+                        {
+                            "id": "opt_fvey_call_dc",
+                            "text": "Have the Prime Minister call the White House immediately to offer security assurances.",
+                            "effects": {
+                                "scores": {
+                                    "uk_us": 2,
+                                    "uk_europe": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_fvey_eu_sat",
+                            "text": "Pivot to French Helios/CSO satellite imagery and UK sovereign ISR aircraft.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": 1,
+                                    "military_readiness": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_gru_raid_success",
+            "stage": "stage_3",
+            "name": "MI5 & Armed Police Capture GRU Sabotage Cell",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                52.95,
+                -1.15
+            ],
+            "image": "generic_police",
+            "description": "Counter-Terrorism Police and MI5 raided the safe house before dawn, arresting four GRU operatives and seizing industrial explosives destined for the National Grid.",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_gru_sabotage_cell": "neutralised"
+                },
+                "scores": {
+                    "civilian_stability": 1,
+                    "military_readiness": 1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_gru_raid_escaped",
+            "stage": "stage_3",
+            "name": "GRU Sabotage Cell Evades Raid",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                52.95,
+                -1.15
+            ],
+            "image": "substation_alpha",
+            "description": "The safe house was vacated minutes before armed police breached the door. The GRU sabotage team has gone dark elsewhere in the UK.",
+            "autoEffects": {
+                "hideAssets": [
+                    "a_gru_sabotage_cell"
+                ],
+                "scores": {
+                    "civilian_stability": -1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_telecom_purged",
+            "stage": "stage_3",
+            "name": "NCSC Purges Compromised Telecoms Core Node",
+            "sound": "teletype",
+            "repeatable": false,
+            "location": [
+                51.52,
+                -0.14
+            ],
+            "image": "ev_cyber_success",
+            "description": "NCSC engineers cleanly isolated and rebuilt the compromised UK fibre exchange, stopping the NHS ransomware cascade and closing Moscow's backdoor.",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_compromised_telecom_node": "secured"
+                },
+                "scores": {
+                    "civilian_stability": 1,
+                    "military_readiness": 1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_telecom_blackout_blip",
+            "stage": "stage_3",
+            "name": "Telecoms Purge Triggers 90-Minute Mobile Outage",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                51.52,
+                -0.14
+            ],
+            "image": "ev_cyber_fail",
+            "description": "The emergency NCSC purge removed the malware, but tripped fallback routing—knocking out mobile networks and contactless payments across southern England for 90 minutes.",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_compromised_telecom_node": "secured"
+                },
+                "scores": {
+                    "civilian_stability": -1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "act_mi5_raid_cell",
+            "isManualAction": true,
+            "name": "Authorise MI5 & Armed Police Raid on GRU Cell",
+            "description": "Launch an immediate counter-terrorism raid to arrest the pinpointed GRU sabotage cell before they strike the National Grid.",
+            "image": "generic_police",
+            "initiator": [
+                "home",
+                "PM"
+            ],
+            "requiresApprovalFrom": [
+                "PM"
+            ],
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_mi5_sleeper_cell"
+                ],
+                "visibleAssets": [
+                    "a_gru_sabotage_cell"
+                ],
+                "assetStates": {
+                    "a_gru_sabotage_cell": "operational"
+                },
+                "notTriggeredEvents": [
+                    "ev_gru_raid_success"
+                ]
+            },
+            "effects": {
+                "randomEvents": [
+                    {
+                        "id": "ev_gru_raid_success",
+                        "delayMs": 25000,
+                        "probability": 0.7
+                    },
+                    {
+                        "id": "ev_gru_raid_escaped",
+                        "delayMs": 25000,
+                        "probability": 0.3
+                    }
+                ]
+            }
+        },
+        {
+            "id": "act_ncsc_purge_telecom",
+            "isManualAction": true,
+            "name": "NCSC Emergency Telecoms Core Purge",
+            "description": "Execute a live firmware purge on the compromised UK telecoms core node to stop ransomware cascades (Small risk of temporary mobile outage).",
+            "image": "act_cyber_offensive",
+            "initiator": [
+                "cyber"
+            ],
+            "requiresApprovalFrom": [
+                "home"
+            ],
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_nhs_ransomware"
+                ],
+                "visibleAssets": [
+                    "a_compromised_telecom_node"
+                ],
+                "assetStates": {
+                    "a_compromised_telecom_node": "operational"
+                },
+                "notTriggeredEvents": [
+                    "ev_telecom_purged",
+                    "ev_telecom_blackout_blip"
+                ]
+            },
+            "effects": {
+                "randomEvents": [
+                    {
+                        "id": "ev_telecom_purged",
+                        "delayMs": 25000,
+                        "probability": 0.75
+                    },
+                    {
+                        "id": "ev_telecom_blackout_blip",
+                        "delayMs": 25000,
+                        "probability": 0.25
+                    }
+                ]
+            }
         }
     ]
 };
