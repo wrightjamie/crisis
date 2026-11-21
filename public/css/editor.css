@@ -1501,4 +1501,215 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     color: var(--text-primary);
 }
 
+/* Simplified Inspector Summary Pills, Compact Cards & Drill-In Subviews */
+.insp-summary-pill {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    padding: 0.12rem 0.5rem;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.insp-summary-pill.active {
+    color: var(--accent-blue);
+    border-color: color-mix(in srgb, var(--accent-blue) 45%, var(--border-color));
+    background: color-mix(in srgb, var(--accent-blue) 10%, var(--bg-primary));
+}
+
+.insp-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.insp-section-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+}
+
+.insp-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.insp-summary-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    border-left-width: 3px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition-fast) ease, background var(--transition-fast) ease, transform 0.12s ease;
+}
+
+.insp-summary-card:hover {
+    border-color: color-mix(in srgb, var(--accent-blue) 60%, var(--border-color));
+    background: color-mix(in srgb, var(--bg-tertiary) 55%, var(--bg-primary));
+}
+
+.insp-summary-card.kind-trigger {
+    border-left-color: var(--accent-blue);
+}
+
+.insp-summary-card.kind-decision {
+    border-left-color: var(--accent-green);
+}
+
+.insp-summary-card.kind-unlock {
+    border-left-color: var(--accent-purple);
+}
+
+.insp-summary-card.kind-option {
+    border-left-color: var(--accent-orange);
+}
+
+.insp-summary-card-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+}
+
+.insp-summary-card-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.insp-summary-card-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.insp-summary-card-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.insp-summary-chevron {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted);
+    transition: transform var(--transition-fast) ease, color var(--transition-fast) ease;
+}
+
+.insp-summary-card:hover .insp-summary-chevron {
+    color: var(--text-primary);
+    transform: translateX(2px);
+}
+
+.insp-icon-del-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: background var(--transition-fast) ease, color var(--transition-fast) ease, border-color var(--transition-fast) ease;
+}
+
+.insp-icon-del-btn:hover {
+    color: var(--accent-red);
+    background: color-mix(in srgb, var(--accent-red) 14%, transparent);
+    border-color: color-mix(in srgb, var(--accent-red) 35%, transparent);
+}
+
+/* Drill-In Subview Breadcrumb & Slide Animation */
+.insp-subview-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.insp-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.55rem;
+    margin-left: -0.35rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--accent-blue);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    max-width: 72%;
+    transition: background var(--transition-fast) ease, border-color var(--transition-fast) ease;
+}
+
+.insp-back-btn:hover {
+    background: color-mix(in srgb, var(--accent-blue) 12%, transparent);
+    border-color: color-mix(in srgb, var(--accent-blue) 30%, transparent);
+}
+
+.insp-back-btn span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.insp-subview-heading {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+}
+
+@keyframes inspSlideInRight {
+    from { opacity: 0; transform: translateX(18px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes inspSlideInLeft {
+    from { opacity: 0; transform: translateX(-18px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.insp-anim-forward {
+    animation: inspSlideInRight 0.16s ease-out;
+}
+
+.insp-anim-back {
+    animation: inspSlideInLeft 0.16s ease-out;
+}
+
 

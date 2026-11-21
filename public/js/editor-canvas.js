@@ -17,6 +17,7 @@
     let onDirtyCallback = null;
     let onLayoutChangeCallback = null;
     let selectedEventId = null;
+    let inspectorView = { mode: 'root' }; // { mode: 'root' } | { mode: 'link', kind, idx } | { mode: 'option', dIdx, oIdx }
     let viewMode = 'canvas'; // 'canvas' | 'accordion'
 
     // Pan & Zoom state
@@ -616,15 +617,465 @@
         titleInput.onblur = exitEdit;
     }
 
-    // Slide-Out Inspector Drawer
-    function openInspector(eventId) {
+    function buildVisibilitySummary(ev) {
+        const parts = [];
+        if (ev.isOpeningEvent) parts.push('Start');
+        if (ev.isEndGame) parts.push('End');
+        if (ev.requiresUnlock) parts.push('Inject');
+        if (ev.repeatable) parts.push('Repeatable');
+        if (Array.isArray(ev.visibleTo) && ev.visibleTo.length > 0) {
+            parts.push(`${ev.visibleTo.length} role${ev.visibleTo.length === 1 ? '' : 's'}`);
+        } else {
+            parts.push('All roles');
+        }
+        if (ev.sound) parts.push(ev.sound);
+        return parts.join(' · ');
+    }
+
+    function renderEventRootView(ev, preservedOpenIds = new Set()) {
+        const allEvents = getAllEvents();
+        const allNodes = (scenarioRef.eventTemplates || []).filter(x => x && x.id !== ev.id);
+        const roles = scenarioRef.roles || [];
+        const imgId = ev.imageId || ev.image || '';
+        const imgUrl = window.EditorImagePicker ? window.EditorImagePicker.resolveImageUrl(imgId) : '/images/favicon.png';
+        const descVal = typeof ev.description === 'string' ? ev.description : '';
+
+        const triggers = Array.isArray(ev.triggerEvents) ? ev.triggerEvents : [];
+        const unlocks = Array.isArray(ev.autoEffects?.unlockEvents) ? ev.autoEffects.unlockEvents : [];
+        const decisions = Array.isArray(ev.decisions) ? ev.decisions : [];
+        const totalLinks = triggers.length + unlocks.length + decisions.length;
+
+        const { scoreRules, assetRules } = extractConditionRules(ev.conditions);
+        const evCondCount = scoreRules.length + assetRules.length;
+        const condSummary = ev.autoTriggerOnConditions
+            ? `Auto · ${evCondCount} rule${evCondCount === 1 ? '' : 's'}`
+            : (evCondCount > 0 ? `${evCondCount} rule${evCondCount === 1 ? '' : 's'}` : 'None');
+
+        const visSummary = buildVisibilitySummary(ev);
+        const visOpen = preservedOpenIds.has('insp-details-visibility') ? 'open' : '';
+        const condOpen = preservedOpenIds.has('insp-details-ev-conditions') ? 'open' : '';
+
+        const triggerCards = triggers.map((tr, idx) => {
+            const tId = typeof tr === 'string' ? tr : (tr.id || '');
+            const targetEv = allEvents.find(x => x.id === tId);
+            const targetLabel = targetEv ? getNodeDisplayLabel(targetEv, allEvents) : 'Unlinked Auto-Trigger';
+            const delaySec = Math.round(((tr && typeof tr === 'object' && tr.delayMs !== undefined ? tr.delayMs : 90000) / 1000));
+            const probPct = Math.round(((tr && typeof tr === 'object' && tr.probability !== undefined ? tr.probability : 1) * 100));
+            return `
+                <div class="insp-summary-card kind-trigger" role="button" tabindex="0" data-drill-kind="trigger" data-drill-idx="${idx}">
+                    <div class="insp-summary-card-main">
+                        <div class="insp-summary-card-title">&rarr; ${escapeHtml(targetLabel)}</div>
+                        <div class="insp-summary-card-meta">Auto-Trigger &middot; ${delaySec}s delay${probPct < 100 ? ` &middot; ${probPct}%` : ''}</div>
+                    </div>
+                    <div class="insp-summary-card-actions">
+                        <button type="button" class="insp-icon-del-btn insp-btn-del-trigger" data-idx="${idx}" title="Remove link" aria-label="Remove link">&times;</button>
+                        <span class="insp-summary-chevron">${renderIcon('chevron-right', 15)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const unlockCards = unlocks.map((uId, idx) => {
+            const targetNode = allNodes.find(x => x.id === uId);
+            const targetLabel = targetNode
+                ? `${getNodeDisplayLabel(targetNode, allNodes)}${targetNode.isManualAction ? ' (Manual Action)' : ''}`
+                : 'Unlinked Unlock';
+            return `
+                <div class="insp-summary-card kind-unlock" role="button" tabindex="0" data-drill-kind="unlock" data-drill-idx="${idx}">
+                    <div class="insp-summary-card-main">
+                        <div class="insp-summary-card-title">Unlock: ${escapeHtml(targetLabel)}</div>
+                        <div class="insp-summary-card-meta">Unlocks Event / Action</div>
+                    </div>
+                    <div class="insp-summary-card-actions">
+                        <button type="button" class="insp-icon-del-btn insp-btn-del-unlock" data-idx="${idx}" title="Remove unlock" aria-label="Remove unlock">&times;</button>
+                        <span class="insp-summary-chevron">${renderIcon('chevron-right', 15)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        const decisionCards = decisions.map((dec, idx) => {
+            const decPrompt = (dec.text || dec.prompt || '').trim() || `Decision #${idx + 1}`;
+            const optCount = (dec.options || []).length;
+            const roleList = Array.isArray(dec.visibleTo) && dec.visibleTo.length > 0
+                ? dec.visibleTo
+                : (dec.role ? [dec.role] : []);
+            const roleLabel = roleList.length > 0
+                ? roleList.map(r => (scenarioRef.roleNames && scenarioRef.roleNames[r]) || r).join(', ')
+                : 'Unassigned';
+            return `
+                <div class="insp-summary-card kind-decision" role="button" tabindex="0" data-drill-kind="decision" data-drill-idx="${idx}">
+                    <div class="insp-summary-card-main">
+                        <div class="insp-summary-card-title">${escapeHtml(decPrompt)}</div>
+                        <div class="insp-summary-card-meta">Decision &middot; ${optCount} option${optCount === 1 ? '' : 's'} &middot; ${escapeHtml(roleLabel)}</div>
+                    </div>
+                    <div class="insp-summary-card-actions">
+                        <button type="button" class="insp-icon-del-btn insp-btn-del-dec" data-didx="${idx}" title="Remove decision" aria-label="Remove decision">&times;</button>
+                        <span class="insp-summary-chevron">${renderIcon('chevron-right', 15)}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="field-group">
+                <label>Event Artwork</label>
+                <button type="button" id="insp-btn-pick-image" class="image-slot-btn">
+                    <img src="${escapeHtml(imgUrl)}" alt="" class="image-slot-thumb" id="insp-img-preview" width="38" height="38">
+                    <div>
+                        <div class="text-bold" id="insp-img-id-label">${escapeHtml(imgId || 'Choose Image...')}</div>
+                        <div class="text-xs text-muted">Click to browse Shared Image Library</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="field-group">
+                <div class="label-with-ai">
+                    <label for="insp-ev-desc">Narrative Description</label>
+                    <button type="button" id="insp-btn-ai-desc" class="btn-ai-brief" title="Draft narrative event description with AI">
+                        ${renderIcon('sparkles', 12)} <span>AI Draft</span>
+                    </button>
+                </div>
+                <textarea id="insp-ev-desc" class="form-control" rows="4" placeholder="Event intelligence report shown to players...">${escapeHtml(descVal)}</textarea>
+            </div>
+
+            <details class="inspector-collapsible" id="insp-details-visibility" ${visOpen}>
+                <summary>
+                    <span class="inline-flex items-center gap-xs text-xs">
+                        <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
+                        <span>Visibility &amp; Options</span>
+                    </span>
+                    <span class="insp-summary-pill">${escapeHtml(visSummary)}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    <div class="field-group">
+                        <label for="insp-ev-sound">Sound Cue (Optional)</label>
+                        <select id="insp-ev-sound" class="form-control">
+                            <option value="" ${!ev.sound ? 'selected' : ''}>None / Default</option>
+                            <option value="alert" ${ev.sound === 'alert' ? 'selected' : ''}>Alert Chime (alert)</option>
+                            <option value="teletype" ${ev.sound === 'teletype' ? 'selected' : ''}>Teletype Wire (teletype)</option>
+                            <option value="klaxon" ${ev.sound === 'klaxon' ? 'selected' : ''}>Klaxon Siren (klaxon)</option>
+                            <option value="explosion" ${ev.sound === 'explosion' ? 'selected' : ''}>Explosion Blast (explosion)</option>
+                            <option value="sonar" ${ev.sound === 'sonar' ? 'selected' : ''}>Sonar Ping (sonar)</option>
+                            ${ev.sound && !['alert', 'teletype', 'klaxon', 'explosion', 'sonar'].includes(ev.sound) ? `<option value="${escapeHtml(ev.sound)}" selected>${escapeHtml(ev.sound)} (Custom)</option>` : ''}
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Event Options</label>
+                        <div class="inspector-check-grid">
+                            <label class="insp-check" title="${ev.isOpeningEvent ? 'Mark another event as Opening Event to transfer' : 'Designate as the single opening event of this scenario'}">
+                                <input type="checkbox" id="insp-ev-opening" ${ev.isOpeningEvent ? 'checked disabled' : ''}>
+                                <span>Opening Event (Start)</span>
+                            </label>
+                            <label class="insp-check">
+                                <input type="checkbox" id="insp-ev-endgame" ${ev.isEndGame ? 'checked' : ''}>
+                                <span>Endgame Event (End)</span>
+                            </label>
+                            <label class="insp-check" title="Requires facilitator or upstream event unlock before triggering">
+                                <input type="checkbox" id="insp-ev-unlock" ${ev.requiresUnlock ? 'checked' : ''}>
+                                <span>Facilitator Inject</span>
+                            </label>
+                            <label class="insp-check">
+                                <input type="checkbox" id="insp-ev-repeatable" ${ev.repeatable ? 'checked' : ''}>
+                                <span>Repeatable Event</span>
+                            </label>
+                            <label class="insp-check" title="Convert this event into a player-initiated manual action">
+                                <input type="checkbox" id="insp-toggle-manual-action">
+                                <span>Manual action</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field-group" style="margin-bottom: 0;">
+                        <label>Visible To Roles (Leave unchecked for all roles)</label>
+                        <div class="inspector-check-grid" id="insp-visible-roles">
+                            ${roles.map(r => {
+                                const checked = Array.isArray(ev.visibleTo) && ev.visibleTo.includes(r) ? 'checked' : '';
+                                return `<label class="insp-check"><input type="checkbox" class="insp-role-vis-cb" value="${escapeHtml(r)}" ${checked}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
+                            }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <details class="inspector-collapsible" id="insp-details-ev-conditions" ${condOpen} style="margin-top: 0.65rem;">
+                <summary>
+                    <span class="inline-flex items-center gap-xs text-xs">
+                        <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
+                        <span>Trigger Conditions</span>
+                    </span>
+                    <span class="insp-summary-pill ${ev.autoTriggerOnConditions || evCondCount > 0 ? 'active' : ''}">${escapeHtml(condSummary)}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    <div class="field-group" style="margin-bottom: 0.75rem;">
+                        <label class="insp-check" title="Automatically fire this event during gameplay as soon as all conditions below are satisfied">
+                            <input type="checkbox" id="insp-ev-auto-cond" ${ev.autoTriggerOnConditions ? 'checked' : ''}>
+                            <span>Auto-trigger when conditions are met</span>
+                        </label>
+                    </div>
+                    ${renderConditionsEditorHtml(ev.conditions, '', 'insp-ev')}
+                </div>
+            </details>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+            <div class="insp-section-header">
+                <span class="insp-section-title">Outgoing Links &amp; Decisions (${totalLinks})</span>
+                <button type="button" id="insp-btn-add-link" class="btn btn-primary text-xs inline-flex items-center gap-xs">
+                    ${renderIcon('plus', 12)} <span>Add Link / Decision</span>
+                </button>
+            </div>
+
+            <div class="insp-summary-list" id="insp-unified-links-list">
+                ${triggerCards}
+                ${unlockCards}
+                ${decisionCards}
+                ${totalLinks === 0 ? '<div class="text-xs text-muted">No outgoing links or decisions yet. Click "Add Link / Decision" or drag from the node\'s + handle.</div>' : ''}
+            </div>
+        `;
+    }
+
+    function renderEventLinkSubview(ev, kind, idx) {
+        const allEvents = getAllEvents();
+        const allNodes = (scenarioRef.eventTemplates || []).filter(x => x && x.id !== ev.id);
+        const roles = scenarioRef.roles || [];
+        const evTitle = ev.name || ev.title || 'Event';
+
+        if (kind === 'trigger') {
+            const tr = (ev.triggerEvents || [])[idx];
+            if (!tr) return null;
+            const tId = typeof tr === 'string' ? tr : (tr.id || '');
+            const delaySec = Math.round(((tr.delayMs !== undefined ? tr.delayMs : 90000) / 1000));
+            const probVal = tr.probability !== undefined ? tr.probability : 1;
+            return `
+                <div class="insp-subview-nav">
+                    <button type="button" class="insp-back-btn" id="insp-btn-back-root">&larr; <span>${escapeHtml(evTitle)}</span></button>
+                    <button type="button" class="btn btn-danger text-xs insp-btn-del-trigger" data-idx="${idx}">Remove Link</button>
+                </div>
+                <div class="insp-subview-heading">Auto-Trigger Link</div>
+                <div class="field-group">
+                    <label>Link Type</label>
+                    <select class="form-control text-xs insp-link-type" data-kind="trigger" data-idx="${idx}">
+                        <option value="trigger" selected>Auto-Trigger Next Event</option>
+                        <option value="decision">Player Decision</option>
+                        <option value="unlock">Unlock Event / Action</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Target Event</label>
+                    <select class="form-control text-xs insp-tr-target" data-idx="${idx}">
+                        <option value="">-- Select Target Event --</option>
+                        ${allEvents.filter(x => x.id !== ev.id).map(x => `<option value="${escapeHtml(x.id)}" ${x.id === tId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allEvents))}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="field-row">
+                    <div class="field-group">
+                        <label>Delay (seconds)</label>
+                        <input type="number" class="form-control text-xs insp-tr-delay" data-idx="${idx}" value="${delaySec}" min="0" step="5">
+                    </div>
+                    <div class="field-group">
+                        <label>Probability (0&ndash;1)</label>
+                        <input type="number" class="form-control text-xs insp-tr-prob" data-idx="${idx}" value="${probVal}" min="0.05" max="1" step="0.05">
+                    </div>
+                </div>
+            `;
+        }
+
+        if (kind === 'unlock') {
+            const uId = (ev.autoEffects?.unlockEvents || [])[idx];
+            if (uId === undefined) return null;
+            return `
+                <div class="insp-subview-nav">
+                    <button type="button" class="insp-back-btn" id="insp-btn-back-root">&larr; <span>${escapeHtml(evTitle)}</span></button>
+                    <button type="button" class="btn btn-danger text-xs insp-btn-del-unlock" data-idx="${idx}">Remove Unlock</button>
+                </div>
+                <div class="insp-subview-heading">Unlock Event / Action</div>
+                <div class="field-group">
+                    <label>Link Type</label>
+                    <select class="form-control text-xs insp-link-type" data-kind="unlock" data-idx="${idx}">
+                        <option value="trigger">Auto-Trigger Next Event</option>
+                        <option value="decision">Player Decision</option>
+                        <option value="unlock" selected>Unlock Event / Action</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Unlocks Event or Manual Action</label>
+                    <select class="form-control text-xs insp-unlock-target" data-idx="${idx}">
+                        <option value="">-- Select Target --</option>
+                        ${allNodes.map(x => `<option value="${escapeHtml(x.id)}" ${x.id === uId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allNodes))}${x.isManualAction ? ' (Manual Action)' : ''}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+        }
+
+        if (kind === 'decision') {
+            const dec = (ev.decisions || [])[idx];
+            if (!dec) return null;
+            const decPrompt = dec.text || dec.prompt || '';
+            const assignedRoles = Array.isArray(dec.visibleTo) && dec.visibleTo.length > 0
+                ? dec.visibleTo
+                : (dec.role ? [dec.role] : []);
+            const opts = Array.isArray(dec.options) ? dec.options : [];
+
+            const optCards = opts.map((opt, oIdx) => {
+                if (!opt.id) opt.id = `opt_${oIdx + 1}`;
+                const optTriggers = getHelperTriggers(opt);
+                const scoreCount = Object.keys((opt.effects && opt.effects.scores) ? opt.effects.scores : {}).length;
+                const cond = extractConditionRules(opt.conditions);
+                const condCount = cond.scoreRules.length + cond.assetRules.length;
+                const metaParts = [];
+                metaParts.push(`${optTriggers.length} event${optTriggers.length === 1 ? '' : 's'}`);
+                if (scoreCount > 0) metaParts.push(`${scoreCount} score effect${scoreCount === 1 ? '' : 's'}`);
+                if (condCount > 0) metaParts.push(`${condCount} condition${condCount === 1 ? '' : 's'}`);
+                return `
+                    <div class="insp-summary-card kind-option" role="button" tabindex="0" data-drill-opt="${oIdx}" data-didx="${idx}">
+                        <div class="insp-summary-card-main">
+                            <div class="insp-summary-card-title">${escapeHtml(opt.text || `Option #${oIdx + 1}`)}</div>
+                            <div class="insp-summary-card-meta">${escapeHtml(metaParts.join(' · '))}</div>
+                        </div>
+                        <div class="insp-summary-card-actions">
+                            <button type="button" class="insp-icon-del-btn insp-btn-del-opt" data-didx="${idx}" data-oidx="${oIdx}" title="Remove option" aria-label="Remove option">&times;</button>
+                            <span class="insp-summary-chevron">${renderIcon('chevron-right', 15)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="insp-subview-nav">
+                    <button type="button" class="insp-back-btn" id="insp-btn-back-root">&larr; <span>${escapeHtml(evTitle)}</span></button>
+                    <button type="button" class="btn btn-danger text-xs insp-btn-del-dec" data-didx="${idx}">Remove Decision</button>
+                </div>
+                <div class="insp-subview-heading">Player Decision #${idx + 1}</div>
+                <div class="field-group">
+                    <label>Link Type</label>
+                    <select class="form-control text-xs insp-link-type" data-kind="decision" data-idx="${idx}">
+                        <option value="trigger">Auto-Trigger Next Event</option>
+                        <option value="decision" selected>Player Decision</option>
+                        <option value="unlock">Unlock Event / Action</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Decision Prompt</label>
+                    <input type="text" class="form-control text-xs insp-dec-prompt" data-didx="${idx}" value="${escapeHtml(decPrompt)}" placeholder="What action should be taken?">
+                </div>
+                <div class="field-group">
+                    <label>Assigned Role(s)</label>
+                    <div class="inspector-check-grid">
+                        ${roles.map(r => {
+                            const isChecked = assignedRoles.includes(r);
+                            return `<label class="insp-check"><input type="checkbox" class="insp-dec-role-cb" data-didx="${idx}" value="${escapeHtml(r)}" ${isChecked ? 'checked' : ''}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
+                        }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+                <div class="insp-section-header">
+                    <span class="insp-section-title">Choice Options (${opts.length})</span>
+                    <button type="button" class="btn btn-primary text-xs inline-flex items-center gap-xs insp-btn-add-opt" data-didx="${idx}">
+                        ${renderIcon('plus', 12)} <span>Add Option</span>
+                    </button>
+                </div>
+                <div class="insp-summary-list">
+                    ${optCards || '<div class="text-xs text-muted">No choice options yet. Click "Add Option".</div>'}
+                </div>
+            `;
+        }
+        return null;
+    }
+
+    function renderDecisionOptionSubview(ev, dIdx, oIdx) {
+        const dec = (ev.decisions || [])[dIdx];
+        const opt = dec?.options?.[oIdx];
+        if (!dec || !opt) return null;
+
+        const allEvents = getAllEvents();
+        const optTriggers = getHelperTriggers(opt);
+        const scoreEffects = (opt.effects && opt.effects.scores) ? opt.effects.scores : {};
+        const optCond = extractConditionRules(opt.conditions);
+        const optCondCount = optCond.scoreRules.length + optCond.assetRules.length;
+        const decLabel = (dec.text || dec.prompt || '').trim() || `Decision #${dIdx + 1}`;
+
+        return `
+            <div class="insp-subview-nav">
+                <button type="button" class="insp-back-btn" id="insp-btn-back-decision" data-didx="${dIdx}">&larr; <span>${escapeHtml(decLabel)}</span></button>
+                <button type="button" class="btn btn-danger text-xs insp-btn-del-opt" data-didx="${dIdx}" data-oidx="${oIdx}">Remove Option</button>
+            </div>
+            <div class="insp-subview-heading">Choice Option #${oIdx + 1}</div>
+
+            <div class="field-group">
+                <label>Option Label</label>
+                <input type="text" class="form-control text-xs insp-opt-text" data-didx="${dIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.text || '')}" placeholder="Describe the player choice...">
+            </div>
+
+            <div class="field-group">
+                <div class="insp-sublist-header">
+                    <label>Downstream Events (${optTriggers.length})</label>
+                    <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Event</button>
+                </div>
+                <div class="insp-sublist">
+                    ${optTriggers.length === 0 ? '<div class="text-xs text-muted">No downstream events linked.</div>' : optTriggers.map((tr, tIdx) => {
+                        const targetId = typeof tr === 'string' ? tr : (tr.id || '');
+                        const delaySec = (typeof tr === 'object' && tr && tr.delayMs !== undefined) ? Math.round(tr.delayMs / 1000) : 60;
+                        return `
+                            <div class="insp-sublist-row">
+                                <select class="form-control text-xs insp-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" aria-label="Downstream Event">
+                                    <option value="">-- Select Event --</option>
+                                    ${allEvents.filter(x => x.id !== ev.id).map(x => `<option value="${escapeHtml(x.id)}" ${x.id === targetId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allEvents))}</option>`).join('')}
+                                </select>
+                                <input type="number" class="form-control text-xs insp-opt-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
+                                <span class="insp-sublist-unit">s</span>
+                                <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" title="Remove event link" aria-label="Remove event link">&times;</button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="insp-sublist-header">
+                    <label>Score Effects (${Object.keys(scoreEffects).length})</label>
+                    <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-score" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Effect</button>
+                </div>
+                <div class="insp-sublist">
+                    ${renderScoreEffectRows(scoreEffects, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
+                </div>
+            </div>
+
+            <details class="insp-opt-cond-details" ${optCondCount > 0 ? 'open' : ''}>
+                <summary>
+                    <span>Availability Conditions &mdash; Scores &amp; Assets (${optCondCount})</span>
+                    <span class="text-xs text-muted">${optCondCount > 0 ? 'Restricted' : 'Always available'}</span>
+                </summary>
+                ${renderConditionsEditorHtml(opt.conditions, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
+            </details>
+        `;
+    }
+
+    // Slide-Out Inspector Drawer (Compact Summary + In-Drawer Drill-In)
+    function openInspector(eventId, nextView, animDir) {
+        const isSwitchingEvent = selectedEventId !== eventId;
         selectedEventId = eventId;
+        if (nextView) {
+            inspectorView = nextView;
+        } else if (isSwitchingEvent) {
+            inspectorView = { mode: 'root' };
+        }
+
         const drawer = document.getElementById('event-inspector-drawer');
         const body = document.getElementById('inspector-body');
         if (!drawer || !body || !scenarioRef) return;
 
         const ev = (scenarioRef.eventTemplates || []).find(e => e.id === eventId);
         if (!ev) return;
+
+        // Preserve open <details> panels when refreshing the same root view
+        const preservedOpenIds = new Set();
+        if (!isSwitchingEvent && inspectorView.mode === 'root') {
+            body.querySelectorAll('details[id][open]').forEach(d => preservedOpenIds.add(d.id));
+        }
 
         setupInspectorHeaderTitle(ev.name || ev.title || '', 'Untitled Event', (nextTitle) => {
             ev.name = nextTitle;
@@ -637,311 +1088,26 @@
         const deleteLabel = document.getElementById('btn-delete-node-label');
         if (deleteLabel) deleteLabel.textContent = 'Delete Event';
 
-        const allEvents = getAllEvents();
-        const roles = scenarioRef.roles || [];
-        const imgId = ev.imageId || ev.image || '';
-        const imgUrl = window.EditorImagePicker ? window.EditorImagePicker.resolveImageUrl(imgId) : '/images/favicon.png';
+        let html = null;
+        if (inspectorView.mode === 'option') {
+            html = renderDecisionOptionSubview(ev, inspectorView.dIdx, inspectorView.oIdx);
+            if (!html) {
+                inspectorView = { mode: 'link', kind: 'decision', idx: inspectorView.dIdx };
+            }
+        }
+        if (!html && inspectorView.mode === 'link') {
+            html = renderEventLinkSubview(ev, inspectorView.kind, inspectorView.idx);
+            if (!html) {
+                inspectorView = { mode: 'root' };
+            }
+        }
+        if (!html) {
+            html = renderEventRootView(ev, preservedOpenIds);
+        }
 
-        const descVal = typeof ev.description === 'string' ? ev.description : '';
-        const triggers = Array.isArray(ev.triggerEvents) ? ev.triggerEvents : [];
-        const decisions = Array.isArray(ev.decisions) ? ev.decisions : [];
-        const unlocks = Array.isArray(ev.autoEffects?.unlockEvents) ? ev.autoEffects.unlockEvents : [];
-        const allNodes = (scenarioRef.eventTemplates || []).filter(x => x && x.id !== ev.id);
-        const totalLinks = triggers.length + decisions.length + unlocks.length;
-
-        body.innerHTML = `
-            <div class="field-group">
-                <label>Event Artwork (Shared Image Library)</label>
-                <button type="button" id="insp-btn-pick-image" class="image-slot-btn">
-                    <img src="${escapeHtml(imgUrl)}" alt="" class="image-slot-thumb" id="insp-img-preview" width="38" height="38">
-                    <div>
-                        <div class="text-bold" id="insp-img-id-label">${escapeHtml(imgId || 'Choose Image...')}</div>
-                        <div class="text-xs text-muted">Click to browse Shared Image Library</div>
-                    </div>
-                </button>
-            </div>
-
-            <div class="field-group">
-                <div class="label-with-ai">
-                    <label for="insp-ev-desc">General Narrative Description</label>
-                    <button type="button" id="insp-btn-ai-desc" class="btn-ai-brief" title="Draft narrative event description with AI">
-                        ${renderIcon('sparkles', 12)} <span>AI Draft</span>
-                    </button>
-                </div>
-                <textarea id="insp-ev-desc" class="form-control" rows="6" placeholder="Event intelligence report shown to players...">${escapeHtml(descVal)}</textarea>
-            </div>
-
-            <div class="field-group">
-                <label for="insp-ev-sound">Sound Cue (Optional)</label>
-                <select id="insp-ev-sound" class="form-control">
-                    <option value="" ${!ev.sound ? 'selected' : ''}>None / Default</option>
-                    <option value="alert" ${ev.sound === 'alert' ? 'selected' : ''}>Alert Chime (alert)</option>
-                    <option value="teletype" ${ev.sound === 'teletype' ? 'selected' : ''}>Teletype Wire (teletype)</option>
-                    <option value="klaxon" ${ev.sound === 'klaxon' ? 'selected' : ''}>Klaxon Siren (klaxon)</option>
-                    <option value="explosion" ${ev.sound === 'explosion' ? 'selected' : ''}>Explosion Blast (explosion)</option>
-                    <option value="sonar" ${ev.sound === 'sonar' ? 'selected' : ''}>Sonar Ping (sonar)</option>
-                    ${ev.sound && !['alert', 'teletype', 'klaxon', 'explosion', 'sonar'].includes(ev.sound) ? `<option value="${escapeHtml(ev.sound)}" selected>${escapeHtml(ev.sound)} (Custom)</option>` : ''}
-                </select>
-            </div>
-
-            <div class="field-group">
-                <label>Event Options</label>
-                <div class="inspector-check-grid">
-                    <label class="insp-check" title="${ev.isOpeningEvent ? 'Mark another event as Opening Event to transfer' : 'Designate as the single opening event of this scenario'}">
-                        <input type="checkbox" id="insp-ev-opening" ${ev.isOpeningEvent ? 'checked disabled' : ''}>
-                        <span>Opening Event (Start)</span>
-                    </label>
-                    <label class="insp-check">
-                        <input type="checkbox" id="insp-ev-endgame" ${ev.isEndGame ? 'checked' : ''}>
-                        <span>Endgame Event (End)</span>
-                    </label>
-                    <label class="insp-check" title="Requires facilitator or upstream event unlock before triggering">
-                        <input type="checkbox" id="insp-ev-unlock" ${ev.requiresUnlock ? 'checked' : ''}>
-                        <span>Facilitator Inject</span>
-                    </label>
-                    <label class="insp-check">
-                        <input type="checkbox" id="insp-ev-repeatable" ${ev.repeatable ? 'checked' : ''}>
-                        <span>Repeatable Event</span>
-                    </label>
-                    <label class="insp-check" title="Convert this event into a player-initiated manual action">
-                        <input type="checkbox" id="insp-toggle-manual-action">
-                        <span>Manual action</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Role Visibility (Fog of War) -->
-            <div class="field-group">
-                <label>Visible To Roles (Leave unchecked for all roles)</label>
-                <div class="inspector-check-grid" id="insp-visible-roles">
-                    ${roles.map(r => {
-                        const checked = Array.isArray(ev.visibleTo) && ev.visibleTo.includes(r) ? 'checked' : '';
-                        return `<label class="insp-check"><input type="checkbox" class="insp-role-vis-cb" value="${escapeHtml(r)}" ${checked}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
-                    }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
-                </div>
-            </div>
-
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.1rem 0;">
-
-            <!-- Event Trigger Conditions (Scores & Asset Status) -->
-            ${(() => {
-                const { scoreRules, assetRules } = extractConditionRules(ev.conditions);
-                const evCondCount = scoreRules.length + assetRules.length;
-                return `
-                <details class="inspector-collapsible" id="insp-details-ev-conditions" ${evCondCount > 0 || ev.autoTriggerOnConditions ? 'open' : ''}>
-                    <summary>
-                        <span class="inline-flex items-center gap-xs text-xs">
-                            <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
-                            <span>Trigger Conditions — Scores &amp; Assets (${evCondCount})</span>
-                        </span>
-                        ${ev.autoTriggerOnConditions ? '<span class="text-xs" style="color: var(--accent-blue); font-weight: 600;">Auto-Trigger</span>' : ''}
-                    </summary>
-                    <div class="inspector-collapsible-body">
-                        <div class="field-group" style="margin-bottom: 0.75rem;">
-                            <label class="insp-check" title="Automatically fire this event during gameplay as soon as all conditions below are satisfied">
-                                <input type="checkbox" id="insp-ev-auto-cond" ${ev.autoTriggerOnConditions ? 'checked' : ''}>
-                                <span>Auto-trigger when conditions are met</span>
-                            </label>
-                        </div>
-                        ${renderConditionsEditorHtml(ev.conditions, '', 'insp-ev')}
-                    </div>
-                </details>
-                `;
-            })()}
-
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.1rem 0;">
-
-            <!-- Unified Outgoing Links & Decisions -->
-            <details class="inspector-collapsible" id="insp-details-links" open>
-                <summary>
-                    <span class="inline-flex items-center gap-xs text-xs">
-                        <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
-                        <span>Outgoing Links &amp; Decisions (${totalLinks})</span>
-                    </span>
-                    <button type="button" id="insp-btn-add-link" class="btn btn-primary text-xs inline-flex items-center gap-xs">
-                        ${renderIcon('plus', 12)} <span>Add Link / Decision</span>
-                    </button>
-                </summary>
-                <div class="inspector-collapsible-body">
-                    <div id="insp-unified-links-list" class="editor-item-list">
-                        ${triggers.map((tr, tIdx) => {
-                            const tId = typeof tr === 'string' ? tr : (tr.id || '');
-                            const delaySec = Math.round(((tr.delayMs !== undefined ? tr.delayMs : 90000) / 1000));
-                            const probVal = tr.probability !== undefined ? tr.probability : 1;
-                            return `
-                                <div class="editor-item-card" data-link-kind="trigger" data-idx="${tIdx}" style="border-left: 3px solid var(--accent-blue);">
-                                    <div class="field-row" style="align-items: center; margin-bottom: 0.5rem;">
-                                        <div class="field-group" style="margin-bottom: 0; flex: 1;">
-                                            <label>Link Type</label>
-                                            <select class="form-control text-xs insp-link-type" data-kind="trigger" data-idx="${tIdx}">
-                                                <option value="trigger" selected>Auto-Trigger Next Event</option>
-                                                <option value="decision">Player Decision</option>
-                                                <option value="unlock">Unlock Event / Action</option>
-                                            </select>
-                                        </div>
-                                        <button type="button" class="btn btn-danger text-xs insp-btn-del-trigger" data-idx="${tIdx}" style="margin-top: 1.1rem;">Remove</button>
-                                    </div>
-                                    <div class="field-row" style="align-items: end;">
-                                        <div class="field-group" style="margin-bottom: 0;">
-                                            <label>Target Event</label>
-                                            <select class="form-control text-xs insp-tr-target" data-idx="${tIdx}">
-                                                <option value="">-- Select Target Event --</option>
-                                                ${allEvents.filter(x => x.id !== ev.id).map(x => `<option value="${escapeHtml(x.id)}" ${x.id === tId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allEvents))}</option>`).join('')}
-                                            </select>
-                                        </div>
-                                        <div class="field-group" style="margin-bottom: 0;">
-                                            <label>Delay (sec)</label>
-                                            <input type="number" class="form-control text-xs insp-tr-delay" data-idx="${tIdx}" value="${delaySec}" min="0" step="5">
-                                        </div>
-                                        <div class="field-group" style="margin-bottom: 0;">
-                                            <label>Probability (0-1)</label>
-                                            <input type="number" class="form-control text-xs insp-tr-prob" data-idx="${tIdx}" value="${probVal}" min="0.05" max="1" step="0.05">
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-
-                        ${unlocks.map((uId, uIdx) => `
-                            <div class="editor-item-card" data-link-kind="unlock" data-idx="${uIdx}" style="border-left: 3px solid var(--accent-purple);">
-                                <div class="field-row" style="align-items: center; margin-bottom: 0.5rem;">
-                                    <div class="field-group" style="margin-bottom: 0; flex: 1;">
-                                        <label>Link Type</label>
-                                        <select class="form-control text-xs insp-link-type" data-kind="unlock" data-idx="${uIdx}">
-                                            <option value="trigger">Auto-Trigger Next Event</option>
-                                            <option value="decision">Player Decision</option>
-                                            <option value="unlock" selected>Unlock Event / Action</option>
-                                        </select>
-                                    </div>
-                                    <button type="button" class="btn btn-danger text-xs insp-btn-del-unlock" data-idx="${uIdx}" style="margin-top: 1.1rem;">Remove</button>
-                                </div>
-                                <div class="field-group" style="margin-bottom: 0;">
-                                    <label>Unlocks Event or Manual Action</label>
-                                    <select class="form-control text-xs insp-unlock-target" data-idx="${uIdx}">
-                                        <option value="">-- Select Target --</option>
-                                        ${allNodes.map(x => `<option value="${escapeHtml(x.id)}" ${x.id === uId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allNodes))}${x.isManualAction ? ' (Manual Action)' : ''}</option>`).join('')}
-                                    </select>
-                                </div>
-                            </div>
-                        `).join('')}
-
-                        ${decisions.map((dec, dIdx) => {
-                            const decPrompt = dec.text || dec.prompt || '';
-                            const assignedRoles = Array.isArray(dec.visibleTo) && dec.visibleTo.length > 0
-                                ? dec.visibleTo
-                                : (dec.role ? [dec.role] : []);
-                            return `
-                            <details class="decision-card-collapsible" style="border-left: 3px solid var(--accent-green);" open>
-                                <summary>
-                                    <span class="inline-flex items-center gap-xs text-xs">
-                                        <span class="collapsible-caret">${renderIcon('chevron-right', 13)}</span>
-                                        <strong>Decision #${dIdx + 1}: ${escapeHtml(decPrompt ? (decPrompt.length > 32 ? decPrompt.slice(0, 32) + '…' : decPrompt) : 'Untitled')}</strong>
-                                    </span>
-                                    <button type="button" class="btn btn-danger text-xs insp-btn-del-dec" data-didx="${dIdx}">Remove</button>
-                                </summary>
-                                <div class="decision-card-collapsible-body">
-                                    <div class="field-group">
-                                        <label>Link Type</label>
-                                        <select class="form-control text-xs insp-link-type" data-kind="decision" data-idx="${dIdx}">
-                                            <option value="trigger">Auto-Trigger Next Event</option>
-                                            <option value="decision" selected>Player Decision</option>
-                                            <option value="unlock">Unlock Event / Action</option>
-                                        </select>
-                                    </div>
-                                    <div class="field-group">
-                                        <label>Decision Prompt</label>
-                                        <input type="text" class="form-control text-xs insp-dec-prompt" data-didx="${dIdx}" value="${escapeHtml(decPrompt)}" placeholder="What action should be taken?">
-                                    </div>
-                                    <div class="field-group">
-                                        <label>Assigned Role(s)</label>
-                                        <div class="inspector-check-grid">
-                                            ${roles.map(r => {
-                                                const isChecked = assignedRoles.includes(r);
-                                                return `<label class="insp-check"><input type="checkbox" class="insp-dec-role-cb" data-didx="${dIdx}" value="${escapeHtml(r)}" ${isChecked ? 'checked' : ''}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
-                                            }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
-                                        </div>
-                                    </div>
-                                    <div class="editor-item-list" style="margin-top: 0.5rem;">
-                                        ${(dec.options || []).map((opt, oIdx) => {
-                                            if (!opt.id) opt.id = `opt_${oIdx + 1}`;
-                                            const optTriggers = getHelperTriggers(opt);
-                                            const scoreEffects = (opt.effects && opt.effects.scores) ? opt.effects.scores : {};
-
-                                            return `
-                                                <div style="background: var(--bg-secondary); padding: 0.65rem; border-radius: 4px; border: 1px solid var(--border-color);">
-                                                    <div class="field-group" style="margin-bottom: 0.5rem;">
-                                                        <label>Option #${oIdx + 1} Label</label>
-                                                        <input type="text" class="form-control text-xs insp-opt-text" data-didx="${dIdx}" data-oidx="${oIdx}" value="${escapeHtml(opt.text || '')}" placeholder="Describe the player choice...">
-                                                    </div>
-
-                                                    <div class="field-group" style="margin-bottom: 0.55rem;">
-                                                        <div class="insp-sublist-header">
-                                                            <label>Downstream Events (${optTriggers.length})</label>
-                                                            <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Event</button>
-                                                        </div>
-                                                        <div class="insp-sublist">
-                                                            ${optTriggers.length === 0 ? '<div class="text-xs text-muted">No downstream events linked.</div>' : optTriggers.map((tr, tIdx) => {
-                                                                const targetId = typeof tr === 'string' ? tr : (tr.id || '');
-                                                                const delaySec = (typeof tr === 'object' && tr && tr.delayMs !== undefined) ? Math.round(tr.delayMs / 1000) : 60;
-                                                                return `
-                                                                    <div class="insp-sublist-row">
-                                                                        <select class="form-control text-xs insp-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" aria-label="Downstream Event">
-                                                                            <option value="">-- Select Event --</option>
-                                                                            ${allEvents.filter(x => x.id !== ev.id).map(x => `<option value="${escapeHtml(x.id)}" ${x.id === targetId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allEvents))}</option>`).join('')}
-                                                                        </select>
-                                                                        <input type="number" class="form-control text-xs insp-opt-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
-                                                                        <span class="insp-sublist-unit">s</span>
-                                                                        <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" title="Remove event link" aria-label="Remove event link">&times;</button>
-                                                                    </div>
-                                                                `;
-                                                            }).join('')}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="field-group" style="margin-bottom: 0.5rem;">
-                                                        <div class="insp-sublist-header">
-                                                            <label>Score Effects (${Object.keys(scoreEffects).length})</label>
-                                                            <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-score" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Effect</button>
-                                                        </div>
-                                                        <div class="insp-sublist">
-                                                            ${renderScoreEffectRows(scoreEffects, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
-                                                        </div>
-                                                    </div>
-
-                                                    ${(() => {
-                                                        const optCond = extractConditionRules(opt.conditions);
-                                                        const optCondCount = optCond.scoreRules.length + optCond.assetRules.length;
-                                                        return `
-                                                        <details class="insp-opt-cond-details" ${optCondCount > 0 ? 'open' : ''}>
-                                                            <summary>
-                                                                <span>Availability Conditions — Scores &amp; Assets (${optCondCount})</span>
-                                                                <span class="text-xs text-muted">${optCondCount > 0 ? 'Restricted' : 'Always available'}</span>
-                                                            </summary>
-                                                            ${renderConditionsEditorHtml(opt.conditions, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
-                                                        </details>
-                                                        `;
-                                                    })()}
-
-                                                    <div style="text-align: right;">
-                                                        <button type="button" class="btn btn-danger text-xs insp-btn-del-opt" data-didx="${dIdx}" data-oidx="${oIdx}">Remove Option</button>
-                                                    </div>
-                                                </div>
-                                            `;
-                                        }).join('')}
-                                        <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt" data-didx="${dIdx}">+ Add Choice Option</button>
-                                    </div>
-                                </div>
-                            </details>
-                            `;
-                        }).join('')}
-
-                        ${totalLinks === 0
-                            ? '<div class="text-xs text-muted">No outgoing links or decisions yet. Click "Add Link / Decision" or drag from the node\'s + handle.</div>'
-                            : `<button type="button" class="btn btn-secondary text-xs inline-flex items-center gap-xs insp-btn-add-link-footer" style="align-self: flex-start;">${renderIcon('plus', 12)} <span>Add Another Link / Decision</span></button>`}
-                    </div>
-                </div>
-            </details>
-        `;
+        const animClass = animDir === 'forward' ? 'insp-anim-forward' : (animDir === 'back' ? 'insp-anim-back' : '');
+        body.innerHTML = `<div class="${animClass}">${html}</div>`;
+        if (animDir) body.scrollTop = 0;
 
         drawer.classList.add('open');
         window.common?.floatingBar?.setDrawerShift(true);
@@ -1072,17 +1238,76 @@
         }
 
         // Visible roles checkboxes
+        const refreshVisPill = () => {
+            const pill = body.querySelector('#insp-details-visibility .insp-summary-pill');
+            if (pill) pill.textContent = buildVisibilitySummary(ev);
+        };
+        if (soundInp) soundInp.addEventListener('change', refreshVisPill);
+        if (openingCb) openingCb.addEventListener('change', refreshVisPill);
+        if (endgameCb) endgameCb.addEventListener('change', refreshVisPill);
+        if (unlockCb) unlockCb.addEventListener('change', refreshVisPill);
+        if (repeatCb) repeatCb.addEventListener('change', refreshVisPill);
+
         body.querySelectorAll('.insp-role-vis-cb').forEach(cb => {
             cb.addEventListener('change', () => {
                 const checkedRoles = Array.from(body.querySelectorAll('.insp-role-vis-cb:checked')).map(x => x.value);
                 if (checkedRoles.length > 0) ev.visibleTo = checkedRoles;
                 else delete ev.visibleTo;
+                refreshVisPill();
                 renderCanvasNodes();
                 markDirty();
             });
         });
 
-        // Unified Outgoing Links & Decisions
+        // Drill-In Navigation (Root <-> Link/Decision <-> Choice Option)
+        const backRootBtn = document.getElementById('insp-btn-back-root');
+        if (backRootBtn) {
+            backRootBtn.addEventListener('click', () => {
+                openInspector(ev.id, { mode: 'root' }, 'back');
+            });
+        }
+
+        const backDecBtn = document.getElementById('insp-btn-back-decision');
+        if (backDecBtn) {
+            backDecBtn.addEventListener('click', () => {
+                const dIdx = Number(backDecBtn.getAttribute('data-didx'));
+                openInspector(ev.id, { mode: 'link', kind: 'decision', idx: dIdx }, 'back');
+            });
+        }
+
+        body.querySelectorAll('.insp-summary-card[data-drill-kind]').forEach(card => {
+            const openLink = (e) => {
+                if (e.target.closest('button')) return;
+                const kind = card.getAttribute('data-drill-kind');
+                const idx = Number(card.getAttribute('data-drill-idx'));
+                openInspector(ev.id, { mode: 'link', kind, idx }, 'forward');
+            };
+            card.addEventListener('click', openLink);
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openLink(e);
+                }
+            });
+        });
+
+        body.querySelectorAll('.insp-summary-card[data-drill-opt]').forEach(card => {
+            const openOpt = (e) => {
+                if (e.target.closest('button')) return;
+                const dIdx = Number(card.getAttribute('data-didx'));
+                const oIdx = Number(card.getAttribute('data-drill-opt'));
+                openInspector(ev.id, { mode: 'option', dIdx, oIdx }, 'forward');
+            };
+            card.addEventListener('click', openOpt);
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openOpt(e);
+                }
+            });
+        });
+
+        // Unified Outgoing Links & Decisions: Add & immediately drill into the new link
         const handleAddLink = (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1093,14 +1318,14 @@
                 delayMs: 90000,
                 probability: 1
             });
-            openInspector(ev.id);
+            const newIdx = ev.triggerEvents.length - 1;
+            openInspector(ev.id, { mode: 'link', kind: 'trigger', idx: newIdx }, 'forward');
             renderCanvasNodes();
             renderCanvasEdges();
             markDirty();
         };
         const addLinkBtn = document.getElementById('insp-btn-add-link');
         if (addLinkBtn) addLinkBtn.addEventListener('click', handleAddLink);
-        body.querySelectorAll('.insp-btn-add-link-footer').forEach(btn => btn.addEventListener('click', handleAddLink));
 
         // Convert link card type in-place (Auto-Trigger <-> Player Decision <-> Unlock Event / Action)
         body.querySelectorAll('.insp-link-type').forEach(sel => {
@@ -1129,6 +1354,7 @@
                     carriedTargetId = ev.autoEffects.unlockEvents.splice(idx, 1)[0] || '';
                 }
 
+                let nextIdx = 0;
                 if (toKind === 'trigger') {
                     if (!Array.isArray(ev.triggerEvents)) ev.triggerEvents = [];
                     ev.triggerEvents.push({
@@ -1136,6 +1362,7 @@
                         delayMs: carriedDelayMs,
                         probability: 1
                     });
+                    nextIdx = ev.triggerEvents.length - 1;
                 } else if (toKind === 'decision') {
                     if (!Array.isArray(ev.decisions)) ev.decisions = [];
                     const defaultRole = scenarioRef.roles && scenarioRef.roles[0] ? scenarioRef.roles[0] : '';
@@ -1156,13 +1383,15 @@
                             { id: 'opt_2', text: 'Option B', effects: { scores: {}, triggerEvents: [] } }
                         ]
                     });
+                    nextIdx = ev.decisions.length - 1;
                 } else if (toKind === 'unlock') {
                     if (!ev.autoEffects || typeof ev.autoEffects !== 'object') ev.autoEffects = {};
                     if (!Array.isArray(ev.autoEffects.unlockEvents)) ev.autoEffects.unlockEvents = [];
                     ev.autoEffects.unlockEvents.push(carriedTargetId);
+                    nextIdx = ev.autoEffects.unlockEvents.length - 1;
                 }
 
-                openInspector(ev.id);
+                openInspector(ev.id, { mode: 'link', kind: toKind, idx: nextIdx });
                 renderCanvasNodes();
                 renderCanvasEdges();
                 markDirty();
@@ -1181,11 +1410,14 @@
         });
 
         body.querySelectorAll('.insp-btn-del-unlock').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const idx = Number(btn.getAttribute('data-idx'));
                 if (ev.autoEffects && Array.isArray(ev.autoEffects.unlockEvents)) {
                     ev.autoEffects.unlockEvents.splice(idx, 1);
-                    openInspector(ev.id);
+                    const wasInSubview = inspectorView.mode !== 'root';
+                    openInspector(ev.id, { mode: 'root' }, wasInSubview ? 'back' : undefined);
                     renderCanvasNodes();
                     renderCanvasEdges();
                     markDirty();
@@ -1235,10 +1467,13 @@
         });
 
         body.querySelectorAll('.insp-btn-del-trigger').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const idx = Number(btn.getAttribute('data-idx'));
                 ev.triggerEvents.splice(idx, 1);
-                openInspector(ev.id);
+                const wasInSubview = inspectorView.mode !== 'root';
+                openInspector(ev.id, { mode: 'root' }, wasInSubview ? 'back' : undefined);
                 renderCanvasNodes();
                 renderCanvasEdges();
                 markDirty();
@@ -1251,7 +1486,8 @@
                 e.stopPropagation();
                 const dIdx = Number(btn.getAttribute('data-didx'));
                 ev.decisions.splice(dIdx, 1);
-                openInspector(ev.id);
+                const wasInSubview = inspectorView.mode !== 'root';
+                openInspector(ev.id, { mode: 'root' }, wasInSubview ? 'back' : undefined);
                 renderCanvasNodes();
                 renderCanvasEdges();
                 markDirty();
@@ -1293,18 +1529,22 @@
                     text: `Option ${nextNum}`,
                     effects: { scores: {}, triggerEvents: [] }
                 });
-                openInspector(ev.id);
+                const newOIdx = ev.decisions[dIdx].options.length - 1;
+                openInspector(ev.id, { mode: 'option', dIdx, oIdx: newOIdx }, 'forward');
                 renderCanvasEdges();
                 markDirty();
             });
         });
 
         body.querySelectorAll('.insp-btn-del-opt').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 const dIdx = Number(btn.getAttribute('data-didx'));
                 const oIdx = Number(btn.getAttribute('data-oidx'));
                 ev.decisions[dIdx].options.splice(oIdx, 1);
-                openInspector(ev.id);
+                const wasInOption = inspectorView.mode === 'option';
+                openInspector(ev.id, { mode: 'link', kind: 'decision', idx: dIdx }, wasInOption ? 'back' : undefined);
                 renderCanvasEdges();
                 markDirty();
             });
@@ -1580,6 +1820,7 @@
 
     function closeInspector() {
         selectedEventId = null;
+        inspectorView = { mode: 'root' };
         const drawer = document.getElementById('event-inspector-drawer');
         if (drawer) drawer.classList.remove('open');
         window.common?.floatingBar?.setDrawerShift(false);
