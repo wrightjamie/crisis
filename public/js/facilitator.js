@@ -1090,7 +1090,16 @@ window.openManualActionDetails = function(actionId) {
             ${prereqEvents.length > 0 ? `<div class="text-sm mt-xs"><strong>Unlocked By Event(s):</strong> ${esc(prereqEvents.join(', '))}</div>` : ''}
             ${closingEvents.length > 0 ? `<div class="text-sm mt-xs"><strong>Expires After:</strong> ${esc(closingEvents.join(', '))}</div>` : ''}
             ${triggered.length > 0 ? `<div class="text-sm mt-xs"><strong>Triggers Events:</strong> ${esc(triggered.map(t => typeof t === 'string' ? t : t.id).join(', '))}</div>` : ''}
-            ${randomOutcomes.length > 0 ? `<div class="text-sm mt-xs"><strong>Possible Outcomes:</strong> ${esc(randomOutcomes.map(r => `${r.id || r.event} (${r.weight || 1})`).join(', '))}</div>` : ''}
+            ${randomOutcomes.length > 0 ? (() => {
+                const usesProb = randomOutcomes.some(r => r && typeof r.probability === 'number');
+                if (usesProb) {
+                    const total = randomOutcomes.reduce((s, r) => s + Math.max(0, Number(r?.probability) || 0), 0);
+                    const parts = randomOutcomes.map(r => `${r.id || r.event} (${Math.round((Number(r.probability) || 0) * 100)}%)`);
+                    if (total < 0.999) parts.push(`No event (${Math.round((1 - total) * 100)}%)`);
+                    return `<div class="text-sm mt-xs"><strong>Possible Outcomes (Exclusive):</strong> ${esc(parts.join(' | '))}</div>`;
+                }
+                return `<div class="text-sm mt-xs"><strong>Possible Outcomes:</strong> ${esc(randomOutcomes.map(r => `${r.id || r.event} (w:${r.weight || 1})`).join(', '))}</div>`;
+            })() : ''}
         </div>
         <p class="text-xs text-muted">Manual actions are initiated directly by players from their station when available.</p>
     `;

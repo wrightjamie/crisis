@@ -1265,6 +1265,11 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     align-items: center;
 }
 
+.inspector-title-display[hidden],
+.inspector-title-input[hidden] {
+    display: none !important;
+}
+
 .inspector-title-display {
     display: inline-flex;
     align-items: center;
@@ -1277,15 +1282,15 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     border-radius: var(--radius-sm);
     background: transparent;
     color: var(--text-primary);
-    cursor: text;
+    cursor: pointer;
     text-align: left;
     transition: background var(--transition-fast) ease, border-color var(--transition-fast) ease;
 }
 
 .inspector-title-display:hover,
 .inspector-title-display:focus-visible {
-    background: color-mix(in srgb, var(--bg-primary) 70%, transparent);
-    border-color: var(--border-color);
+    background: color-mix(in srgb, var(--bg-primary) 75%, transparent);
+    border-color: var(--accent-blue);
     outline: none;
 }
 
@@ -1299,7 +1304,7 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     display: inline-flex;
     align-items: center;
     color: var(--text-muted);
-    opacity: 0;
+    opacity: 0.45;
     flex-shrink: 0;
     transition: opacity var(--transition-fast) ease, color var(--transition-fast) ease;
 }
@@ -1316,6 +1321,12 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     font-weight: 600;
     padding: 0.3rem 0.55rem !important;
     height: auto !important;
+}
+
+.insp-sublist-prob {
+    width: 3.75rem !important;
+    flex: 0 0 auto;
+    text-align: right;
 }
 
 /* Styled Inspector Checkboxes & Role/Flag Grids */

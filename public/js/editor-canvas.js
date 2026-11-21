@@ -625,6 +625,9 @@
         if (ev.repeatable) parts.push('Repeatable');
         if (Array.isArray(ev.visibleTo) && ev.visibleTo.length > 0) {
             parts.push(`${ev.visibleTo.length} role${ev.visibleTo.length === 1 ? '' : 's'}`);
+        }
+        if (Array.isArray(ev.hiddenFrom) && ev.hiddenFrom.length > 0) {
+            parts.push(`hidden:${ev.hiddenFrom.length}`);
         } else {
             parts.push('All roles');
         }
@@ -703,11 +706,12 @@
             const roleLabel = roleList.length > 0
                 ? roleList.map(r => (scenarioRef.roleNames && scenarioRef.roleNames[r]) || r).join(', ')
                 : 'Unassigned';
+            const timerLabel = dec.timeLimitMs ? ` &middot; ${Math.round(dec.timeLimitMs / 1000)}s` : '';
             return `
                 <div class="insp-summary-card kind-decision" role="button" tabindex="0" data-drill-kind="decision" data-drill-idx="${idx}">
                     <div class="insp-summary-card-main">
                         <div class="insp-summary-card-title">${escapeHtml(decPrompt)}</div>
-                        <div class="insp-summary-card-meta">Decision &middot; ${optCount} option${optCount === 1 ? '' : 's'} &middot; ${escapeHtml(roleLabel)}</div>
+                        <div class="insp-summary-card-meta">Decision &middot; ${optCount} option${optCount === 1 ? '' : 's'}${timerLabel} &middot; ${escapeHtml(roleLabel)}</div>
                     </div>
                     <div class="insp-summary-card-actions">
                         <button type="button" class="insp-icon-del-btn insp-btn-del-dec" data-didx="${idx}" title="Remove decision" aria-label="Remove decision">&times;</button>
@@ -787,12 +791,22 @@
                         </div>
                     </div>
 
-                    <div class="field-group" style="margin-bottom: 0;">
+                    <div class="field-group">
                         <label>Visible To Roles (Leave unchecked for all roles)</label>
                         <div class="inspector-check-grid" id="insp-visible-roles">
                             ${roles.map(r => {
                                 const checked = Array.isArray(ev.visibleTo) && ev.visibleTo.includes(r) ? 'checked' : '';
                                 return `<label class="insp-check"><input type="checkbox" class="insp-role-vis-cb" value="${escapeHtml(r)}" ${checked}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
+                            }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Hidden From Roles (Optional exclusion)</label>
+                        <div class="inspector-check-grid" id="insp-hidden-roles">
+                            ${roles.map(r => {
+                                const checked = Array.isArray(ev.hiddenFrom) && ev.hiddenFrom.includes(r) ? 'checked' : '';
+                                return `<label class="insp-check"><input type="checkbox" class="insp-role-hid-cb" value="${escapeHtml(r)}" ${checked}><span>${escapeHtml((scenarioRef.roleNames && scenarioRef.roleNames[r]) || r)}</span></label>`;
                             }).join('') || '<span class="text-xs text-muted">No roles defined yet.</span>'}
                         </div>
                     </div>
@@ -970,6 +984,17 @@
                     </div>
                 </div>
 
+                <div class="field-group">
+                    <label>Countdown Timer (Seconds, optional)</label>
+                    <div class="insp-sublist-row">
+                        <input type="number" class="form-control text-xs insp-dec-timer" data-didx="${idx}" value="${dec.timeLimitMs ? Math.round(dec.timeLimitMs / 1000) : ''}" min="0" step="5" placeholder="No timer">
+                        <select class="form-control text-xs insp-dec-default-opt" data-didx="${idx}" aria-label="Default standing order when timer expires" ${!dec.timeLimitMs ? 'disabled' : ''}>
+                            <option value="">-- Default Option on Timeout --</option>
+                            ${opts.map((o, oi) => `<option value="${escapeHtml(o.id || `opt_${oi + 1}`)}" ${dec.defaultOptionId === o.id ? 'selected' : ''}>${escapeHtml(o.text || o.id || `Option ${oi + 1}`)}</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
 
                 <div class="insp-section-header">
@@ -992,8 +1017,18 @@
         if (!dec || !opt) return null;
 
         const allEvents = getAllEvents();
-        const optTriggers = getHelperTriggers(opt);
+        const optTriggers = Array.isArray(opt.effects?.triggerEvents)
+            ? opt.effects.triggerEvents
+            : (Array.isArray(opt.triggerEvents) ? opt.triggerEvents : []);
+        const optRandoms = Array.isArray(opt.effects?.randomEvents) ? opt.effects.randomEvents : [];
+        const totalRandProb = optRandoms.reduce((sum, r) => sum + Math.max(0, Number(r?.probability ?? 0)), 0);
+        const usesRandProb = optRandoms.some(r => r && typeof r.probability === 'number');
+        const remNoEventPct = usesRandProb ? Math.max(0, Math.round((1 - totalRandProb) * 100)) : 0;
         const scoreEffects = (opt.effects && opt.effects.scores) ? opt.effects.scores : {};
+        const revealList = Array.isArray(opt.effects?.revealAssets) ? opt.effects.revealAssets : [];
+        const hideList = Array.isArray(opt.effects?.hideAssets) ? opt.effects.hideAssets : [];
+        const assetEffectCount = revealList.length + hideList.length;
+        const allAssets = Array.isArray(scenarioRef?.assets) ? scenarioRef.assets : [];
         const optCond = extractConditionRules(opt.conditions);
         const optCondCount = optCond.scoreRules.length + optCond.assetRules.length;
         const decLabel = (dec.text || dec.prompt || '').trim() || `Decision #${dIdx + 1}`;
@@ -1012,13 +1047,14 @@
 
             <div class="field-group">
                 <div class="insp-sublist-header">
-                    <label>Downstream Events (${optTriggers.length})</label>
+                    <label>Downstream Events &mdash; Independent (${optTriggers.length})</label>
                     <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Event</button>
                 </div>
                 <div class="insp-sublist">
-                    ${optTriggers.length === 0 ? '<div class="text-xs text-muted">No downstream events linked.</div>' : optTriggers.map((tr, tIdx) => {
+                    ${optTriggers.length === 0 ? '<div class="text-xs text-muted">No independent downstream events linked.</div>' : optTriggers.map((tr, tIdx) => {
                         const targetId = typeof tr === 'string' ? tr : (tr.id || '');
                         const delaySec = (typeof tr === 'object' && tr && tr.delayMs !== undefined) ? Math.round(tr.delayMs / 1000) : 60;
+                        const probVal = (typeof tr === 'object' && tr && tr.probability !== undefined) ? tr.probability : 1;
                         return `
                             <div class="insp-sublist-row">
                                 <select class="form-control text-xs insp-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" aria-label="Downstream Event">
@@ -1027,7 +1063,34 @@
                                 </select>
                                 <input type="number" class="form-control text-xs insp-opt-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
                                 <span class="insp-sublist-unit">s</span>
+                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" value="${probVal}" min="0.05" max="1" step="0.05" aria-label="Probability 0 to 1" title="Probability (0–1)">
                                 <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-tidx="${tIdx}" title="Remove event link" aria-label="Remove event link">&times;</button>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="insp-sublist-header">
+                    <label>Exclusive Outcomes &mdash; A || B (${optRandoms.length})${optRandoms.length > 0 && usesRandProb ? ` <span class="text-xs text-muted">(${remNoEventPct}% no event)</span>` : ''}</label>
+                    <button type="button" class="btn btn-secondary text-xs insp-btn-add-opt-rand" data-didx="${dIdx}" data-oidx="${oIdx}">+ Add Outcome</button>
+                </div>
+                <div class="insp-sublist">
+                    ${optRandoms.length === 0 ? '<div class="text-xs text-muted">No mutually exclusive outcomes. Add outcomes with probabilities (0&ndash;1); any remainder results in no event.</div>' : optRandoms.map((rn, rIdx) => {
+                        const targetId = typeof rn === 'string' ? rn : (rn.id || rn.event || '');
+                        const delaySec = (typeof rn === 'object' && rn && rn.delayMs !== undefined) ? Math.round(rn.delayMs / 1000) : 60;
+                        const probVal = (typeof rn === 'object' && rn && rn.probability !== undefined) ? rn.probability : 0.5;
+                        return `
+                            <div class="insp-sublist-row">
+                                <select class="form-control text-xs insp-opt-rand-link" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" aria-label="Exclusive Outcome Event">
+                                    <option value="">-- Select Event --</option>
+                                    ${allEvents.filter(x => x.id !== ev.id).map(x => `<option value="${escapeHtml(x.id)}" ${x.id === targetId ? 'selected' : ''}>${escapeHtml(getNodeDisplayLabel(x, allEvents))}</option>`).join('')}
+                                </select>
+                                <input type="number" class="form-control text-xs insp-opt-rand-delay" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" value="${delaySec}" min="0" step="5" aria-label="Delay in seconds" title="Delay (seconds)">
+                                <span class="insp-sublist-unit">s</span>
+                                <input type="number" class="form-control text-xs insp-sublist-prob insp-opt-rand-prob" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" value="${probVal}" min="0.05" max="1" step="0.05" aria-label="Exclusive Probability 0 to 1" title="Exclusive Probability (0–1)">
+                                <button type="button" class="btn btn-danger text-xs insp-sublist-del insp-btn-del-opt-rand" data-didx="${dIdx}" data-oidx="${oIdx}" data-ridx="${rIdx}" title="Remove exclusive outcome" aria-label="Remove exclusive outcome">&times;</button>
                             </div>
                         `;
                     }).join('')}
@@ -1043,6 +1106,27 @@
                     ${renderScoreEffectRows(scoreEffects, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
                 </div>
             </div>
+
+            <details class="insp-opt-cond-details" ${assetEffectCount > 0 ? 'open' : ''}>
+                <summary>
+                    <span>Asset Visibility Effects &mdash; Reveal / Hide (${assetEffectCount})</span>
+                    <span class="text-xs text-muted">${assetEffectCount > 0 ? `${revealList.length} reveal, ${hideList.length} hide` : 'None'}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    <div class="field-group">
+                        <label>Reveal Hidden Assets</label>
+                        <div class="inspector-check-grid">
+                            ${allAssets.map(a => `<label class="insp-check"><input type="checkbox" class="insp-opt-reveal-cb" data-didx="${dIdx}" data-oidx="${oIdx}" value="${escapeHtml(a.id)}" ${revealList.includes(a.id) ? 'checked' : ''}><span>${escapeHtml(a.name || a.id)}</span></label>`).join('') || '<span class="text-xs text-muted">No assets defined.</span>'}
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Hide Visible Assets</label>
+                        <div class="inspector-check-grid">
+                            ${allAssets.map(a => `<label class="insp-check"><input type="checkbox" class="insp-opt-hide-cb" data-didx="${dIdx}" data-oidx="${oIdx}" value="${escapeHtml(a.id)}" ${hideList.includes(a.id) ? 'checked' : ''}><span>${escapeHtml(a.name || a.id)}</span></label>`).join('') || '<span class="text-xs text-muted">No assets defined.</span>'}
+                        </div>
+                    </div>
+                </div>
+            </details>
 
             <details class="insp-opt-cond-details" ${optCondCount > 0 ? 'open' : ''}>
                 <summary>
@@ -1253,6 +1337,17 @@
                 const checkedRoles = Array.from(body.querySelectorAll('.insp-role-vis-cb:checked')).map(x => x.value);
                 if (checkedRoles.length > 0) ev.visibleTo = checkedRoles;
                 else delete ev.visibleTo;
+                refreshVisPill();
+                renderCanvasNodes();
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll('.insp-role-hid-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const checkedRoles = Array.from(body.querySelectorAll('.insp-role-hid-cb:checked')).map(x => x.value);
+                if (checkedRoles.length > 0) ev.hiddenFrom = checkedRoles;
+                else delete ev.hiddenFrom;
                 refreshVisPill();
                 renderCanvasNodes();
                 markDirty();
@@ -1517,6 +1612,45 @@
             });
         });
 
+        body.querySelectorAll('.insp-dec-timer').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const dIdx = Number(inp.getAttribute('data-didx'));
+                const dec = ev.decisions[dIdx];
+                if (!dec) return;
+                const secs = Number(inp.value);
+                const defSel = body.querySelector(`.insp-dec-default-opt[data-didx="${dIdx}"]`);
+                if (secs > 0) {
+                    dec.timeLimitMs = Math.round(secs * 1000);
+                    if (!dec.defaultOptionId && dec.options && dec.options[0]) {
+                        dec.defaultOptionId = dec.options[0].id || 'opt_1';
+                    }
+                    if (defSel) {
+                        defSel.disabled = false;
+                        if (dec.defaultOptionId) defSel.value = dec.defaultOptionId;
+                    }
+                } else {
+                    delete dec.timeLimitMs;
+                    delete dec.defaultOptionId;
+                    if (defSel) {
+                        defSel.disabled = true;
+                        defSel.value = '';
+                    }
+                }
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll('.insp-dec-default-opt').forEach(sel => {
+            sel.addEventListener('change', () => {
+                const dIdx = Number(sel.getAttribute('data-didx'));
+                const dec = ev.decisions[dIdx];
+                if (!dec) return;
+                if (sel.value) dec.defaultOptionId = sel.value;
+                else delete dec.defaultOptionId;
+                markDirty();
+            });
+        });
+
         body.querySelectorAll('.insp-btn-add-opt').forEach(btn => {
             btn.addEventListener('click', () => {
                 const dIdx = Number(btn.getAttribute('data-didx'));
@@ -1633,6 +1767,136 @@
                     renderCanvasEdges();
                     markDirty();
                 }
+            });
+        });
+
+        body.querySelectorAll('.insp-opt-prob').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const dIdx = Number(inp.getAttribute('data-didx'));
+                const oIdx = Number(inp.getAttribute('data-oidx'));
+                const tIdx = Number(inp.getAttribute('data-tidx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionTriggerArray(opt);
+                if (arr[tIdx]) {
+                    arr[tIdx].probability = Math.min(1, Math.max(0.05, Number(inp.value || 1)));
+                    markDirty();
+                }
+            });
+        });
+
+        // Mutually Exclusive Random Outcomes (opt.effects.randomEvents)
+        const ensureOptionRandomArray = (opt) => {
+            const eff = ensureOptionEffects(opt);
+            if (!Array.isArray(eff.randomEvents)) eff.randomEvents = [];
+            eff.randomEvents = eff.randomEvents.map(r => (typeof r === 'string' ? { id: r, delayMs: 60000, probability: 0.5 } : r));
+            return eff.randomEvents;
+        };
+
+        body.querySelectorAll('.insp-btn-add-opt-rand').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dIdx = Number(btn.getAttribute('data-didx'));
+                const oIdx = Number(btn.getAttribute('data-oidx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionRandomArray(opt);
+                const used = arr.reduce((s, r) => s + Math.max(0, Number(r?.probability ?? 0)), 0);
+                const suggestedProb = Math.max(0.1, Math.min(0.5, Math.round((1 - used) * 100) / 100 || 0.25));
+                const candidate = getAllEvents().find(x => x.id !== ev.id && !arr.some(r => r.id === x.id))
+                    || getAllEvents().find(x => x.id !== ev.id);
+                arr.push({ id: candidate ? candidate.id : '', delayMs: 60000, probability: suggestedProb });
+                openInspector(ev.id);
+                renderCanvasNodes();
+                renderCanvasEdges();
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll('.insp-btn-del-opt-rand').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dIdx = Number(btn.getAttribute('data-didx'));
+                const oIdx = Number(btn.getAttribute('data-oidx'));
+                const rIdx = Number(btn.getAttribute('data-ridx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionRandomArray(opt);
+                arr.splice(rIdx, 1);
+                if (arr.length === 0 && opt.effects) delete opt.effects.randomEvents;
+                openInspector(ev.id);
+                renderCanvasNodes();
+                renderCanvasEdges();
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll('.insp-opt-rand-link').forEach(sel => {
+            sel.addEventListener('change', () => {
+                const dIdx = Number(sel.getAttribute('data-didx'));
+                const oIdx = Number(sel.getAttribute('data-oidx'));
+                const rIdx = Number(sel.getAttribute('data-ridx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionRandomArray(opt);
+                if (arr[rIdx]) {
+                    arr[rIdx].id = sel.value;
+                    renderCanvasNodes();
+                    renderCanvasEdges();
+                    markDirty();
+                }
+            });
+        });
+
+        body.querySelectorAll('.insp-opt-rand-delay').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const dIdx = Number(inp.getAttribute('data-didx'));
+                const oIdx = Number(inp.getAttribute('data-oidx'));
+                const rIdx = Number(inp.getAttribute('data-ridx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionRandomArray(opt);
+                if (arr[rIdx]) {
+                    arr[rIdx].delayMs = Math.max(0, Number(inp.value || 0) * 1000);
+                    renderCanvasEdges();
+                    markDirty();
+                }
+            });
+        });
+
+        body.querySelectorAll('.insp-opt-rand-prob').forEach(inp => {
+            inp.addEventListener('change', () => {
+                const dIdx = Number(inp.getAttribute('data-didx'));
+                const oIdx = Number(inp.getAttribute('data-oidx'));
+                const rIdx = Number(inp.getAttribute('data-ridx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const arr = ensureOptionRandomArray(opt);
+                if (arr[rIdx]) {
+                    arr[rIdx].probability = Math.min(1, Math.max(0.05, Number(inp.value || 0.5)));
+                    delete arr[rIdx].weight;
+                    openInspector(ev.id);
+                    markDirty();
+                }
+            });
+        });
+
+        // Asset Visibility Effects (Reveal / Hide Assets on Decision Options)
+        body.querySelectorAll('.insp-opt-reveal-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const dIdx = Number(cb.getAttribute('data-didx'));
+                const oIdx = Number(cb.getAttribute('data-oidx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const eff = ensureOptionEffects(opt);
+                const checked = Array.from(body.querySelectorAll(`.insp-opt-reveal-cb[data-didx="${dIdx}"][data-oidx="${oIdx}"]:checked`)).map(x => x.value);
+                if (checked.length > 0) eff.revealAssets = checked;
+                else delete eff.revealAssets;
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll('.insp-opt-hide-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const dIdx = Number(cb.getAttribute('data-didx'));
+                const oIdx = Number(cb.getAttribute('data-oidx'));
+                const opt = ev.decisions[dIdx].options[oIdx];
+                const eff = ensureOptionEffects(opt);
+                const checked = Array.from(body.querySelectorAll(`.insp-opt-hide-cb[data-didx="${dIdx}"][data-oidx="${oIdx}"]:checked`)).map(x => x.value);
+                if (checked.length > 0) eff.hideAssets = checked;
+                else delete eff.hideAssets;
+                markDirty();
             });
         });
 
