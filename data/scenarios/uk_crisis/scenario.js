@@ -599,6 +599,40 @@ module.exports = {
             ],
             "image": "generic_cyber",
             "briefing": "Deeply embedded SVR/Sandworm implant inside a Tier-1 UK fibre exchange, enabling silent NHS ransomware cascades and emergency broadcast hijacking."
+        },
+        {
+            "id": "a_usaf_lakenheath",
+            "name": "USAF 48th Fighter Wing (RAF Lakenheath)",
+            "location": [
+                52.41,
+                0.56
+            ],
+            "state": "operational",
+            "tags": [
+                "military",
+                "air",
+                "us",
+                "allied"
+            ],
+            "image": "nato_air_base",
+            "briefing": "US Air Force 48th Fighter Wing operating F-35A and F-15E squadrons out of Suffolk. Provides critical NATO air policing, heavy airlift staging, and allied deterrence—subject to Washington authorisation."
+        },
+        {
+            "id": "a_usn_carrier_group",
+            "name": "US 6th Fleet Carrier Group (North Atlantic)",
+            "location": [
+                58.5,
+                -14
+            ],
+            "state": "operational",
+            "tags": [
+                "military",
+                "naval",
+                "us",
+                "allied"
+            ],
+            "image": "as_truman",
+            "briefing": "US Navy Carrier Strike Group and Aegis destroyers operating in the North Atlantic approaches to reinforce the GIUK Gap and protect transatlantic sea lanes."
         }
     ],
     "stages": [
@@ -624,6 +658,133 @@ module.exports = {
         }
     ],
     "eventTemplates": [
+        {
+            "id": "ev_kremlin_ultimatum",
+            "isOpeningEvent": true,
+            "stage": "stage_1",
+            "name": "Kremlin Statement: Warning Over European Intervention in Ukraine",
+            "sound": "teletype",
+            "repeatable": false,
+            "location": [
+                55.75,
+                37.61
+            ],
+            "image": "ev_russia_false_flag",
+            "description": "In a televised address from Moscow, the Kremlin condemns UK and European military advisers, intelligence sharing, and weapons logistics supporting Ukraine as \"direct belligerent intervention.\" Russian Northern and Baltic Fleet task groups are placed on high combat alert.",
+            "roleDescriptions": {
+                "PM": "COBRA has been convened immediately. Allies in Paris, Berlin, and Warsaw are waiting to see whether Britain stands firm or blinks first.",
+                "foreign": "Washington's response is still unclear—pushing too hard unilaterally could alienate an already cautious White House, while hesitation will rattle European NATO partners.",
+                "defence": "RAF QRA and Royal Navy North Atlantic patrols are on standby; USAF Lakenheath and the US 6th Fleet Carrier Group remain in theatre for now.",
+                "media": "24-hour news channels are leading with the Kremlin threat. Financial markets and energy futures are already jittery."
+            },
+            "decisions": [
+                {
+                    "role": "foreign",
+                    "text": "How should Britain respond diplomatically to the Kremlin's warning over Ukraine?",
+                    "options": [
+                        {
+                            "id": "opt_krem_firm_nato",
+                            "text": "Issue a joint UK–European declaration rejecting Russian intimidation and reaffirming support for Ukraine.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": 1,
+                                    "uk_russia": -1,
+                                    "military_escalation": 1
+                                },
+                                "unlockEvents": [
+                                    "ev_uk_casualty_leak",
+                                    "ev_maritime_shadowing",
+                                    "ev_disinfo_campaign",
+                                    "ev_bomber_intercept"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "opt_krem_coord_us",
+                            "text": "Coordinate a measured statement with Washington first to keep the UK–US alliance locked in step.",
+                            "effects": {
+                                "scores": {
+                                    "uk_us": 1,
+                                    "uk_europe": -1
+                                },
+                                "unlockEvents": [
+                                    "ev_uk_casualty_leak",
+                                    "ev_maritime_shadowing",
+                                    "ev_dissident_discovery",
+                                    "ev_gps_jamming"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "opt_krem_deescalate",
+                            "text": "Call for urgent diplomatic talks and emphasise Britain's role is strictly defensive.",
+                            "effects": {
+                                "scores": {
+                                    "military_escalation": -1,
+                                    "uk_europe": -1,
+                                    "uk_us": -1
+                                },
+                                "unlockEvents": [
+                                    "ev_uk_casualty_leak",
+                                    "ev_protest_manchester",
+                                    "ev_disinfo_campaign"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "role": "PM",
+                    "text": "What initial readiness posture should COBRA authorise?",
+                    "options": [
+                        {
+                            "id": "opt_krem_high_alert",
+                            "text": "Raise UK military and NCSC cyber alert levels immediately and brief Parliament.",
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": 1,
+                                    "civilian_stability": -1
+                                },
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_uk_casualty_leak",
+                                        "delayMs": 65000,
+                                        "probability": 0.7
+                                    },
+                                    {
+                                        "id": "ev_deepfake_pm",
+                                        "delayMs": 70000,
+                                        "probability": 0.3
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "opt_krem_quiet_prep",
+                            "text": "Prepare defences quietly behind closed doors to avoid triggering public panic.",
+                            "effects": {
+                                "scores": {
+                                    "civilian_stability": 1,
+                                    "military_readiness": -1
+                                },
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_uk_casualty_leak",
+                                        "delayMs": 80000,
+                                        "probability": 0.65
+                                    },
+                                    {
+                                        "id": "ev_heathrow_gps_spoof",
+                                        "delayMs": 85000,
+                                        "probability": 0.35
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
         {
             "id": "ev_protest_manchester",
             "stage": "stage_1",
@@ -794,7 +955,6 @@ module.exports = {
         {
             "id": "ev_uk_casualty_leak",
             "stage": "stage_1",
-            "isOpeningEvent": true,
             "name": "British Soldier Casualties Leaked to Press",
             "image": "ev_uk_casualty_leak",
             "repeatable": false,
@@ -917,7 +1077,13 @@ module.exports = {
                     ]
                 }
             ],
-            "sound": "teletype"
+            "sound": "teletype",
+            "requiresUnlock": true,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_kremlin_ultimatum"
+                ]
+            }
         },
         {
             "id": "ev_protest_london",
@@ -2687,6 +2853,29 @@ module.exports = {
                     "text": "How should our fighter squadrons engage the approaching bomber fleet?",
                     "options": [
                         {
+                            "id": "opt_inc_usaf_joint",
+                            "text": "Scramble RAF Typhoons jointly with USAF Lakenheath F-35As for an overwhelming NATO intercept!",
+                            "conditions": {
+                                "visibleAssets": [
+                                    "a_usaf_lakenheath"
+                                ],
+                                "assetStates": {
+                                    "a_usaf_lakenheath": "operational"
+                                }
+                            },
+                            "effects": {
+                                "scores": {
+                                    "military_readiness": 2,
+                                    "uk_us": 1,
+                                    "military_escalation": 1
+                                },
+                                "unlockEvents": [
+                                    "ev_nuclear_readiness",
+                                    "ev_final_authorization"
+                                ]
+                            }
+                        },
+                        {
                             "id": "opt_inc_1",
                             "text": "Commit all fighters into a mass interception over the North Sea before bombers reach weapons range",
                             "effects": {
@@ -3602,7 +3791,7 @@ module.exports = {
         {
             "id": "act_us_support",
             "name": "Request US Military Transport",
-            "description": "Ask the US President to send heavy transport planes to fly British supplies and troops.",
+            "description": "Request urgent US military airlift and munitions support from USAF Lakenheath & Atlantic commands. Unavailable if the US has withdrawn its assets from theatre.",
             "initiator": [
                 "foreign",
                 "defence"
@@ -3627,7 +3816,16 @@ module.exports = {
                             "ev_cyber_london"
                         ]
                     }
-                ]
+                ],
+                "triggeredEvents": [
+                    "ev_kremlin_ultimatum"
+                ],
+                "visibleAssets": [
+                    "a_usaf_lakenheath"
+                ],
+                "assetStates": {
+                    "a_usaf_lakenheath": "operational"
+                }
             },
             "effects": {
                 "randomEvents": [
@@ -4891,7 +5089,7 @@ module.exports = {
                     "civilian_stability": 1
                 },
                 "triggeredEvents": [
-                    "ev_uk_casualty_leak"
+                    "ev_kremlin_ultimatum"
                 ]
             },
             "roleDescriptions": {
@@ -4947,7 +5145,7 @@ module.exports = {
                     "military_escalation": 5
                 },
                 "triggeredEvents": [
-                    "ev_uk_casualty_leak"
+                    "ev_kremlin_ultimatum"
                 ]
             },
             "roleDescriptions": {
@@ -5001,7 +5199,7 @@ module.exports = {
                     "uk_us": 1
                 },
                 "triggeredEvents": [
-                    "ev_uk_casualty_leak"
+                    "ev_kremlin_ultimatum"
                 ]
             },
             "autoEffects": {
@@ -5214,6 +5412,75 @@ module.exports = {
                     }
                 ]
             }
+        },
+        {
+            "id": "ev_us_withdraws_support",
+            "stage": "stage_2",
+            "name": "White House Statement: US Declines to Back UK Intervention",
+            "sound": "teletype",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                52.41,
+                0.56
+            ],
+            "image": "ev_us_neutrality",
+            "description": "Citing strained UK–US relations and competing Indo-Pacific priorities, the White House announces that American forces will NOT back British or European escalation over Ukraine. USAF 48th Fighter Wing aircraft at RAF Lakenheath are ordered to stand down from NATO tasking, and the US 6th Fleet Carrier Group departs the North Atlantic.",
+            "conditions": {
+                "maxScores": {
+                    "uk_us": 2
+                },
+                "triggeredEvents": [
+                    "ev_kremlin_ultimatum"
+                ]
+            },
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_usaf_lakenheath": "withdrawn",
+                    "a_usn_carrier_group": "withdrawn"
+                },
+                "hideAssets": [
+                    "a_usaf_lakenheath",
+                    "a_usn_carrier_group"
+                ],
+                "scores": {
+                    "military_readiness": -1,
+                    "uk_europe": -1
+                }
+            },
+            "roleDescriptions": {
+                "PM": "US assets have been pulled from our tactical map. Until Washington reverses course, Britain cannot call in US military transport or USAF air cover.",
+                "foreign": "The Special Relationship is in deep freeze. We must decide whether to make urgent diplomatic concessions to Washington or pivot fully to European defence partners.",
+                "defence": "Without USAF Lakenheath and the US Carrier Group in the North Atlantic, RAF and Royal Navy units must cover the GIUK Gap and UK airspace alone."
+            },
+            "decisions": [
+                {
+                    "role": "foreign",
+                    "text": "How should Britain respond to the White House withdrawing US assets?",
+                    "options": [
+                        {
+                            "id": "opt_usw_repair",
+                            "text": "Open emergency Prime Minister–President crisis talks to restore US backing (Slows EU alignment).",
+                            "effects": {
+                                "scores": {
+                                    "uk_us": 1,
+                                    "uk_europe": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_usw_eu_pivot",
+                            "text": "Accept Washington's pullback and rally France, Germany, and Nordic allies into a European shield.",
+                            "effects": {
+                                "scores": {
+                                    "uk_europe": 2,
+                                    "military_readiness": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
         }
     ]
 };
