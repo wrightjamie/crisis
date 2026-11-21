@@ -277,7 +277,7 @@
                 <div class="${nodeClass}" data-event-id="${escapeHtml(ev.id)}" style="left: ${Math.round(pos.x)}px; top: ${Math.round(pos.y)}px;">
                     <div class="canvas-node-header">
                         <div class="inline-flex items-center gap-xs flex-wrap">
-                            ${ev.isOpeningEvent ? `<span class="badge badge-opening">Start</span>` : ''}
+                            ${ev.isOpeningEvent ? `<span class="badge badge-opening">&#9654; Start</span>` : ''}
                             ${ev.isEndGame ? `<span class="badge badge-endgame">End Game</span>` : ''}
                             ${ev.requiresUnlock ? `<span class="badge badge-inject">Inject</span>` : ''}
                             ${ev.stage ? `<span class="badge badge-stage">${escapeHtml(ev.stage)}</span>` : ''}
@@ -2111,7 +2111,7 @@
                 <details class="event-accordion-item${ev.isEndGame ? ' endgame-item' : ''}">
                     <summary>
                         <div class="inline-flex items-center gap-sm">
-                            ${ev.isOpeningEvent ? `<span class="badge badge-opening">Start</span>` : ''}
+                            ${ev.isOpeningEvent ? `<span class="badge badge-opening">&#9654; Start</span>` : ''}
                             <span>${escapeHtml(ev.name || ev.title || 'Untitled Event')}</span>
                             ${ev.isEndGame ? `<span class="badge badge-endgame">End Game</span>` : ''}
                             ${ev.requiresUnlock ? `<span class="badge badge-inject">Inject</span>` : ''}

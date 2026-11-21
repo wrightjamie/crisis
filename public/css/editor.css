@@ -1199,11 +1199,25 @@ details.variant-opt-collapsible[open] > .variant-opt-summary {
     gap: 0.45rem;
 }
 
-/* Opening Event Badge */
+/* Opening Event Node & Badge — Visually Distinct Entry Point */
+.canvas-node.root-node {
+    border: 2px solid var(--status-1);
+    border-left: 5px solid var(--status-1);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--status-1) 15%, var(--bg-secondary)), var(--bg-secondary) 65%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-1) 20%, transparent), var(--shadow-md);
+}
+
+.canvas-node.root-node.selected {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-1) 45%, transparent), var(--shadow-lg);
+}
+
 .badge-opening {
-    background: color-mix(in srgb, var(--status-1) 20%, transparent);
-    color: var(--status-1);
-    border: 1px solid color-mix(in srgb, var(--status-1) 45%, transparent);
+    background: var(--status-1);
+    color: var(--bg-primary);
+    border: 1px solid var(--status-1);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 /* Drag-to-Connect Right-Edge Link Handle (Editor Canvas Only) */

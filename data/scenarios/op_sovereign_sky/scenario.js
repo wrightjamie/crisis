@@ -3995,7 +3995,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "sustainability": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_t3_hub_and_spoke"
+                ]
             },
             "autoEffects": {
                 "assetStateChanges": {
@@ -4050,7 +4053,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "force_protection": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_t1_basing_dilemma"
+                ]
             },
             "autoEffects": {
                 "assetStateChanges": {
@@ -4118,7 +4124,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "coalition_support": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_start"
+                ]
             },
             "roleDescriptions": {
                 "joint": "Air Power cannot succeed in isolation—restore Coalition Capability and Full Spectrum diplomatic backing."

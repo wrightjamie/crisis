@@ -4889,7 +4889,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "civilian_stability": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
             },
             "roleDescriptions": {
                 "home": "Police forces are overwhelmed by forecourt queues and sporadic looting. Emergency powers will restore order at a political cost.",
@@ -4942,7 +4945,10 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "military_escalation": 5
-                }
+                },
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
             },
             "roleDescriptions": {
                 "PM": "Placing UK forces under full NATO command strengthens allied deterrence, though Britain loses unilateral control over de-escalation."
@@ -4993,7 +4999,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "uk_us": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
             },
             "autoEffects": {
                 "hideAssets": [

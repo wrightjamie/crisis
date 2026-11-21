@@ -2955,7 +2955,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "supply_lines": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_military_incursion"
+                ]
             },
             "autoEffects": {
                 "assetStateChanges": {
@@ -3069,7 +3072,10 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "international_pressure": 5
-                }
+                },
+                "triggeredEvents": [
+                    "ev_naval_skirmish"
+                ]
             },
             "roleDescriptions": {
                 "downing_street": "Defying this ultimatum risks severe diplomatic isolation; accepting it freezes the tactical map where it stands."
@@ -3125,7 +3131,10 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "uk_public_support": 1
-                }
+                },
+                "triggeredEvents": [
+                    "ev_naval_skirmish"
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "The PM is threatening to relieve you of command and sue for peace unless you turn the tide immediately."
@@ -3415,8 +3424,8 @@ module.exports = {
             "name": "Black Buck II: AAR Weather Abort",
             "description": "Severe mid-Atlantic turbulence damaged a Voyager refuelling drogue, forcing the long-range strike package to abort and divert back to Mount Pleasant.",
             "location": [
-                -45.0,
-                -52.0
+                -45,
+                -52
             ],
             "autoEffects": {
                 "scores": {
@@ -3458,7 +3467,7 @@ module.exports = {
             "description": "HMS Astute swept the northern approaches without regaining contact on ARA Salta, though her presence has pushed surface raiders back.",
             "location": [
                 -50.5,
-                -58.0
+                -58
             ],
             "autoEffects": {
                 "scores": {
