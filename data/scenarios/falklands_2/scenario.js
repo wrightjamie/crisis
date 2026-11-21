@@ -2,6 +2,7 @@ module.exports = {
     "id": "falklands_2",
     "name": "Falklands II: Southern Storm",
     "description": "A surprise aggressive move by Argentine forces threatens the Falkland Islands. Built for solo command or a 2–3 player team, secure the islands, hunt elusive South Atlantic threats, manage the Ascension logistics bridge, and decide whether to escalate to the mainland.",
+    "guideUrl": "/scenarios/falklands_2/guide.html",
     "mapConfig": {
         "center": [
             -51.6977,

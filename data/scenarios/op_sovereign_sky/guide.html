@@ -77,6 +77,8 @@
       <tr><td><strong>Special Forces Air Insertion</strong> (<code>act_sf_air_ops</code>)</td><td>Track B2 (ISR Cycle + Air Ctrl 3+)</td><td>Mobility or ISR / JFAC</td><td>LO2 P6 SF Air Ops (Op Mikado) + LO2 P7 TECHINT (75% Crypto Capture / 25% Hot Extraction).</td></tr>
       <tr><td><strong>Humanitarian Relief Air-Drop</strong> (<code>act_humanitarian_aid</code>)</td><td>Track C4 (Airborne Ops)</td><td>Mobility or Joint / JFAC</td><td>LO1 P2 Humanitarian Ops + LO2 P6 Air-Drop + LO3 P9 Full Spectrum (assists revealed enclave).</td></tr>
       <tr><td><strong>Op Shader Leaflet & Broadcast</strong> (<code>act_info_psyops</code>)</td><td>Urban Info Ops (Air Ctrl 3+)</td><td>Strike or Joint / JFAC</td><td>LO2 P8 Information Activities — Non-Kinetic PsyOps (Op SHADER case study).</td></tr>
+      <tr><td><strong>F-35B Stealth & Storm Shadow OCA</strong> (<code>act_uk_stealth_oca</code>)</td><td>Track B2 (ISR reveals SA-17)</td><td>Strike or Control / JFAC</td><td>LO2 P5 OCA & LO3 P10 Op Orchard (75% destroys SA-17 / 25% SAM relocates &amp; hides).</td></tr>
+      <tr><td><strong>Hub & Spoke Air-Bridge Surge</strong> (<code>act_hub_spoke_surge</code>)</td><td>Track C1 (Sustain &le; 2 or degraded base/tanker)</td><td>Mobility / JFAC</td><td>LO1 P1 Sustain Enabler &amp; LO2 P6 Hub &amp; Spoke (80% restores Voyager/Akrotiri +2 Sustain / 20% storm delay).</td></tr>
     </table>
   </div>
 </div>
@@ -108,7 +110,7 @@
   <div class="decision-box">
     <h3>Track A4: Offensive Counter-Air & Op Orchard Cyber Strike (ev_t1_oca_cyber)</h3>
     <span class="syl-ref">Syllabus Link: LO2 P5 (OCA — Op Black Buck / Granby) • LO3 P10 (Offensive Air-Cyber — Operation Orchard 2007)</span>
-    <p><strong>Cross-Track Synergy:</strong> If Track B2 (<code>ev_t2_isr_cycle</code>) has already revealed <code>a_crimson_sam_battery</code>, Control unlocks <strong>[ISR VERIFIED TARGET] Precision Stealth OCA</strong> (F-35B + Storm Shadow destroying the SA-17)! Otherwise Control faces riskier reactive Wild Weasel suppression or stand-off cratering. ISR decides whether to deploy an <strong>Operation Orchard (6 Sept 2007)</strong> Offensive Air-Cyber radar spoof or save cyber tools.</p>
+    <p><strong>Cross-Track Synergy:</strong> If Track B2 (<code>ev_t2_isr_cycle</code>) has already revealed <code>a_crimson_sam_battery</code>, Control unlocks <strong>[ISR VERIFIED TARGET] Precision Stealth OCA</strong> (F-35B + Storm Shadow destroying the SA-17)! Otherwise Control faces a riskier conventional Typhoon Storm Shadow &amp; Brimstone sweep or stand-off cratering. ISR decides whether to deploy an <strong>Operation Orchard (6 Sept 2007)</strong> Offensive Air-Cyber radar spoof or save cyber tools.</p>
   </div>
 
   <div class="decision-box">
@@ -180,7 +182,13 @@
   <div class="decision-box">
     <h3>Track C5: Combat Recovery & 3-Tier Medevac (ev_t3_csar_medevac) [TIMED: 150s]</h3>
     <span class="syl-ref">Syllabus Link: LO2 P6 (Tasks 22 & 23: Peacetime vs Combat Recovery — Exercise Volfa; Forward/Tactical/Strategic Medevac)</span>
-    <p><strong>Core Doctrine:</strong> Contrasts <strong>Peacetime Recovery</strong> (unarmed SAR, e.g. Griffin HAR2) vs <strong>Combat Recovery</strong> (hostile interference expected, armed Chinook + Typhoon RESCORT, practised on <strong>Exercise Volfa</strong>). Sending unarmed peacetime SAR triggers <strong><code>ev_csar_ambush_branch</code></strong>! Sequences 3 Medevac tiers: <strong>Forward</strong> (Chinook/Puma MERT) &rarr; <strong>Tactical</strong> (A400M in theatre) &rarr; <strong>Strategic</strong> (C-17 back to UK).</p>
+    <p><strong>Core Doctrine:</strong> Contrasts <strong>Peacetime Recovery</strong> (unarmed SAR, e.g. Griffin HAR2) vs <strong>Combat Recovery</strong> (hostile interference expected, armed Chinook + Typhoon RESCORT, practised on <strong>Exercise Volfa</strong>). The downed pilot spawns at a dynamic map coordinate (<code>possibleLocations</code>) and committing Combat Recovery diverts <code>a_chinook</code> (<code>tasked_csar</code>). Sending unarmed peacetime SAR triggers <strong><code>ev_csar_ambush_branch</code></strong>! Sequences 3 Medevac tiers: <strong>Forward</strong> (Chinook/Puma MERT) &rarr; <strong>Tactical</strong> (A400M in theatre) &rarr; <strong>Strategic</strong> (C-17 back to UK).</p>
+  </div>
+
+  <div class="box-warning">
+    <strong>Replayability Pack — Probabilistic Wildcards, Elusive Threats &amp; Auto-Triggered Shocks:</strong><br>
+    • <strong>100% Syllabus Guarantee:</strong> All LO1–LO3 spine events fire on every run; mutually exclusive <code>randomEvents</code> wildcards fire around Tracks A, B, and C so every class faces fresh tactical twists (<em>Neutral Airliner VID ROE</em>, <em>Crimson Fast-Jet Pop-Up Ambush</em>, <em>SA-17 Relocation</em>, <em>Eyes-Only SIGINT Munitions Convoy</em> [visible only to ISR &amp; JFAC], <em>False-Flag OSINT Video</em>, <em>Reaper Satlink Hijack</em>, <em>Voyager AAR EW Jamming</em>, <em>Kilo Sub Thermal-Layer Dive &amp; Re-Emergence</em>, and <em>Regional Overflight Refusal</em>).<br>
+    • <strong>3 Auto-Triggered Threshold Shocks:</strong> <code>sustainability &le; 1</code> &rarr; <em>Fuel &amp; Munitions Rationing</em> (degrades <code>a_voyager</code> until Brize Norton surge); <code>force_protection &le; 1</code> &rarr; <em>RAF Akrotiri Runway Cratering</em> (allows F-35B carrier diversion to <code>a_qec</code> if on-station!); <code>coalition_support &le; 1</code> &rarr; <em>Allied Overflight &amp; Basing Restrictions</em>.
   </div>
 </div>
 
@@ -515,7 +523,4 @@
     <li><strong>Peacekeeping vs. Peace Enforcement:</strong> <strong>Peacekeeping</strong> prevents fighting from resuming after a conflict; <strong>Peace Enforcement</strong> uses military force to compel peace during a conflict <em>without consent</em> from the participants.</li>
     <li><strong>Post-Conflict Peace Building & Humanitarian Ops:</strong> Laying foundations for sustainable peace; and providing short-term material and logistical aid to people in need after natural or man-made disasters.</li>
   </ul>
-</div>
-
-</body>
-</html>
+</d

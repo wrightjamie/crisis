@@ -2,6 +2,7 @@ module.exports = {
     "id": "uk_crisis",
     "name": "UK Crisis: Russian Tensions",
     "description": "Lead the British government through a dangerous standoff with Russia. Balance public safety, military readiness, and international diplomacy.",
+    "guideUrl": "/scenarios/uk_crisis/guide.html",
     "mapConfig": {
         "center": [
             54.5,

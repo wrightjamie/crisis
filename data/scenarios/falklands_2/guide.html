@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Falklands II: Southern Storm — Facilitator & Player Guide</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a202c; line-height: 1.35; font-size: 9.5pt; margin: 0; padding: 0; }
+  h1 { color: #002855; font-size: 15pt; border-bottom: 3px solid #002855; padding-bottom: 4px; margin-top: 0; margin-bottom: 6px; }
+  h2 { color: #003876; font-size: 11.5pt; border-bottom: 1px solid #cbd5e0; padding-bottom: 2px; margin-top: 10px; margin-bottom: 6px; }
+  h3 { color: #1a365d; font-size: 10pt; margin-top: 6px; margin-bottom: 3px; }
+  p, ul, ol { margin-top: 2px; margin-bottom: 5px; }
+  ul, ol { padding-left: 18px; }
+  li { margin-bottom: 3px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9pt; }
+  th, td { border: 1px solid #a0aec0; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background-color: #002855; color: #ffffff; font-weight: 600; }
+  tr:nth-child(even) { background-color: #f7fafc; }
+  .badge { display: inline-block; background: #e2e8f0; color: #002855; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8pt; margin-bottom: 4px; }
+  .badge-player { display: inline-block; background: #e6fffa; color: #234e52; border: 1px solid #81e6d9; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8pt; margin-bottom: 4px; }
+  .box { background: #edf2f7; border-left: 4px solid #002855; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .box-warning { background: #fffaf0; border-left: 4px solid #dd6b20; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .decision-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px; margin-top: 4px; margin-bottom: 8px; }
+  .page-break { page-break-before: always; break-before: page; }
+  @media screen {
+    body { max-width: 210mm; margin: 15px auto; padding: 12px; background: #e2e8f0; }
+    .sheet { background: white; padding: 12mm; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== FACILITATOR GUIDE — PAGE 1 ==================== -->
+<div class="sheet">
+  <div class="badge">FACILITATOR &amp; INSTRUCTOR GUIDE — DO NOT ISSUE TO PLAYERS</div>
+  <h1>Falklands II: Southern Storm — Facilitator Guide</h1>
+  <p><strong>Scenario Overview:</strong> A fast-paced South Atlantic military and diplomatic crisis built for <strong>solo command (<code>minUsers: 1</code>)</strong> or a <strong>2–3 player command team</strong> (<code>uk_commander</code> + optional <code>air_maritime</code> and <code>downing_street</code>, both falling back seamlessly to <code>uk_commander</code> in solo play). Across 62 events and 6 manual actions, mutually exclusive probability forks (<code>randomEvents</code>) ensure ~55–65% of the pool fires in any single 45–60 minute run—so no two playthroughs unfold the same way.</p>
+
+  <div class="box">
+    <strong>Cascading Wave Flow (Automated Progression):</strong><br>
+    • <strong>Opening (<code>ev_start</code> — Timed 60s):</strong> Shock Stanley election result. Player posture sets how fast Wave 1 arrives (55s–120s).<br>
+    • <strong>Wave 1 — Maritime &amp; Air Exclusion Zone (<code>ev_military_incursion</code>):</strong> Launches <em>Naval Skirmish</em> + a mutually exclusive sub/tanker fork (<em>ARA Salta Detected</em> 55% vs <em>British Tanker Seized</em> 35%) + 65% chance of Eyes-Only <em>Chilean Radar Backchannel Tip-Off</em>. Naval Skirmish branches into <em>Air Raid on MPA</em>, <em>Pebble Island BVR</em>, <em>Radar Hit</em>, or <em>HMS Defender Damaged</em> &rarr; resolving to <em>Sea Control Won/Lost</em>.<br>
+    • <strong>Wave 2 — Island Defence:</strong> Cascades into <em>Heliborne Assault on Port Stanley</em> or <em>San Carlos Bay Night Landing</em>, branching through <em>Urban Combat</em>, <em>Stalemate at Stanley</em>, or <em>Goose Green Cut Off</em>, alongside probabilistic wildcards (<em>FIDF Resistance</em>, <em>Timed Cyber Attack</em>, <em>Southern Ocean Gale</em>, <em>Buzos Tácticos Sabotage</em>, <em>South Georgia Distress</em>).<br>
+    • <strong>Wave 3 — Logistics, Diplomacy &amp; Endgame:</strong> Cascades into <em>Critical Supply Shortage</em> &amp; <em>PM Demands Decisive Action</em> &rarr; <em>UN Resolution</em> or <em>Mainland Escalation Debate</em> (with probabilistic <em>Casualty Leak</em> / <em>Regional Airspace Ban</em>) &rarr; <code>ev_endgame_trigger</code> &rarr; 3 formal Endgames.
+  </div>
+
+  <h2>Pre-Game Variant Setup (3 Operational Axes)</h2>
+  <div class="decision-box">
+    <ul>
+      <li><strong>Ascension Island Status:</strong> <em>Fully Operational</em> (+1 Supply) vs <em>Sabotaged / Out of Use</em> (-2 Supply, -1 Readiness; sets <code>ascension_island</code> to <code>sabotaged</code>, locking out A400M airlift &amp; reinforcements until <code>act_ascension_sealift</code> restores it).</li>
+      <li><strong>Weather Conditions:</strong> <em>Clear Skies</em> (+1 Readiness) vs <em>Severe Storms</em> (-1 Readiness, -1 Supply).</li>
+      <li><strong>Early Warning Intel:</strong> <em>Surprise Attack</em> (+1 Aggression, +1 Pressure, HMS Defender further east) vs <em>Advance Warning</em> (+1 Readiness, +1 Public Support).</li>
+    </ul>
+  </div>
+
+  <h2>Hidden Hostile Assets &amp; Elusive Re-Emergence</h2>
+  <table>
+    <tr><th>Hidden Asset</th><th>How Revealed</th><th>Consequence If Un-Prosecuted</th></tr>
+    <tr><td><strong>ARA Salta</strong> (<code>a_arg_sub_san_juan</code>)</td><td><code>ev_sub_detected</code> (dynamic <code>possibleLocations</code>)</td><td>If it evades sonar (<code>hideAssets</code>) while still <code>operational</code>, <strong><code>ev_sub_reemerges</code></strong> auto-fires during supply ops to ambush an inbound RFA ship!</td></tr>
+    <tr><td><strong>Coastal Exocet Battery</strong> (<code>a_exocet_coastal_battery</code>)</td><td><em>Chilean Intel</em>, <em>FIDF Recon</em>, or <code>act_fidf_recon</code></td><td>Unlocks Typhoon precision strike in <code>ev_naval_skirmish</code>. If left <code>operational</code>, auto-triggers <strong><code>ev_exocet_ambush</code></strong> against UK ships!</td></tr>
+    <tr><td><strong>Buzos Tácticos Cell</strong> (<code>a_arg_specops_west</code>)</td><td><em>FIDF Recon</em>, <code>act_fidf_recon</code>, or <code>ev_specops_sabotage</code></td><td>Threatens RAF Mount Pleasant's Avtur fuel farm if not captured.</td></tr>
+    <tr><td><strong>Covert Fleet Oiler</strong> (<code>a_shadow_oiler</code>)</td><td><code>ev_merchant_seized</code> or <code>ev_us_support</code></td><td>Sustains Argentine corvettes north of the TEZ until damaged or driven off by HMS Astute.</td></tr>
+  </table>
+</div>
+
+<!-- ==================== FACILITATOR GUIDE — PAGE 2 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">FACILITATOR &amp; INSTRUCTOR GUIDE — PAGE 2</div>
+
+  <h2>Auto-Triggered Escalations &amp; Threshold Shocks (<code>autoTriggerOnConditions: true</code>)</h2>
+  <table>
+    <tr><th>Event</th><th>Trigger Condition</th><th>Operational Impact &amp; Debrief Focus</th></tr>
+    <tr><td><strong>RFA Tanker Interdiction &amp; Wideawake Fuel Crisis</strong></td><td><code>supply_lines &le; 1</code></td><td>Grounds <code>ascension_voyager</code>, locking out <em>Black Buck II</em> long-range strikes until <code>act_ascension_sealift</code> or US fuel drawdown restores it.</td></tr>
+    <tr><td><strong>Super Étendard Saturation Raid</strong></td><td><code>argentina_aggression &ge; 5</code></td><td>Timed 40s air-defence crunch; sheltering jets damages <code>mount_pleasant</code>.</td></tr>
+    <tr><td><strong>Emergency UN Ceasefire Ultimatum</strong></td><td><code>international_pressure &ge; 5</code></td><td>Forces choice between diplomatic pause (early endgame) or defying the UN.</td></tr>
+    <tr><td><strong>Downing Street Ultimatum</strong></td><td><code>uk_public_support &le; 1</code></td><td>PM threatens relief of command; player must resign (instant Defeat) or gamble all-in.</td></tr>
+    <tr><td><strong>US Quiet Material Support / UN Sanctions</strong></td><td><code>pressure &le; 2</code> / <code>pressure &ge; 4</code></td><td>Rewards diplomatic restraint with US satellite ISR &amp; fuel, or penalises escalation with sanctions.</td></tr>
+  </table>
+
+  <h2>Manual Actions (6 Proactive Command Levers)</h2>
+  <table>
+    <tr><th>Manual Action</th><th>Initiator / Approver*</th><th>Key Conditions &amp; Risk/Reward</th></tr>
+    <tr><td><strong>Deploy SAS to Mainland</strong> (<code>act_sf_mainland</code>)</td><td>Commander / Downing St</td><td>Readiness &ge; 2 after air/political clash. 60% damages Río Grande / 40% compromised team.</td></tr>
+    <tr><td><strong>Request Reinforcements</strong> (<code>act_request_reinforcements</code>)</td><td>Cmdr or Air/Mar / Downing St</td><td>Requires <code>ascension_island</code> operational. Restores damaged <code>hms_defender</code> &amp; <code>mount_pleasant</code>.</td></tr>
+    <tr><td><strong>FIDF &amp; A400M Recon Sweep</strong> (<code>act_fidf_recon</code>)</td><td>Cmdr or Air/Mar / None</td><td>75% reveals coastal Exocet battery &amp; sabotage cell / 25% chased off by enemy CAP.</td></tr>
+    <tr><td><strong>Black Buck II Long-Range Strike</strong> (<code>act_black_buck_strike</code>)</td><td>Cmdr or Air/Mar / Downing St</td><td>Requires <code>ascension_voyager</code> operational. 65% damages Río Gallegos / 35% AAR weather abort.</td></tr>
+    <tr><td><strong>HMS Astute Barrier Patrol</strong> (<code>act_astute_patrol</code>)</td><td>Cmdr or Air/Mar / None</td><td>70% sinks ARA Salta &amp; drives off oiler / 30% dry hole.</td></tr>
+    <tr><td><strong>Emergency Ascension Sealift</strong> (<code>act_ascension_sealift</code>)</td><td>Cmdr or Downing St / None</td><td>Available when Supply &le; 2 or Ascension/Voyager crippled. Restores airbridge (+2 Supply).</td></tr>
+  </table>
+  <p><em>*In solo play (1 player), approvers automatically skip self-approval so the Commander executes smoothly without extra clicks.</em></p>
+
+  <h2>Endgame Debrief Matrix</h2>
+  <table>
+    <tr><th>Outcome (<code>isEndGame: true</code>)</th><th>Requirement</th><th>Facilitator Debrief Prompts</th></tr>
+    <tr><td><strong>Victory</strong> (<code>ev_end_victory</code>)</td><td>Public Support &ge; 3 &amp; Readiness &ge; 3</td><td>How did recon-to-strike and protecting the Ascension airbridge decide the outcome?</td></tr>
+    <tr><td><strong>Stalemate</strong> (<code>ev_end_stalemate</code>)</td><td>Always available fallback</td><td>Why did military caution or diplomatic pressure freeze the conflict into a winter garrison?</td></tr>
+    <tr><td><strong>Defeat</strong> (<code>ev_end_defeat</code>)</td><td>Readiness &le; 2 (or PM resignation)</td><td>Which un-prosecuted threat or supply breakdown tipped the balance?</td></tr>
+  </table>
+
+  <div class="box-warning">
+    <strong>Multi-Role Fog of War Note:</strong> When running with 2–3 players, <em>Chilean Radar Backchannel Tip-Off</em> is Eyes-Only for Commander &amp; Downing Street (hidden from Air/Maritime), and <em>Press Leak of UK Casualty Figures</em> is hidden from Air/Maritime—encourage verbal cross-desk briefings!
+  </div>
+</div>
+
+<!-- ==================== PLAYER BRIEFING PACK — PAGE 3 ==================== -->
+<div class="sheet page-break">
+  <div class="badge-player">PLAYER BRIEFING &amp; REFERENCE PACK — ISSUE TO PLAYERS</div>
+  <h1>Falklands II: Southern Storm — Operations Brief</h1>
+  <p><strong>Situation:</strong> A fiercely contested local election in Port Stanley has produced a shock pro-Argentine Mayor-elect amid MI6 suspicions of foreign interference. Argentine naval, air, and covert units are massing along the edge of the Falklands Total Exclusion Zone. Your mission is to defend British sovereign territory, protect island civilians, keep the 7,700-mile Ascension Island supply bridge open, and manage intense political pressure from Downing Street and the UN.</p>
+
+  <h2>Command Structure (Solo or 2–3 Player Team)</h2>
+  <table>
+    <tr><th>Station</th><th>Core Responsibilities</th></tr>
+    <tr><td><strong>UK Task Force Commander</strong> <em>(Mandatory)</em></td><td>Overall theatre command across land, sea, and air; ground defence of Port Stanley &amp; MPA; coordinating recon, logistics, and final strategic assessment. <em>(Handles all desks seamlessly in solo play.)</em></td></tr>
+    <tr><td><strong>Air &amp; Maritime Ops</strong> <em>(Optional)</em></td><td>1435 Flight Typhoons (QRA/BVR), HMS Defender (Type 45 air defence), ASW submarine hunting, 1564 Flight helicopters, and A400M/Voyager AAR tasking.</td></tr>
+    <tr><td><strong>Downing Street &amp; Foreign Office</strong> <em>(Optional)</em></td><td>UK public support, press/media handling, UN &amp; allied diplomacy, discreet intelligence backchannels, and political approval for mainland strikes or SAS operations.</td></tr>
+  </table>
+
+  <h2>Key UK &amp; Hostile Theatre Assets</h2>
+  <table>
+    <tr><th>Asset</th><th>Role &amp; Strategic Importance</th></tr>
+    <tr><td><strong>RAF Ascension Island &amp; Voyager KC2</strong></td><td>Mid-Atlantic staging hub (Wideawake Airfield) and Air-to-Air Refuelling tanker. Essential for reinforcements, A400M airlift, and long-range strikes.</td></tr>
+    <tr><td><strong>RAF Mount Pleasant (MPA)</strong></td><td>BFSAI headquarters, hardened shelters, early-warning radar, and main runway. Losing MPA's runway cripples air superiority.</td></tr>
+    <tr><td><strong>1435 Flight (4&times; Typhoon FGR4)</strong></td><td>24/7 Quick Reaction Alert fighters armed with Meteor BVR missiles and precision strike munitions.</td></tr>
+    <tr><td><strong>HMS Defender (Type 45 Destroyer)</strong></td><td>Fleet air-defence umbrella (SAMPSON radar + Sea Viper missiles) and Wildcat ASW/boarding helicopter.</td></tr>
+    <tr><td><strong>1564 Flight &amp; A400M Atlas</strong></td><td>Chinook/Puma intra-theatre troop lift/CASEVAC and A400M long-range maritime patrol &amp; airlift.</td></tr>
+    <tr><td><strong>Río Gallegos &amp; Río Grande (Hostile)</strong></td><td>Argentine Air Force and Naval Aviation mainland strike bases launching fighters and Exocet raids.</td></tr>
+  </table>
+
+  <h2>Theatre Metrics (1 = Critical &rarr; 5 = Optimal)</h2>
+  <ul>
+    <li><strong>UK Public Support:</strong> Domestic backing in Britain. Falling to <strong>1</strong> risks an ultimatum from Downing Street.</li>
+    <li><strong>Military Readiness:</strong> Combat effectiveness of BFSAI air, naval, and land forces. Must be <strong>3+</strong> for Victory.</li>
+    <li><strong>International Pressure:</strong> Diplomatic heat from the UN and regional states <em>(lower is better; hitting 5 triggers an emergency ceasefire ultimatum, while keeping it &le; 2 may unlock discreet US support)</em>.</li>
+    <li><strong>Argentine Aggression:</strong> Tempo of hostile offensive action <em>(hitting 5 triggers a saturation air raid)</em>.</li>
+    <li><strong>Supply Lines:</strong> Health of the Ascension air/sea logistics bridge <em>(dropping to 1 risks a Wideawake fuel crisis)</em>.</li>
+  </ul>
+
+  <div class="box">
+    <strong>Command Tips:</strong><br>
+    1. <strong>Hunt &amp; Finish Hidden Threats:</strong> Intelligence and recon sweeps reveal concealed enemy units on the map—if a submarine or coastal missile launcher slips away intact, it can return later to ambush your ships.<br>
+    2. <strong>Use Your Actions Menu:</strong> Proactive operations (Recon Sweeps, HMS Astute Patrols, Ascension Fuel Sealift, Reinforcements, and Mainland Options) unlock dynamically as the crisis develops.<br>
+    3. <strong>Watch the Clocks:</strong> High-tempo air raids, submarine contacts, and cyber attacks carry live countdown timers—indecision triggers default standing orders.
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UK Crisis: Russian Tensions — Facilitator & Player Guide</title>
+<style>
+  @page { size: A4 portrait; margin: 10mm; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a202c; line-height: 1.35; font-size: 9.5pt; margin: 0; padding: 0; }
+  h1 { color: #002855; font-size: 15pt; border-bottom: 3px solid #002855; padding-bottom: 4px; margin-top: 0; margin-bottom: 6px; }
+  h2 { color: #003876; font-size: 11.5pt; border-bottom: 1px solid #cbd5e0; padding-bottom: 2px; margin-top: 10px; margin-bottom: 6px; }
+  h3 { color: #1a365d; font-size: 10pt; margin-top: 6px; margin-bottom: 3px; }
+  p, ul, ol { margin-top: 2px; margin-bottom: 5px; }
+  ul, ol { padding-left: 18px; }
+  li { margin-bottom: 3px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9pt; }
+  th, td { border: 1px solid #a0aec0; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background-color: #002855; color: #ffffff; font-weight: 600; }
+  tr:nth-child(even) { background-color: #f7fafc; }
+  .badge { display: inline-block; background: #e2e8f0; color: #002855; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8pt; margin-bottom: 4px; }
+  .badge-player { display: inline-block; background: #e6fffa; color: #234e52; border: 1px solid #81e6d9; font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 8pt; margin-bottom: 4px; }
+  .box { background: #edf2f7; border-left: 4px solid #002855; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .box-warning { background: #fffaf0; border-left: 4px solid #dd6b20; padding: 6px 8px; margin: 5px 0; font-size: 8.8pt; }
+  .decision-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 8px; margin-top: 4px; margin-bottom: 8px; }
+  .page-break { page-break-before: always; break-before: page; }
+  @media screen {
+    body { max-width: 210mm; margin: 15px auto; padding: 12px; background: #e2e8f0; }
+    .sheet { background: white; padding: 12mm; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== FACILITATOR GUIDE — PAGE 1 ==================== -->
+<div class="sheet">
+  <div class="badge">FACILITATOR &amp; COBRA EXERCISE GUIDE — DO NOT ISSUE TO PLAYERS</div>
+  <h1>UK Crisis: Russian Tensions — Facilitator Guide</h1>
+  <p><strong>Scenario Overview:</strong> A multi-ministerial Cabinet Office Briefing Room (COBRA) crisis simulation for <strong>2–6 players</strong> (<code>PM</code> mandatory; optional <code>home</code>, <code>defence</code>, <code>foreign</code>, <code>media</code>, <code>cyber</code> with automatic <code>roleFallbacks</code>). Spanning 74 events and 12 manual actions across 5 escalation stages, this scenario combines <strong>facilitator-paced chapter progression</strong> (<code>unlockEvents</code>) with <strong>probabilistic hybrid-warfare twists</strong> (<code>randomEvents</code>), <strong>Eyes-Only intelligence</strong>, <strong>timed COBRA injects</strong>, and <strong>auto-triggered national shocks</strong>.</p>
+
+  <div class="box">
+    <strong>Facilitator Pacing Model (You Control the Tempo):</strong><br>
+    • <strong>Opening (<code>ev_uk_casualty_leak</code>):</strong> Secret UK troop casualties in the Baltics leak to the press, immediately unlocking early Stage 1 crises and rolling probabilistic hybrid-warfare aftershocks (<em>Deepfake PM Video</em>, <em>Heathrow GPS Spoofing</em>, <em>MI5 Sleeper Cell</em>, or <em>Baltic Drone Ambush</em>).<br>
+    • <strong>Stage 1 &rarr; 2 (Grey Zone &amp; Sabotage):</strong> Protests, maritime cable shadowing, Salisbury nerve-agent alert, bank cyber-attacks, NHS ransomware, and North Sea pipeline sabotage. Inject unlocked events at the pace your group handles best.<br>
+    • <strong>Stage 3 &rarr; 4 (Clashes &amp; Kinetic Escalation):</strong> Faslane submarine contact, Black Sea/Atlantic near-misses, RAF Akrotiri &amp; UK base strikes, National Grid blackouts, and Kaliningrad Iskander dispersal.<br>
+    • <strong>Stage 5 (Climax &amp; Final COBRA Vote):</strong> Article 5 ambiguity, US neutrality risk, secret Moscow backchannels &rarr; <code>ev_final_authorization</code> &rarr; 3 mutually exclusive Endgames.
+  </div>
+
+  <h2>Pre-Game Variant Setup (4 Geopolitical Axes)</h2>
+  <div class="decision-box">
+    <ul>
+      <li><strong>HMS Prince of Wales Location:</strong> <em>Deployed to RIMPAC (Australia)</em> (-1 Readiness; carrier 3 weeks away) vs <em>English Channel</em> (+1 Readiness; carrier ready in hours).</li>
+      <li><strong>Iran Conflict Status:</strong> <em>War Ongoing</em> (-1 Readiness, +1 UK-US; forces stretched) vs <em>Resolved</em> (+1 Stability; war-weary public).</li>
+      <li><strong>US Administration Stance:</strong> <em>Staunch Ally</em> (+1 UK-US) vs <em>Isolationist Shift</em> (-2 UK-US, +1 UK-Europe; Five Eyes risk).</li>
+      <li><strong>Domestic Climate:</strong> <em>Stable Economy</em> (+1 Stability) vs <em>Winter of Discontent</em> (-2 Stability; immediate strike/panic-buying vulnerability).</li>
+    </ul>
+  </div>
+
+  <h2>Hidden Adversary Network (5 Assets + Re-Emergence)</h2>
+  <table>
+    <tr><th>Hidden Asset</th><th>Revealed By</th><th>How Players Counter It / Risk If Missed</th></tr>
+    <tr><td><strong>Russian Yasen Sub</strong> (<code>a_rus_sub_faslane</code>)</td><td><code>ev_sub_detection</code></td><td>Can slip sonar via <code>ev_sub_breaks_contact</code> (<code>hideAssets</code>); if still operational, auto-triggers <strong><code>ev_sub_faslane_reemerges</code></strong> off Clyde!</td></tr>
+    <tr><td><strong>GRU Sabotage Cell</strong> (<code>a_gru_sabotage_cell</code>)</td><td><code>ev_mi5_sleeper_cell</code> (Eyes-Only)</td><td>Unlocks Manual Action <code>act_mi5_raid_cell</code> (70% arrested / 30% escapes &amp; hides).</td></tr>
+    <tr><td><strong>Shadow-Fleet Spy Trawler</strong> (<code>a_rus_spy_trawler</code>)</td><td><code>ev_north_sea_pipeline</code> / <code>ev_spy_trawler_anchor</code></td><td>Unlocks Royal Marines boarding option in pipeline &amp; undersea cable events.</td></tr>
+    <tr><td><strong>Kaliningrad Iskander</strong> (<code>a_kaliningrad_iskander</code>)</td><td><code>ev_iskander_mobile</code></td><td>Can hide under forest cover if ISR pulls back or if <em>Five Eyes Throttled</em> fires.</td></tr>
+    <tr><td><strong>Compromised Telecom Node</strong> (<code>a_compromised_telecom_node</code>)</td><td><code>ev_nhs_ransomware</code></td><td>Unlocks Manual Action <code>act_ncsc_purge_telecom</code> (75% clean purge / 25% 90-min mobile outage).</td></tr>
+  </table>
+</div>
+
+<!-- ==================== FACILITATOR GUIDE — PAGE 2 ==================== -->
+<div class="sheet page-break">
+  <div class="badge">FACILITATOR &amp; COBRA EXERCISE GUIDE — PAGE 2</div>
+
+  <h2>Eyes-Only Intelligence &amp; Asymmetric Fog of War</h2>
+  <table>
+    <tr><th>Event</th><th>Visibility Rule</th><th>Facilitator Coaching Tip</th></tr>
+    <tr><td><strong>MI5 Tracks GRU Sabotage Cell</strong></td><td><code>visibleTo: [PM, home, cyber]</code></td><td>Watch whether Home/PM brief Defence &amp; Media verbally—or keep it quiet to prevent panic.</td></tr>
+    <tr><td><strong>GCHQ Kremlin War-Cabinet Split</strong></td><td><code>visibleTo: [PM, foreign, cyber]</code></td><td>Gives diplomatic leverage; Defence &amp; Media cannot see it on screen.</td></tr>
+    <tr><td><strong>Parliamentary No-Confidence Rumours</strong></td><td><code>hiddenFrom: [defence]</code></td><td>Creates authentic Whitehall political pressure while Defence focuses on military threats.</td></tr>
+    <tr><td><strong>Secret Moscow Backchannel Offer</strong></td><td><code>hiddenFrom: [media]</code></td><td>Tests Cabinet secrecy—will Foreign/PM keep Media out of the loop?</td></tr>
+  </table>
+
+  <h2>Auto-Triggered National Shocks (<code>autoTriggerOnConditions: true</code>)</h2>
+  <ul>
+    <li><strong><code>civilian_stability &le; 1</code> &rarr; Civil Contingencies Act Panic:</strong> Nationwide fuel/supermarket panic (Timed 60s) forcing Home to choose between emergency rationing + Army tanker drivers vs voluntary limits.</li>
+    <li><strong><code>military_escalation &ge; 5</code> &rarr; NATO Article 4/5 Rapid Response:</strong> SACEUR requests UK forces under joint NATO command vs retaining national command.</li>
+    <li><strong><code>uk_us &le; 1</code> &rarr; Five Eyes Intelligence Throttled:</strong> Washington restricts live satellite feeds, hiding <code>a_kaliningrad_iskander</code> until Foreign/PM repairs ties or pivots to European ISR.</li>
+  </ul>
+
+  <h2>Key Manual Actions (12 Cabinet Initiatives)</h2>
+  <table>
+    <tr><th>Action</th><th>Initiator / Approver</th><th>Outcome Profile</th></tr>
+    <tr><td><strong>MI5 Raid on GRU Cell</strong> (<code>act_mi5_raid_cell</code>)</td><td>Home or PM / PM</td><td>Requires GRU cell revealed. 70% captured / 30% cell escapes.</td></tr>
+    <tr><td><strong>NCSC Telecoms Purge</strong> (<code>act_ncsc_purge_telecom</code>)</td><td>Cyber / Home</td><td>Requires telecom node revealed. 75% purged / 25% mobile outage blip.</td></tr>
+    <tr><td><strong>Covert Cyber Strike</strong> (<code>act_cyber_offensive</code>)</td><td>Cyber / Home</td><td>50/50 enemy radar shutdown vs traced blowback.</td></tr>
+    <tr><td><strong>Secret Talks with Russia</strong> (<code>act_backchannel_russia</code>)</td><td>Foreign / None</td><td>50/50 de-escalation pause vs press leak scandal.</td></tr>
+    <tr><td><strong>US Transport / EU Coalition</strong></td><td>Foreign, Defence, PM</td><td>Weighted diplomatic/logistics gambles (60/40 &amp; 70/30).</td></tr>
+    <tr><td><strong>Deep Strike Plans &amp; F-35 Strikes / Nuclear Auth</strong></td><td>PM, Defence / PM, Home</td><td>High-escalation kinetic options requiring multi-ministerial sign-off.</td></tr>
+  </table>
+
+  <h2>Endgame Debrief Matrix (Triggered via <code>ev_final_authorization</code>)</h2>
+  <table>
+    <tr><th>Endgame</th><th>Debrief Focus</th></tr>
+    <tr><td><strong>Diplomatic Peace Secured</strong> (<code>ev_endgame_diplomatic</code>)</td><td>Balanced deterrence with backchannel diplomacy without losing NATO unity or domestic order.</td></tr>
+    <tr><td><strong>United European Fortress</strong> (<code>ev_endgame_eu_defense</code>)</td><td>Successfully pivoted to European cohesion and military readiness under pressure.</td></tr>
+    <tr><td><strong>Domestic Collapse &amp; Riots</strong> (<code>ev_endgame_domestic</code>)</td><td>Allowed home-front stability, infrastructure resilience, or public communications to fracture.</td></tr>
+  </table>
+</div>
+
+<!-- ==================== PLAYER BRIEFING PACK — PAGE 3 ==================== -->
+<div class="sheet page-break">
+  <div class="badge-player">COBRA CABINET PLAYER BRIEFING &amp; REFERENCE PACK — ISSUE TO PLAYERS</div>
+  <h1>UK Crisis: Russian Tensions — COBRA Cabinet Brief</h1>
+  <p><strong>Situation:</strong> Early 2025. NATO–Russia tensions have reached breaking point following Russian force buildups along the Baltic frontier. The Prime Minister has convened an emergency <strong>COBRA (Cabinet Office Briefing Rooms)</strong> session. Expect hybrid warfare across cyber, undersea infrastructure, disinformation, domestic unrest, maritime standoffs, and potential kinetic strikes.</p>
+
+  <h2>COBRA Ministerial Stations (2–6 Players)</h2>
+  <table>
+    <tr><th>Ministerial Desk</th><th>Core Responsibilities</th></tr>
+    <tr><td><strong>Prime Minister (<code>PM</code>)</strong> <em>(Mandatory)</em></td><td>Chairs COBRA, resolves cross-departmental trade-offs, holds ultimate authority over national strategy, deep-strike options, and the final war-or-ceasefire vote.</td></tr>
+    <tr><td><strong>Home Secretary (<code>home</code>)</strong></td><td>Internal security, policing, counter-sabotage (MI5), Civil Contingencies powers, and keeping streets calm without eroding civil liberties.</td></tr>
+    <tr><td><strong>Defence Secretary (<code>defence</code>)</strong></td><td>Commands Royal Navy, RAF, and British Army deployments, QRA air intercepts, anti-submarine defence of Faslane, and kinetic Rules of Engagement.</td></tr>
+    <tr><td><strong>Foreign Secretary (<code>foreign</code>)</strong></td><td>Lead diplomat managing NATO cohesion, the UK–US Special Relationship, European defence partners, sanctions, and backchannel talks with Moscow.</td></tr>
+    <tr><td><strong>Media &amp; Comms Director (<code>media</code>)</strong></td><td>Manages Downing Street press strategy, counters hostile disinformation and deepfakes, and prevents public panic or market runs.</td></tr>
+    <tr><td><strong>Cyber Security Lead (<code>cyber</code>)</strong></td><td>Directs NCSC and GCHQ cyber defence of banks, NHS trusts, telecoms, and the National Grid—plus covert offensive cyber options.</td></tr>
+  </table>
+
+  <h2>Key UK Strategic Assets on the Tactical Map</h2>
+  <ul>
+    <li><strong>HMNB Clyde (Faslane) &amp; Vanguard-Class Submarines:</strong> Home of the UK's Continuous At-Sea Nuclear Deterrent (CASD).</li>
+    <li><strong>GCHQ Bude &amp; National Grid Control:</strong> Critical signals intelligence and national energy/electricity transmission hubs.</li>
+    <li><strong>RAF Combat &amp; Lift Fleet:</strong> Typhoon FGR4 (QRA), F-35B Lightning II (stealth strike), Voyager tankers, and A400M Atlas.</li>
+    <li><strong>Royal Navy Fleet:</strong> Carrier Strike Group (HMS Prince of Wales), Type 45 Destroyers, Type 23/26 ASW Frigates, and Astute-class hunter-killer submarines.</li>
+  </ul>
+
+  <h2>COBRA National Status Metrics (1 = Critical &rarr; 5 = Secure)</h2>
+  <ul>
+    <li><strong>UK–Russia Relations &amp; Military Escalation:</strong> Measures diplomatic headroom vs proximity to full-scale war <em>(hitting Escalation 5 triggers NATO rapid response)</em>.</li>
+    <li><strong>Civilian Stability:</strong> Domestic public order and morale <em>(dropping to 1 triggers nationwide fuel/food panic)</em>.</li>
+    <li><strong>UK–US Alliance &amp; European Cohesion:</strong> Strength of Washington &amp; NATO/EU backing <em>(UK–US dropping to 1 throttles Five Eyes intelligence)</em>.</li>
+    <li><strong>Military Readiness:</strong> Combat availability and resilience of UK Armed Forces.</li>
+  </ul>
+
+  <div class="box">
+    <strong>COBRA Operating Rules:</strong><br>
+    1. <strong>Talk Across the Table:</strong> Some classified MI5/GCHQ flashes and diplomatic offers are <strong>Eyes-Only</strong>—only specific desks see them on screen. Share verbally when needed!<br>
+    2. <strong>Cabinet Sign-Offs:</strong> High-risk proactive initiatives in your <strong>Actions</strong> menu (cyber strikes, MI5 raids, F-35 strikes, national addresses) require formal approval from another Minister.<br>
+    3. <strong>Beat the Clock:</strong> Urgent COBRA flashes (airspace incursions, grid attacks, deepfake broadcasts, chemical alerts) have live countdown timers—indecision fires default standing orders.
+  </div>
+</div>
+
+</body>
+</html>
