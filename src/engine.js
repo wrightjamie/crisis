@@ -582,14 +582,35 @@ class GameEngine {
     }
 
     _scheduleRandomEvents(randomEvents) {
-        if (!randomEvents) return;
+        if (!Array.isArray(randomEvents) || randomEvents.length === 0) return;
         const scenario = this.getScenario();
+
+        const usesProbability = randomEvents.some(re => re && typeof re.probability === 'number');
+        if (usesProbability) {
+            const totalProb = randomEvents.reduce((sum, re) => sum + Math.max(0, Number(re?.probability) || 0), 0);
+            const upperBound = Math.max(1.0, totalProb);
+            let roll = Math.random() * upperBound;
+            for (const re of randomEvents) {
+                const p = Math.max(0, Number(re?.probability) || 0);
+                if (roll < p) {
+                    const targetId = re.id || re.event;
+                    if (this._canScheduleEventTemplate(targetId, scenario)) {
+                        this._enqueueScheduledEvent(targetId, re.delayMs);
+                    }
+                    break;
+                }
+                roll -= p;
+            }
+            return;
+        }
+
         const totalWeight = randomEvents.reduce((sum, re) => sum + (re.weight || 1), 0);
         let roll = Math.random() * totalWeight;
         for (const re of randomEvents) {
             if (roll < (re.weight || 1)) {
-                if (this._canScheduleEventTemplate(re.id, scenario)) {
-                    this._enqueueScheduledEvent(re.id, re.delayMs);
+                const targetId = re.id || re.event;
+                if (this._canScheduleEventTemplate(targetId, scenario)) {
+                    this._enqueueScheduledEvent(targetId, re.delayMs);
                 }
                 break;
             }
@@ -690,17 +711,17 @@ class GameEngine {
             
             const activeRoles = this.getActiveRoles();
             
-            // 1. Try finding a resolved approver from the allowed list
+            // 1. Try finding a resolved approver from the allowed list (never self-approve)
             for (let pa of possibleApprovers) {
                 const resolved = this.resolveRoleFallback(pa, activeRoles, scenario.roleFallbacks);
-                if (resolved) {
+                if (resolved && resolved !== initiatorRole) {
                     approver = resolved;
                     break;
                 }
             }
             
             // 3. Maintain original behavior if no clients are connected (e.g., unit tests)
-            if (!approver && possibleApprovers.length > 0) {
+            if (!approver && activeRoles.length === 0 && possibleApprovers.length > 0) {
                 approver = possibleApprovers[0];
             }
         }

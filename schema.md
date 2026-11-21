@@ -340,13 +340,22 @@ Presented to a specific role when an event is triggered.
                     "asset_id": "new_state_string" // E.g., { "power_grid": "offline" }
                 },
 
-                // 5. Schedule Automatic Events
+                // 5. Schedule Automatic Events (Independent Rolls)
                 triggerEvents: [ 
                     { 
                         id: "event_id",     // The event to trigger
                         delayMs: number,    // Milliseconds to wait before triggering
-                        probability: number // 0.0 to 1.0 chance of this happening
+                        probability: number // 0.0 to 1.0 independent chance of firing
                     } 
+                ],
+
+                // 6. Mutually Exclusive Random Outcomes (A || B || nothing)
+                randomEvents: [
+                    {
+                        id: "event_id",     // Mutually exclusive outcome
+                        delayMs: number,    // (Optional) Milliseconds to wait before triggering
+                        probability: number // 0.0 to 1.0 (remaining probability below 1.0 = no event), OR use legacy `weight: number`
+                    }
                 ]
             }
         }
@@ -400,8 +409,9 @@ Actions that players can trigger proactively from the "Actions" menu, stored dir
                 probability: number
             }
         ],
-        randomEvents: [       // Selects one event to trigger based on weight
-            { id: "event_id", weight: number, effects: { scores: { "score_id": number } } }
+        randomEvents: [       // Mutually exclusive outcome: use `probability` (0..1; remainder < 1.0 = no event) OR legacy `weight`
+            { id: "event_id", delayMs: number, probability: number },
+            { id: "event_id_alt", delayMs: number, weight: number }
         ]
     }
 }

@@ -431,6 +431,39 @@ if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
     console.log("✅ Score/asset auto-triggered event & conditional decision option tests passed.");
 }
 
+// Test 13: Mutually exclusive randomEvents with explicit probability (A || B || nothing)
+{
+    testScenario.eventTemplates.push(
+        { id: 'ev_rand_a', name: 'Random A', description: 'Outcome A', repeatable: true },
+        { id: 'ev_rand_b', name: 'Random B', description: 'Outcome B', repeatable: true }
+    );
+    engine.createLobby('test_scenario');
+    engine.startGame();
+
+    const origRandom = Math.random;
+    try {
+        // Roll 0.1 -> hits ev_rand_a (0.0..0.4)
+        Math.random = () => 0.1;
+        engine.applyEffects({ randomEvents: [{ id: 'ev_rand_a', probability: 0.4 }, { id: 'ev_rand_b', probability: 0.3 }] });
+        assert.strictEqual(engine.gameState.scheduledEvents.filter(e => e.templateId === 'ev_rand_a').length, 1, "Roll 0.1 should schedule ev_rand_a");
+        assert.strictEqual(engine.gameState.scheduledEvents.filter(e => e.templateId === 'ev_rand_b').length, 0, "Roll 0.1 must not schedule ev_rand_b");
+
+        // Roll 0.5 -> hits ev_rand_b (0.4..0.7)
+        Math.random = () => 0.5;
+        engine.applyEffects({ randomEvents: [{ id: 'ev_rand_a', probability: 0.4 }, { id: 'ev_rand_b', probability: 0.3 }] });
+        assert.strictEqual(engine.gameState.scheduledEvents.filter(e => e.templateId === 'ev_rand_b').length, 1, "Roll 0.5 should schedule ev_rand_b");
+
+        // Roll 0.85 -> hits remaining 0.3 no-op window (0.7..1.0)
+        Math.random = () => 0.85;
+        const countBefore = engine.gameState.scheduledEvents.length;
+        engine.applyEffects({ randomEvents: [{ id: 'ev_rand_a', probability: 0.4 }, { id: 'ev_rand_b', probability: 0.3 }] });
+        assert.strictEqual(engine.gameState.scheduledEvents.length, countBefore, "Roll 0.85 in remaining probability should schedule no event");
+    } finally {
+        Math.random = origRandom;
+    }
+    console.log("✅ Mutually exclusive probability randomEvents (A || B || nothing) tests passed.");
+}
+
 // Cleanup
 scenarios.pop();
 console.log("All engine-actions tests passed.");

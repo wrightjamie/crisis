@@ -379,6 +379,7 @@ function validateScenarioGraph(scenario, errors) {
             (dec.options || []).forEach(opt => {
                 const trs = Array.isArray(opt.triggerEvents) ? opt.triggerEvents : (Array.isArray(opt.effects?.triggerEvents) ? opt.effects.triggerEvents : []);
                 trs.forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
+                (opt.effects?.randomEvents || []).forEach(rn => addEdge(ev.id, typeof rn === 'string' ? rn : (rn?.id || rn?.event)));
                 (opt.effects?.unlockEvents || []).forEach(u => addEdge(ev.id, u));
             });
         });

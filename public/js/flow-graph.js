@@ -14,9 +14,11 @@
 
     function getHelperTriggers(opt) {
         if (!opt) return [];
-        if (Array.isArray(opt.triggerEvents)) return opt.triggerEvents;
-        if (opt.effects && Array.isArray(opt.effects.triggerEvents)) return opt.effects.triggerEvents;
-        return [];
+        const trs = Array.isArray(opt.triggerEvents)
+            ? opt.triggerEvents
+            : (opt.effects && Array.isArray(opt.effects.triggerEvents) ? opt.effects.triggerEvents : []);
+        const rnds = (opt.effects && Array.isArray(opt.effects.randomEvents)) ? opt.effects.randomEvents : [];
+        return [...trs, ...rnds];
     }
 
     function extractConditionEventRefs(cond, includeTriggered = true) {
