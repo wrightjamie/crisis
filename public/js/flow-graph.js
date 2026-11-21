@@ -269,79 +269,17 @@
             }
         });
 
-        // 3. Horizontal spanning forest
-        const primaryChildren = new Map();
-        const hasPrimaryParent = new Set();
-        allNodes.forEach(node => primaryChildren.set(node.id, []));
-
-        sortedCandidates.forEach(u => {
-            const uCol = depthMap.get(u.id);
-            for (const edge of (outgoingOrdered.get(u.id) || [])) {
-                const vId = edge.targetId;
-                const vCol = depthMap.get(vId);
-                if (vCol === uCol + 1 && !hasPrimaryParent.has(vId) && vId !== u.id) {
-                    primaryChildren.get(u.id).push(vId);
-                    hasPrimaryParent.add(vId);
-                }
-            }
-        });
-        sortedCandidates.forEach(u => {
-            const uCol = depthMap.get(u.id);
-            for (const edge of (outgoingOrdered.get(u.id) || [])) {
-                const vId = edge.targetId;
-                const vCol = depthMap.get(vId);
-                if (vCol > uCol && !hasPrimaryParent.has(vId) && vId !== u.id) {
-                    primaryChildren.get(u.id).push(vId);
-                    hasPrimaryParent.add(vId);
-                }
-            }
-        });
-
+        // 3. Compact Layered Barycenter Layout (per-column packing, no global cursorY inflation)
         const computedPos = new Map();
         const colWidth = 360;
         const startX = 60;
-        const gapY = 48;
-        let cursorY = 60;
-        const visited = new Set();
+        const startY = 60;
+        const gapY = 40;
+        const actionIdSet = new Set(actions.map(a => a.id));
+        const getNodeHeight = (node) => actionIdSet.has(node.id)
+            ? 115
+            : (eventMap.has(node.id) ? estimateNodeHeight(eventMap.get(node.id)) : 120);
 
-        function layoutSubtree(nodeId) {
-            if (visited.has(nodeId)) return computedPos.get(nodeId)?.y || cursorY;
-            visited.add(nodeId);
-
-            const col = depthMap.get(nodeId) || 0;
-            const x = startX + col * colWidth;
-            const children = (primaryChildren.get(nodeId) || []).filter(cid => !visited.has(cid));
-            const isAction = actions.some(a => a.id === nodeId);
-            const nodeH = isAction ? 115 : (eventMap.has(nodeId) ? estimateNodeHeight(eventMap.get(nodeId)) : 120);
-
-            if (children.length === 0) {
-                const y = cursorY;
-                computedPos.set(nodeId, { x, y });
-                cursorY += nodeH + gapY;
-                return y;
-            }
-
-            const childYs = [];
-            for (const cid of children) {
-                childYs.push(layoutSubtree(cid));
-            }
-
-            const y = childYs.length === 1
-                ? childYs[0]
-                : Math.round((childYs[0] + childYs[childYs.length - 1]) / 2);
-
-            computedPos.set(nodeId, { x, y });
-            cursorY = Math.max(cursorY, y + nodeH + gapY);
-            return y;
-        }
-
-        const treeRoots = sortedCandidates.filter(e => !hasPrimaryParent.has(e.id));
-        treeRoots.forEach(rootNode => layoutSubtree(rootNode.id));
-        sortedCandidates.forEach(node => {
-            if (!visited.has(node.id)) layoutSubtree(node.id);
-        });
-
-        // 4. Column-by-column overlap resolution
         const columns = new Map();
         allNodes.forEach(node => {
             const col = depthMap.get(node.id) || 0;
@@ -350,43 +288,123 @@
         });
 
         const sortedCols = Array.from(columns.keys()).sort((a, b) => a - b);
+
+        // Pack a column's sorted nodes tightly around their desired Y without overlap
+        function packColumn(colNodes, desiredMap) {
+            if (colNodes.length === 0) return;
+            // Forward pass: respect desiredY while preventing overlap
+            let cursor = startY;
+            colNodes.forEach(node => {
+                const pos = computedPos.get(node.id);
+                const desired = desiredMap.has(node.id) ? desiredMap.get(node.id) : cursor;
+                const y = Math.max(cursor, desired);
+                pos.y = y;
+                cursor = y + getNodeHeight(node) + gapY;
+            });
+            // Pull-up pass: if the column starts way below desired top and has room above, compact gently
+            for (let i = colNodes.length - 1; i >= 0; i--) {
+                const node = colNodes[i];
+                const pos = computedPos.get(node.id);
+                const desired = desiredMap.has(node.id) ? desiredMap.get(node.id) : pos.y;
+                if (pos.y > desired) {
+                    const prev = i > 0 ? colNodes[i - 1] : null;
+                    const minAllowed = prev ? (computedPos.get(prev.id).y + getNodeHeight(prev) + gapY) : startY;
+                    pos.y = Math.max(minAllowed, desired);
+                }
+            }
+        }
+
+        // Initial left-to-right placement
+        const nodeIndexMap = new Map(sortedCandidates.map((n, i) => [n.id, i]));
         for (const colIdx of sortedCols) {
             const colNodes = columns.get(colIdx);
+            const x = startX + colIdx * colWidth;
+            const desiredMap = new Map();
+
+            colNodes.forEach(node => {
+                computedPos.set(node.id, { x, y: startY });
+                if (colIdx === 0) {
+                    const isOpener = node.isOpeningEvent || node.id === 'ev_start' || node.id === 'evt_initial';
+                    desiredMap.set(node.id, isOpener ? startY : startY + 200 + (nodeIndexMap.get(node.id) || 0));
+                } else {
+                    const preds = (incomingPreds.get(node.id) || [])
+                        .filter(p => (depthMap.get(p.sourceId) || 0) < colIdx && computedPos.has(p.sourceId));
+                    if (preds.length > 0) {
+                        const avgY = preds.reduce((sum, p) => {
+                            const pPos = computedPos.get(p.sourceId);
+                            return sum + pPos.y + Math.round((p.portOffsetY || 0) * 0.35);
+                        }, 0) / preds.length;
+                        desiredMap.set(node.id, Math.max(startY, Math.round(avgY)));
+                    }
+                }
+            });
+
+            colNodes.sort((a, b) => {
+                const da = desiredMap.has(a.id) ? desiredMap.get(a.id) : 1e9;
+                const db = desiredMap.has(b.id) ? desiredMap.get(b.id) : 1e9;
+                if (da !== db) return da - db;
+                return (nodeIndexMap.get(a.id) || 0) - (nodeIndexMap.get(b.id) || 0);
+            });
+
+            // Pack tightly from startY if column is dense, or near desired Y if sparse
+            let compactY = startY;
+            colNodes.forEach(node => {
+                const pos = computedPos.get(node.id);
+                const d = desiredMap.get(node.id);
+                if (d !== undefined && colNodes.length <= 4) {
+                    pos.y = Math.max(compactY, d);
+                } else {
+                    pos.y = compactY;
+                }
+                compactY = pos.y + getNodeHeight(node) + gapY;
+            });
+        }
+
+        // Barycenter relaxation: 1 right-to-left pass + 1 left-to-right pass
+        for (let i = sortedCols.length - 2; i >= 0; i--) {
+            const colIdx = sortedCols[i];
+            const colNodes = columns.get(colIdx);
+            const desiredMap = new Map();
+            colNodes.forEach(node => {
+                const kids = (outgoingOrdered.get(node.id) || [])
+                    .filter(e => (depthMap.get(e.targetId) || 0) > colIdx && computedPos.has(e.targetId));
+                if (kids.length > 0) {
+                    const avgChildY = kids.reduce((s, e) => s + computedPos.get(e.targetId).y, 0) / kids.length;
+                    desiredMap.set(node.id, Math.max(startY, Math.round(avgChildY)));
+                } else {
+                    desiredMap.set(node.id, computedPos.get(node.id).y);
+                }
+            });
+            packColumn(colNodes, desiredMap);
+        }
+
+        for (let i = 1; i < sortedCols.length; i++) {
+            const colIdx = sortedCols[i];
+            const colNodes = columns.get(colIdx);
+            const desiredMap = new Map();
             colNodes.forEach(node => {
                 const preds = (incomingPreds.get(node.id) || [])
                     .filter(p => (depthMap.get(p.sourceId) || 0) < colIdx && computedPos.has(p.sourceId));
-                const ownKids = primaryChildren.get(node.id) || [];
-                if (preds.length > 1 && ownKids.length === 0) {
-                    const avgY = Math.round(preds.reduce((sum, p) => {
-                        const pPos = computedPos.get(p.sourceId);
-                        return sum + pPos.y + Math.round((p.portOffsetY || 0) * 0.5);
-                    }, 0) / preds.length);
-                    computedPos.get(node.id).y = avgY;
+                if (preds.length > 0) {
+                    const avgPredY = preds.reduce((s, p) => s + computedPos.get(p.sourceId).y + Math.round((p.portOffsetY || 0) * 0.25), 0) / preds.length;
+                    desiredMap.set(node.id, Math.max(startY, Math.round(avgPredY)));
+                } else {
+                    desiredMap.set(node.id, computedPos.get(node.id).y);
                 }
             });
-
-            colNodes.sort((a, b) => computedPos.get(a.id).y - computedPos.get(b.id).y);
-
-            let minAllowedY = 60;
-            colNodes.forEach(node => {
-                const pos = computedPos.get(node.id);
-                const isAction = actions.some(a => a.id === node.id);
-                const nodeH = isAction ? 115 : (eventMap.has(node.id) ? estimateNodeHeight(eventMap.get(node.id)) : 120);
-
-                if (pos.y < minAllowedY) {
-                    const delta = minAllowedY - pos.y;
-                    pos.y = minAllowedY;
-                    let currKids = primaryChildren.get(node.id) || [];
-                    while (currKids.length === 1) {
-                        const kidId = currKids[0];
-                        const kidPos = computedPos.get(kidId);
-                        if (kidPos) kidPos.y += delta;
-                        currKids = primaryChildren.get(kidId) || [];
-                    }
-                }
-                minAllowedY = pos.y + nodeH + gapY;
-            });
+            packColumn(colNodes, desiredMap);
         }
+
+        // Normalize top margin to startY
+        let minGlobalY = Infinity;
+        for (const p of computedPos.values()) {
+            if (p.y < minGlobalY) minGlobalY = p.y;
+        }
+        if (Number.isFinite(minGlobalY) && minGlobalY > startY) {
+            const shift = minGlobalY - startY;
+            for (const p of computedPos.values()) p.y -= shift;
+        }
+        const cursorY = startY;
 
         events.forEach(ev => {
             const existing = savedPositions[ev.id] || ev._canvasPos;
