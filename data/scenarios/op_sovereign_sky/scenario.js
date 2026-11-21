@@ -912,6 +912,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_neutral_airliner",
+                                        "delayMs": 32000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_wc_fastjet_ambush",
+                                        "delayMs": 35000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -929,6 +941,18 @@ module.exports = {
                                         "id": "ev_t1_asymmetric_swarm",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_fastjet_ambush",
+                                        "delayMs": 30000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_wc_neutral_airliner",
+                                        "delayMs": 35000,
+                                        "probability": 0.3
                                     }
                                 ]
                             }
@@ -1089,6 +1113,20 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "possibleLocations": [
+                [
+                    34.64,
+                    32.92
+                ],
+                [
+                    34.55,
+                    33.04
+                ],
+                [
+                    34.68,
+                    32.88
+                ]
             ]
         },
         {
@@ -1168,7 +1206,7 @@ module.exports = {
                         },
                         {
                             "id": "opt_a4_wild_weasel",
-                            "text": "Bait & Hunt SAM Sweep: Use decoys to trick hidden SAM radars into switching on, then attack them alongside Typhoon strikes (Riskier for aircrew)",
+                            "text": "Launch conventional Typhoon Storm Shadow & Brimstone OCA sweep without waiting for ISR pinpointing (Higher risk to jets)",
                             "effects": {
                                 "scores": {
                                     "air_control": 1,
@@ -1186,6 +1224,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_sam_relocates",
+                                        "delayMs": 32000,
+                                        "probability": 0.45
+                                    },
+                                    {
+                                        "id": "ev_wc_fastjet_ambush",
+                                        "delayMs": 35000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -1201,6 +1251,13 @@ module.exports = {
                                         "id": "ev_t1_bai_supremacy",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_sam_relocates",
+                                        "delayMs": 30000,
+                                        "probability": 0.65
                                     }
                                 ]
                             }
@@ -1346,6 +1403,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_sigint_convoy",
+                                        "delayMs": 30000,
+                                        "probability": 0.6
+                                    },
+                                    {
+                                        "id": "ev_wc_osint_fake_video",
+                                        "delayMs": 35000,
+                                        "probability": 0.25
+                                    }
                                 ]
                             }
                         },
@@ -1362,6 +1431,18 @@ module.exports = {
                                         "id": "ev_t2_isr_cycle",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_osint_fake_video",
+                                        "delayMs": 30000,
+                                        "probability": 0.55
+                                    },
+                                    {
+                                        "id": "ev_wc_sigint_convoy",
+                                        "delayMs": 35000,
+                                        "probability": 0.3
                                     }
                                 ]
                             }
@@ -1454,6 +1535,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_rpas_satlink_hijack",
+                                        "delayMs": 32000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_wc_sigint_convoy",
+                                        "delayMs": 35000,
+                                        "probability": 0.3
+                                    }
                                 ]
                             }
                         },
@@ -1473,6 +1566,13 @@ module.exports = {
                                         "id": "ev_t2_defensive_cyber",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_rpas_satlink_hijack",
+                                        "delayMs": 28000,
+                                        "probability": 0.65
                                     }
                                 ]
                             }
@@ -1836,6 +1936,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_sub_dives",
+                                        "delayMs": 32000,
+                                        "probability": 0.35
+                                    },
+                                    {
+                                        "id": "ev_wc_voyager_ew_jam",
+                                        "delayMs": 35000,
+                                        "probability": 0.45
+                                    }
                                 ]
                             }
                         },
@@ -1853,6 +1965,13 @@ module.exports = {
                                         "id": "ev_t3_tanker_crisis",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_sub_dives",
+                                        "delayMs": 30000,
+                                        "probability": 0.7
                                     }
                                 ]
                             }
@@ -1885,6 +2004,20 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "possibleLocations": [
+                [
+                    34.3,
+                    33.9
+                ],
+                [
+                    34.7,
+                    34.4
+                ],
+                [
+                    33.95,
+                    33.4
+                ]
             ]
         },
         {
@@ -1924,6 +2057,18 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_overflight_refusal",
+                                        "delayMs": 30000,
+                                        "probability": 0.5
+                                    },
+                                    {
+                                        "id": "ev_wc_voyager_ew_jam",
+                                        "delayMs": 32000,
+                                        "probability": 0.35
+                                    }
                                 ]
                             }
                         },
@@ -1940,6 +2085,13 @@ module.exports = {
                                         "id": "ev_t3_airborne_ops",
                                         "delayMs": 55000,
                                         "probability": 1
+                                    }
+                                ],
+                                "randomEvents": [
+                                    {
+                                        "id": "ev_wc_overflight_refusal",
+                                        "delayMs": 30000,
+                                        "probability": 0.55
                                     }
                                 ]
                             }
@@ -2091,7 +2243,10 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_s5_space_jamming"
-                                ]
+                                ],
+                                "assetStateChanges": {
+                                    "a_chinook": "tasked_csar"
+                                }
                             }
                         },
                         {
@@ -2129,6 +2284,20 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "possibleLocations": [
+                [
+                    35.38,
+                    35.95
+                ],
+                [
+                    35.15,
+                    36.12
+                ],
+                [
+                    35.62,
+                    35.78
+                ]
             ]
         },
         {
@@ -2603,6 +2772,20 @@ module.exports = {
                         }
                     ]
                 }
+            ],
+            "possibleLocations": [
+                [
+                    35.5,
+                    35.5
+                ],
+                [
+                    35.22,
+                    35.85
+                ],
+                [
+                    35.75,
+                    35.62
+                ]
             ]
         },
         {
@@ -3232,6 +3415,926 @@ module.exports = {
             },
             "image": "ev_psyops_leaflet_drop",
             "isManualAction": true
+        },
+        {
+            "id": "ev_wc_neutral_airliner",
+            "stage": "stage_2",
+            "name": "Track A Wildcard: Neutral Airliner Enters Engagement Zone",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                35.05,
+                34.45
+            ],
+            "possibleLocations": [
+                [
+                    35.05,
+                    34.45
+                ],
+                [
+                    34.82,
+                    33.9
+                ],
+                [
+                    35.3,
+                    34.1
+                ]
+            ],
+            "image": "ev_airspace_intercept",
+            "description": "A civilian commercial airliner has strayed off its Eastern Mediterranean airway directly into the path of incoming hostile radar contacts. QRA Typhoons have seconds to visually identify (VID) before weapons release.",
+            "roleDescriptions": {
+                "control": "Active DCA demands positive identification. Firing blindly risks a catastrophic civilian disaster; closing for VID puts Typhoons closer to hostile missiles."
+            },
+            "decisions": [
+                {
+                    "role": "control",
+                    "text": "Rules of Engagement for the unidentified contact:",
+                    "timeLimitMs": 45000,
+                    "defaultOptionId": "opt_airliner_vid",
+                    "options": [
+                        {
+                            "id": "opt_airliner_vid",
+                            "text": "Hold BVR fire and vector Typhoons for close visual identification & escort out of danger.",
+                            "effects": {
+                                "scores": {
+                                    "coalition_support": 1,
+                                    "air_control": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_airliner_clear_sky",
+                            "text": "Broadcast emergency guard-channel diversion orders while locking radar on trailing hostiles.",
+                            "effects": {
+                                "scores": {
+                                    "air_control": 1,
+                                    "force_protection": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_fastjet_ambush",
+            "stage": "stage_2",
+            "name": "Track A Wildcard: Crimson Fast-Jet Pop-Up Ambush",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                35.25,
+                35.1
+            ],
+            "possibleLocations": [
+                [
+                    35.25,
+                    35.1
+                ],
+                [
+                    34.9,
+                    34.8
+                ],
+                [
+                    35.6,
+                    34.7
+                ]
+            ],
+            "image": "rus_su57",
+            "description": "Two Crimson State fighters have popped up from sea-skimming altitude behind coastal terrain to ambush our offshore ISR and tanker orbit!",
+            "roleDescriptions": {
+                "control": "This is a classic threat to Air Power's enablers. Scramble Typhoon QRA immediately to preserve a Favourable Air Situation."
+            },
+            "decisions": [
+                {
+                    "role": "control",
+                    "text": "Counter the pop-up fast-jet ambush:",
+                    "timeLimitMs": 45000,
+                    "defaultOptionId": "opt_ambush_evade",
+                    "options": [
+                        {
+                            "id": "opt_ambush_meteor",
+                            "text": "Vector F-35B & Typhoon CAP to engage with Meteor BVR missiles while HMS Duncan paints targets.",
+                            "effects": {
+                                "scores": {
+                                    "air_control": 1,
+                                    "joint_effect": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_ambush_evade",
+                            "text": "Pull Voyager and Rivet Joint back west immediately and hold defensive CAP.",
+                            "effects": {
+                                "scores": {
+                                    "force_protection": 1,
+                                    "situational_awareness": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_sam_relocates",
+            "stage": "stage_2",
+            "name": "Track A Wildcard: SA-17 SAM Battery Relocates Under Camouflage",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                35.42,
+                35.92
+            ],
+            "possibleLocations": [
+                [
+                    35.42,
+                    35.92
+                ],
+                [
+                    35.28,
+                    35.75
+                ],
+                [
+                    35.55,
+                    36.02
+                ]
+            ],
+            "image": "ukr_air_defense",
+            "description": "Because the hostile SA-17 battery was not destroyed immediately, its crew packed up and displaced under camouflage netting—vanishing from our tactical map!",
+            "autoEffects": {
+                "hideAssets": [
+                    "a_crimson_sam_battery"
+                ],
+                "scores": {
+                    "air_control": -1
+                }
+            },
+            "roleDescriptions": {
+                "isr": "Target lost! Task RC-135W Rivet Joint or Reaper MQ-9B to re-acquire the mobile launcher before it ambushes Track C's helicopters."
+            },
+            "decisions": [
+                {
+                    "role": "isr",
+                    "text": "Re-task ISR Wing to hunt the displaced SA-17 battery?",
+                    "options": [
+                        {
+                            "id": "opt_sam_reacquire",
+                            "text": "Re-task Rivet Joint SIGINT & Reaper GEOINT to re-locate the battery immediately.",
+                            "effects": {
+                                "revealAssets": [
+                                    "a_crimson_sam_battery"
+                                ],
+                                "scores": {
+                                    "situational_awareness": 1,
+                                    "sustainability": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_sam_skip",
+                            "text": "Keep ISR on current maritime tasks and warn aircraft to stay above 25,000ft.",
+                            "effects": {
+                                "scores": {
+                                    "air_control": -1,
+                                    "force_protection": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_sigint_convoy",
+            "stage": "stage_2",
+            "name": "EYES ONLY (Track B): SIGINT Flash — Enemy Munitions Convoy",
+            "sound": "teletype",
+            "repeatable": false,
+            "visibleTo": [
+                "isr",
+                "jfac"
+            ],
+            "location": [
+                35.45,
+                36.18
+            ],
+            "possibleLocations": [
+                [
+                    35.45,
+                    36.18
+                ],
+                [
+                    35.18,
+                    36.05
+                ],
+                [
+                    35.68,
+                    35.95
+                ]
+            ],
+            "image": "rc135_rivet_joint",
+            "description": "CLASSIFICATION: UK EYES ONLY (ISR & JFAC). RC-135W Rivet Joint intercepted unencrypted radio orders revealing a resupply convoy carrying fresh SA-17 reload missiles heading for the coast.",
+            "roleDescriptions": {
+                "isr": "Strike and Control CANNOT see this alert! Verbally coordinate with them across the room—this is Network Enabled Capability (Right information, right place, right time) in action.",
+                "jfac": "Decide whether to disseminate immediately to Strike for an Air Interdiction hit or track it to its hidden depot."
+            },
+            "decisions": [
+                {
+                    "role": "isr",
+                    "text": "Follow the ISR Process (Disseminate & Apply) on the munitions convoy:",
+                    "options": [
+                        {
+                            "id": "opt_sigint_disseminate",
+                            "text": "Disseminate coordinates immediately via Link-16 NEC for a Typhoon Air Interdiction strike.",
+                            "effects": {
+                                "scores": {
+                                    "situational_awareness": 1,
+                                    "joint_effect": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_sigint_shadow",
+                            "text": "Shadow the convoy with Reaper RPAS to reveal their coastal command villa first.",
+                            "effects": {
+                                "revealAssets": [
+                                    "a_sf_intel_compound"
+                                ],
+                                "scores": {
+                                    "situational_awareness": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_osint_fake_video",
+            "stage": "stage_2",
+            "name": "Track B Wildcard: False-Flag OSINT Video Goes Viral",
+            "sound": "teletype",
+            "repeatable": false,
+            "location": [
+                35.2,
+                35.9
+            ],
+            "image": "ev_disinfo_campaign",
+            "description": "Adversary information warfare accounts have released doctored OSINT footage claiming an RAF jet struck a coastal school, sparking urgent calls from coalition capitals.",
+            "roleDescriptions": {
+                "joint": "Under the Full Spectrum Approach, diplomatic and information resilience matter just as much as kinetic precision."
+            },
+            "decisions": [
+                {
+                    "role": "joint",
+                    "text": "Counter the adversary disinformation campaign:",
+                    "options": [
+                        {
+                            "id": "opt_osint_debunk",
+                            "text": "Declassify timestamped Reaper GEOINT gun-camera footage to prove no UK aircraft was in the sector.",
+                            "effects": {
+                                "scores": {
+                                    "coalition_support": 1,
+                                    "situational_awareness": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_osint_ignore",
+                            "text": "Refuse to release classified sensor imagery to protect collection methods.",
+                            "effects": {
+                                "scores": {
+                                    "coalition_support": -1,
+                                    "force_protection": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_rpas_satlink_hijack",
+            "stage": "stage_3",
+            "name": "Track B Wildcard: Reaper MQ-9B Satlink Hijack Attempt",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                35.35,
+                34.9
+            ],
+            "image": "generic_cyber",
+            "description": "Adversary cyber-EW operators are attempting to hijack the satellite command uplink of our orbiting Reaper MQ-9B RPAS—threatening Air-Space and Air-Cyber integration!",
+            "roleDescriptions": {
+                "isr": "Defensive Air-Cyber teams at RAF Waddington have 45 seconds to switch to encrypted backup SATCOM or trigger autonomous return-to-base."
+            },
+            "decisions": [
+                {
+                    "role": "isr",
+                    "text": "Protect the Reaper RPAS satellite link:",
+                    "timeLimitMs": 45000,
+                    "defaultOptionId": "opt_rpas_rtb",
+                    "options": [
+                        {
+                            "id": "opt_rpas_encrypt",
+                            "text": "Execute Defensive Air-Cyber frequency hop onto hardened military SATCOM and stay on station.",
+                            "effects": {
+                                "scores": {
+                                    "situational_awareness": 1,
+                                    "force_protection": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_rpas_rtb",
+                            "text": "Command autonomous return-to-base immediately to prevent capture (Temporary ISR gap).",
+                            "effects": {
+                                "scores": {
+                                    "force_protection": 1,
+                                    "situational_awareness": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_voyager_ew_jam",
+            "stage": "stage_3",
+            "name": "Track C Wildcard: Voyager Tanker EW Jamming During AAR",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                34.7,
+                33.6
+            ],
+            "possibleLocations": [
+                [
+                    34.7,
+                    33.6
+                ],
+                [
+                    34.4,
+                    33.2
+                ],
+                [
+                    35,
+                    33.3
+                ]
+            ],
+            "image": "voyager_refueler",
+            "description": "Hostile naval electronic warfare jamming is disrupting navigation and rendezvous beacons on our offshore Voyager KC2 Air-to-Air Refuelling orbit—threatening Track A fighters running low on fuel!",
+            "roleDescriptions": {
+                "mobility": "Cross-track impact: If Voyager breaks orbit without refuelling Track A's Typhoons, Air Power's limitation of Impermanence will force them home early."
+            },
+            "decisions": [
+                {
+                    "role": "mobility",
+                    "text": "Maintain Air-to-Air Refuelling under EW jamming:",
+                    "options": [
+                        {
+                            "id": "opt_aar_reposition",
+                            "text": "Shift the Voyager towline 40 miles west under HMS Duncan's shield and complete visual refuelling.",
+                            "effects": {
+                                "scores": {
+                                    "sustainability": 1,
+                                    "air_control": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_aar_abort",
+                            "text": "Abort the AAR orbit immediately to protect the high-value tanker (Degrades Track A sorties).",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_voyager": "degraded"
+                                },
+                                "scores": {
+                                    "force_protection": 1,
+                                    "air_control": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_sub_dives",
+            "stage": "stage_3",
+            "name": "Track C Wildcard: Hostile Kilo Sub Slips Below Thermal Layer",
+            "sound": "sonar",
+            "repeatable": false,
+            "location": [
+                34.3,
+                33.9
+            ],
+            "image": "ev_sub_detection",
+            "description": "The hostile Kilo-class submarine has dived beneath an Eastern Mediterranean thermal layer and broken sonar contact—she remains hidden and operational!",
+            "autoEffects": {
+                "hideAssets": [
+                    "a_hostile_sub"
+                ],
+                "scores": {
+                    "joint_effect": -1
+                }
+            },
+            "roleDescriptions": {
+                "strike": "Without P-8A Poseidon sonobuoys and RN Wildcat dipping sonar re-acquiring her, she could ambush HMS Duncan or our amphibious lift later."
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_wc_sub_reemerges_ambush",
+            "stage": "stage_4",
+            "name": "Elusive Kilo Sub Re-Emerges on Maritime Lift Corridor!",
+            "sound": "sonar",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                34.15,
+                33.75
+            ],
+            "possibleLocations": [
+                [
+                    34.15,
+                    33.75
+                ],
+                [
+                    34.45,
+                    34.05
+                ],
+                [
+                    33.9,
+                    33.55
+                ]
+            ],
+            "image": "ev_sub_surfaces",
+            "description": "Because the hostile Kilo-class submarine escaped earlier, she has resurfaced to periscope depth along HMS Duncan's patrol box—threatening our Air-Maritime Integration corridor!",
+            "conditions": {
+                "assetStates": {
+                    "a_hostile_sub": "operational"
+                },
+                "hiddenAssets": [
+                    "a_hostile_sub"
+                ],
+                "triggeredEvents": [
+                    "ev_wc_sub_dives",
+                    "ev_t3_airborne_ops"
+                ]
+            },
+            "autoEffects": {
+                "revealAssets": [
+                    "a_hostile_sub"
+                ],
+                "scores": {
+                    "force_protection": -1
+                }
+            },
+            "roleDescriptions": {
+                "strike": "P-8A Poseidon and HMS Duncan's RN Wildcat have a brief Anti-Submarine Warfare (ASW) firing window before she dives again!"
+            },
+            "decisions": [
+                {
+                    "role": "strike",
+                    "text": "Execute Counter-Sea ASW prosecution:",
+                    "timeLimitMs": 45000,
+                    "defaultOptionId": "opt_sub_re_screen",
+                    "options": [
+                        {
+                            "id": "opt_sub_re_prosecute",
+                            "text": "Vector P-8A Poseidon & RN Wildcat to drop Sting Ray torpedoes and neutralise the sub.",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_hostile_sub": "destroyed"
+                                },
+                                "scores": {
+                                    "joint_effect": 1,
+                                    "force_protection": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_sub_re_screen",
+                            "text": "Have HMS Duncan launch acoustic decoys and steer clear.",
+                            "effects": {
+                                "hideAssets": [
+                                    "a_hostile_sub"
+                                ],
+                                "scores": {
+                                    "sustainability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_wc_overflight_refusal",
+            "stage": "stage_4",
+            "name": "Track C Wildcard: Regional Partner Restricts Overflight Corridor",
+            "sound": "teletype",
+            "repeatable": false,
+            "hiddenFrom": [
+                "strike"
+            ],
+            "location": [
+                35.9,
+                31.2
+            ],
+            "image": "generic_un",
+            "description": "A neighbouring state has abruptly closed its airspace to UK military transport flights, forcing C-17 Globemasters and A400Ms from RAF Brize Norton onto a longer maritime detour.",
+            "roleDescriptions": {
+                "joint": "This directly tests Air Power's Reach, Sustainability, and Diplomatic Full Spectrum engagement."
+            },
+            "decisions": [
+                {
+                    "role": "joint",
+                    "text": "Resolve the Hub & Spoke overflight restriction:",
+                    "options": [
+                        {
+                            "id": "opt_overflight_diplo",
+                            "text": "Use Diplomatic & Economic Full Spectrum outreach with NATO allies to reopen the corridor.",
+                            "effects": {
+                                "scores": {
+                                    "coalition_support": 1,
+                                    "sustainability": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_overflight_detour",
+                            "text": "Reroute C-17s over international waters and absorb the extra Voyager fuel burn.",
+                            "effects": {
+                                "scores": {
+                                    "sustainability": -1,
+                                    "coalition_support": 1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_shock_fuel_rationing",
+            "stage": "stage_3",
+            "name": "Threshold Shock: Aviation Fuel & Precision Munitions Rationing",
+            "sound": "alert",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                34.58,
+                32.98
+            ],
+            "image": "ev_logistics_failure",
+            "description": "Sustained high-tempo flying has drained RAF Akrotiri's Avtur and precision-guided munitions reserves to critical levels. Voyager AAR sorties are degraded until a Hub & Spoke surge arrives!",
+            "conditions": {
+                "maxScores": {
+                    "sustainability": 1
+                }
+            },
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_voyager": "degraded"
+                }
+            },
+            "roleDescriptions": {
+                "mobility": "Sustain is one of the 4 Enablers of Air Power! Trigger the Emergency Hub & Spoke Air-Bridge Surge manual action from RAF Brize Norton to restore Voyager and full sortie rates."
+            },
+            "decisions": [
+                {
+                    "role": "mobility",
+                    "text": "Immediate rationing posture at RAF Akrotiri:",
+                    "options": [
+                        {
+                            "id": "opt_ration_prioritise",
+                            "text": "Prioritise QRA Control of the Air and Medevac while awaiting C-17 resupply from Brize Norton.",
+                            "effects": {
+                                "scores": {
+                                    "sustainability": 1,
+                                    "air_control": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_ration_surge",
+                            "text": "Burn war-reserve stocks to keep all strike sorties flying (High risk of running dry).",
+                            "effects": {
+                                "scores": {
+                                    "air_control": 1,
+                                    "force_protection": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_shock_akrotiri_cratered",
+            "stage": "stage_3",
+            "name": "Threshold Shock: Runway Cratering at RAF Akrotiri!",
+            "sound": "explosion",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                34.58,
+                32.98
+            ],
+            "image": "ev_akrotiri_strike",
+            "description": "With Base Force Protection critically low, a ballistic missile salvo has cratered the main runway at RAF Akrotiri—highlighting Air Power's limitation of Vulnerability on the ground!",
+            "conditions": {
+                "maxScores": {
+                    "force_protection": 1
+                }
+            },
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_akrotiri": "damaged"
+                }
+            },
+            "roleDescriptions": {
+                "jfac": "If HMS Queen Elizabeth is on station (Carrier Enabled Power Projection), STOVL F-35Bs can divert immediately to the carrier deck while RAF Engineers repair Akrotiri!"
+            },
+            "decisions": [
+                {
+                    "role": "jfac",
+                    "text": "Respond to the cratered runway at RAF Akrotiri:",
+                    "timeLimitMs": 50000,
+                    "defaultOptionId": "opt_crater_repair",
+                    "options": [
+                        {
+                            "id": "opt_crater_carrier_divert",
+                            "text": "Divert F-35Bs to HMS Queen Elizabeth (Carrier Enabled Power Projection) while Engineers patch Akrotiri!",
+                            "conditions": {
+                                "assetStates": {
+                                    "a_qec": "operational"
+                                }
+                            },
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_akrotiri": "operational"
+                                },
+                                "scores": {
+                                    "force_protection": 2,
+                                    "joint_effect": 1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_crater_repair",
+                            "text": "Deploy RAF Rapid Runway Repair teams under RAF Regiment guard to reopen an emergency strip.",
+                            "effects": {
+                                "assetStateChanges": {
+                                    "a_akrotiri": "operational"
+                                },
+                                "scores": {
+                                    "force_protection": 1,
+                                    "sustainability": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_shock_coalition_freeze",
+            "stage": "stage_4",
+            "name": "Threshold Shock: Allied Overflight & Basing Restrictions",
+            "sound": "teletype",
+            "repeatable": false,
+            "autoTriggerOnConditions": true,
+            "location": [
+                35,
+                33.5
+            ],
+            "image": "generic_un",
+            "description": "With Coalition Support critically eroded, NATO partners have suspended shared tanker basing and diplomatic cover pending UK assurances on proportional Rules of Engagement.",
+            "conditions": {
+                "maxScores": {
+                    "coalition_support": 1
+                }
+            },
+            "roleDescriptions": {
+                "joint": "Air Power cannot succeed in isolation—restore Coalition Capability and Full Spectrum diplomatic backing."
+            },
+            "decisions": [
+                {
+                    "role": "joint",
+                    "text": "Repair coalition trust:",
+                    "options": [
+                        {
+                            "id": "opt_coalition_roe",
+                            "text": "Tighten collateral-damage ROE and invite NATO liaison officers into UK JFAC 11 Group HQ.",
+                            "effects": {
+                                "scores": {
+                                    "coalition_support": 2,
+                                    "air_control": -1
+                                }
+                            }
+                        },
+                        {
+                            "id": "opt_coalition_solo",
+                            "text": "Continue UK-only operations from sovereign bases without allied concessions.",
+                            "effects": {
+                                "scores": {
+                                    "sustainability": -1,
+                                    "joint_effect": -1
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ev_oca_sam_destroyed",
+            "stage": "stage_3",
+            "name": "Action Outcome: F-35B & Storm Shadow OCA Destroys SA-17 Battery",
+            "sound": "explosion",
+            "repeatable": false,
+            "location": [
+                35.35,
+                35.85
+            ],
+            "image": "ev_f35_success",
+            "description": "Combining Offensive Air-Cyber blinding with stealth F-35B and Typhoon Storm Shadow precision strikes, UK JFAC has obliterated Crimson State's coastal SA-17 SAM battery—opening the skies toward Air Supremacy!",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_crimson_sam_battery": "destroyed"
+                },
+                "scores": {
+                    "air_control": 2,
+                    "joint_effect": 1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_oca_sam_relocated",
+            "stage": "stage_3",
+            "name": "Action Outcome: SA-17 Battery Disperses Before Impact",
+            "sound": "klaxon",
+            "repeatable": false,
+            "location": [
+                35.35,
+                35.85
+            ],
+            "image": "ev_f35_fail",
+            "description": "Storm Shadow missiles struck the decoy radar van, while the real mobile SA-17 launcher displaced under smoke and vanished from our tactical picture!",
+            "autoEffects": {
+                "hideAssets": [
+                    "a_crimson_sam_battery"
+                ],
+                "scores": {
+                    "sustainability": -1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_airbridge_restored",
+            "stage": "stage_3",
+            "name": "Action Outcome: Brize Norton Hub & Spoke Surge Restores Sustainment",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                34.58,
+                32.98
+            ],
+            "image": "raf_brize_norton",
+            "description": "A continuous wave of C-17 Globemasters and A400M Atlases from RAF Brize Norton (Hub) into RAF Akrotiri (Spoke) has replenished precision munitions, Avtur fuel, and Voyager AAR readiness!",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_voyager": "operational",
+                    "a_akrotiri": "operational"
+                },
+                "scores": {
+                    "sustainability": 2
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "ev_airbridge_delayed",
+            "stage": "stage_3",
+            "name": "Action Outcome: Air-Bridge Surge Delayed by Mediterranean Storm",
+            "sound": "alert",
+            "repeatable": false,
+            "location": [
+                34.58,
+                32.98
+            ],
+            "image": "ev_weather_warning",
+            "description": "Severe crosswinds delayed half the C-17 wave from RAF Brize Norton, delivering partial relief to Akrotiri's fuel and munitions dumps.",
+            "autoEffects": {
+                "assetStateChanges": {
+                    "a_voyager": "operational"
+                },
+                "scores": {
+                    "sustainability": 1
+                }
+            },
+            "decisions": []
+        },
+        {
+            "id": "act_uk_stealth_oca",
+            "isManualAction": true,
+            "name": "F-35B Stealth & Storm Shadow OCA Strike (Op Orchard Style)",
+            "description": "Launch a UK-authentic stealth F-35B and Typhoon Storm Shadow Offensive Counter-Air strike against the pinpointed SA-17 SAM battery to achieve Air Supremacy and protect Track C helicopters.",
+            "image": "f35_aircraft",
+            "initiator": [
+                "strike",
+                "control"
+            ],
+            "requiresApprovalFrom": [
+                "jfac"
+            ],
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_t2_isr_cycle"
+                ],
+                "visibleAssets": [
+                    "a_crimson_sam_battery"
+                ],
+                "assetStates": {
+                    "a_crimson_sam_battery": "operational"
+                },
+                "notTriggeredEvents": [
+                    "ev_oca_sam_destroyed"
+                ]
+            },
+            "effects": {
+                "randomEvents": [
+                    {
+                        "id": "ev_oca_sam_destroyed",
+                        "delayMs": 25000,
+                        "probability": 0.75
+                    },
+                    {
+                        "id": "ev_oca_sam_relocated",
+                        "delayMs": 25000,
+                        "probability": 0.25
+                    }
+                ]
+            }
+        },
+        {
+            "id": "act_hub_spoke_surge",
+            "isManualAction": true,
+            "name": "Emergency Hub & Spoke Air-Bridge Surge (RAF Brize Norton)",
+            "description": "Surge C-17 Globemasters and A400M Atlases from RAF Brize Norton (Hub) to RAF Akrotiri (Spoke) to restore degraded Voyager AAR tankers, runway repairs, and munitions sustainability.",
+            "image": "raf_brize_norton",
+            "initiator": [
+                "mobility"
+            ],
+            "requiresApprovalFrom": [
+                "jfac"
+            ],
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_t3_hub_and_spoke"
+                ],
+                "any": [
+                    {
+                        "maxScores": {
+                            "sustainability": 2
+                        }
+                    },
+                    {
+                        "assetStates": {
+                            "a_voyager": "degraded"
+                        }
+                    },
+                    {
+                        "assetStates": {
+                            "a_akrotiri": "damaged"
+                        }
+                    }
+                ],
+                "notTriggeredEvents": [
+                    "ev_airbridge_restored"
+                ]
+            },
+            "effects": {
+                "randomEvents": [
+                    {
+                        "id": "ev_airbridge_restored",
+                        "delayMs": 25000,
+                        "probability": 0.8
+                    },
+                    {
+                        "id": "ev_airbridge_delayed",
+                        "delayMs": 25000,
+                        "probability": 0.2
+                    }
+                ]
+            }
         }
     ]
 };
