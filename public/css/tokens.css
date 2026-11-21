@@ -22,6 +22,7 @@
   --status-3: var(--accent-orange); /* Strained */
   --status-4: var(--accent-orange-dark); /* Crisis */
   --status-5: var(--accent-red); /* Critical */
+  --color-end-game: var(--accent-red); /* End-Game Event Highlight */
 
   /* Typography */
   --font-normal: 400;

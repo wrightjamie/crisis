@@ -306,72 +306,10 @@ module.exports = {
             "briefing": "Pointe du Hoc is a prominent 100-foot cliff overlooking the English Channel between Utah and Omaha beaches. Believed to host heavy German artillery capable of devastating both American landing sectors, it was assaulted by the US 2nd Ranger Battalion in an iconic cliff assault using ropes and grappling ladders."
         }
     ],
-    "manualActions": [
-        {
-            "id": "act_allied_naval_barrage",
-            "image": "ev_naval_strike",
-            "name": "Request Naval Barrage",
-            "description": "Call in heavy offshore bombardment from battleships. Uses significant supply.",
-            "initiator": [
-                "allied_command",
-                "allied_logistics"
-            ],
-            "conditions": {
-                "minScores": {
-                    "allied_supply": 2
-                }
-            },
-            "effects": {
-                "scores": {
-                    "allied_supply": -1,
-                    "axis_fortifications": -1,
-                    "allied_momentum": 1
-                }
-            }
-        },
-        {
-            "id": "act_axis_release_panzers",
-            "image": "brigade_alpha",
-            "name": "Request Panzer Release (Hitler)",
-            "description": "Attempt to wake Hitler and get authorization to release the main Panzer reserves.",
-            "initiator": [
-                "axis_command"
-            ],
-            "conditions": {
-                "minScores": {
-                    "axis_reserves": 2
-                }
-            },
-            "effects": {
-                "randomEvents": [
-                    {
-                        "id": "ev_hitler_wakes",
-            "image": "ev_crisis_cabinet",
-                        "weight": 30,
-                        "effects": {
-                            "scores": {
-                                "axis_reserves": 2,
-                                "beach_control": -1
-                            }
-                        }
-                    },
-                    {
-                        "id": "ev_hitler_sleeps",
-            "image": "ev_crisis_cabinet",
-                        "weight": 70,
-                        "effects": {
-                            "scores": {
-                                "axis_reserves": -1
-                            }
-                        }
-                    }
-                ]
-            }
-        }
-    ],
     "eventTemplates": [
         {
             "id": "ev_start",
+            "isOpeningEvent": true,
             "image": "ev_airborne_paratroop_drop",
             "name": "Midnight, June 6",
             "description": "Operation Overlord commences. Airborne pathfinders are dropping in.",
@@ -382,43 +320,43 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_start",
-            "image": "ev_airborne_paratroop_drop",
+                    "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_omaha_start",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 270000,
                     "probability": 1
                 },
                 {
                     "id": "th3_carentan_start",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 450000,
                     "probability": 1
                 },
                 {
                     "id": "ev_endgame_eval",
-            "image": "ev_crisis_cabinet",
+                    "image": "ev_crisis_cabinet",
                     "delayMs": 600000,
                     "probability": 1
                 },
                 {
                     "id": "ev_luftwaffe_appearance",
-            "image": "ev_bomber_intercept",
+                    "image": "ev_bomber_intercept",
                     "delayMs": 400000,
                     "probability": 0.3
                 },
                 {
                     "id": "ev_french_sabotage",
-            "image": "ev_russia_hub_explosion",
+                    "image": "ev_russia_hub_explosion",
                     "delayMs": 200000,
                     "probability": 0.6
                 },
                 {
                     "id": "ev_allied_air_superiority",
-            "image": "typhoon_aircraft",
+                    "image": "typhoon_aircraft",
                     "delayMs": 600000,
                     "probability": 0.9
                 }
@@ -469,19 +407,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_pegasus_gliders",
-            "image": "ev_airborne_paratroop_drop",
+                    "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th1_axis_confusion",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th1_merville_battery",
-            "image": "act_special_forces",
+                    "image": "act_special_forces",
                     "delayMs": 150000,
                     "probability": 0.8
                 }
@@ -531,7 +469,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_21st_panzer",
-            "image": "evt_armor_push",
+                    "image": "evt_armor_push",
                     "delayMs": 90000,
                     "probability": 0.8
                 }
@@ -580,7 +518,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_glider_crash",
-            "image": "ev_airborne_paratroop_drop",
+                    "image": "ev_airborne_paratroop_drop",
                     "delayMs": 120000,
                     "probability": 0.3
                 }
@@ -630,19 +568,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th1_airborne_linkup",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.6
                 },
                 {
                     "id": "th1_glider_reinforcements",
-            "image": "ev_airborne_paratroop_drop",
+                    "image": "ev_airborne_paratroop_drop",
                     "delayMs": 90000,
                     "probability": 0.7
                 },
                 {
                     "id": "th1_bayeux_push",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 240000,
                     "probability": 0.7
                 }
@@ -774,31 +712,31 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_pointe_du_hoc",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th2_naval_close_support",
-            "image": "ev_naval_strike",
+                    "image": "ev_naval_strike",
                     "delayMs": 90000,
                     "probability": 0.8
                 },
                 {
                     "id": "th2_wn62_resistance",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.9
                 },
                 {
                     "id": "th2_vierville_draw",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.9
                 },
                 {
                     "id": "th2_artillery_spotters",
-            "image": "drone_squad",
+                    "image": "act_special_forces",
                     "delayMs": 150000,
                     "probability": 0.6
                 }
@@ -858,13 +796,13 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_dog_green_breakout",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.7
                 },
                 {
                     "id": "th2_omaha_ammunition",
-            "image": "ev_logistics_failure",
+                    "image": "ev_logistics_failure",
                     "delayMs": 240000,
                     "probability": 0.7
                 }
@@ -915,7 +853,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th2_ranger_reinforcements",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.5
                 }
@@ -994,19 +932,19 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_flooded_fields",
-            "image": "evt_flood_warning",
+                    "image": "evt_flood_warning",
                     "delayMs": 90000,
                     "probability": 1
                 },
                 {
                     "id": "th3_counter_attack_carentan",
-            "image": "evt_armor_push",
+                    "image": "evt_armor_push",
                     "delayMs": 90000,
                     "probability": 0.6
                 },
                 {
                     "id": "th3_douve_bridges",
-            "image": "ev_bridge_collapse",
+                    "image": "ev_bridge_collapse",
                     "delayMs": 150000,
                     "probability": 0.8
                 }
@@ -1030,7 +968,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_engineer_assault",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 90000,
                     "probability": 0.8
                 }
@@ -1123,13 +1061,13 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "th3_bloody_gulch",
-            "image": "generic_deployment",
+                    "image": "generic_deployment",
                     "delayMs": 180000,
                     "probability": 0.7
                 },
                 {
                     "id": "th3_friendly_fire",
-            "image": "ev_kinetic_strike",
+                    "image": "ev_kinetic_strike",
                     "delayMs": 210000,
                     "probability": 0.2
                 }
@@ -1147,7 +1085,7 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "ev_panzer_assault",
-            "image": "evt_armor_push",
+                    "image": "evt_armor_push",
                     "delayMs": 90000
                 }
             ]
@@ -1192,17 +1130,17 @@ module.exports = {
             "triggerEvents": [
                 {
                     "id": "ev_end_allied_victory",
-            "image": "ev_eu_success",
+                    "image": "ev_eu_success",
                     "delayMs": 1000
                 },
                 {
                     "id": "ev_end_axis_victory",
-            "image": "ev_endgame_domestic",
+                    "image": "ev_endgame_domestic",
                     "delayMs": 1000
                 },
                 {
                     "id": "ev_end_stalemate",
-            "image": "ev_endgame_culmination",
+                    "image": "ev_endgame_culmination",
                     "delayMs": 1000
                 }
             ]
@@ -1406,7 +1344,7 @@ module.exports = {
         },
         {
             "id": "th2_artillery_spotters",
-            "image": "drone_squad",
+            "image": "act_special_forces",
             "name": "Axis Artillery Spotters",
             "description": "Hidden German observers are directing devastating artillery fire onto the beaches.",
             "location": [
@@ -1590,6 +1528,25 @@ module.exports = {
             "name": "FACILITATOR: Ultra Intel Coup (Pro-Allied)",
             "description": "Bletchley Park has decrypted vital German deployment orders. This gives the Allies a massive advantage.",
             "requiresUnlock": true,
+            "conditions": {
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "th1_airborne_start"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th1_axis_confusion"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th1_21st_panzer"
+                        ]
+                    }
+                ]
+            },
             "effects": {
                 "scores": {
                     "allied_momentum": 2,
@@ -1604,6 +1561,25 @@ module.exports = {
             "name": "FACILITATOR: OKW Releases Reserves (Pro-Axis)",
             "description": "The German High Command has unexpectedly released heavy Panzer and SS reserves directly into the battle.",
             "requiresUnlock": true,
+            "conditions": {
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "th1_21st_panzer"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th3_counter_attack_carentan"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_hitler_wakes"
+                        ]
+                    }
+                ]
+            },
             "effects": {
                 "scores": {
                     "axis_reserves": 3,
@@ -1618,6 +1594,25 @@ module.exports = {
             "name": "FACILITATOR: Mulberry Collapse (Pro-Axis)",
             "description": "A catastrophic structural failure at the artificial harbors has crippled the Allied supply chain.",
             "requiresUnlock": true,
+            "conditions": {
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "th2_omaha_ammunition"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th2_naval_close_support"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th3_carentan_start"
+                        ]
+                    }
+                ]
+            },
             "effects": {
                 "scores": {
                     "allied_supply": -3,
@@ -1631,12 +1626,128 @@ module.exports = {
             "name": "FACILITATOR: Maquis General Uprising (Pro-Allied)",
             "description": "The French Resistance has launched a coordinated, massive uprising across Normandy, throwing German rear echelons into chaos.",
             "requiresUnlock": true,
+            "conditions": {
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_french_sabotage"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th1_airborne_start"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th3_carentan_start"
+                        ]
+                    }
+                ]
+            },
             "effects": {
                 "scores": {
                     "axis_reserves": -2,
                     "axis_fortifications": -2
                 }
             }
+        },
+        {
+            "id": "act_allied_naval_barrage",
+            "image": "ev_naval_strike",
+            "name": "Request Naval Barrage",
+            "description": "Call in heavy offshore bombardment from battleships. Uses significant supply.",
+            "initiator": [
+                "allied_command",
+                "allied_logistics"
+            ],
+            "conditions": {
+                "minScores": {
+                    "allied_supply": 2
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "th2_omaha_start"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th2_wn62_resistance"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th1_21st_panzer"
+                        ]
+                    }
+                ]
+            },
+            "effects": {
+                "scores": {
+                    "allied_supply": -1,
+                    "axis_fortifications": -1,
+                    "allied_momentum": 1
+                }
+            },
+            "isManualAction": true
+        },
+        {
+            "id": "act_axis_release_panzers",
+            "image": "brigade_alpha",
+            "name": "Request Panzer Release (Hitler)",
+            "description": "Attempt to wake Hitler and get authorization to release the main Panzer reserves.",
+            "initiator": [
+                "axis_command"
+            ],
+            "conditions": {
+                "minScores": {
+                    "axis_reserves": 2
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "th1_axis_confusion"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th2_omaha_start"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "th3_carentan_start"
+                        ]
+                    }
+                ]
+            },
+            "effects": {
+                "randomEvents": [
+                    {
+                        "id": "ev_hitler_wakes",
+                        "image": "ev_crisis_cabinet",
+                        "weight": 30,
+                        "effects": {
+                            "scores": {
+                                "axis_reserves": 2,
+                                "beach_control": -1
+                            }
+                        }
+                    },
+                    {
+                        "id": "ev_hitler_sleeps",
+                        "image": "ev_crisis_cabinet",
+                        "weight": 70,
+                        "effects": {
+                            "scores": {
+                                "axis_reserves": -1
+                            }
+                        }
+                    }
+                ]
+            },
+            "isManualAction": true
         }
     ]
 };

@@ -245,6 +245,15 @@ app.put('/api/scenarios/:id/draft', accessControl.requireAuth('admin'), (req, re
     }
 });
 
+app.patch('/api/scenarios/:id/layout', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const result = scenarioService.saveCanvasLayout(req.params.id, req.body?.canvasLayout);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
 app.post('/api/scenarios/:id/publish', accessControl.requireAuth('admin'), (req, res) => {
     try {
         if (req.body && req.body.id) {

@@ -46,5 +46,25 @@
     "H-Hour": {
         "definition": "Assault Beach Landing Hour",
         "wiki": "The exact time at which initial assault landing craft hit the beach in a given sector, timed specifically around low tide to avoid submerged German anti-invasion obstacles."
+    },
+    "LZ": {
+        "definition": "Landing Zone",
+        "wiki": "Designated open fields or meadows behind the Normandy beaches selected for Allied troop-carrying gliders to land reinforcements, jeeps, and anti-tank guns."
+    },
+    "SS": {
+        "definition": "Schutzstaffel (Waffen-SS)",
+        "wiki": "Elite paramilitary combat divisions of Nazi Germany, such as the 17th SS Panzergrenadier Division (Götz von Berlichingen) and 12th SS Panzer Division (Hitlerjugend), committed to counter-attacking the Normandy beachhead."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "The United States of America, contributing the US First Army (Utah and Omaha beaches) and the 82nd and 101st Airborne Divisions to Operation Overlord."
+    },
+    "Ultra": {
+        "definition": "Allied Signals Intelligence (Enigma Decrypts)",
+        "wiki": "The top-secret Allied intelligence program at Bletchley Park that decrypted high-level German Enigma and Lorenz radio traffic, providing advance insight into Wehrmacht deployments."
+    },
+    "WN62": {
+        "definition": "Widerstandsnest 62 (Resistance Nest 62)",
+        "wiki": "One of the most heavily fortified German coastal strongpoints overlooking Omaha Beach, equipped with concrete casemates, artillery, mortars, and MG-42 machine guns."
     }
 }

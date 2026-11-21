@@ -19,11 +19,26 @@
         return [];
     }
 
+    function extractConditionEventRefs(cond, includeTriggered = true) {
+        if (!cond || typeof cond !== 'object') return [];
+        const refs = [];
+        if (Array.isArray(cond.prerequisites)) refs.push(...cond.prerequisites);
+        if (includeTriggered && Array.isArray(cond.triggeredEvents)) refs.push(...cond.triggeredEvents);
+        if (includeTriggered && Array.isArray(cond.unlockedEvents)) refs.push(...cond.unlockedEvents);
+        if (Array.isArray(cond.all)) {
+            cond.all.forEach(sub => refs.push(...extractConditionEventRefs(sub, includeTriggered)));
+        }
+        if (Array.isArray(cond.any)) {
+            cond.any.forEach(sub => refs.push(...extractConditionEventRefs(sub, includeTriggered)));
+        }
+        return Array.from(new Set(refs)).filter(Boolean);
+    }
+
     function getEventPrerequisites(ev) {
         if (!ev) return [];
         const direct = Array.isArray(ev.prerequisites) ? ev.prerequisites : [];
-        const cond = (ev.conditions && Array.isArray(ev.conditions.prerequisites)) ? ev.conditions.prerequisites : [];
-        return Array.from(new Set([...direct, ...cond])).filter(Boolean);
+        const fromCond = extractConditionEventRefs(ev.conditions, true);
+        return Array.from(new Set([...direct, ...fromCond])).filter(id => id && id !== ev.id);
     }
 
     function estimateNodeHeight(ev) {
@@ -36,18 +51,20 @@
 
     function getActionPredecessorEvents(act) {
         if (!act) return [];
-        const cond = act.conditions || {};
-        const triggered = Array.isArray(cond.triggeredEvents) ? cond.triggeredEvents : [];
-        const unlocked = Array.isArray(cond.unlockedEvents) ? cond.unlockedEvents : [];
+        const fromCond = extractConditionEventRefs(act.conditions, true);
         const events = Array.isArray(act.events) ? act.events : [];
-        return Array.from(new Set([...triggered, ...unlocked, ...events])).filter(Boolean);
+        return Array.from(new Set([...fromCond, ...events])).filter(id => id && id !== act.id);
     }
 
     function getActionTriggeredEvents(act) {
         if (!act || !act.effects) return [];
         const eff = act.effects;
-        const tr = Array.isArray(eff.triggerEvents) ? eff.triggerEvents : [];
-        const rnd = Array.isArray(eff.randomEvents) ? eff.randomEvents.map(r => r.event || r.id) : [];
+        const tr = Array.isArray(eff.triggerEvents)
+            ? eff.triggerEvents.map(t => (typeof t === 'string' ? t : (t && (t.id || t.event))))
+            : [];
+        const rnd = Array.isArray(eff.randomEvents)
+            ? eff.randomEvents.map(r => (typeof r === 'string' ? r : (r && (r.event || r.id))))
+            : [];
         return Array.from(new Set([...tr, ...rnd])).filter(Boolean);
     }
 
@@ -66,7 +83,31 @@
      * @param {boolean} [options.forceRecalculate]
      * @returns {Map<string, { x: number, y: number }>}
      */
-    function computeLayout(events = [], actions = [], options = {}) {
+    function partitionNodes(rawEvents = [], rawActions = []) {
+        const events = [];
+        const actions = [];
+        const seenAct = new Set();
+        (rawEvents || []).forEach(item => {
+            if (!item) return;
+            if (item.isManualAction) {
+                if (!seenAct.has(item.id)) {
+                    actions.push(item);
+                    seenAct.add(item.id);
+                }
+            } else {
+                events.push(item);
+            }
+        });
+        (rawActions || []).forEach(act => {
+            if (!act || seenAct.has(act.id)) return;
+            actions.push(act);
+            seenAct.add(act.id);
+        });
+        return { events, actions };
+    }
+
+    function computeLayout(rawEvents = [], rawActions = [], options = {}) {
+        const { events, actions } = partitionNodes(rawEvents, rawActions);
         const savedPositions = options.savedPositions || {};
         const forceRecalculate = Boolean(options.forceRecalculate);
         const result = new Map();
@@ -148,22 +189,25 @@
             getActionTriggeredEvents(act).forEach(tgtId => {
                 addEdge(act.id, tgtId, 0);
             });
+            const actUnlocks = Array.isArray(act.effects?.unlockEvents) ? act.effects.unlockEvents : [];
+            actUnlocks.forEach(tgtId => {
+                addEdge(act.id, tgtId, 10);
+            });
         });
 
         events.forEach(ev => {
-            const unlockList = Array.isArray(ev.effects?.unlockEvents) ? ev.effects.unlockEvents : [];
+            const unlockList = [
+                ...(Array.isArray(ev.effects?.unlockEvents) ? ev.effects.unlockEvents : []),
+                ...(Array.isArray(ev.autoEffects?.unlockEvents) ? ev.autoEffects.unlockEvents : [])
+            ];
             unlockList.forEach(tgtId => {
-                if (actions.some(a => a.id === tgtId)) {
-                    addEdge(ev.id, tgtId, 10);
-                }
+                addEdge(ev.id, tgtId, 10);
             });
             (ev.decisions || []).forEach(dec => {
                 (dec.options || []).forEach((opt, optIdx) => {
                     const optUnlocks = Array.isArray(opt.effects?.unlockEvents) ? opt.effects.unlockEvents : [];
                     optUnlocks.forEach(tgtId => {
-                        if (actions.some(a => a.id === tgtId)) {
-                            addEdge(ev.id, tgtId, 28 + optIdx * 22);
-                        }
+                        addEdge(ev.id, tgtId, 28 + optIdx * 22);
                     });
                 });
             });
@@ -175,8 +219,8 @@
 
         const allNodes = [...events, ...actions];
         const sortedCandidates = allNodes.slice().sort((a, b) => {
-            const aStart = (a.id === 'ev_start' || a.id === 'evt_initial') ? 0 : 1;
-            const bStart = (b.id === 'ev_start' || b.id === 'evt_initial') ? 0 : 1;
+            const aStart = a.isOpeningEvent ? 0 : ((a.id === 'ev_start' || a.id === 'evt_initial') ? 1 : 2);
+            const bStart = b.isOpeningEvent ? 0 : ((b.id === 'ev_start' || b.id === 'evt_initial') ? 1 : 2);
             if (aStart !== bStart) return aStart - bStart;
             const aIn = (incomingPreds.get(a.id) || []).length;
             const bIn = (incomingPreds.get(b.id) || []).length;
@@ -388,7 +432,8 @@
     /**
      * Build SVG markup for all graph edges (event triggers, decision branches, prerequisites, manual actions).
      */
-    function buildEdgesSvg(events = [], actions = [], posMap, options = {}) {
+    function buildEdgesSvg(rawEvents = [], rawActions = [], posMap, options = {}) {
+        const { events, actions } = partitionNodes(rawEvents, rawActions);
         const escapeHtml = options.escapeHtml || defaultEscapeHtml;
         const nodeW = options.nodeWidth || 270;
         const nodeHalfH = options.nodeHalfHeight || 48;
@@ -481,6 +526,40 @@
                 const d = buildBezierPath(px1, py1, px2, py2);
                 const cls = extraClass({ type: 'prereq', sourceId: preId, targetId: sourceEv.id });
                 svgParts.push(`<path d="${d}" class="canvas-edge-path prereq-edge${cls}" marker-end="url(#${markerPrefix}arrow-prereq)"/>`);
+            });
+
+            // 3b. Event & Decision option unlockEvents
+            const actionMap = new Map();
+            actions.forEach(a => actionMap.set(a.id, a));
+            const emitUnlockEdge = (tgtId, sy, optionId = null) => {
+                const tgtEv = eventMap.get(tgtId);
+                const tgtAct = actionMap.get(tgtId);
+                if (!tgtEv && !tgtAct) return;
+                const tgtPos = getPos(tgtId, tgtEv || tgtAct);
+                const x2 = tgtPos.x;
+                const y2 = tgtPos.y + (tgtAct ? 40 : nodeHalfH);
+                const d = buildBezierPath(x1, sy, x2, y2);
+                const midX = Math.round((x1 + x2) / 2);
+                const midY = Math.round((sy + y2) / 2) - 6;
+                const edgeType = tgtAct ? 'action-unlock' : 'unlock';
+                const cls = extraClass({ type: edgeType, sourceId: sourceEv.id, targetId: tgtId, optionId });
+                const pathClass = tgtAct ? 'action-unlock-edge' : 'prereq-edge';
+                const marker = tgtAct ? `${markerPrefix}arrow-action` : `${markerPrefix}arrow-prereq`;
+                svgParts.push(`<path d="${d}" class="canvas-edge-path ${pathClass}${cls}" marker-end="url(#${marker})"/>`);
+                svgParts.push(`<text x="${midX}" y="${midY}" text-anchor="middle" class="canvas-edge-label action-unlock-label${cls}">Unlocks</text>`);
+            };
+
+            const directUnlocks = [
+                ...(Array.isArray(sourceEv.effects?.unlockEvents) ? sourceEv.effects.unlockEvents : []),
+                ...(Array.isArray(sourceEv.autoEffects?.unlockEvents) ? sourceEv.autoEffects.unlockEvents : [])
+            ];
+            directUnlocks.forEach(tgtId => emitUnlockEdge(tgtId, y1));
+
+            (sourceEv.decisions || []).forEach(dec => {
+                (dec.options || []).forEach((opt, optIdx) => {
+                    const optUnlocks = Array.isArray(opt.effects?.unlockEvents) ? opt.effects.unlockEvents : [];
+                    optUnlocks.forEach(tgtId => emitUnlockEdge(tgtId, y1 + 28 + optIdx * 18, opt.id));
+                });
             });
         });
 

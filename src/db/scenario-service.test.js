@@ -205,6 +205,19 @@ function runTests() {
     assert.strictEqual(seededCount, 1);
     assert.ok(scenarioService.getScenario('core_seeded_one'));
 
+    // Test saveCanvasLayout does NOT create a draft on a published scenario
+    const layoutRes = scenarioService.saveCanvasLayout('core_seeded_one', {
+        version: 2,
+        panX: 120,
+        panY: 80,
+        scale: 0.9,
+        positions: { e1: { x: 250, y: 140 } }
+    });
+    assert.strictEqual(layoutRes.hasDraft, false, 'Saving canvas layout should not mark scenario as draft');
+    const afterLayout = scenarioService.getScenario('core_seeded_one');
+    assert.strictEqual(afterLayout._meta.hasDraft, false, 'Scenario should remain published without draft');
+    assert.strictEqual(afterLayout.canvasLayout.positions.e1.x, 250, 'Canvas layout coordinates should persist');
+
     fs.rmSync(tempLegacyDir, { recursive: true, force: true });
 
     closeDb();

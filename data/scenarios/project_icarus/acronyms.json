@@ -38,5 +38,13 @@
     "CCS": {
         "definition": "Carbon Capture and Storage",
         "wiki": "The process of capturing industrial carbon dioxide emissions at point sources, transporting them, and depositing them into secure deep underground geological formations."
+    },
+    "EU": {
+        "definition": "European Union",
+        "wiki": "Supranational political and economic bloc of European states operating the European Icarus Node and managing continental energy grids and border policy."
+    },
+    "NA": {
+        "definition": "North America",
+        "wiki": "Continental coalition (United States and Canada) operating the North American Icarus Node and defending vulnerable eastern seaboard cities such as Miami."
     }
 }

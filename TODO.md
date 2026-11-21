@@ -19,6 +19,7 @@
 - [x] Populate and assign 100% image coverage across all 13 scenarios in the game (including generating 11 new assets for Global Pandemic, Project Icarus, and Mars Colony Rebellion)
 - [x] Create living UI component library (`public/elements.html`) and add strict design system rules in `AGENT.md` to prevent AI agents from generating redundant styles
 - [x] Refactor and DRY header styles across all pages (player, facilitator, admin) into unified `.top-bar` design system
+- [x] Re-architect Op Sovereign Sky into 3 concurrent parallel tracks with branching consequences, cross-track visibility unlocks, timed injects, full RAFAC Air Power syllabus coverage (LO1–LO3 / P1–P10), and event-linked / phase-bounded Manual Actions (`notTriggeredEvents` + asset states)
 
 ## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
 

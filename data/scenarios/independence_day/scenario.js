@@ -66,6 +66,7 @@ module.exports = {
         // PHASE 1: First Contact (T+0 to T+10)
         {
             id: 'ev_start',
+            isOpeningEvent: true,
             name: 'Shadows Over Earth',
             description: 'Massive unidentified objects have entered low Earth orbit, positioning themselves over major global capitals. Total global satellite blackout has commenced.',
             image: 'ev_start_id4',
@@ -78,7 +79,7 @@ module.exports = {
                 { role: 'uk', hiddenFrom: ['russia', 'china', 'india'], text: 'Intelligence?', options: [{ id: 'share', text: 'Share with US/EU', effects: { scores: { uk_tech: +1, global_tech: +1 } } }, { id: 'hoard', text: 'Keep Classified', effects: { scores: { uk_tech: +2, global_tech: +2 } } }] }
             ],
             triggerEvents: [
-                { id: 'ev_roswell_cache', delayMs: 60000 },
+                { id: 'ev_roswell', delayMs: 60000 },
                 { id: 'ev_first_strike_prep', delayMs: 180000 },
                 { id: 'ev_global_strike', delayMs: 300000 }, // 5 mins
                 { id: 'ev_china_hoard', delayMs: 420000 },
@@ -170,6 +171,13 @@ module.exports = {
             name: 'The Mothership Descends',
             description: 'The primary alien vessel enters the atmosphere. Global survival depends on our response.',
             image: 'ev_mothership',
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_global_strike'] },
+                    { triggeredEvents: ['ev_arms_race_start'] },
+                    { triggeredEvents: ['ev_roswell'] }
+                ]
+            },
             decisions: [
                 { role: 'usa', hiddenFrom: ['china', 'russia'], text: 'Final Push?', options: [{ id: 'nuke', text: 'Launch all remaining Nukes', effects: { scores: { usa_survival: -1, global_tech: +3 } } }] },
                 { role: 'russia', hiddenFrom: ['usa', 'china', 'eu', 'uk'], text: 'Dead Hand?', options: [{ id: 'activate', text: 'Activate Dead Hand', effects: { scores: { russia_survival: -1, global_tech: +2 } } }] }
@@ -181,6 +189,13 @@ module.exports = {
             name: '45 Minutes: The Final Stand',
             image: 'ev_alien_reinforcement',
             description: 'The alien weapon is firing. The global defense grid activates...',
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_mothership'] },
+                    { triggeredEvents: ['ev_espionage_uk'] },
+                    { triggeredEvents: ['ev_espionage_china'] }
+                ]
+            },
             triggerEvents: [
                 { id: 'ev_end_extinction', delayMs: 1000 },
                 { id: 'ev_end_pyrrhic', delayMs: 1000 },

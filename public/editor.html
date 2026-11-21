@@ -42,7 +42,7 @@
         <div class="editor-subbar">
             <div class="editor-subbar-left">
                 <h2 class="editor-title-display" id="header-scenario-name">Loading Scenario...</h2>
-                <code class="editor-id-code" id="header-scenario-id" hidden style="display: none;">id</code>
+                <code class="editor-id-code" id="header-scenario-id" hidden>id</code>
                 <span class="status-pill draft" id="header-status-pill">Draft</span>
                 <div class="autosave-indicator" id="autosave-status" role="status" aria-live="polite">
                     <span class="autosave-dot" id="autosave-dot"></span>
@@ -50,31 +50,38 @@
                 </div>
             </div>
             <div class="editor-subbar-right">
-                <button type="button" id="btn-test-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Launch a sandbox game session in a new tab using current draft data">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    <span>Test Scenario</span>
+                <button type="button" id="btn-test-scenario" class="btn btn-secondary btn-compact text-xs inline-flex items-center gap-xs" title="Launch a sandbox game session in a new tab using current draft data">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>Test</span>
                 </button>
-                <button type="button" id="btn-discard-draft" class="btn btn-secondary text-sm inline-flex items-center gap-xs" style="display: none;" title="Discard uncommitted draft edits and revert to published version">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                    <span>Discard Draft</span>
+                <button type="button" id="btn-publish-scenario" class="btn btn-primary btn-compact text-xs inline-flex items-center gap-xs" title="Validate and publish draft to make it live for games">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Publish</span>
                 </button>
-                <button type="button" id="btn-reset-builtin" class="btn btn-secondary text-sm inline-flex items-center gap-xs" style="display: none;" title="Restore built-in scenario to factory defaults">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                    <span>Factory Reset</span>
-                </button>
-                <button type="button" id="btn-clone-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Clone/Fork scenario into a new custom scenario">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                    <span>Clone</span>
-                </button>
-                <button type="button" id="btn-export-scenario" class="btn btn-secondary text-sm inline-flex items-center gap-xs" title="Export portable scenario .zip archive">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    <span>Export</span>
-                </button>
-                <button type="button" id="btn-publish-scenario" class="btn btn-primary text-sm inline-flex items-center gap-xs" title="Validate and publish draft to make it live for games">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    <span>Publish Scenario</span>
+                <button type="button" id="btn-more-actions" popovertarget="editor-more-menu" class="btn btn-secondary btn-compact text-xs inline-flex items-center gap-xs" title="More scenario actions" aria-label="More scenario actions">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                 </button>
             </div>
+        </div>
+
+        <!-- Secondary Scenario Actions Popover Menu -->
+        <div id="editor-more-menu" popover="auto" class="editor-more-popover" role="menu" aria-label="More Scenario Actions">
+            <button type="button" id="btn-discard-draft" class="editor-more-item" role="menuitem" style="display: none;" title="Discard uncommitted draft edits and revert to published version">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                <span>Discard Draft</span>
+            </button>
+            <button type="button" id="btn-clone-scenario" class="editor-more-item" role="menuitem" title="Clone/Fork scenario into a new custom scenario">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>Clone Scenario</span>
+            </button>
+            <button type="button" id="btn-export-scenario" class="editor-more-item" role="menuitem" title="Export portable scenario .zip archive">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export .zip</span>
+            </button>
+            <button type="button" id="btn-reset-builtin" class="editor-more-item" role="menuitem" style="display: none;" title="Restore built-in scenario to factory defaults">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                <span>Factory Reset</span>
+            </button>
         </div>
 
         <!-- Section Navigation Tabs -->
@@ -322,60 +329,26 @@
              TAB 5: EVENTS & DECISION CANVAS (WITH MANUAL ACTIONS ON TREE)
              ============================================================== -->
         <section id="panel-events" class="editor-workspace full-bleed" style="display: none;">
-            <div class="canvas-toolbar">
-                <div class="flex-center gap-sm flex-wrap">
-                    <div class="inline-flex" role="group" aria-label="Event View Mode">
-                        <button type="button" id="btn-view-canvas" class="btn btn-primary text-xs inline-flex items-center gap-xs">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
-                            <span>Flow Canvas</span>
-                        </button>
-                        <button type="button" id="btn-view-accordion" class="btn btn-secondary text-xs inline-flex items-center gap-xs">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-                            <span>List / Accordion</span>
-                        </button>
-                    </div>
-                    <button type="button" id="btn-add-event-node" class="btn btn-primary text-xs inline-flex items-center gap-xs">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        <span>Add Event Node</span>
-                    </button>
-                    <button type="button" id="btn-add-action-node" class="btn btn-secondary text-xs inline-flex items-center gap-xs btn-canvas-action" title="Add a proactive Manual Action node that becomes available from activities on the tree">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        <span>Add Manual Action</span>
-                    </button>
-                    <button type="button" id="btn-auto-layout-canvas" class="btn btn-secondary text-xs inline-flex items-center gap-xs" title="Automatically organize events and manual actions into logical predecessor-to-successor columns">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                        <span>Auto-Arrange Tree</span>
-                    </button>
-                </div>
-
-                <div class="flex-center gap-sm">
-                    <span class="text-xs text-muted">Blue = Event Trigger • Green = Decision Branch • Amber = Manual Action • Dashed = Prerequisite</span>
-                    <button type="button" id="btn-zoom-out" class="btn btn-secondary text-xs" title="Zoom Out" aria-label="Zoom Out">-</button>
-                    <span id="canvas-zoom-label" class="text-xs text-muted" style="min-width: 42px; text-align: center;">100%</span>
-                    <button type="button" id="btn-zoom-in" class="btn btn-secondary text-xs" title="Zoom In" aria-label="Zoom In">+</button>
-                    <button type="button" id="btn-zoom-reset" class="btn btn-secondary text-xs">Reset View</button>
-                </div>
-            </div>
-
             <!-- Interactive Visio-Style Stage -->
             <div id="events-canvas-wrapper" class="canvas-stage-wrapper">
                 <div id="canvas-transform-plane" class="canvas-transform-plane">
                     <svg id="canvas-svg-layer" class="canvas-svg-layer">
                         <defs>
                             <marker id="arrow-trigger" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#3b82f6"/>
+                                <path d="M 0 1 L 10 5 L 0 9 z" class="canvas-arrow-trigger"/>
                             </marker>
                             <marker id="arrow-decision" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+                                <path d="M 0 1 L 10 5 L 0 9 z" class="canvas-arrow-decision"/>
                             </marker>
                             <marker id="arrow-prereq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+                                <path d="M 0 1 L 10 5 L 0 9 z" class="canvas-arrow-prereq"/>
                             </marker>
                             <marker id="arrow-action" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+                                <path d="M 0 1 L 10 5 L 0 9 z" class="canvas-arrow-action"/>
                             </marker>
                         </defs>
                         <g id="canvas-edges-group"></g>
+                        <path id="canvas-temp-link-path" class="canvas-temp-link-path" d="" hidden></path>
                     </svg>
                     <div id="canvas-nodes-layer" class="canvas-nodes-layer"></div>
                 </div>
@@ -383,8 +356,14 @@
                 <!-- Slide-Out Popout Inspector Drawer -->
                 <aside id="event-inspector-drawer" class="inspector-drawer" aria-label="Event and Decision Inspector">
                     <div class="inspector-header">
-                        <div>
-                            <h3 class="editor-panel-title" id="inspector-title">Event Inspector</h3>
+                        <div class="inspector-title-wrap" id="inspector-title-wrap">
+                            <button type="button" class="inspector-title-display" id="inspector-title-btn" title="Click to edit title">
+                                <span class="editor-panel-title" id="inspector-title">Event Inspector</span>
+                                <span class="inspector-title-edit-icon" aria-hidden="true">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                </span>
+                            </button>
+                            <input type="text" id="inspector-title-input" class="form-control inspector-title-input" aria-label="Node Title" hidden>
                             <code class="text-xs text-muted" id="inspector-subtitle" hidden style="display: none;">evt_id</code>
                         </div>
                         <button type="button" id="btn-close-inspector" class="btn btn-secondary text-xs" aria-label="Close Inspector">Close</button>
@@ -401,8 +380,49 @@
             </div>
 
             <!-- Alternative Structured Accordion List View -->
-            <div id="events-accordion-wrapper" style="display: none; padding: 1.5rem; overflow-y: auto; flex: 1;">
+            <div id="events-accordion-wrapper" style="display: none; padding: 1.5rem 1.5rem 4.5rem 1.5rem; overflow-y: auto; flex: 1;">
                 <div id="events-accordion-list" style="max-width: 1100px; margin: 0 auto;"></div>
+            </div>
+
+            <!-- Editor Canvas Controls (mounted into shared standard floating dock when Tab 5 is active) -->
+            <div id="editor-float-left" class="floating-bar" role="toolbar" aria-label="Node Creation and Layout" style="display: none;">
+                <button type="button" id="btn-add-event-node" class="floating-bar-btn primary" title="Add Node (Event or Manual Action)" aria-label="Add Node">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button type="button" id="btn-auto-layout-canvas" class="floating-bar-btn" title="Auto-Arrange Tree" aria-label="Auto-Arrange Tree">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
+            </div>
+
+            <div id="editor-float-right" class="floating-bar" role="toolbar" aria-label="View and Zoom Controls" style="display: none;">
+                <button type="button" id="btn-view-canvas" class="floating-bar-btn active" title="Flow Canvas View" aria-label="Flow Canvas View">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                </button>
+                <button type="button" id="btn-view-accordion" class="floating-bar-btn" title="List / Accordion View" aria-label="List / Accordion View">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+                <span class="floating-bar-divider" aria-hidden="true"></span>
+                <button type="button" id="btn-zoom-out" class="floating-bar-btn" title="Zoom Out" aria-label="Zoom Out">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                </button>
+                <button type="button" id="btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom &amp; View" aria-label="Reset Zoom and View">
+                    <span id="canvas-zoom-label">100%</span>
+                </button>
+                <button type="button" id="btn-zoom-in" class="floating-bar-btn" title="Zoom In" aria-label="Zoom In">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                </button>
+                <span class="floating-bar-divider" aria-hidden="true"></span>
+                <button type="button" id="btn-canvas-legend" popovertarget="canvas-legend-popover" class="floating-bar-btn" title="Connection Legend" aria-label="Connection Legend">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </button>
+            </div>
+
+            <!-- Compact Edge Legend Popover -->
+            <div id="canvas-legend-popover" popover="auto" class="canvas-legend-popover" aria-label="Connection Legend">
+                <div class="canvas-legend-row"><span class="canvas-legend-dot trigger"></span><span>Event Trigger</span></div>
+                <div class="canvas-legend-row"><span class="canvas-legend-dot decision"></span><span>Decision Branch</span></div>
+                <div class="canvas-legend-row"><span class="canvas-legend-dot action"></span><span>Manual Action</span></div>
+                <div class="canvas-legend-row"><span class="canvas-legend-dot prereq"></span><span>Prerequisite / Unlock</span></div>
             </div>
         </section>
 

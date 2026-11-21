@@ -25,7 +25,7 @@
     },
     "MOD": {
         "definition": "Ministry of Defence",
-        "wiki": "The British government department responsible for implementing the defence policy set by Her Majesty's Government, and is the headquarters of the British Armed Forces."
+        "wiki": "The British government department responsible for implementing the defence policy set by His Majesty's Government, and is the headquarters of the British Armed Forces."
     },
     "C2": {
         "definition": "Command and Control",
@@ -34,5 +34,41 @@
     "UK": {
         "definition": "United Kingdom",
         "wiki": "A sovereign country in Europe, comprising England, Wales, Scotland, and Northern Ireland."
+    },
+    "A400M": {
+        "definition": "Airbus A400M Atlas",
+        "wiki": "A four-engine turboprop military transport aircraft operated by the RAF, capable of delivering heavy disaster-relief cargo and personnel to austere or storm-damaged airfields."
+    },
+    "HNWI": {
+        "definition": "High-Net-Worth Individual",
+        "wiki": "Wealthy private residents, yacht owners, or resort visitors with substantial liquid financial assets who may exert political or media pressure for priority evacuation."
+    },
+    "NGO": {
+        "definition": "Non-Governmental Organization",
+        "wiki": "Independent humanitarian and relief organizations (such as the Red Cross or Oxfam) that deliver food, water, medical care, and shelter during major disasters."
+    },
+    "PM": {
+        "definition": "Prime Minister",
+        "wiki": "The head of the UK Government, chairing COBRA emergency meetings and authorizing cross-departmental crisis funding and deployments."
+    },
+    "PR": {
+        "definition": "Public Relations",
+        "wiki": "Strategic communications management between the government, news media, and the public to maintain trust and counter misinformation during a crisis."
+    },
+    "RAF": {
+        "definition": "Royal Air Force",
+        "wiki": "The United Kingdom's air and space warfare service, providing rapid strategic airlift, aerial reconnaissance, and humanitarian relief sorties."
+    },
+    "ROE": {
+        "definition": "Rules of Engagement",
+        "wiki": "Directives issued by military and political authorities defining the circumstances, conditions, and level of force under which armed personnel may act."
+    },
+    "SAR": {
+        "definition": "Search and Rescue",
+        "wiki": "Coordinated operations using specialist teams, search dogs, helicopters, and vessels to locate and extract survivors trapped by disaster or stranded at sea."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "The United States of America, whose territory of Puerto Rico and the US Virgin Islands lie immediately adjacent to the British Virgin Islands."
     }
 }

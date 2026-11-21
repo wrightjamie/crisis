@@ -178,5 +178,121 @@
     "MACA": {
         "definition": "Military Aid to the Civil Authorities",
         "wiki": "Framework authorizing military forces and logistics assets to assist civil authorities during domestic crises, disaster relief, or critical national emergencies."
+    },
+    "ATO": {
+        "definition": "Air Tasking Order",
+        "wiki": "The daily operational directive issued by UK JFAC (11 Group) assigning specific aircraft, sorties, targets, tankers, and callsigns across the entire theatre."
+    },
+    "AWACS": {
+        "definition": "Airborne Warning and Control System",
+        "wiki": "High-altitude radar and airborne command post aircraft (such as the E-3D Sentry AEW1) exploiting Height and Perspective to detect low-flying aircraft beyond surface radar horizons."
+    },
+    "CCD": {
+        "definition": "Camouflage, Concealment and Deception",
+        "wiki": "Passive Defensive Counter-Air (DCA) measures used to hide, disguise, or create decoys for aircraft and airfield infrastructure to reduce vulnerability on the ground."
+    },
+    "CEPP": {
+        "definition": "Carrier Enabled Power Projection",
+        "wiki": "Projecting integrated joint Air Power from Queen Elizabeth-class aircraft carriers with embarked F-35B Lightnings, Royal Navy, British Army, and NATO coalition forces."
+    },
+    "HAS": {
+        "definition": "Hardened Aircraft Shelter",
+        "wiki": "Reinforced concrete hangar used in Passive Defensive Counter-Air (DCA) to protect fragile parked combat aircraft from blast and missile shrapnel."
+    },
+    "MALE": {
+        "definition": "Medium-Altitude Long-Endurance",
+        "wiki": "Class of Remotely Piloted Air System (such as Reaper MQ-9B / Protector) capable of remaining aloft for over 24 hours for persistent surveillance and precision attack."
+    },
+    "MANPADS": {
+        "definition": "Man-Portable Air-Defence System",
+        "wiki": "Shoulder-launched surface-to-air missiles commonly employed by non-state insurgents in asymmetrical warfare against low-flying helicopters and transport aircraft."
+    },
+    "NATO": {
+        "definition": "North Atlantic Treaty Organization",
+        "wiki": "Collective defence alliance integrating allied Air Command & Control across Europe and the North Atlantic, including RAF contributions to NATO Icelandic Air Policing."
+    },
+    "RESCORT": {
+        "definition": "Rescue Escort",
+        "wiki": "Dedicated combat fighter aircraft assigned to protect Combat Recovery helicopters extracting downed aircrew from hostile territory."
+    },
+    "SAR": {
+        "definition": "Search and Rescue",
+        "wiki": "Peacetime Personnel Recovery operations conducted where no hostile interference is expected, contrasting with armed Combat Recovery under enemy fire."
+    },
+    "UN": {
+        "definition": "United Nations",
+        "wiki": "International organization authorizing Peacekeeping, Peace Enforcement, Peace Support Operations, and Humanitarian Operations mandates."
+    },
+    "WMD": {
+        "definition": "Weapons of Mass Destruction",
+        "wiki": "Chemical, biological, radiological, or nuclear weapons; strategic nuclear deterrence exists to deter adversary WMD escalation."
+    },
+    "A400M": {
+        "definition": "Airbus A400M Atlas",
+        "wiki": "Four-engine turboprop military transport aircraft operated by the RAF for tactical and strategic airlift, paratroop insertion, and humanitarian resupply."
+    },
+    "AEW1": {
+        "definition": "Airborne Early Warning Mark 1 (E-3D Sentry / E-7 Wedgetail)",
+        "wiki": "RAF airborne radar surveillance and battle-management aircraft providing wide-area air picture coverage over terrain blind spots."
+    },
+    "C-17": {
+        "definition": "Boeing C-17 Globemaster III",
+        "wiki": "Heavy strategic airlift aircraft operated by No. 99 Squadron RAF from RAF Brize Norton to move outsized cargo and troops across global hub-and-spoke airbridges."
+    },
+    "C-130J": {
+        "definition": "Lockheed Martin C-130J Hercules",
+        "wiki": "Tactical turboprop transport aircraft specialized in austere dirt-strip landings, low-level air-drop, and Special Forces air mobility."
+    },
+    "E-3D": {
+        "definition": "Boeing E-3D Sentry AEW1",
+        "wiki": "Airborne Warning and Control System (AWACS) radar aircraft providing long-range air surveillance, fighter direction, and airspace battle management."
+    },
+    "F-35B": {
+        "definition": "Lockheed Martin F-35B Lightning II",
+        "wiki": "Fifth-generation stealth STOVL multi-role combat aircraft jointly operated by the RAF and Royal Navy for Offensive Counter-Air, SEAD, and precision strike."
+    },
+    "FGR4": {
+        "definition": "Fighter / Ground Attack / Reconnaissance Mark 4 (Typhoon)",
+        "wiki": "Primary RAF multi-role variant of the Eurofighter Typhoon tasked with Defensive Counter-Air, QRA interception, and precision air-to-ground strike."
+    },
+    "HAR2": {
+        "definition": "Helicopter Air Rescue Mark 2",
+        "wiki": "RAF search-and-rescue rotary-wing designation used for personnel recovery and casualty evacuation missions."
+    },
+    "HC2": {
+        "definition": "Helicopter Cargo Mark 2 (Puma / Chinook)",
+        "wiki": "RAF support helicopter designation for tactical troop lift, underslung resupply, and aeromedical evacuation under Joint Helicopter Command."
+    },
+    "KC2": {
+        "definition": "Tanker / Transport Mark 2 (Voyager)",
+        "wiki": "Two-point wing-pod air-to-air refuelling variant of the RAF Voyager (A330 MRTT), overcoming the limitation of impermanence for fast jets."
+    },
+    "KC3": {
+        "definition": "Tanker / Transport Mark 3 (Voyager)",
+        "wiki": "Three-point air-to-air refuelling variant of the RAF Voyager fitted with a fuselage hose-drum unit in addition to wing pods for larger receiver aircraft."
+    },
+    "MQ-9B": {
+        "definition": "General Atomics MQ-9B Protector RG Mk1",
+        "wiki": "RAF Medium-Altitude Long-Endurance (MALE) remotely piloted air system providing persistent multi-sensor ISR and precision strike."
+    },
+    "MRA1": {
+        "definition": "Maritime Reconnaissance and Attack Mark 1 (Poseidon)",
+        "wiki": "RAF designation for the P-8A Poseidon maritime patrol aircraft, equipped with radar, acoustic sonobuoys, and torpedoes for Anti-Submarine Warfare."
+    },
+    "P-8A": {
+        "definition": "Boeing P-8A Poseidon MRA1",
+        "wiki": "Long-range maritime patrol and anti-submarine warfare aircraft operated by the RAF from RAF Lossiemouth for Counter-Sea and Air-Maritime Integration."
+    },
+    "RC-135W": {
+        "definition": "Boeing RC-135W Rivet Joint",
+        "wiki": "Dedicated electronic and signals intelligence (SIGINT/ELINT) aircraft operated by No. 51 Squadron RAF from RAF Waddington."
+    },
+    "SA-17": {
+        "definition": "9K37M1-2 Buk-M1-2 (NATO: SA-17 Grizzly)",
+        "wiki": "Mobile medium-range radar-guided surface-to-air missile system capable of threatening tactical aircraft across a wide engagement envelope."
+    },
+    "SF": {
+        "definition": "Special Forces",
+        "wiki": "Elite military units (such as the SAS, SBS, and SFSG) conducting covert reconnaissance, direct action, and specialist raids supported by dedicated air mobility."
     }
 }

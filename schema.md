@@ -22,7 +22,7 @@ Unlike traditional linear simulations or static branching games, this engine pro
 - **Camouflage & Submersion**: Assets can disappear again via `hideAssets` or `assetVisibilityChanges` if enemy forces deploy deception or slip away.
 
 ### III. Inter-Agency Governance & Institutional Friction
-- **Cabinet / COBR Approvals**: Players do not merely react to incoming emergencies; they can launch proactive initiatives from the "Actions" menu (`manualActions`).
+- **Cabinet / COBR Approvals**: Players do not merely react to incoming emergencies; they can launch proactive initiatives from the "Actions" menu (nodes inside `eventTemplates[]` flagged with `isManualAction: true`).
 - **Multi-Ministerial Sign-Off**: High-stakes initiatives (e.g., cyber counter-offensives, military mobilisations, secret diplomatic backchannels) can require authorization via `requiresApprovalFrom`. If the Foreign Office requests an allied strike, Defence or the Cabinet must approve or veto.
 - **Contradictory Pressures**: Every choice carries trade-offs tracked across multi-dimensional metrics (e.g., `military_escalation`, `civilian_stability`, `allied_trust`, `national_budget`).
 
@@ -80,11 +80,12 @@ Unlike traditional linear simulations or static branching games, this engine pro
    ```
 
 ### Pattern 2: Inter-Agency Authorization Loop
-A minister initiates a bold policy, but needs Cabinet sign-off:
+A minister initiates a bold policy, but needs Cabinet sign-off (defined inside `eventTemplates[]` with `isManualAction: true`):
 ```javascript
 {
     id: "act_special_forces",
     name: "Deploy Special Forces on Covert Raid",
+    isManualAction: true,
     initiator: ["defence"],
     requiresApprovalFrom: "foreign", // Foreign Office must weigh diplomatic blowback
     effects: {
@@ -93,15 +94,17 @@ A minister initiates a bold policy, but needs Cabinet sign-off:
 }
 ```
 
-### Pattern 3: Escalation Threshold Injects
-Events trigger automatically or unlock only when regional tensions reach a boiling point:
+### Pattern 3: Escalation Threshold Injects (Score / Asset Auto-Triggers)
+Events can fire automatically as soon as score thresholds or asset states are satisfied (`autoTriggerOnConditions: true`), or wait for facilitator delivery when `autoTriggerOnConditions` is omitted/false:
 ```javascript
 {
     id: "ev_kinetic_strike",
     name: "Cruise Missile Strike on Logistics Hub",
     sound: "explosion",
+    autoTriggerOnConditions: true,
     conditions: {
         minScores: { military_escalation: 4 },
+        assetStates: { "a_logistics_hub": "operational" },
         visibleAssets: ["a_rus_sub_faslane"]
     }
 }
@@ -167,11 +170,8 @@ The top-level object representing a fully playable module.
             name: "string"    // e.g., 'Tension & Sabotage'
         }
     ],
-    eventTemplates: [         // Array of all events (flat structure, no nesting)
-        // ... See Event Template Object ...
-    ],
-    manualActions: [          // Actions players can trigger proactively
-        // ... See Manual Action Object ...
+    eventTemplates: [         // Unified flat array of all events AND player-triggered manual actions (marked with isManualAction: true)
+        // ... See Event Template Object & Manual Action Node ...
     ],
     aiConfig: {               // AI Configuration for scenario summaries and intelligence briefings
         systemPrompt: "string", // System prompt governing AI behavior and writing style
@@ -237,22 +237,38 @@ Events define map incidents and generate decision tasks for players.
     sound: "string",          // (Optional) Sound effect triggered on 'display' role: 'klaxon' | 'explosion' | 'sonar' | 'teletype' | 'alert'
     
     // Advanced Logic (Optional)
+    isOpeningEvent: boolean,  // If true, marks this event as the single canonical opening event (Column 0 root in flow graphs). Every scenario with multiple nodes must designate exactly one opening event, and all other nodes must trace back to it.
+    isEndGame: boolean,       // If true, marks this event as an endgame conclusion node.
+    isManualAction: boolean,  // If true, this node is a player-triggered Manual Action (requires 'initiator' array) rather than a facilitator/timer-triggered event.
+    autoTriggerOnConditions: boolean, // If true, automatically fires this event during active gameplay as soon as 'conditions' are met (evaluated after effects and facilitator score updates). Also counts as reachable from the opening event when score/asset conditions are present.
     requiresUnlock: boolean,  // If true, this event is hidden from the Facilitator until a decision explicitly unlocks it.
     visibleTo: ["string"],    // (Optional) Array of roles that can see this event. If used, the 'display' role is also hidden from it.
     hiddenFrom: ["string"],   // (Optional) Array of roles that cannot see this event. If used, the 'display' role is also hidden from it.
-    conditions: {             // Requirements for this event to be available/triggerable
-        minScores: { "score_id": number }, // E.g. { "global_panic": 4 }
-        maxScores: { "score_id": number },
-        assets: { "asset_id": "required_state" }, // E.g. { "area51": "operational" }
+    conditions: {             // Requirements for this event to be available/triggerable (supports recursive all / any / not nesting)
+        minScores: { "score_id": number }, // E.g. { "global_panic": 4 } (score >= value)
+        maxScores: { "score_id": number }, // E.g. { "public_order": 2 } (score <= value)
+        assetStates: { "asset_id": "required_state" }, // E.g. { "area51": "operational" } (alias: 'assets')
         visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed
         hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
         assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
         unlockedEvents: ["event_id"],     // Event IDs that must have been unlocked
         triggeredEvents: ["event_id"],    // Event IDs that must have already triggered
+        notTriggeredEvents: ["event_id"], // Event IDs that must NOT have triggered yet (closes/expires availability)
         activeRoles: ["role_id"],         // All of these roles must be active players in the session
-        anyActiveRoles: ["role_id"]       // At least one of these roles must be active players in the session
+        anyActiveRoles: ["role_id"],      // At least one of these roles must be active players in the session
+        all: [ /* nested condition objects (logical AND) */ ],
+        any: [ /* nested condition objects (logical OR) */ ],
+        not: { /* nested condition object (logical NOT) */ }
     },
     
+    triggerEvents: [          // (Optional) Downstream events automatically scheduled when this event fires
+        {
+            id: "event_id",
+            delayMs: number,
+            probability: number // 0.0 to 1.0
+        }
+    ],
+
     autoEffects: {            // (Optional) Immediate effects applied as soon as the event triggers (e.g. revealing an asset upon detection)
         revealAssets: ["asset_id"],       // Reveals previously hidden asset(s) on map and station panels
         hideAssets: ["asset_id"],         // Hides visible asset(s)
@@ -289,7 +305,7 @@ Presented to a specific role when an event is triggered.
             id: "string",
             text: "string",   // The button text
             conditions: {     // (Optional) If present, this option is hidden from the player when conditions are not met
-                assets: { "asset_id": "required_state" },
+                assetStates: { "asset_id": "required_state" }, // Alias: 'assets'
                 visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed (e.g. target must be detected before strike option appears)
                 hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
                 assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
@@ -297,8 +313,12 @@ Presented to a specific role when an event is triggered.
                 maxScores: { "score_id": number },
                 unlockedEvents: ["event_id"],
                 triggeredEvents: ["event_id"],
+                notTriggeredEvents: ["event_id"],
                 activeRoles: ["role_id"],
-                anyActiveRoles: ["role_id"]
+                anyActiveRoles: ["role_id"],
+                all: [ /* nested condition objects */ ],
+                any: [ /* nested condition objects */ ],
+                not: { /* nested condition object */ }
             },
             effects: {        // What happens when this is clicked
                 
@@ -334,28 +354,33 @@ Presented to a specific role when an event is triggered.
 }
 ```
 
-## 7. Manual Action Object
-Actions that players can trigger proactively from the "Actions" menu, independent of events.
+## 7. Manual Action Node (`eventTemplates[]` with `isManualAction: true`)
+Actions that players can trigger proactively from the "Actions" menu, stored directly inside `eventTemplates[]` with `isManualAction: true` (there is no separate top-level `manualActions` array).
 
 ```javascript
 {
     id: "string",             // Unique identifier (e.g., 'act_nuke')
     name: "string",           // Display title
     description: "string",    // Description shown to players
+    isManualAction: true,     // Required flag distinguishing a player-triggered manual action from a standard event
     image: "string",          // (Optional) Image ID from data/image-library.json (e.g., 'act_cyber_offensive')
     initiator: ["string"],    // Array of role IDs that can initiate this action
     requiresApprovalFrom: ["string"], // (Optional) Roles that must approve before it triggers
     conditions: {             // Requirements for this action to be available (or visible)
         minScores: { "score_id": number },
         maxScores: { "score_id": number },
-        assets: { "asset_id": "required_state" },
+        assetStates: { "asset_id": "required_state" }, // Alias: 'assets'
         visibleAssets: ["asset_id"],      // Asset(s) that must currently be visible/revealed
         hiddenAssets: ["asset_id"],       // Asset(s) that must currently be hidden/undetected
         assetVisibility: { "asset_id": boolean }, // Specific visibility: true=visible, false=hidden
         unlockedEvents: ["event_id"],
         triggeredEvents: ["event_id"],
+        notTriggeredEvents: ["event_id"],
         activeRoles: ["role_id"],
-        anyActiveRoles: ["role_id"]
+        anyActiveRoles: ["role_id"],
+        all: [ /* nested condition objects */ ],
+        any: [ /* nested condition objects */ ],
+        not: { /* nested condition object */ }
     },
     effects: {                // What happens when this action is fully approved and triggered
         scores: { "score_id": number }, // E.g., { military_escalation: +2 }
@@ -397,3 +422,26 @@ All scenario images live in `public/images/library/` and are cataloged in `data/
 }
 ```
 - `tags` is a freeform, non-restrictive array of strings. Any new tags or tag categories added to `data/image-library.json` are dynamically exposed via `GET /api/images/tags` and searchable via `GET /api/images?tag=...&q=...`.
+
+---
+
+## 9. Scenario Management & Editor REST API (`/api/scenarios`)
+Scenarios are persisted in SQLite (`data/crisis.db`) with separate published baseline (`published_json`), working draft (`draft_json`), and canvas layout metadata. Admin-only endpoints require an authenticated `admin` session.
+
+| Method & Path | Auth | Description |
+| :--- | :--- | :--- |
+| `GET /api/scenarios` | Public | Lists all scenarios with publish/draft status (`status`, `hasDraft`, `isBuiltin`, `updatedAt`). |
+| `GET /api/scenarios/:id` | Public | Returns a scenario's full JSON (`?mode=draft` or `?mode=published`), including `guideHtml`, `acronyms`, and saved canvas layout. |
+| `POST /api/scenarios` | Admin | Creates a new scenario in draft state. |
+| `PUT /api/scenarios/:id/draft` | Admin | Saves draft changes (`scenario`, `guideHtml`, `acronyms`) and sets `has_draft = 1`. |
+| `PATCH /api/scenarios/:id/layout` | Admin | Persists canvas node coordinates (`{ canvasLayout: { [nodeId]: { x, y } } }`) into both draft and published JSON **without** creating or dirtying a draft (`has_draft` remains unchanged). |
+| `POST /api/scenarios/:id/publish` | Admin | Validates the draft (schema + flow-graph reachability) and promotes it to the live published baseline (`has_draft = 0`). |
+| `POST /api/scenarios/:id/discard-draft` | Admin | Reverts uncommitted draft changes back to the last published baseline (`has_draft = 0`). |
+| `POST /api/scenarios/validate` | Admin | Runs schema and flow-graph validation (`validateScenario` + `validateScenarioGraph`) against a payload and returns `{ valid, errors }`. |
+| `POST /api/scenarios/:id/clone` | Admin | Clones/forks an existing scenario under a new ID and name. |
+| `POST /api/scenarios/:id/reset-builtin` | Admin | Resets a built-in scenario back to its factory default definition. |
+| `POST /api/scenarios/:id/test-session` | Admin | Launches an isolated live test game session from either the draft or published version. |
+| `GET /api/scenarios/:id/export` | Public | Exports a single scenario (`scenario.js`, `guide.html`, `acronyms.json`, `manifest.json`) as a `.zip` archive. |
+| `GET /api/scenarios/export-all` | Public | Exports all scenarios as a bundled `.zip` archive. |
+| `POST /api/scenarios/import` | Admin | Imports a scenario `.zip` archive into the database. |
+| `DELETE /api/scenarios/:id` | Admin | Permanently deletes a scenario. |

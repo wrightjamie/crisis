@@ -326,7 +326,7 @@ module.exports = {
                 "naval"
             ],
             "image": "hmnb_clyde",
-            "briefing": "Her Majesty's Naval Base Clyde is one of three operating bases in the United Kingdom for the Royal Navy and is the base for the UK's continuous at-sea nuclear deterrent."
+            "briefing": "His Majesty's Naval Base Clyde is one of three operating bases in the United Kingdom for the Royal Navy and is the base for the UK's continuous at-sea nuclear deterrent."
         },
         {
             "id": "a3",
@@ -560,6 +560,11 @@ module.exports = {
             "stage": "stage_1",
             "name": "Mass Anti-War Protests in Manchester",
             "repeatable": false,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "location": [
                 53.48,
                 -2.24
@@ -612,7 +617,14 @@ module.exports = {
             "stage": "stage_1",
             "name": "Russian Warships Over Undersea Cables",
             "sound": "sonar",
-            "prerequisites": [],
+            "prerequisites": [
+                "ev_uk_casualty_leak"
+            ],
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "repeatable": true,
             "location": [
                 57,
@@ -692,6 +704,7 @@ module.exports = {
         {
             "id": "ev_uk_casualty_leak",
             "stage": "stage_1",
+            "isOpeningEvent": true,
             "name": "British Soldier Casualties Leaked to Press",
             "image": "ev_uk_casualty_leak",
             "prerequisites": [],
@@ -891,6 +904,11 @@ module.exports = {
             "stage": "stage_1",
             "name": "Russian Defector Found Unconscious",
             "repeatable": false,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "location": [
                 51.06,
                 -1.79
@@ -921,6 +939,11 @@ module.exports = {
             "stage": "stage_1",
             "name": "Flood of Fake News on Social Media",
             "repeatable": true,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "location": [
                 51.5,
                 -0.1
@@ -948,6 +971,11 @@ module.exports = {
             "stage": "stage_1",
             "name": "Record Scrambles to Intercept Russian Bombers",
             "repeatable": true,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "location": [
                 59,
                 0
@@ -975,6 +1003,11 @@ module.exports = {
             "stage": "stage_1",
             "name": "Defence Secretary's Plane GPS Jammed",
             "repeatable": false,
+            "conditions": {
+                "triggeredEvents": [
+                    "ev_uk_casualty_leak"
+                ]
+            },
             "location": [
                 55,
                 19
@@ -3283,9 +3316,7 @@ module.exports = {
                     "civilian_stability": -1
                 }
             }
-        }
-    ],
-    "manualActions": [
+        },
         {
             "id": "act_nuke",
             "name": "Authorise Nuclear Strike",
@@ -3301,7 +3332,24 @@ module.exports = {
             "conditions": {
                 "assets": {
                     "a_vanguard": "operational"
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_nuclear_readiness"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_faslane_strike_2"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_final_authorization"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "scores": {
@@ -3309,7 +3357,8 @@ module.exports = {
                     "civilian_stability": -5
                 }
             },
-            "image": "ev_nuclear_alert"
+            "image": "ev_nuclear_alert",
+            "isManualAction": true
         },
         {
             "id": "act_backchannel_russia",
@@ -3321,7 +3370,29 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "military_escalation": 3
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_russia_hub_explosion"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_black_sea_intercept"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_airspace_intercept"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_akrotiri_strike"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "randomEvents": [
@@ -3338,7 +3409,8 @@ module.exports = {
                     "uk_russia": -1
                 }
             },
-            "image": "act_backchannel_russia"
+            "image": "act_backchannel_russia",
+            "isManualAction": true
         },
         {
             "id": "act_us_support",
@@ -3351,7 +3423,24 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "uk_us": 2
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_maritime_shadowing"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_bomber_intercept"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_cyber_london"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "randomEvents": [
@@ -3375,7 +3464,8 @@ module.exports = {
                     }
                 ]
             },
-            "image": "act_us_support"
+            "image": "act_us_support",
+            "isManualAction": true
         },
         {
             "id": "act_cyber_offensive",
@@ -3388,7 +3478,24 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "military_readiness": 2
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_disinfo_campaign"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_gps_jamming"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_cyber_london"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "scores": {
@@ -3416,7 +3523,8 @@ module.exports = {
                     }
                 ]
             },
-            "image": "act_cyber_offensive"
+            "image": "act_cyber_offensive",
+            "isManualAction": true
         },
         {
             "id": "act_national_address",
@@ -3429,7 +3537,24 @@ module.exports = {
             "conditions": {
                 "maxScores": {
                     "civilian_stability": 3
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_protest_manchester"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_disinfo_campaign"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_protest_london"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "scores": {
@@ -3437,7 +3562,8 @@ module.exports = {
                     "uk_europe": -1
                 }
             },
-            "image": "act_national_address"
+            "image": "act_national_address",
+            "isManualAction": true
         },
         {
             "id": "act_special_forces",
@@ -3449,7 +3575,24 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "military_readiness": 2
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_russia_hub_explosion"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_undersea_cable"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_sub_detection"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "randomEvents": [
@@ -3475,7 +3618,8 @@ module.exports = {
                     }
                 ]
             },
-            "image": "act_special_forces"
+            "image": "act_special_forces",
+            "isManualAction": true
         },
         {
             "id": "act_request_strike_options",
@@ -3489,7 +3633,29 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "military_readiness": 3
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_airspace_intercept"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_akrotiri_strike"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_sub_surfaces"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_kinetic_strike"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "randomEvents": [
@@ -3514,7 +3680,8 @@ module.exports = {
                         "delayMs": 60000
                     }
                 ]
-            }
+            },
+            "isManualAction": true
         },
         {
             "id": "act_strike_airbase",
@@ -3560,7 +3727,8 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            "isManualAction": true
         },
         {
             "id": "act_strike_c2",
@@ -3606,7 +3774,8 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            "isManualAction": true
         },
         {
             "id": "act_eu_coalition",
@@ -3620,7 +3789,24 @@ module.exports = {
             "conditions": {
                 "minScores": {
                     "civilian_stability": 2
-                }
+                },
+                "any": [
+                    {
+                        "triggeredEvents": [
+                            "ev_uk_casualty_leak"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_gps_jamming"
+                        ]
+                    },
+                    {
+                        "triggeredEvents": [
+                            "ev_maritime_shadowing"
+                        ]
+                    }
+                ]
             },
             "effects": {
                 "randomEvents": [
@@ -3644,7 +3830,8 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            "isManualAction": true
         }
     ]
 };

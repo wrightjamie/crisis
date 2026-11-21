@@ -38,5 +38,9 @@
     "RCS": {
         "definition": "Reaction Control System",
         "wiki": "A subsystem of thrusters used for three-axis attitude control, docking maneuvers, and fine orbital adjustments on transit spacecraft and orbital shuttles."
+    },
+    "UNS": {
+        "definition": "United Nations Ship",
+        "wiki": "Official naval vessel prefix used by orbital warships and fleet carriers operating under the United Nations Space Command blockade."
     }
 }

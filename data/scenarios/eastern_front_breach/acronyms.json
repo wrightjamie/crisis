@@ -50,5 +50,9 @@
     "ATGM": {
         "definition": "Anti-Tank Guided Missile",
         "wiki": "Man-portable or vehicle-mounted guided missiles (such as Javelin, NLAW, and Spike) designed to penetrate and destroy heavy armor at long ranges."
+    },
+    "FPV": {
+        "definition": "First-Person View (Loitering Combat Drone)",
+        "wiki": "Low-cost, high-maneuverability quadcopter drones piloted via live video feed goggles and fitted with explosive warheads for precision anti-armor strikes."
     }
 }

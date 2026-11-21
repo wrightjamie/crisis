@@ -273,7 +273,7 @@ class GameEngine {
                 scoreConfigs: scenario.scoreConfigs || {},
                 aiConfig: scenario.aiConfig,
                 stages: scenario.stages || [],
-                manualActions: scenario.manualActions || [],
+                manualActions: this._getManualActions(scenario),
                 canvasLayout: scenario.canvasLayout || null
             },
             scores: scores,
@@ -329,7 +329,7 @@ class GameEngine {
         const scenario = this.getScenario();
         if (!scenario) return false;
 
-        const template = scenario.eventTemplates.find(e => e.id === eventId);
+        const template = (scenario.eventTemplates || []).find(e => e.id === eventId && !e.isManualAction);
         if (!template) return false;
 
         if (!template.repeatable && this.gameState.events.some(e => e.templateId === eventId)) {
@@ -613,6 +613,40 @@ class GameEngine {
         this._applyAssetEffects(effects);
         this._scheduleTriggeredEvents(effects.triggerEvents);
         this._scheduleRandomEvents(effects.randomEvents);
+        this.evaluateAutoConditionEvents();
+    }
+
+    evaluateAutoConditionEvents() {
+        if (this._evaluatingAutoEvents || this.gameState.status !== 'active') return 0;
+        const scenario = this.getScenario();
+        if (!scenario || !Array.isArray(scenario.eventTemplates)) return 0;
+
+        this._evaluatingAutoEvents = true;
+        let triggeredCount = 0;
+        try {
+            let pass = 0;
+            let didTrigger = true;
+            while (didTrigger && pass < 10 && this.gameState.status === 'active') {
+                didTrigger = false;
+                pass++;
+                const activeRoles = this.getActiveRoles();
+                for (const template of scenario.eventTemplates) {
+                    if (!template || template.isManualAction || !template.autoTriggerOnConditions || !template.conditions) continue;
+                    if (!this._canScheduleEventTemplate(template.id, scenario)) continue;
+                    const triggeredIds = this.gameState.events.map(e => e.templateId);
+                    if (checkConditions(template, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, triggeredIds, activeRoles)) {
+                        if (this.triggerScenarioEvent(template.id)) {
+                            triggeredCount++;
+                            didTrigger = true;
+                            if (this.gameState.status !== 'active') break;
+                        }
+                    }
+                }
+            }
+        } finally {
+            this._evaluatingAutoEvents = false;
+        }
+        return triggeredCount;
     }
 
     dismissTask(taskId) {
@@ -625,13 +659,19 @@ class GameEngine {
         return false;
     }
 
+    _getManualActions(scenario) {
+        if (!scenario) return [];
+        return (scenario.eventTemplates || []).filter(e => e && e.isManualAction);
+    }
+
     triggerManualAction(actionId, initiatorRole) {
         if (this.gameState.status !== 'active') return false;
         
         const scenario = this.getScenario();
-        if (!scenario || !scenario.manualActions) return false;
+        const manualActions = this._getManualActions(scenario);
+        if (!scenario || manualActions.length === 0) return false;
 
-        const action = scenario.manualActions.find(a => a.id === actionId);
+        const action = manualActions.find(a => a.id === actionId);
         if (!action) return false;
 
         // Verify initiator has permission
@@ -707,7 +747,7 @@ class GameEngine {
     getScenarioTemplates() {
         if (this.gameState.status === 'active') {
             const scenario = this.getScenario();
-            return scenario ? scenario.eventTemplates : [];
+            return scenario ? (scenario.eventTemplates || []).filter(e => e && !e.isManualAction) : [];
         }
         return [];
     }

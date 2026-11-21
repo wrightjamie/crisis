@@ -8,7 +8,7 @@ let localState = null;
 let previousScores = null;
 let previousAiBriefingTimestamp = null;
 let currentInfoView = null;
-let previousAvailableActions = [];
+let previousAvailableActions = null;
 let gameId = new URLSearchParams(window.location.search).get('game');
 
 // DOM Elements
@@ -1035,7 +1035,7 @@ function updateUI() {
             .filter(a => a.initiator.includes(role) && window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId), activeRolesList))
             .map(a => a.id);
 
-        if (previousAvailableActions.length > 0) {
+        if (previousAvailableActions !== null) {
             const newActions = currentAvailableActions.filter(id => !previousAvailableActions.includes(id));
             if (newActions.length > 0) {
                 if (!currentInfoView || currentInfoView.type !== 'actions') {
@@ -1572,7 +1572,13 @@ function buildActionsPanelHtml(p) {
     localState.scenarioConfig.manualActions.forEach(action => {
         if (!action.initiator.includes(role)) return;
 
-        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId), activeRolesList);
+        const triggeredIds = localState.events.map(e => e.templateId);
+        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, triggeredIds, activeRolesList);
+        const isClosed = Boolean(
+            action.conditions &&
+            Array.isArray(action.conditions.notTriggeredEvents) &&
+            action.conditions.notTriggeredEvents.some(id => triggeredIds.includes(id))
+        );
 
         actionsShown++;
         
@@ -1607,6 +1613,9 @@ function buildActionsPanelHtml(p) {
 
         if (isMet) {
             html += `<button class="btn btn-primary mt-sm w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+        } else if (isClosed) {
+            html += `<div class="mt-2 text-muted text-xs font-mono">✅ COMPLETED / WINDOW CLOSED</div>`;
+            html += `<button class="btn btn-primary mt-sm w-100 opacity-50 cursor-not-allowed" disabled>Action Closed</button>`;
         } else {
             html += `<div class="mt-2 text-status-4 text-xs font-mono">🔒 REQUIREMENTS NOT MET</div>`;
             html += `<button class="btn btn-primary mt-sm w-100 opacity-50 cursor-not-allowed" disabled>Initiate Action</button>`;

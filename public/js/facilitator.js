@@ -1067,8 +1067,12 @@ window.openManualActionDetails = function(actionId) {
     titleEl.textContent = 'Manual Action Details';
 
     const initiators = Array.isArray(act.initiator) ? act.initiator.join(', ').toUpperCase() : (act.initiator ? String(act.initiator).toUpperCase() : 'ANY');
-    const approvers = Array.isArray(act.approver) ? act.approver.join(', ').toUpperCase() : (act.approver ? String(act.approver).toUpperCase() : 'None (Immediate)');
+    const rawApprovers = act.requiresApprovalFrom ?? act.approver;
+    const approvers = Array.isArray(rawApprovers) ? rawApprovers.join(', ').toUpperCase() : (rawApprovers ? String(rawApprovers).toUpperCase() : 'None (Immediate)');
     const triggered = (act.effects && Array.isArray(act.effects.triggerEvents)) ? act.effects.triggerEvents : [];
+    const randomOutcomes = (act.effects && Array.isArray(act.effects.randomEvents)) ? act.effects.randomEvents : [];
+    const prereqEvents = (act.conditions && Array.isArray(act.conditions.triggeredEvents)) ? act.conditions.triggeredEvents : [];
+    const closingEvents = (act.conditions && Array.isArray(act.conditions.notTriggeredEvents)) ? act.conditions.notTriggeredEvents : [];
     const conditionsMet = checkConditions(act, currentState.scores, currentState.assets, currentState.unlockedEvents, (currentState.events || []).map(e => e.templateId), currentActiveRoles);
 
     let html = `
@@ -1083,7 +1087,10 @@ window.openManualActionDetails = function(actionId) {
         <div class="card mb-2">
             <div class="text-sm"><strong>Initiator Role(s):</strong> ${esc(initiators)}</div>
             <div class="text-sm mt-xs"><strong>Approver(s):</strong> ${esc(approvers)}</div>
+            ${prereqEvents.length > 0 ? `<div class="text-sm mt-xs"><strong>Unlocked By Event(s):</strong> ${esc(prereqEvents.join(', '))}</div>` : ''}
+            ${closingEvents.length > 0 ? `<div class="text-sm mt-xs"><strong>Expires After:</strong> ${esc(closingEvents.join(', '))}</div>` : ''}
             ${triggered.length > 0 ? `<div class="text-sm mt-xs"><strong>Triggers Events:</strong> ${esc(triggered.map(t => typeof t === 'string' ? t : t.id).join(', '))}</div>` : ''}
+            ${randomOutcomes.length > 0 ? `<div class="text-sm mt-xs"><strong>Possible Outcomes:</strong> ${esc(randomOutcomes.map(r => `${r.id || r.event} (${r.weight || 1})`).join(', '))}</div>` : ''}
         </div>
         <p class="text-xs text-muted">Manual actions are initiated directly by players from their station when available.</p>
     `;

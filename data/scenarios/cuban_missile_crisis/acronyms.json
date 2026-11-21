@@ -58,5 +58,37 @@
     "SAM": {
         "definition": "Surface-to-Air Missile",
         "wiki": "Guided anti-aircraft missiles, notably the Soviet S-75 Dvina (SA-2 Guideline) batteries in Cuba, one of which shot down Major Rudolf Anderson's U-2 over Banes on October 27, 1962."
+    },
+    "ABC": {
+        "definition": "American Broadcasting Company",
+        "wiki": "Major US television and radio network whose diplomatic correspondent John Scali served as a crucial informal backchannel between Soviet KGB station chief Aleksandr Fomin and the Kennedy administration."
+    },
+    "AFB": {
+        "definition": "Air Force Base",
+        "wiki": "Military installation operated by the United States Air Force, such as Homestead AFB and MacDill AFB in Florida, staging tactical strike wings and U-2 reconnaissance flights during the crisis."
+    },
+    "B-59": {
+        "definition": "Soviet Submarine B-59 (Foxtrot-Class)",
+        "wiki": "One of four nuclear-torpedo-armed Soviet Project 641 submarines sent to Cuba; on October 27, 1962, flotilla chief Vasily Arkhipov refused to authorize a nuclear torpedo launch while under US Navy practice depth charges."
+    },
+    "DCI": {
+        "definition": "Director of Central Intelligence",
+        "wiki": "Head of the Central Intelligence Agency and chief intelligence adviser to the President, held by John McCone during the Cuban Missile Crisis."
+    },
+    "RFK": {
+        "definition": "Robert F. Kennedy",
+        "wiki": "US Attorney General and President John F. Kennedy's closest adviser, who conducted the decisive secret backchannel negotiations with Soviet Ambassador Anatoly Dobrynin."
+    },
+    "ROE": {
+        "definition": "Rules of Engagement",
+        "wiki": "Directives governing when military units may use force, critically tightened by EXCOMM and Stavka to prevent an unauthorized incident from sparking nuclear war."
+    },
+    "SA-2": {
+        "definition": "S-75 Dvina (NATO: SA-2 Guideline)",
+        "wiki": "High-altitude Soviet radar-guided surface-to-air missile system deployed in Cuba that shot down Major Rudolf Anderson's U-2 reconnaissance aircraft on Black Saturday."
+    },
+    "SS-4": {
+        "definition": "R-12 Dvina (NATO: SS-4 Sandal)",
+        "wiki": "Soviet medium-range ballistic missile (MRBM) with a ~2,000 km range deployed to San Cristóbal and Sagua la Grande in Cuba, capable of striking Washington, D.C. and major US cities."
     }
 }

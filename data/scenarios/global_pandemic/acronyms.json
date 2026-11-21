@@ -46,5 +46,25 @@
     "CEPI": {
         "definition": "Coalition for Epidemic Preparedness Innovations",
         "wiki": "A global partnership between public, private, philanthropic, and civil organizations to finance and coordinate the rapid development of epidemic and pandemic vaccines."
+    },
+    "BSL-4": {
+        "definition": "Biosafety Level 4",
+        "wiki": "The highest level of biological containment required for handling lethal, easily transmitted pathogens for which no established vaccine or treatment exists."
+    },
+    "COVAX": {
+        "definition": "COVID-19 Vaccines Global Access (Global Vaccine Equity Mechanism)",
+        "wiki": "A WHO- and CEPI-backed international pooled procurement initiative aimed at guaranteeing equitable vaccine distribution to low- and middle-income nations."
+    },
+    "EU": {
+        "definition": "European Union",
+        "wiki": "Economic and political union of European member states coordinating vaccine manufacturing, export controls, and Oxford/EMA biomedical research."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "The United States of America, home to the CDC in Atlanta and major private pharmaceutical manufacturing capacity."
+    },
+    "USA": {
+        "definition": "United States of America",
+        "wiki": "Major global power capable of invoking the Defense Production Act and Operation Warp Speed to accelerate domestic vaccine and PPE production."
     }
 }

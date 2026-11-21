@@ -76,12 +76,14 @@ testScen = {
         id: 'test_action',
         name: 'Test Action',
         initiator: ['home'],
-        conditions: { activeRoles: 'string' } // Invalid
+        conditions: { activeRoles: 'string', triggeredEvents: 'ev_1', notTriggeredEvents: 'ev_2' } // Invalid
     }]
 };
 resultErrors = [];
 validateManualActions(testScen, resultErrors);
 assert.ok(resultErrors.some(e => e.includes("'activeRoles' must be an array")), "Should catch invalid activeRoles in manual action");
+assert.ok(resultErrors.some(e => e.includes("'triggeredEvents' must be an array")), "Should catch invalid triggeredEvents in manual action");
+assert.ok(resultErrors.some(e => e.includes("'notTriggeredEvents' must be an array")), "Should catch invalid notTriggeredEvents in manual action");
 console.log("✅ validateManualActions tests passed.");
 
 console.log("Testing validateAiConfig...");
@@ -118,21 +120,57 @@ assert.strictEqual(resultErrors.length, 0, "Valid library image ID should pass v
 
 const mockScenario = {
     assets: [{ id: 'a1', name: 'Destroyer', image: 'type_45_destroyer' }],
-    eventTemplates: [{ id: 'ev1', name: 'Cyber Event', image: 'ev_cyber_london' }],
-    manualActions: [{ id: 'act1', name: 'Backchannel', initiator: ['foreign'], image: 'act_backchannel_russia' }]
+    eventTemplates: [
+        { id: 'ev1', name: 'Cyber Event', image: 'ev_cyber_london' },
+        { id: 'act1', isManualAction: true, name: 'Backchannel', initiator: ['foreign'], image: 'act_backchannel_russia' }
+    ]
 };
 resolveScenarioImages(mockScenario);
 assert.strictEqual(mockScenario.assets[0].imageId, 'type_45_destroyer');
 assert.strictEqual(mockScenario.assets[0].image, '/images/library/type_45_destroyer.png');
 assert.ok(mockScenario.assets[0].imageMeta && mockScenario.assets[0].imageMeta.title.length > 0);
 assert.strictEqual(mockScenario.eventTemplates[0].image, '/images/library/ev_cyber_london.png');
-assert.strictEqual(mockScenario.manualActions[0].image, '/images/library/act_backchannel_russia.png');
+assert.strictEqual(mockScenario.eventTemplates[1].image, '/images/library/act_backchannel_russia.png');
 
 const navalImages = getAllImages({ tag: 'naval' });
 assert.ok(navalImages.length > 0 && navalImages.every(img => img.tags.includes('naval')), "Tag filtering should return matching images");
 const searchImages = getAllImages({ q: 'Destroyer' });
 assert.ok(searchImages.some(img => img.id === 'type_45_destroyer'), "Query search should match title/description");
 console.log("✅ Image library resolution and validation tests passed.");
+
+console.log("Testing validateScenarioGraph...");
+const { validateScenarioGraph } = require('./validate-scenarios');
+
+// Multiple opening events error
+let graphErrors = [];
+validateScenarioGraph({
+    eventTemplates: [
+        { id: 'ev1', name: 'First', isOpeningEvent: true },
+        { id: 'ev2', name: 'Second', isOpeningEvent: true }
+    ]
+}, graphErrors);
+assert.ok(graphErrors.some(e => e.includes('Multiple opening events')), 'Should reject multiple opening events');
+
+// Unreachable event error
+graphErrors = [];
+validateScenarioGraph({
+    eventTemplates: [
+        { id: 'ev1', name: 'Opening', isOpeningEvent: true },
+        { id: 'ev2', name: 'Orphan Event' }
+    ]
+}, graphErrors);
+assert.ok(graphErrors.some(e => e.includes('does not trace back to opening event')), 'Should flag unreachable event');
+
+// Reachable chain passes
+graphErrors = [];
+validateScenarioGraph({
+    eventTemplates: [
+        { id: 'ev1', name: 'Opening', isOpeningEvent: true, triggerEvents: [{ id: 'ev2' }] },
+        { id: 'ev2', name: 'Linked Event' }
+    ]
+}, graphErrors);
+assert.strictEqual(graphErrors.length, 0, 'Fully linked graph should pass validation');
+console.log("✅ validateScenarioGraph tests passed.");
 
 if (allValid) {
     console.log("All scenarios are valid and unit tests passed.");

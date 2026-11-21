@@ -48,9 +48,6 @@ function forEachScenarioImageItem(scenario, callback) {
     if (Array.isArray(scenario.eventTemplates)) {
         scenario.eventTemplates.forEach(callback);
     }
-    if (Array.isArray(scenario.manualActions)) {
-        scenario.manualActions.forEach(callback);
-    }
 
     return scenario;
 }

@@ -130,5 +130,37 @@
     "BVR": {
         "definition": "Beyond Visual Range",
         "wiki": "Air combat engagements occurring at ranges beyond direct visual sighting, relying on advanced active radar seekers (such as the Meteor missile) and onboard sensor fusion."
+    },
+    "A330": {
+        "definition": "Airbus A330 (Voyager Airframe)",
+        "wiki": "Commercial wide-body twin-engine airliner platform modified into the Airbus A330 MRTT (RAF Voyager) for strategic air-to-air refuelling and personnel transport."
+    },
+    "A400M": {
+        "definition": "Airbus A400M Atlas",
+        "wiki": "Four-engine turboprop military transport aircraft stationed at RAF Mount Pleasant for tactical airlift, long-range maritime patrol, and resupply across the South Atlantic."
+    },
+    "ASRAAM": {
+        "definition": "Advanced Short Range Air-to-Air Missile",
+        "wiki": "High-agility infrared-guided within-visual-range air-to-air missile carried by RAF Typhoon FGR4 fighters for close-in dogfighting and rapid self-defence."
+    },
+    "FGR4": {
+        "definition": "Fighter / Ground Attack / Reconnaissance Mark 4",
+        "wiki": "The primary RAF multi-role variant of the Eurofighter Typhoon, operated by No. 1435 Flight at RAF Mount Pleasant for 24/7 Quick Reaction Alert air defence."
+    },
+    "KC2": {
+        "definition": "Tanker / Transport Mark 2 (Voyager)",
+        "wiki": "Two-point wing-pod air-to-air refuelling variant of the RAF Voyager (A330 MRTT) operating from RAF Ascension Island to sustain the South Atlantic air bridge."
+    },
+    "MI6": {
+        "definition": "Secret Intelligence Service (SIS)",
+        "wiki": "The United Kingdom's foreign intelligence agency responsible for overseas covert intelligence collection, counter-espionage, and assessing foreign political interference."
+    },
+    "MRTT": {
+        "definition": "Multi Role Tanker Transport",
+        "wiki": "Military aerial refuelling and strategic transport configuration of the Airbus A330, designated Voyager in Royal Air Force service."
+    },
+    "S1850M": {
+        "definition": "S1850M Long-Range Air Surveillance Radar",
+        "wiki": "Three-dimensional multi-beam long-range volume search radar fitted to Royal Navy Type 45 destroyers, capable of tracking up to 1,000 air targets out to 400 km."
     }
 }

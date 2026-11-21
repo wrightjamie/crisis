@@ -287,6 +287,46 @@ class ScenarioService {
         return this.getScenario(id, { useDraft: true });
     }
 
+    saveCanvasLayout(id, canvasLayout) {
+        if (!canvasLayout || typeof canvasLayout !== 'object') {
+            throw new Error('canvasLayout must be a valid object');
+        }
+        const { db, row } = this._getScenarioRowOrThrow(id);
+
+        const applyLayoutToJson = (rawJson) => {
+            if (!rawJson) return rawJson;
+            let parsed;
+            try {
+                parsed = JSON.parse(rawJson);
+            } catch {
+                return rawJson;
+            }
+            parsed.canvasLayout = canvasLayout;
+            const positions = canvasLayout.positions || {};
+            if (Array.isArray(parsed.eventTemplates)) {
+                parsed.eventTemplates.forEach(ev => {
+                    if (ev && ev.id && positions[ev.id]) {
+                        ev._canvasPos = { x: Math.round(positions[ev.id].x), y: Math.round(positions[ev.id].y) };
+                    }
+                });
+            }
+            return JSON.stringify(parsed);
+        };
+
+        const updatedData = applyLayoutToJson(row.data);
+        const updatedDraft = row.draft_data ? applyLayoutToJson(row.draft_data) : updatedData;
+
+        // Intentionally preserve has_draft and status so repositioning nodes does not create a draft
+        db.prepare(`
+            UPDATE scenarios
+            SET data = ?,
+                draft_data = ?
+            WHERE id = ?
+        `).run(updatedData, updatedDraft, id);
+
+        return { ok: true, id, hasDraft: Boolean(row.has_draft), status: row.status };
+    }
+
     cloneScenario(id, { newId, newName } = {}) {
         if (!id) throw new Error('Source scenario ID is required');
         const source = this.getScenario(id, { useDraft: true });

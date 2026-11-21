@@ -147,6 +147,33 @@ function validateConditions(conditions, path, errors) {
     if (conditions.assetVisibility && typeof conditions.assetVisibility !== 'object') {
         errors.push(`${path}.conditions 'assetVisibility' must be an object`);
     }
+    if (conditions.triggeredEvents && !Array.isArray(conditions.triggeredEvents)) {
+        errors.push(`${path}.conditions 'triggeredEvents' must be an array`);
+    }
+    if (conditions.notTriggeredEvents && !Array.isArray(conditions.notTriggeredEvents)) {
+        errors.push(`${path}.conditions 'notTriggeredEvents' must be an array`);
+    }
+    if (conditions.all !== undefined) {
+        if (!Array.isArray(conditions.all)) {
+            errors.push(`${path}.conditions 'all' must be an array`);
+        } else {
+            conditions.all.forEach((sub, idx) => validateConditions(sub, `${path}.conditions.all[${idx}]`, errors));
+        }
+    }
+    if (conditions.any !== undefined) {
+        if (!Array.isArray(conditions.any)) {
+            errors.push(`${path}.conditions 'any' must be an array`);
+        } else {
+            conditions.any.forEach((sub, idx) => validateConditions(sub, `${path}.conditions.any[${idx}]`, errors));
+        }
+    }
+    if (conditions.not !== undefined) {
+        if (!conditions.not || typeof conditions.not !== 'object' || Array.isArray(conditions.not)) {
+            errors.push(`${path}.conditions 'not' must be an object`);
+        } else {
+            validateConditions(conditions.not, `${path}.conditions.not`, errors);
+        }
+    }
 }
 
 function validateAssets(scenario, errors) {
@@ -184,6 +211,18 @@ function validateEventTemplates(scenario, errors) {
             }
             if (event.sound && typeof event.sound !== 'string') {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'sound' must be a string`);
+            }
+            if (event.isOpeningEvent !== undefined && typeof event.isOpeningEvent !== 'boolean') {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'isOpeningEvent' must be a boolean`);
+            }
+            if (event.isManualAction !== undefined && typeof event.isManualAction !== 'boolean') {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'isManualAction' must be a boolean`);
+            }
+            if (event.isManualAction === true && (!event.initiator || !Array.isArray(event.initiator))) {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) manual action missing or invalid 'initiator' array`);
+            }
+            if (event.autoTriggerOnConditions !== undefined && typeof event.autoTriggerOnConditions !== 'boolean') {
+                errors.push(`${eventPath} (${event.id || 'unknown'}) 'autoTriggerOnConditions' must be a boolean`);
             }
             if (event.conditions) {
                 validateConditions(event.conditions, `${eventPath} (${event.id || 'unknown'})`, errors);
@@ -292,6 +331,96 @@ function validateAiConfig(scenario, errors) {
     }
 }
 
+function _extractConditionRefs(cond) {
+    if (!cond || typeof cond !== 'object') return [];
+    const refs = [];
+    if (Array.isArray(cond.prerequisites)) refs.push(...cond.prerequisites);
+    if (Array.isArray(cond.triggeredEvents)) refs.push(...cond.triggeredEvents);
+    if (Array.isArray(cond.unlockedEvents)) refs.push(...cond.unlockedEvents);
+    if (Array.isArray(cond.all)) cond.all.forEach(sub => refs.push(..._extractConditionRefs(sub)));
+    if (Array.isArray(cond.any)) cond.any.forEach(sub => refs.push(..._extractConditionRefs(sub)));
+    return refs.filter(Boolean);
+}
+
+function validateScenarioGraph(scenario, errors) {
+    const allTemplates = Array.isArray(scenario.eventTemplates) ? scenario.eventTemplates : [];
+    const events = allTemplates.filter(e => e && !e.isManualAction);
+    const actions = allTemplates.filter(e => e && e.isManualAction);
+    if (events.length === 0) return;
+
+    const openingEvents = events.filter(e => e && e.isOpeningEvent === true);
+    if (openingEvents.length > 1) {
+        errors.push(`Multiple opening events found (${openingEvents.map(e => e.id).join(', ')}); only 1 event may have 'isOpeningEvent: true'`);
+        return;
+    }
+
+    const startEvent = openingEvents[0]
+        || events.find(e => e && (e.id === 'ev_start' || e.id === 'evt_initial'))
+        || (events.length === 1 && actions.length === 0 ? events[0] : null);
+
+    if (!startEvent) {
+        if (events.length > 1 || actions.length > 0) {
+            errors.push("Scenario must designate an opening event with 'isOpeningEvent: true'");
+        }
+        return;
+    }
+
+    const adj = new Map();
+    const allNodes = [...events, ...actions].filter(n => n && n.id);
+    allNodes.forEach(n => adj.set(n.id, new Set()));
+    const addEdge = (u, v) => {
+        if (u && v && u !== v && adj.has(u) && adj.has(v)) adj.get(u).add(v);
+    };
+
+    events.forEach(ev => {
+        if (!ev || !ev.id) return;
+        (ev.triggerEvents || []).forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
+        (ev.decisions || []).forEach(dec => {
+            (dec.options || []).forEach(opt => {
+                const trs = Array.isArray(opt.triggerEvents) ? opt.triggerEvents : (Array.isArray(opt.effects?.triggerEvents) ? opt.effects.triggerEvents : []);
+                trs.forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
+                (opt.effects?.unlockEvents || []).forEach(u => addEdge(ev.id, u));
+            });
+        });
+        [...(ev.effects?.unlockEvents || []), ...(ev.autoEffects?.unlockEvents || [])].forEach(u => addEdge(ev.id, u));
+        [...(Array.isArray(ev.prerequisites) ? ev.prerequisites : []), ..._extractConditionRefs(ev.conditions)].forEach(p => addEdge(p, ev.id));
+        if (ev.autoTriggerOnConditions && ev.conditions && (ev.conditions.minScores || ev.conditions.maxScores || ev.conditions.assetStates || ev.conditions.assets || ev.conditions.visibleAssets || ev.conditions.hiddenAssets)) {
+            addEdge(startEvent.id, ev.id);
+        }
+    });
+
+    actions.forEach(act => {
+        if (!act || !act.id) return;
+        [...(Array.isArray(act.events) ? act.events : []), ..._extractConditionRefs(act.conditions)].forEach(p => addEdge(p, act.id));
+        (act.effects?.triggerEvents || []).forEach(tr => addEdge(act.id, typeof tr === 'string' ? tr : (tr?.id || tr?.event)));
+        (act.effects?.randomEvents || []).forEach(rn => addEdge(act.id, typeof rn === 'string' ? rn : (rn?.id || rn?.event)));
+        (act.effects?.unlockEvents || []).forEach(u => addEdge(act.id, u));
+    });
+
+    const visited = new Set([startEvent.id]);
+    const queue = [startEvent.id];
+    while (queue.length > 0) {
+        const curr = queue.shift();
+        for (const next of (adj.get(curr) || [])) {
+            if (!visited.has(next)) {
+                visited.add(next);
+                queue.push(next);
+            }
+        }
+    }
+
+    events.forEach(ev => {
+        if (ev && ev.id && !visited.has(ev.id)) {
+            errors.push(`Event '${ev.name || ev.id}' (${ev.id}) does not trace back to opening event '${startEvent.name || startEvent.id}'`);
+        }
+    });
+    actions.forEach(act => {
+        if (act && act.id && !visited.has(act.id)) {
+            errors.push(`Manual action '${act.name || act.id}' (${act.id}) does not trace back to opening event '${startEvent.name || startEvent.id}'`);
+        }
+    });
+}
+
 function validateScenario(scenario) {
     const errors = [];
 
@@ -305,6 +434,7 @@ function validateScenario(scenario) {
     validateVariantAxes(scenario, errors);
     validateManualActions(scenario, errors);
     validateAiConfig(scenario, errors);
+    validateScenarioGraph(scenario, errors);
 
     return {
         isValid: errors.length === 0,
@@ -322,5 +452,6 @@ module.exports = {
     validateAiConfig,
     validateScoreConfigs,
     validateImageReference,
-    validateImageLibrary
+    validateImageLibrary,
+    validateScenarioGraph
 };

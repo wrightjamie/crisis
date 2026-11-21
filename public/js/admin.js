@@ -66,7 +66,12 @@
             if (s.status === 'draft') {
                 statusBadge = `<span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">Unpublished Draft</span>`;
             } else if (s.hasDraft) {
-                statusBadge = `<span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35);" title="Live version is published; uncommitted draft edits exist">Draft Changes</span>`;
+                statusBadge = `
+                    <span class="inline-flex items-center gap-xs">
+                        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35);" title="Live version is published; uncommitted draft edits exist">Draft Changes</span>
+                        <button type="button" class="btn btn-secondary btn-revert-draft" data-id="${s.id}" data-name="${escapeHtml(s.name)}" title="Revert draft changes to last published baseline" aria-label="Revert draft changes for ${escapeHtml(s.name)}" style="padding: 2px 6px; min-height: 22px; line-height: 1;">${renderIcon('rotate-ccw', 12)}</button>
+                    </span>
+                `;
             }
 
             const updatedDate = s.updatedAt ? new Date(s.updatedAt).toLocaleDateString() : '-';
@@ -94,6 +99,12 @@
         }).join('');
 
         // Attach action handlers
+        tbody.querySelectorAll('.btn-revert-draft').forEach(btn => {
+            btn.addEventListener('click', () => revertScenarioDraft(
+                btn.getAttribute('data-id'),
+                btn.getAttribute('data-name')
+            ));
+        });
         tbody.querySelectorAll('.btn-export').forEach(btn => {
             btn.addEventListener('click', () => exportScenario(btn.getAttribute('data-id')));
         });
@@ -161,6 +172,25 @@
             showBanner(`Export all failed: ${err.message}`, 'error');
         }
     });
+
+    async function revertScenarioDraft(id, name) {
+        if (!confirm(`Revert draft changes for '${name}' back to the last published baseline? Uncommitted draft edits will be lost.`)) return;
+
+        try {
+            const res = await apiFetch(`/api/scenarios/${encodeURIComponent(id)}/discard-draft`, {
+                method: 'POST'
+            });
+            const data = await res.json();
+            if (res.ok) {
+                showBanner(`Draft changes for '${name}' were reverted to the last published baseline.`, 'success');
+                loadScenarios();
+            } else {
+                showBanner(`Revert failed: ${data.error || 'Unknown error'}`, 'error');
+            }
+        } catch (err) {
+            showBanner(`Revert failed: ${err.message}`, 'error');
+        }
+    }
 
     async function deleteScenario(id, name) {
         if (!confirm(`Are you sure you want to delete scenario '${name}'? This will remove all associated custom assets.`)) return;

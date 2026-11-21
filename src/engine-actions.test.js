@@ -14,16 +14,17 @@ const testScenario = {
     roles: ['home', 'defence', 'foreign'],
     initialScores: { uk_us: 3, military_readiness: 3 },
     assets: [],
-    eventTemplates: [],
-    manualActions: [
+    eventTemplates: [
         {
             id: 'test_immediate_action',
+            isManualAction: true,
             name: 'Immediate Action',
             initiator: ['home'],
             effects: { scores: { uk_us: 1 } }
         },
         {
             id: 'test_approval_action',
+            isManualAction: true,
             name: 'Approval Action',
             initiator: ['foreign'],
             requiresApprovalFrom: 'home',
@@ -31,6 +32,7 @@ const testScenario = {
         },
         {
             id: 'test_array_approval_action',
+            isManualAction: true,
             name: 'Array Approval Action',
             initiator: ['defence', 'foreign'],
             requiresApprovalFrom: ['defence', 'foreign'],
@@ -38,6 +40,7 @@ const testScenario = {
         },
         {
             id: 'test_active_roles_action',
+            isManualAction: true,
             name: 'Active Roles Action',
             initiator: ['home'],
             conditions: { activeRoles: ['defence'] },
@@ -45,6 +48,7 @@ const testScenario = {
         },
         {
             id: 'test_any_active_roles_action',
+            isManualAction: true,
             name: 'Any Active Roles Action',
             initiator: ['home'],
             conditions: { anyActiveRoles: ['defence', 'foreign'] },
@@ -202,6 +206,23 @@ assert.strictEqual(testCheckConditions({ conditions: { hiddenAssets: ['hidden_te
 assert.strictEqual(testCheckConditions({ conditions: { assetVisibility: { 'hidden_test_asset': true, 'test_asset': false } } }, engine.gameState.scores, engine.gameState.assets), true);
 assert.strictEqual(testCheckConditions({ conditions: { assetVisibility: { 'hidden_test_asset': false } } }, engine.gameState.scores, engine.gameState.assets), false);
 
+// Test event-window conditions (triggeredEvents + notTriggeredEvents)
+assert.strictEqual(
+    testCheckConditions({ conditions: { triggeredEvents: ['ev_open'], notTriggeredEvents: ['ev_close'] } }, engine.gameState.scores, engine.gameState.assets, [], []),
+    false,
+    "Action should be locked before triggering event fires"
+);
+assert.strictEqual(
+    testCheckConditions({ conditions: { triggeredEvents: ['ev_open'], notTriggeredEvents: ['ev_close'] } }, engine.gameState.scores, engine.gameState.assets, [], ['ev_open']),
+    true,
+    "Action should unlock once triggering event fires and closing event has not fired"
+);
+assert.strictEqual(
+    testCheckConditions({ conditions: { triggeredEvents: ['ev_open'], notTriggeredEvents: ['ev_close'] } }, engine.gameState.scores, engine.gameState.assets, [], ['ev_open', 'ev_close']),
+    false,
+    "Action should close again once closing/outcome event fires"
+);
+
 console.log("✅ Hidden and revealed asset tests passed.");
 
 // --- New Tests for Timed Decisions ---
@@ -349,6 +370,65 @@ if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
     engine.startGame();
     assert.strictEqual(engine.gameState.status, 'active');
     console.log("✅ Variant axes score and asset modifier tests passed.");
+}
+
+// Test 12: Score/Asset auto-triggered events & conditional decision options
+{
+    testScenario.variants = [];
+    testScenario.assets = [{ id: 'test_asset', name: 'Test Asset', location: [0,0], state: 'operational', tags: [] }];
+    testScenario.eventTemplates.push(
+        {
+            id: 'ev_score_auto',
+            name: 'High Escalation Trigger',
+            description: 'Automatically fires when uk_us hits 5.',
+            autoTriggerOnConditions: true,
+            conditions: { minScores: { uk_us: 5 } }
+        },
+        {
+            id: 'ev_cond_decision',
+            name: 'Conditional Decision Event',
+            description: 'Tests score & asset gated options.',
+            decisions: [
+                {
+                    id: 'dec_cond',
+                    role: 'defence',
+                    text: 'Select action:',
+                    options: [
+                        { id: 'opt_always', text: 'Always Available' },
+                        { id: 'opt_needs_score', text: 'Needs Score 5', conditions: { minScores: { uk_us: 5 } } },
+                        { id: 'opt_needs_damaged', text: 'Needs Damaged Asset', conditions: { assetStates: { test_asset: 'damaged' } } }
+                    ]
+                }
+            ]
+        }
+    );
+
+    engine.createLobby('test_scenario');
+    engine.startGame();
+
+    assert.strictEqual(engine.gameState.events.some(e => e.templateId === 'ev_score_auto'), false, "Auto-condition event must not fire before score threshold is met");
+
+    // Trigger decision event while uk_us=3 and test_asset=operational -> only opt_always
+    engine.triggerScenarioEvent('ev_cond_decision');
+    const task1 = engine.gameState.decisionTasks[engine.gameState.decisionTasks.length - 1];
+    assert.deepStrictEqual(task1.options.map(o => o.id), ['opt_always'], "Only unconditional option should be available initially");
+
+    // Apply score +2 (uk_us -> 5) and damage test_asset -> ev_score_auto should auto-trigger!
+    engine.applyEffects({ scores: { uk_us: 2 }, assetStateChanges: { test_asset: 'damaged' } });
+    assert.strictEqual(engine.gameState.scores.uk_us, 5);
+    assert.strictEqual(engine.gameState.events.filter(e => e.templateId === 'ev_score_auto').length, 1, "Score-triggered auto-event should fire automatically once threshold is met");
+
+    // Re-applying effects should not fire non-repeatable ev_score_auto a second time
+    engine.applyEffects({ scores: { uk_us: 0 } });
+    assert.strictEqual(engine.gameState.events.filter(e => e.templateId === 'ev_score_auto').length, 1, "Non-repeatable auto-condition event must only fire once");
+
+    // Trigger decision event again (make it repeatable for test) -> all 3 options should now be available
+    const condEv = testScenario.eventTemplates.find(e => e.id === 'ev_cond_decision');
+    condEv.repeatable = true;
+    engine.triggerScenarioEvent('ev_cond_decision');
+    const task2 = engine.gameState.decisionTasks[engine.gameState.decisionTasks.length - 1];
+    assert.deepStrictEqual(task2.options.map(o => o.id), ['opt_always', 'opt_needs_score', 'opt_needs_damaged'], "Score-gated and asset-gated options should now be available");
+    console.log("✅ Score/asset auto-triggered event & conditional decision option tests passed.");
 }
 
 // Cleanup

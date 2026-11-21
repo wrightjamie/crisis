@@ -25,9 +25,9 @@ assert.deepStrictEqual(
     'Should collect manual action predecessor events'
 );
 assert.deepStrictEqual(
-    FlowGraph.getActionTriggeredEvents({ effects: { triggerEvents: ['ev_3'], randomEvents: [{ event: 'ev_4' }] } }),
-    ['ev_3', 'ev_4'],
-    'Should collect manual action triggered events'
+    FlowGraph.getActionTriggeredEvents({ effects: { triggerEvents: ['ev_3', { id: 'ev_5', delayMs: 5000, probability: 1.0 }], randomEvents: [{ event: 'ev_4' }, { id: 'ev_6', weight: 50 }] } }),
+    ['ev_3', 'ev_5', 'ev_4', 'ev_6'],
+    'Should collect manual action triggered events (both strings and objects)'
 );
 
 // 2. Layout computation test (left-to-right column progression & no overlaps)
@@ -91,5 +91,52 @@ assert(edgesSvg.includes('decision-edge edge-chosen'), 'Should apply custom getE
 assert(edgesSvg.includes('prereq-edge'), 'Should emit prerequisite edge');
 assert(edgesSvg.includes('action-unlock-edge'), 'Should emit manual action unlock edge');
 assert(edgesSvg.includes('action-edge'), 'Should emit manual action trigger edge');
+
+// 4. Nested condition operators (all / any / not), isOpeningEvent, and unlockEvents tests
+const { checkConditions } = require('../public/js/shared.js');
+
+const nestedOrAndObj = {
+    conditions: {
+        any: [
+            { triggeredEvents: ['ev_a'] },
+            { all: [{ triggeredEvents: ['ev_b'] }, { minScores: { tension: 4 } }] }
+        ]
+    }
+};
+assert.strictEqual(checkConditions(nestedOrAndObj, { tension: 1 }, [], [], ['ev_a']), true, 'A OR (B AND C) passes when A triggered');
+assert.strictEqual(checkConditions(nestedOrAndObj, { tension: 3 }, [], [], ['ev_b']), false, 'A OR (B AND C) fails when B triggered but C fails');
+assert.strictEqual(checkConditions(nestedOrAndObj, { tension: 4 }, [], [], ['ev_b']), true, 'A OR (B AND C) passes when B AND C pass');
+
+const nestedAndOrObj = {
+    conditions: {
+        all: [
+            { any: [{ triggeredEvents: ['ev_a'] }, { triggeredEvents: ['ev_b'] }] },
+            { not: { triggeredEvents: ['ev_blocked'] } }
+        ]
+    }
+};
+assert.strictEqual(checkConditions(nestedAndOrObj, {}, [], [], ['ev_b']), true, '(A OR B) AND NOT blocked passes');
+assert.strictEqual(checkConditions(nestedAndOrObj, {}, [], [], ['ev_b', 'ev_blocked']), false, '(A OR B) AND NOT blocked fails when blocked');
+
+// FlowGraph extracts nested predecessors and respects isOpeningEvent + unlockEvents
+assert.deepStrictEqual(
+    FlowGraph.getEventPrerequisites({ id: 'ev_x', conditions: nestedOrAndObj.conditions }),
+    ['ev_a', 'ev_b'],
+    'FlowGraph should extract predecessors recursively from nested all/any conditions'
+);
+const openingEvents = [
+    {
+        id: 'ev_alpha',
+        name: 'Opening',
+        isOpeningEvent: true,
+        decisions: [{ role: 'home', text: 'Go', options: [{ id: 'o1', text: 'Unlock', effects: { unlockEvents: ['ev_beta', 'act_gamma'] } }] }]
+    },
+    { id: 'ev_beta', name: 'Unlocked Event', requiresUnlock: true }
+];
+const openingActions = [{ id: 'act_gamma', name: 'Unlocked Action', requiresUnlock: true }];
+const openPos = FlowGraph.computeLayout(openingEvents, openingActions, { forceRecalculate: true });
+assert.strictEqual(openPos.get('ev_alpha').x, 60, 'isOpeningEvent should be placed in column 0');
+assert(openPos.get('ev_beta').x > openPos.get('ev_alpha').x, 'Unlocked event should be downstream of unlocking event');
+assert(openPos.get('act_gamma').x > openPos.get('ev_alpha').x, 'Unlocked action should be downstream of unlocking event');
 
 console.log('✅ FlowGraph unit tests passed successfully!');

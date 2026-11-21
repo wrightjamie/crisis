@@ -42,5 +42,9 @@
     "ICBM": {
         "definition": "Intercontinental Ballistic Missile",
         "wiki": "Land-based, rocket-propelled strategic ballistic missiles capable of delivering thermonuclear warheads against global and high-altitude targets."
+    },
+    "US": {
+        "definition": "United States",
+        "wiki": "The United States of America, custodian of the classified Roswell alien technology cache and a core pillar of the Global Defense Grid."
     }
 }

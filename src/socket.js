@@ -431,6 +431,7 @@ module.exports = function setupSockets(io, gameManager) {
             engine.updateActivity();
             console.log('Scores manually updated by facilitator');
             engine.gameState.scores = { ...engine.gameState.scores, ...newScores };
+            engine.evaluateAutoConditionEvents();
             io.to(gameId).emit('state_update', engine.gameState);
             io.to(gameId).emit('generate_ai_briefing_all', { context: "The facilitator manually adjusted the operational scores." });
         });

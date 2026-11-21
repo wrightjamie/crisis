@@ -18,5 +18,9 @@
     "SAR": {
         "definition": "Search and Rescue",
         "wiki": "The search for and provision of aid to people who are in distress, imminent danger, or trapped in disaster zones, collapsed structures, or hazardous environments."
+    },
+    "AI": {
+        "definition": "Artificial Intelligence",
+        "wiki": "Automated analysis and reporting technology used in the Crisis Wargame platform to generate live intelligence summaries and After Action Reports."
     }
 }

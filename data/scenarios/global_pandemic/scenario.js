@@ -98,6 +98,7 @@ module.exports = {
     eventTemplates: [
         {
             id: 'ev_outbreak_start',
+            isOpeningEvent: true,
             image: 'ev_outbreak_start',
             name: 'Patient Zero Identified',
             description: 'The WHO has officially declared Strain Omega a Public Health Emergency of International Concern. Global travel is accelerating the spread.',
@@ -205,6 +206,12 @@ module.exports = {
             name: 'Vaccine Nationalism',
             description: 'The first viable vaccines are entering production, but demand vastly outstrips supply.',
             location: [33.7490, -84.3880], // Atlanta
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_research_breakthrough'] },
+                    { triggeredEvents: ['ev_supply_chain_collapse'] }
+                ]
+            },
             decisions: [
                 {
                     role: 'who',
@@ -229,6 +236,13 @@ module.exports = {
             image: 'generic_un',
             name: 'The Aftermath',
             description: 'The initial acute phase of the pandemic is over. Evaluating global survival...',
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_vaccine_hoarding'] },
+                    { triggeredEvents: ['ev_supply_chain_collapse'] },
+                    { triggeredEvents: ['ev_research_breakthrough'] }
+                ]
+            },
             triggerEvents: [
                 { id: 'ev_end_collapse',
             image: 'ev_endgame_domestic', delayMs: 1000 },

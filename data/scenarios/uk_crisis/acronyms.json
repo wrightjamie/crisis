@@ -37,7 +37,7 @@
     },
     "MOD": {
         "definition": "Ministry of Defence",
-        "wiki": "The British government department responsible for implementing the defence policy set by Her Majesty's Government, and is the headquarters of the British Armed Forces."
+        "wiki": "The British government department responsible for implementing the defence policy set by His Majesty's Government, and is the headquarters of the British Armed Forces."
     },
     "C2": {
         "definition": "Command and Control",
@@ -76,11 +76,11 @@
         "wiki": "The United Kingdom's air and space warfare service, responsible for air defence, strategic and tactical mobility, intelligence gathering, and precision strike capabilities."
     },
     "HMS": {
-        "definition": "Her Majesty's Ship (or His Majesty's Ship)",
+        "definition": "His Majesty's Ship",
         "wiki": "The official ship prefix used for naval vessels in the Royal Navy of the United Kingdom."
     },
     "HMNB": {
-        "definition": "Her Majesty's Naval Base",
+        "definition": "His Majesty's Naval Base",
         "wiki": "Designation for primary operating naval bases in the United Kingdom, including HMNB Clyde (Faslane/Coulport, home of the UK nuclear deterrent), Portsmouth, and Devonport."
     },
     "QRA": {
@@ -126,5 +126,37 @@
     "EEZ": {
         "definition": "Exclusive Economic Zone",
         "wiki": "An area of the sea in which a sovereign state has special rights regarding the exploration and use of marine resources, extending up to 200 nautical miles from its coastal baseline."
+    },
+    "A400M": {
+        "definition": "Airbus A400M Atlas",
+        "wiki": "A four-engine turboprop military transport aircraft operated by the RAF out of RAF Brize Norton, bridging the gap between tactical and strategic airlift."
+    },
+    "C-17": {
+        "definition": "Boeing C-17 Globemaster III",
+        "wiki": "A large strategic military transport aircraft operated by No. 99 Squadron RAF for long-range heavy cargo, troop deployment, and rapid global airlift."
+    },
+    "F-35": {
+        "definition": "Lockheed Martin F-35 Lightning II",
+        "wiki": "A fifth-generation stealth multirole combat aircraft designed for air superiority, precision strike, electronic warfare, and intelligence, surveillance, and reconnaissance (ISR)."
+    },
+    "F-35B": {
+        "definition": "F-35B Lightning II (STOVL Variant)",
+        "wiki": "The Short Take-Off and Vertical Landing variant of the F-35 Lightning II, jointly operated by the RAF and Royal Navy from RAF Marham and Queen Elizabeth-class aircraft carriers."
+    },
+    "MI5": {
+        "definition": "Military Intelligence, Section 5 (Security Service)",
+        "wiki": "The United Kingdom's domestic counter-intelligence and security agency responsible for protecting national security against espionage, sabotage, subversion, and terrorism."
+    },
+    "SAS": {
+        "definition": "Special Air Service",
+        "wiki": "An elite special forces regiment of the British Army specializing in covert reconnaissance, counter-terrorism, direct action, and behind-enemy-lines operations."
+    },
+    "SBS": {
+        "definition": "Special Boat Service",
+        "wiki": "The special forces unit of the Royal Navy, specializing in maritime counter-terrorism, covert amphibious reconnaissance, undersea infrastructure security, and direct action."
+    },
+    "VIP": {
+        "definition": "Very Important Person",
+        "wiki": "A senior government official, minister, or head of state requiring dedicated secure transport, communications, and protective security."
     }
 }

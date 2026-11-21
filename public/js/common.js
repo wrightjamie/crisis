@@ -137,6 +137,7 @@
         'play': '<polygon points="5 3 19 12 5 21 5 3"/>',
         'rocket': '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>',
         'refresh': '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
+        'rotate-ccw': '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>',
         'copy': '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
         'map': '<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>',
         'map-pin': '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
@@ -341,6 +342,68 @@
         };
     }
 
+    // 10. Standard Shared Floating Dock & Bar Manager
+    const floatingBar = (() => {
+        const groups = new Map();
+
+        function ensureDock() {
+            if (typeof document === 'undefined') return null;
+            let dock = document.getElementById('floating-dock');
+            if (!dock) {
+                dock = document.createElement('div');
+                dock.id = 'floating-dock';
+                dock.className = 'floating-dock';
+                dock.innerHTML = `
+                    <div class="floating-dock-slot" data-slot="left"></div>
+                    <div class="floating-dock-slot" data-slot="right"></div>
+                `;
+                document.body.appendChild(dock);
+            }
+            return dock;
+        }
+
+        function sortSlot(slotEl) {
+            const children = Array.from(slotEl.children);
+            children.sort((a, b) => Number(a.dataset.floatOrder || 50) - Number(b.dataset.floatOrder || 50));
+            children.forEach(ch => slotEl.appendChild(ch));
+        }
+
+        function addGroup(id, { slot = 'right', order = 50, element = null, visible = true } = {}) {
+            const dock = ensureDock();
+            if (!dock || !id) return null;
+            const slotEl = dock.querySelector(`.floating-dock-slot[data-slot="${slot === 'left' ? 'left' : 'right'}"]`);
+            if (!slotEl) return null;
+
+            const el = element || document.createElement('div');
+            if (!el.classList.contains('floating-bar')) {
+                el.classList.add('floating-bar');
+            }
+            el.dataset.floatGroup = id;
+            el.dataset.floatOrder = String(order);
+            el.style.display = visible ? 'inline-flex' : 'none';
+            slotEl.appendChild(el);
+            sortSlot(slotEl);
+            groups.set(id, el);
+            return el;
+        }
+
+        function setGroupVisible(id, visible) {
+            const el = groups.get(id) || document.querySelector(`[data-float-group="${CSS.escape(id)}"]`);
+            if (el) {
+                el.style.display = visible ? 'inline-flex' : 'none';
+            }
+        }
+
+        function setDrawerShift(isOpen) {
+            const dock = document.getElementById('floating-dock');
+            if (dock) {
+                dock.classList.toggle('drawer-open', Boolean(isOpen));
+            }
+        }
+
+        return { ensureDock, addGroup, setGroupVisible, setDrawerShift };
+    })();
+
     // Export to global scope
     const common = {
         getToken,
@@ -353,7 +416,8 @@
         showToast,
         escapeHtml,
         renderIcon,
-        createPaginator
+        createPaginator,
+        floatingBar
     };
 
     window.common = common;

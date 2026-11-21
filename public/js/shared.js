@@ -30,6 +30,7 @@ function _checkAssetConditions(conditions, assets = []) {
 function _checkEventsAndRoles(conditions, unlockedEvents, triggeredEvents, activeRoles) {
     if (conditions.unlockedEvents && !conditions.unlockedEvents.every(e => unlockedEvents.includes(e))) return false;
     if (conditions.triggeredEvents && !conditions.triggeredEvents.every(e => triggeredEvents.includes(e))) return false;
+    if (conditions.notTriggeredEvents && conditions.notTriggeredEvents.some(e => triggeredEvents.includes(e))) return false;
     if (conditions.activeRoles && !conditions.activeRoles.every(r => activeRoles.includes(r))) return false;
     if (conditions.anyActiveRoles && conditions.anyActiveRoles.length > 0 && !conditions.anyActiveRoles.some(r => activeRoles.includes(r))) return false;
     return true;
@@ -46,14 +47,32 @@ function _checkHighestScoreGroup(highestScoreGroup, scores) {
     return bestGroup === highestScoreGroup.expected;
 }
 
+function _evaluateConditionNode(c, scores, assets, unlockedEvents, triggeredEvents, activeRoles) {
+    if (!c || typeof c !== 'object') return true;
+    const leafPass =
+        _checkScoreBounds(c, scores) &&
+        _checkAssetConditions(c, assets) &&
+        _checkEventsAndRoles(c, unlockedEvents, triggeredEvents, activeRoles) &&
+        _checkHighestScoreGroup(c.highestScoreGroup, scores);
+    if (!leafPass) return false;
+
+    if (Array.isArray(c.all) && !c.all.every(sub => _evaluateConditionNode(sub, scores, assets, unlockedEvents, triggeredEvents, activeRoles))) {
+        return false;
+    }
+    if (Array.isArray(c.any) && c.any.length > 0 && !c.any.some(sub => _evaluateConditionNode(sub, scores, assets, unlockedEvents, triggeredEvents, activeRoles))) {
+        return false;
+    }
+    if (c.not && _evaluateConditionNode(c.not, scores, assets, unlockedEvents, triggeredEvents, activeRoles)) {
+        return false;
+    }
+    return true;
+}
+
 function checkConditions(obj, scores = {}, assets = [], unlockedEvents = [], triggeredEvents = [], activeRoles = []) {
     if (obj.requiresUnlock && !unlockedEvents.includes(obj.id)) return false;
     const c = obj.conditions;
     if (!c) return true;
-    return _checkScoreBounds(c, scores) &&
-           _checkAssetConditions(c, assets) &&
-           _checkEventsAndRoles(c, unlockedEvents, triggeredEvents, activeRoles) &&
-           _checkHighestScoreGroup(c.highestScoreGroup, scores);
+    return _evaluateConditionNode(c, scores, assets, unlockedEvents, triggeredEvents, activeRoles);
 }
 
 function canSee(item, role) {

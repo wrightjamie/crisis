@@ -181,6 +181,7 @@
             eventTemplates: [
                 {
                     id: 'ev_start',
+                    isOpeningEvent: true,
                     name: 'Initial Crisis Alert',
                     title: 'Initial Crisis Alert',
                     description: 'First emergency reports have reached the command centre.',
@@ -188,7 +189,6 @@
                     decisions: []
                 }
             ],
-            manualActions: [],
             variantAxes: [],
             aiConfig: {
                 systemPrompt: 'Provide concise, operational intelligence briefings based on current metrics.',
@@ -406,7 +406,7 @@
         syncAllViewsFromScenario();
 
         if (window.EditorCanvas) {
-            window.EditorCanvas.init(scenario, scheduleAutoSave);
+            window.EditorCanvas.init(scenario, scheduleAutoSave, scheduleLayoutSave);
         }
         if (window.EditorWizard) {
             window.EditorWizard.init(scenario, presets, () => {
@@ -1909,6 +1909,24 @@
         if (pill) pill.title = detailTitle || message || '';
     }
 
+    let layoutSaveTimer = null;
+
+    function scheduleLayoutSave() {
+        if (!scenario || !scenario.id || !hasPersistedToDb || !scenario.canvasLayout) return;
+        if (layoutSaveTimer) clearTimeout(layoutSaveTimer);
+        layoutSaveTimer = setTimeout(async () => {
+            try {
+                await apiFetch(`/api/scenarios/${encodeURIComponent(scenario.id)}/layout`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ canvasLayout: scenario.canvasLayout })
+                });
+            } catch (err) {
+                console.warn('Layout save skipped:', err.message);
+            }
+        }, 400);
+    }
+
     function scheduleAutoSave() {
         setAutoSaveIndicator('saving', 'Unsaved changes...');
         if (autoSaveTimer) clearTimeout(autoSaveTimer);
@@ -2114,6 +2132,12 @@
                     const el = document.getElementById(`panel-${p}`);
                     if (el) el.style.display = (p === target) ? (p === 'events' ? 'flex' : 'block') : 'none';
                 });
+                if (window.common && window.common.floatingBar) {
+                    const isEvents = target === 'events';
+                    window.common.floatingBar.setGroupVisible('editor-canvas-left', isEvents);
+                    window.common.floatingBar.setGroupVisible('editor-canvas-right', isEvents);
+                    if (!isEvents) window.common.floatingBar.setDrawerShift(false);
+                }
                 if (target === 'overview' && overviewMap) {
                     setTimeout(() => overviewMap.invalidateSize(), 60);
                 }
@@ -2497,7 +2521,7 @@
                 if (!res.ok) throw new Error('Failed to discard draft');
                 scenario = await res.json();
                 syncAllViewsFromScenario();
-                if (window.EditorCanvas) window.EditorCanvas.init(scenario, scheduleAutoSave);
+                if (window.EditorCanvas) window.EditorCanvas.init(scenario, scheduleAutoSave, scheduleLayoutSave);
                 showToast('Reverted to published version', 'info');
             } catch (err) {
                 showToast(err.message, 'error');
@@ -2512,7 +2536,7 @@
                 if (!res.ok) throw new Error(data.error || 'Factory reset failed');
                 scenario = data;
                 syncAllViewsFromScenario();
-                if (window.EditorCanvas) window.EditorCanvas.init(scenario, scheduleAutoSave);
+                if (window.EditorCanvas) window.EditorCanvas.init(scenario, scheduleAutoSave, scheduleLayoutSave);
                 showToast('Restored scenario to factory default', 'success');
             } catch (err) {
                 showToast(err.message, 'error');

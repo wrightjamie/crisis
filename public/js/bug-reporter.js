@@ -64,19 +64,29 @@
     function createWidgetDOM() {
         if (document.getElementById('bug-reporter-launcher')) return;
 
-        // Launcher Button
+        // Launcher Button (mounted into shared standard floating bar dock)
         const launcher = document.createElement('button');
+        launcher.type = 'button';
         launcher.id = 'bug-reporter-launcher';
-        launcher.className = 'bug-reporter-launcher';
+        launcher.className = 'floating-bar bug-reporter-launcher';
         launcher.title = 'Report a bug or feature request';
         launcher.style.display = 'none';
         launcher.innerHTML = `
             <span class="bug-icon">🐞</span>
-            <span class="bug-label">Feedback & Bugs</span>
+            <span class="bug-label">Feedback &amp; Bugs</span>
             <span id="bug-badge" class="bug-badge" style="display: none;">0</span>
         `;
         launcher.addEventListener('click', togglePanel);
-        document.body.appendChild(launcher);
+        if (window.common && window.common.floatingBar) {
+            window.common.floatingBar.addGroup('bug-reporter', {
+                slot: 'right',
+                order: 90,
+                element: launcher,
+                visible: false
+            });
+        } else {
+            document.body.appendChild(launcher);
+        }
 
         // Panel Container
         const panel = document.createElement('div');

@@ -107,6 +107,7 @@ module.exports = {
     eventTemplates: [
         {
             id: 'ev_climate_start',
+            isOpeningEvent: true,
             image: 'ev_climate_start',
             name: 'The Tipping Point',
             description: 'Massive ice shelf collapse detected in Antarctica. Sea levels are projected to rise catastrophically within hours. Project Icarus is our only option, but requires massive initial funding.',
@@ -206,6 +207,12 @@ module.exports = {
             name: 'Mass Migration Crisis',
             description: 'Millions are fleeing uninhabitable zones in the Global South, moving towards Europe and Asia.',
             location: [35.0000, 15.0000], // Mediterranean/North Africa
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_hurricane_miami'] },
+                    { triggeredEvents: ['ev_drought_mekong'] }
+                ]
+            },
             decisions: [
                 {
                     role: 'global_south',
@@ -230,6 +237,13 @@ module.exports = {
             image: 'generic_un',
             name: 'The Final Tipping Point',
             description: 'Global temperatures are spiking. The time for preparation is over. Is Project Icarus ready?',
+            conditions: {
+                any: [
+                    { triggeredEvents: ['ev_climate_refugees'] },
+                    { triggeredEvents: ['ev_hurricane_miami'] },
+                    { triggeredEvents: ['ev_drought_mekong'] }
+                ]
+            },
             triggerEvents: [
                 { id: 'ev_end_extinction',
             image: 'ev_city_destruction', delayMs: 1000 },
