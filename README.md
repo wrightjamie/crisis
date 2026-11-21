@@ -81,3 +81,53 @@ If you used **Method 2**, go to the **Project** tab, select the project, and cli
 ### Accessing the App
 Once deployed, the server will be available on your local network at:
 `http://<your_nas_ip>:3000`
+
+---
+
+## Setting or Resetting the Admin Password
+
+The Admin panel (`/admin`) and Scenario Editor are protected by a hashed admin password stored in the SQLite database (`data/crisis.db`).
+
+> **Persistence Tip:** Make sure `./data:/usr/src/app/data` is mounted as a volume in your container configuration so your password and scenario edits survive container updates and restarts.
+
+### Using Dockhand (Recommended for Docker)
+
+1. Open **Dockhand** and navigate to **Containers**.
+2. Select your running Crisis container (e.g. `crisis_app`).
+3. Open the **Terminal** (Console / Exec) tab and connect with `/bin/sh`.
+4. Run the interactive password script:
+   ```sh
+   npm run set-admin
+   ```
+   Type your new password when prompted (`Enter new admin password:`) and press **Enter**.
+   
+   *Alternatively, pass the password directly in a single command:*
+   ```sh
+   node scripts/set-admin-password.js --password "YourNewPassword"
+   ```
+5. Confirm you see:
+   ```text
+   ✅ Admin password updated successfully in SQLite database.
+   ```
+6. The new password takes effect **immediately** (no container restart required). Sign in at `http://<your_host>:3000/admin`.
+
+### Using Docker CLI
+
+```bash
+docker exec -it crisis_app npm run set-admin
+```
+
+Or non-interactively:
+
+```bash
+docker exec crisis_app node scripts/set-admin-password.js --password "YourNewPassword"
+```
+
+### Local Development
+
+From the project root:
+
+```bash
+npm run set-admin
+```
+
