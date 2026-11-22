@@ -1553,39 +1553,14 @@ body:has(dialog[open]) {
 
 .fac-canvas-stage-wrapper {
   flex: none;
-  height: clamp(460px, 60vh, 720px);
-  min-height: 460px;
+  height: clamp(620px, 78vh, 960px);
+  min-height: 580px;
 }
 
-.fac-explorer-expanded {
-  position: fixed;
-  inset: var(--space-md);
-  z-index: var(--z-panel);
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-secondary);
-  border: 1px solid var(--accent-blue);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  padding: var(--space-md);
-}
-
-.fac-explorer-expanded .fac-event-list {
-  flex: 1;
+.fac-event-list.fac-network-mode {
   max-height: none;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.fac-explorer-expanded .fac-canvas-shell {
-  flex: 1;
-}
-
-.fac-explorer-expanded .fac-canvas-stage-wrapper {
-  height: auto;
-  min-height: 0;
-  flex: 1;
+  overflow: visible;
+  padding-right: 0;
 }
 
 .canvas-transform-plane {

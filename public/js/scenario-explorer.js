@@ -6,12 +6,12 @@
     let currentEventSearch = '';
     let currentExplorerView = 'network'; // 'network' or 'list'
     let showManualActions = true;
-    let isExpanded = false;
 
     // Persistent canvas state across live state_update broadcasts
     let panZoomController = null;
     let lastFittedScenarioId = null;
     let lastPositionsMap = new Map();
+    let floatingBarMounted = false;
 
     const escapeHtml = (str) => {
         if (window.common && typeof window.common.escapeHtml === 'function') {
@@ -45,6 +45,11 @@
         window.setEventSearch('');
     };
 
+    window.toggleManualActionsFilter = function() {
+        showManualActions = !showManualActions;
+        renderScenarioExplorer();
+    };
+
     window.setExplorerView = function(mode) {
         if (mode !== 'network' && mode !== 'list') mode = 'network';
         currentExplorerView = mode;
@@ -55,31 +60,42 @@
         renderScenarioExplorer();
     };
 
-    function toggleExpandedView(forceState) {
-        const card = document.getElementById('event-explorer-card');
-        if (!card) return;
-        isExpanded = typeof forceState === 'boolean' ? forceState : !isExpanded;
-        card.classList.toggle('fac-explorer-expanded', isExpanded);
-
-        const btn = document.getElementById('fac-btn-expand');
-        if (btn) {
-            btn.textContent = isExpanded ? '⤡ Collapse' : '⤢ Expand';
-            btn.title = isExpanded ? 'Exit full-viewport mode (Esc)' : 'Expand network diagram to full viewport';
-        }
-
-        if (panZoomController && lastPositionsMap.size > 0) {
-            requestAnimationFrame(() => panZoomController.fitToView(lastPositionsMap));
+    function syncFloatingNetworkBar(isVisible) {
+        if (!window.common || !window.common.floatingBar) return;
+        if (!floatingBarMounted) {
+            const bar = document.createElement('div');
+            bar.id = 'fac-network-float-bar';
+            bar.className = 'floating-bar';
+            bar.setAttribute('role', 'toolbar');
+            bar.setAttribute('aria-label', 'Network Zoom Controls');
+            bar.innerHTML = `
+                <button type="button" id="fac-btn-zoom-out" class="floating-bar-btn" title="Zoom Out" aria-label="Zoom Out">−</button>
+                <button type="button" id="fac-btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom to 100%" aria-label="Reset Zoom to 100%">
+                    <span id="fac-canvas-zoom-label">100%</span>
+                </button>
+                <button type="button" id="fac-btn-zoom-in" class="floating-bar-btn" title="Zoom In" aria-label="Zoom In">+</button>
+                <span class="floating-bar-divider" aria-hidden="true"></span>
+                <button type="button" id="fac-btn-zoom-fit" class="floating-bar-btn" title="Fit diagram to viewport">Fit</button>
+                <button type="button" id="fac-btn-zoom-reset-view" class="floating-bar-btn" title="Reset pan and zoom">Reset</button>
+            `;
+            window.common.floatingBar.addGroup('fac-network-controls', {
+                slot: 'left',
+                order: 10,
+                element: bar,
+                visible: Boolean(isVisible)
+            });
+            bar.querySelector('#fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
+            bar.querySelector('#fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
+            bar.querySelector('#fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
+            bar.querySelector('#fac-btn-zoom-reset-view')?.addEventListener('click', () => panZoomController?.reset());
+            bar.querySelector('#fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
+            floatingBarMounted = true;
+        } else {
+            window.common.floatingBar.setVisible('fac-network-controls', Boolean(isVisible));
         }
     }
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isExpanded) {
-            const infoDialog = document.getElementById('fac-info-panel');
-            if (!infoDialog || !infoDialog.open) {
-                toggleExpandedView(false);
-            }
-        }
-    });
+    window.setNetworkControlsVisible = syncFloatingNetworkBar;
 
     function buildRuntimeMaps() {
         const triggeredIds = new Set();
@@ -241,6 +257,8 @@
     }
 
     function ensureNetworkShell(container) {
+        syncFloatingNetworkBar(true);
+
         let shell = document.getElementById('fac-canvas-shell');
         if (shell && container.contains(shell)) return shell;
 
@@ -253,24 +271,6 @@
 
         container.innerHTML = `
             <div id="fac-canvas-shell" class="fac-canvas-shell">
-                <div class="canvas-toolbar">
-                    <div class="canvas-legend">
-                        <span><span class="canvas-legend-dot trigger"></span>Trigger</span>
-                        <span><span class="canvas-legend-dot decision"></span>Decision</span>
-                        <span><span class="canvas-legend-dot action"></span>Manual Action</span>
-                        <span><span class="canvas-legend-dot prereq"></span>Prereq</span>
-                        <span><span class="canvas-legend-dot endgame"></span>End Game</span>
-                    </div>
-                    <div class="flex-center gap-xs flex-wrap">
-                        <button type="button" id="fac-btn-toggle-actions" class="btn btn-secondary btn-sm${showManualActions ? ' active' : ''}" title="Show or hide player Manual Action nodes">⚡ Actions</button>
-                        <button type="button" id="fac-btn-zoom-out" class="btn btn-secondary btn-sm" title="Zoom Out" aria-label="Zoom Out">-</button>
-                        <span id="fac-canvas-zoom-label" class="text-xs text-muted canvas-zoom-label">100%</span>
-                        <button type="button" id="fac-btn-zoom-in" class="btn btn-secondary btn-sm" title="Zoom In" aria-label="Zoom In">+</button>
-                        <button type="button" id="fac-btn-zoom-fit" class="btn btn-secondary btn-sm" title="Fit diagram to viewport">Fit</button>
-                        <button type="button" id="fac-btn-zoom-reset" class="btn btn-secondary btn-sm" title="Reset zoom to 100%">Reset</button>
-                        <button type="button" id="fac-btn-expand" class="btn btn-secondary btn-sm" title="Expand network diagram to full viewport">${isExpanded ? '⤡ Collapse' : '⤢ Expand'}</button>
-                    </div>
-                </div>
                 <div id="fac-canvas-wrapper" class="canvas-stage-wrapper fac-canvas-stage-wrapper">
                     <div id="fac-canvas-plane" class="canvas-transform-plane">
                         <svg id="fac-canvas-svg" class="canvas-svg-layer">
@@ -292,20 +292,9 @@
                 wrapperEl,
                 planeEl,
                 zoomLabelEl,
-                canStartPan: (e) => !e.target.closest('.canvas-node')
+                canStartPan: (e) => !e.target.closest('.canvas-node') && !e.target.closest('.floating-bar')
             });
         }
-
-        document.getElementById('fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
-        document.getElementById('fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
-        document.getElementById('fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
-        document.getElementById('fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
-        document.getElementById('fac-btn-expand')?.addEventListener('click', () => toggleExpandedView());
-        document.getElementById('fac-btn-toggle-actions')?.addEventListener('click', (e) => {
-            showManualActions = !showManualActions;
-            e.currentTarget.classList.toggle('active', showManualActions);
-            renderScenarioExplorer();
-        });
 
         return document.getElementById('fac-canvas-shell');
     }
@@ -567,6 +556,7 @@
         const activeStageEvents = allTemplates.filter(t => !t.hidden && getStageIndex(t.stage) <= currentStageIndex);
 
         // 1. Update toolbar counts
+        const manualActionsCount = (currentState.scenarioConfig?.manualActions || []).length;
         const counts = {
             all: activeStageEvents.length,
             active: 0,
@@ -574,7 +564,8 @@
             pending: 0,
             locked: 0,
             complete: 0,
-            endgame: 0
+            endgame: 0,
+            actions: manualActionsCount
         };
 
         activeStageEvents.forEach(t => {
@@ -593,6 +584,8 @@
             const btn = document.getElementById(`filter-btn-${f}`);
             if (btn) btn.classList.toggle('active', currentEventFilter === f);
         });
+        const actionsFilterBtn = document.getElementById('filter-btn-actions');
+        if (actionsFilterBtn) actionsFilterBtn.classList.toggle('active', showManualActions);
 
         // 3. Update view toggle buttons
         const btnNetwork = document.getElementById('btn-view-network');
@@ -603,7 +596,9 @@
         }
 
         // 4. Render selected view
+        container.classList.toggle('fac-network-mode', currentExplorerView === 'network');
         if (currentExplorerView === 'list') {
+            syncFloatingNetworkBar(false);
             renderCardListView(container, activeStageEvents, stages, maps, p);
         } else {
             renderNetworkView(container, activeStageEvents, stages, maps, p);
