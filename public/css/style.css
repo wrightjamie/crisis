@@ -1420,19 +1420,20 @@ body:has(dialog[open]) {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: var(--space-xs) var(--space-sm);
+  padding: 0;
+  min-height: 44px;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: var(--space-sm);
-  flex-wrap: wrap;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 .fac-toolbar-tabs {
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding-right: var(--space-sm);
+  align-items: stretch;
+  gap: 2px;
+  padding: 4px;
+  background: var(--bg-tertiary);
   border-right: 1px solid var(--border-color);
   flex-shrink: 0;
 }
@@ -1447,28 +1448,43 @@ body:has(dialog[open]) {
 
 .fac-event-toolbar .fac-toolbar-panel {
   display: none;
+  flex: 1;
+  min-height: 42px;
+  padding: 5px var(--space-sm);
+  box-sizing: border-box;
 }
 
 #fac-tab-radio-search:checked ~ #fac-toolbar-panel-search {
-  display: block;
+  display: flex;
+  align-items: center;
+}
+
+#fac-toolbar-panel-search .form-control {
+  height: 32px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 #fac-tab-radio-filter:checked ~ #fac-toolbar-panel-filter {
   display: flex;
+  align-items: center;
 }
 
 #fac-tab-radio-search:checked ~ .fac-toolbar-tabs label[for="fac-tab-radio-search"],
 #fac-tab-radio-filter:checked ~ .fac-toolbar-tabs label[for="fac-tab-radio-filter"] {
-  background: var(--accent-blue);
-  color: var(--bg-primary);
-  border-color: var(--accent-blue);
+  background: color-mix(in srgb, var(--accent-blue) 22%, transparent);
+  border-color: color-mix(in srgb, var(--accent-blue) 45%, transparent);
+  color: var(--accent-blue);
 }
 
 .fac-toolbar-tab {
   position: relative;
-  min-width: 30px;
-  height: 28px;
-  padding: 0 var(--space-xs);
+  width: 34px;
+  min-width: 34px;
+  height: auto;
+  min-height: 34px;
+  padding: 0;
+  border-radius: var(--radius-sm);
   justify-content: center;
   cursor: pointer;
 }
@@ -1476,8 +1492,8 @@ body:has(dialog[open]) {
 .fac-toolbar-tab.has-active-criteria::after {
   content: '';
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 4px;
+  right: 4px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
