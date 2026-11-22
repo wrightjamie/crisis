@@ -170,7 +170,45 @@ validateScenarioGraph({
     ]
 }, graphErrors);
 assert.strictEqual(graphErrors.length, 0, 'Fully linked graph should pass validation');
+
+// Reachable via conditionalEffects
+graphErrors = [];
+validateScenarioGraph({
+    eventTemplates: [
+        {
+            id: 'ev1',
+            name: 'Opening',
+            isOpeningEvent: true,
+            effects: {
+                conditionalEffects: [
+                    { conditions: { minScores: { s: 1 } }, effects: { triggerEvents: [{ id: 'ev2' }] } }
+                ]
+            }
+        },
+        { id: 'ev2', name: 'Conditional Event' }
+    ]
+}, graphErrors);
+assert.strictEqual(graphErrors.length, 0, 'Event reachable via conditionalEffects should pass graph validation');
 console.log("✅ validateScenarioGraph tests passed.");
+
+// Validate deployAssets and conditionalEffects schema rules
+console.log("Testing deployAssets and conditionalEffects validation...");
+const badEffectsErrors = [];
+validateEventTemplates({
+    assets: [{ id: 'a1', name: 'Asset 1' }],
+    eventTemplates: [{
+        id: 'ev1',
+        name: 'Bad Effects Event',
+        effects: {
+            deployAssets: { unknown_asset: -100 },
+            conditionalEffects: [{ conditions: { minScores: { s: 1 } } }]
+        }
+    }]
+}, badEffectsErrors);
+assert.ok(badEffectsErrors.some(e => e.includes("unknown asset 'unknown_asset'")), 'Should reject unknown asset in deployAssets');
+assert.ok(badEffectsErrors.some(e => e.includes('durationMs must be a positive number')), 'Should reject non-positive durationMs in deployAssets');
+assert.ok(badEffectsErrors.some(e => e.includes("missing or invalid 'effects' object")), 'Should reject conditionalEffects entry missing effects');
+console.log("✅ deployAssets and conditionalEffects validation tests passed.");
 
 if (allValid) {
     console.log("All scenarios are valid and unit tests passed.");

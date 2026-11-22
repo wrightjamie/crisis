@@ -178,6 +178,7 @@ module.exports = function setupSockets(io, gameManager) {
             const role = typeof roleData === 'string' ? roleData : (roleData && roleData.role);
             if (!role) {
                 engine.connectedClients[socket.id] = null;
+                socket.data.role = null;
                 delete engine.pendingPlayers[socket.id];
                 return;
             }
@@ -215,6 +216,7 @@ module.exports = function setupSockets(io, gameManager) {
             }
 
             engine.connectedClients[socket.id] = role;
+            socket.data.role = role;
             socket.emit('role_registered', role);
             io.to(gameId).emit('active_roles', engine.getActiveRoles());
 
@@ -238,6 +240,7 @@ module.exports = function setupSockets(io, gameManager) {
             engine.updateActivity();
             if (engine.connectedClients[socket.id]) {
                 delete engine.connectedClients[socket.id];
+                socket.data.role = null;
                 io.to(gameId).emit('active_roles', engine.getActiveRoles());
             }
             if (engine.pendingPlayers[socket.id]) {
@@ -448,11 +451,18 @@ module.exports = function setupSockets(io, gameManager) {
             io.to(gameId).emit('state_update', engine.gameState);
         });
 
+        const getFacilitatorContext = (fallbackGameId = null) => {
+            const gameId = socket.data.gameId || fallbackGameId;
+            const engine = gameId ? gameManager.getGame(gameId) : null;
+            const isFacilitator = Boolean(engine && (socket.data.role === 'facilitator' || engine.connectedClients[socket.id] === 'facilitator'));
+            return isFacilitator ? { gameId, engine } : null;
+        };
+
         // Facilitator pauses/resumes all clocks
         socket.on('toggle_pause_game', () => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine || socket.data.role !== 'facilitator') return;
+            const ctx = getFacilitatorContext();
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
             engine.updateActivity();
             if (engine.isPaused) {
                 engine.resumeGame();
@@ -464,9 +474,9 @@ module.exports = function setupSockets(io, gameManager) {
 
         // Facilitator toggles AI briefings ON/OFF during live games (Issue #53)
         socket.on('toggle_ai_enabled', (data) => {
-            const gameId = socket.data.gameId || (data && data.gameId);
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine || socket.data.role !== 'facilitator') return;
+            const ctx = getFacilitatorContext(data && data.gameId);
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
             engine.updateActivity();
             if (typeof data === 'object' && typeof data.enabled === 'boolean') {
                 engine.gameState.aiEnabled = data.enabled;

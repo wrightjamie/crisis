@@ -464,6 +464,155 @@ if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
     console.log("✅ Mutually exclusive probability randomEvents (A || B || nothing) tests passed.");
 }
 
+// Test 14: Non-repeatable manual actions cannot be triggered twice (#90)
+{
+    testScenario.eventTemplates.push(
+        {
+            id: 'act_once_only',
+            name: 'One-Time Action',
+            isManualAction: true,
+            initiator: ['home'],
+            effects: { scores: { uk_us: 1 } }
+        },
+        {
+            id: 'act_repeatable',
+            name: 'Repeatable Action',
+            isManualAction: true,
+            repeatable: true,
+            initiator: ['home'],
+            effects: { scores: { uk_us: 1 } }
+        }
+    );
+    engine.createLobby('test_scenario');
+    engine.startGame();
+
+    assert.strictEqual(engine.triggerManualAction('act_once_only', 'home'), true, "First trigger of non-repeatable manual action should succeed");
+    assert.strictEqual(engine.triggerManualAction('act_once_only', 'home'), false, "Second trigger of non-repeatable manual action must be rejected");
+    assert.strictEqual(engine.triggerManualAction('act_repeatable', 'home'), true, "First trigger of repeatable manual action should succeed");
+    assert.strictEqual(engine.triggerManualAction('act_repeatable', 'home'), true, "Second trigger of repeatable manual action should succeed");
+    console.log("✅ Non-repeatable manual action deduplication tests passed.");
+}
+
+// Test 15: conditionalEffects evaluated against pre-effect state (#91)
+{
+    engine.createLobby('test_scenario');
+    engine.startGame();
+
+    // Base score uk_us = 3. Condition: uk_us <= 3 -> apply extra +1.
+    // Even though base effect adds +1 (making uk_us=4), condition is checked pre-effect so +1 extra also applies (-> 5).
+    engine.applyEffects({
+        scores: { uk_us: 1 },
+        conditionalEffects: [
+            {
+                conditions: { maxScores: { uk_us: 3 } },
+                effects: { scores: { uk_us: 1 } }
+            }
+        ]
+    });
+    assert.strictEqual(engine.gameState.scores.uk_us, 5, "conditionalEffects should evaluate against pre-effect score");
+
+    // Now uk_us is 5 -> condition uk_us <= 3 is false -> conditional effect must not apply
+    engine.gameState.scores.uk_us = 4;
+    engine.applyEffects({
+        scores: { uk_us: 0 },
+        conditionalEffects: [
+            {
+                conditions: { maxScores: { uk_us: 3 } },
+                effects: { scores: { uk_us: 1 } }
+            }
+        ]
+    });
+    assert.strictEqual(engine.gameState.scores.uk_us, 4, "conditionalEffects should not apply when condition is false");
+    console.log("✅ conditionalEffects pre-effect evaluation tests passed.");
+}
+
+// Test 16: Timed deployAssets, returnState, pause/resume, damage safety, and concurrent resolveTask check (#92)
+{
+    testScenario.eventTemplates.push({
+        id: 'ev_deploy_conflict',
+        name: 'Asset Tasking Event',
+        repeatable: true,
+        decisions: [
+            {
+                role: 'home',
+                text: 'Choose asset action',
+                options: [
+                    {
+                        id: 'opt_use_asset',
+                        text: 'Deploy test_asset',
+                        conditions: { assets: { test_asset: 'operational' } },
+                        effects: { deployAssets: { test_asset: 5000 } }
+                    },
+                    {
+                        id: 'opt_fallback',
+                        text: 'Hold',
+                        effects: {}
+                    }
+                ]
+            }
+        ]
+    });
+
+    engine.createLobby('test_scenario');
+    engine.startGame();
+
+    const asset = engine.gameState.assets.find(a => a.id === 'test_asset');
+    assert.strictEqual(asset.initialState, 'operational', "Asset should record initialState on lobby creation");
+
+    // Open two concurrent tasks that both offer opt_use_asset
+    engine.triggerScenarioEvent('ev_deploy_conflict');
+    engine.triggerScenarioEvent('ev_deploy_conflict');
+    const [t1, t2] = engine.gameState.decisionTasks.slice(-2);
+
+    // Resolving t1 deploys test_asset
+    const res1 = engine.resolveTask(t1.id, 'opt_use_asset');
+    assert.ok(res1, "First task should successfully deploy operational asset");
+    assert.strictEqual(asset.state, 'deployed', "Asset state should become 'deployed'");
+    assert.ok(asset.deployedUntil > Date.now(), "Asset should have a future deployedUntil timestamp");
+
+    // Resolving t2 with opt_use_asset while deployed must be rejected
+    const res2 = engine.resolveTask(t2.id, 'opt_use_asset');
+    assert.strictEqual(res2, null, "Concurrent task using already-deployed asset must be rejected");
+    assert.strictEqual(t2.status, 'pending', "Rejected task must remain pending");
+
+    // Pause and resume should preserve remaining deployment time
+    engine.pauseGame(true);
+    assert.strictEqual(asset.deployPaused, true, "Deployed asset should be marked deployPaused when game pauses");
+    assert.ok(asset.deployRemainingMs > 0, "deployRemainingMs should be captured on pause");
+    const changedWhilePaused = engine.checkDeployedAssets(Date.now() + 999999);
+    assert.strictEqual(changedWhilePaused, false, "Deployed asset must not expire while game is paused");
+
+    engine.resumeGame();
+    assert.strictEqual(asset.deployPaused, false, "Deployed asset should resume on resumeGame");
+
+    // Expiring timer returns asset to initialState ('operational')
+    const expired = engine.checkDeployedAssets(asset.deployedUntil + 10);
+    assert.strictEqual(expired, true, "checkDeployedAssets should report state change on expiry");
+    assert.strictEqual(asset.state, 'operational', "Asset should return to its starting state when deployment expires");
+    assert.strictEqual(asset.deployedUntil, undefined, "deployedUntil should be cleared after expiry");
+
+    // Now t2 can use the asset again
+    const res2After = engine.resolveTask(t2.id, 'opt_use_asset');
+    assert.ok(res2After, "Task should succeed once asset returns to operational");
+
+    // Custom returnState option
+    engine.applyEffects({ deployAssets: { test_asset: { durationMs: 3000, state: 'on_mission', returnState: 'reduced' } } });
+    assert.strictEqual(asset.state, 'on_mission', "Custom deploy state should be applied");
+    engine.checkDeployedAssets(asset.deployedUntil + 10);
+    assert.strictEqual(asset.state, 'reduced', "Custom returnState should be applied on expiry");
+
+    // Damage safety: if asset is damaged mid-deployment, timer expiry must NOT overwrite damage
+    engine.applyEffects({ assetStateChanges: { test_asset: 'operational' } });
+    engine.applyEffects({ deployAssets: { test_asset: 5000 } });
+    assert.strictEqual(asset.state, 'deployed');
+    engine.applyEffects({ assetStateChanges: { test_asset: 'damaged' } });
+    assert.strictEqual(asset.state, 'damaged');
+    assert.strictEqual(asset.deployedUntil, undefined, "Explicit assetStateChanges should clear active deployment timer");
+    engine.checkDeployedAssets(Date.now() + 999999);
+    assert.strictEqual(asset.state, 'damaged', "Damaged state must be preserved and never overwritten back to operational");
+    console.log("✅ Timed deployAssets, pause/resume, damage safety & concurrent option tests passed.");
+}
+
 // Cleanup
 scenarios.pop();
 console.log("All engine-actions tests passed.");

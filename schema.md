@@ -340,6 +340,27 @@ Presented to a specific role when an event is triggered.
                     "asset_id": "new_state_string" // E.g., { "power_grid": "offline" }
                 },
 
+                // 4b. Timed Asset Deployment (Pause-Aware)
+                // Marks asset as 'deployed' (or custom state) for durationMs, blocking
+                // options/actions requiring 'operational', then restores returnState
+                // (defaults to the asset's starting state) unless damaged/destroyed meanwhile.
+                deployAssets: {
+                    "asset_id": 120000, // Shorthand: durationMs (ms)
+                    "other_asset": {
+                        durationMs: 120000,
+                        state: "deployed",       // Optional, defaults to "deployed"
+                        returnState: "operational" // Optional, defaults to asset's starting state
+                    }
+                },
+
+                // 4c. Conditional Effects (Evaluated Against Pre-Effect State)
+                conditionalEffects: [
+                    {
+                        conditions: { /* standard conditions object */ },
+                        effects: { /* nested effects object */ }
+                    }
+                ],
+
                 // 5. Schedule Automatic Events (Independent Rolls)
                 triggerEvents: [ 
                     { 

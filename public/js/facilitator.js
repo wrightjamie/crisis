@@ -1358,6 +1358,7 @@ function renderScheduledEvents() {
 
 // Local tick for countdowns to prevent needing 10 server broadcasts a second
 setInterval(() => {
+    if (currentState && currentState.isPaused) return;
     document.querySelectorAll('.countdown-timer').forEach(el => {
         const triggerTime = parseInt(el.getAttribute('data-trigger-time'));
         const remaining = Math.max(0, triggerTime - Date.now());

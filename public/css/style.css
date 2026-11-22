@@ -1552,7 +1552,9 @@ body:has(dialog[open]) {
 }
 
 .fac-canvas-stage-wrapper {
+  flex: none;
   height: clamp(460px, 60vh, 720px);
+  min-height: 460px;
 }
 
 .fac-explorer-expanded {
@@ -1582,6 +1584,7 @@ body:has(dialog[open]) {
 
 .fac-explorer-expanded .fac-canvas-stage-wrapper {
   height: auto;
+  min-height: 0;
   flex: 1;
 }
 

@@ -160,6 +160,16 @@ class GameEngine {
                 });
             }
 
+            // Pause all timed asset deployments
+            if (this.gameState.assets) {
+                this.gameState.assets.forEach(asset => {
+                    if (asset.deployedUntil && !asset.deployPaused) {
+                        asset.deployPaused = true;
+                        asset.deployRemainingMs = Math.max(0, asset.deployedUntil - now);
+                    }
+                });
+            }
+
             console.log(`Game ${this.gameId} paused ${isManual ? 'manually by facilitator' : 'due to facilitator disconnect'}.`);
         }
     }
@@ -192,6 +202,17 @@ class GameEngine {
                         task.paused = false;
                         task.startTime = now - (task.timeLimitMs - task.timeRemainingMs);
                         task.timeRemainingMs = null;
+                    }
+                });
+            }
+
+            // Resume all timed asset deployments
+            if (this.gameState.assets) {
+                this.gameState.assets.forEach(asset => {
+                    if (asset.deployPaused && asset.deployRemainingMs !== null && asset.deployRemainingMs !== undefined) {
+                        asset.deployPaused = false;
+                        asset.deployedUntil = now + asset.deployRemainingMs;
+                        asset.deployRemainingMs = null;
                     }
                 });
             }
@@ -253,6 +274,10 @@ class GameEngine {
         if (selectedVariants && scenario.variantAxes) {
             applyVariantsToScenario(scenario, selectedVariants, scores, assets, selectedVariantNames, variantBriefings);
         }
+
+        assets.forEach(a => {
+            a.initialState = a.state || 'operational';
+        });
 
         this.gameState = {
             status: 'lobby',
@@ -464,10 +489,39 @@ class GameEngine {
                 }
             }
 
+            if (this.checkDeployedAssets(now)) {
+                stateChanged = true;
+            }
+
             if (stateChanged && onStateUpdate) {
                 onStateUpdate(this.gameState);
             }
         }, 1000);
+    }
+
+    checkDeployedAssets(now = Date.now()) {
+        if (!this.gameState.assets || this.isPaused) return false;
+        let changed = false;
+        this.gameState.assets.forEach(asset => {
+            if (asset.deployedUntil && !asset.deployPaused && now >= asset.deployedUntil) {
+                const expectedDeployedState = asset.deployedState || 'deployed';
+                const returnState = asset.deployReturnState || asset.initialState || 'operational';
+                if (asset.state === expectedDeployedState) {
+                    asset.state = returnState;
+                    console.log(`Asset deployment completed: ${asset.id} -> ${returnState}`);
+                    changed = true;
+                }
+                delete asset.deployedUntil;
+                delete asset.deployedState;
+                delete asset.deployReturnState;
+                delete asset.deployPaused;
+                delete asset.deployRemainingMs;
+            }
+        });
+        if (changed) {
+            this.evaluateAutoConditionEvents();
+        }
+        return changed;
     }
 
     stopSchedulerLoop() {
@@ -481,12 +535,23 @@ class GameEngine {
         const task = this.gameState.decisionTasks.find(t => t.id === taskId);
         if (!task || task.status !== 'pending') return null;
 
+        const option = task.options.find(o => o.id === optionId);
+        if (!option) return null;
+
+        // Re-verify option conditions at submission time (e.g., asset deployed concurrently)
+        if (option.conditions) {
+            const triggeredIds = this.gameState.events.map(e => e.templateId);
+            if (!checkConditions(option, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, triggeredIds, this.getActiveRoles())) {
+                console.log(`Decision option ${optionId} for task ${task.id} rejected: conditions no longer met.`);
+                return null;
+            }
+        }
+
         console.log(`Decision submitted for task ${task.id}: option ${optionId}`);
         task.status = 'resolved';
         task.selectedOption = optionId;
 
-        const option = task.options.find(o => o.id === optionId);
-        if (option && option.effects) {
+        if (option.effects) {
             this.applyEffects(option.effects);
         }
         return option;
@@ -507,16 +572,47 @@ class GameEngine {
         }
     }
 
+    _applyDeployAssets(deployAssets) {
+        if (!deployAssets || typeof deployAssets !== 'object') return;
+        const now = Date.now();
+        for (const [assetId, cfg] of Object.entries(deployAssets)) {
+            const asset = this.gameState.assets.find(a => a.id === assetId);
+            if (!asset) continue;
+            const isObj = Boolean(cfg && typeof cfg === 'object');
+            const durationMs = typeof cfg === 'number' ? cfg : Number(isObj ? cfg.durationMs : NaN);
+            if (!Number.isFinite(durationMs) || durationMs <= 0) continue;
+            const deployState = (isObj && cfg.state) ? cfg.state : 'deployed';
+            const returnState = (isObj && cfg.returnState)
+                ? cfg.returnState
+                : (asset.initialState || asset.state || 'operational');
+            asset.state = deployState;
+            asset.deployedState = deployState;
+            asset.deployReturnState = returnState;
+            asset.deployedUntil = now + durationMs;
+            asset.deployPaused = this.isPaused;
+            asset.deployRemainingMs = this.isPaused ? durationMs : null;
+            console.log(`Asset deployed: ${assetId} -> ${deployState} for ${durationMs}ms (returns to ${returnState})`);
+        }
+    }
+
     _applyAssetEffects(effects) {
         if (effects.assetStateChanges) {
             for (const [assetId, newState] of Object.entries(effects.assetStateChanges)) {
                 const asset = this.gameState.assets.find(a => a.id === assetId);
                 if (asset) {
                     asset.state = newState;
+                    // Clear any active deployment timer if an explicit state change occurs
+                    delete asset.deployedUntil;
+                    delete asset.deployedState;
+                    delete asset.deployReturnState;
+                    delete asset.deployPaused;
+                    delete asset.deployRemainingMs;
                     console.log(`Asset state changed: ${assetId} -> ${newState}`);
                 }
             }
         }
+
+        this._applyDeployAssets(effects.deployAssets);
 
         if (effects.revealAssets) {
             effects.revealAssets.forEach(assetId => {
@@ -601,8 +697,30 @@ class GameEngine {
         }
     }
 
-    applyEffects(effects) {
+    applyEffects(effects, _skipAutoEval = false) {
         if (!effects) return;
+
+        // Evaluate conditionalEffects against pre-effect state so base effects
+        // don't accidentally flip the condition for their own modifiers.
+        const matchedConditionalEffects = [];
+        if (Array.isArray(effects.conditionalEffects)) {
+            const triggeredIds = this.gameState.events.map(e => e.templateId);
+            const activeRoles = this.getActiveRoles();
+            effects.conditionalEffects.forEach(entry => {
+                if (!entry || !entry.effects) return;
+                const met = !entry.conditions || checkConditions(
+                    { conditions: entry.conditions },
+                    this.gameState.scores,
+                    this.gameState.assets,
+                    this.gameState.unlockedEvents,
+                    triggeredIds,
+                    activeRoles
+                );
+                if (met) {
+                    matchedConditionalEffects.push(entry.effects);
+                }
+            });
+        }
 
         this._applyScoreEffects(effects.scores);
 
@@ -617,7 +735,14 @@ class GameEngine {
         this._applyAssetEffects(effects);
         this._scheduleTriggeredEvents(effects.triggerEvents);
         this._scheduleRandomEvents(effects.randomEvents);
-        this.evaluateAutoConditionEvents();
+
+        matchedConditionalEffects.forEach(ce => {
+            this.applyEffects(ce, true);
+        });
+
+        if (!_skipAutoEval) {
+            this.evaluateAutoConditionEvents();
+        }
     }
 
     evaluateAutoConditionEvents() {
@@ -681,8 +806,13 @@ class GameEngine {
         // Verify initiator has permission
         if (!action.initiator.includes(initiatorRole)) return false;
 
+        const triggeredIds = this.gameState.events.map(e => e.templateId);
+
+        // Prevent re-triggering non-repeatable manual actions
+        if (!action.repeatable && triggeredIds.includes(action.id)) return false;
+
         // Verify conditions
-        if (!checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, this.gameState.events.map(e => e.templateId), this.getActiveRoles())) return false;
+        if (!checkConditions(action, this.gameState.scores, this.gameState.assets, this.gameState.unlockedEvents, triggeredIds, this.getActiveRoles())) return false;
 
         console.log(`Manual Action triggered: ${action.name} by ${initiatorRole}`);
 

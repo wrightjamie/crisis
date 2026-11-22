@@ -191,7 +191,67 @@ function validateAssets(scenario, errors) {
     }
 }
 
+function validateDeployAssetEntry(assetId, cfg, path, assetIds, errors) {
+    if (assetIds.size > 0 && !assetIds.has(assetId)) {
+        errors.push(`${path}.effects.deployAssets references unknown asset '${assetId}'`);
+    }
+    if (typeof cfg === 'number') {
+        if (!Number.isFinite(cfg) || cfg <= 0) {
+            errors.push(`${path}.effects.deployAssets['${assetId}'] durationMs must be a positive number`);
+        }
+        return;
+    }
+    if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) {
+        errors.push(`${path}.effects.deployAssets['${assetId}'] must be a positive durationMs number or config object`);
+        return;
+    }
+    if (typeof cfg.durationMs !== 'number' || !Number.isFinite(cfg.durationMs) || cfg.durationMs <= 0) {
+        errors.push(`${path}.effects.deployAssets['${assetId}'].durationMs must be a positive number`);
+    }
+    if (cfg.state !== undefined && typeof cfg.state !== 'string') {
+        errors.push(`${path}.effects.deployAssets['${assetId}'].state must be a string`);
+    }
+    if (cfg.returnState !== undefined && typeof cfg.returnState !== 'string') {
+        errors.push(`${path}.effects.deployAssets['${assetId}'].returnState must be a string`);
+    }
+}
+
+function validateEffects(effects, path, assetIds, errors) {
+    if (!effects || typeof effects !== 'object') return;
+    if (effects.deployAssets !== undefined) {
+        if (!effects.deployAssets || typeof effects.deployAssets !== 'object' || Array.isArray(effects.deployAssets)) {
+            errors.push(`${path}.effects 'deployAssets' must be an object`);
+        } else {
+            for (const [assetId, cfg] of Object.entries(effects.deployAssets)) {
+                validateDeployAssetEntry(assetId, cfg, path, assetIds, errors);
+            }
+        }
+    }
+    if (effects.conditionalEffects !== undefined) {
+        if (!Array.isArray(effects.conditionalEffects)) {
+            errors.push(`${path}.effects 'conditionalEffects' must be an array`);
+        } else {
+            effects.conditionalEffects.forEach((entry, idx) => {
+                const entryPath = `${path}.effects.conditionalEffects[${idx}]`;
+                if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+                    errors.push(`${entryPath} must be an object`);
+                    return;
+                }
+                if (entry.conditions !== undefined) {
+                    validateConditions(entry.conditions, entryPath, errors);
+                }
+                if (!entry.effects || typeof entry.effects !== 'object' || Array.isArray(entry.effects)) {
+                    errors.push(`${entryPath} missing or invalid 'effects' object`);
+                } else {
+                    validateEffects(entry.effects, entryPath, assetIds, errors);
+                }
+            });
+        }
+    }
+}
+
 function validateEventTemplates(scenario, errors) {
+    const assetIds = new Set(Array.isArray(scenario.assets) ? scenario.assets.map(a => a && a.id).filter(Boolean) : []);
     if (!scenario.eventTemplates || !Array.isArray(scenario.eventTemplates)) {
         errors.push("Missing or invalid 'eventTemplates'");
     } else {
@@ -227,6 +287,12 @@ function validateEventTemplates(scenario, errors) {
             if (event.conditions) {
                 validateConditions(event.conditions, `${eventPath} (${event.id || 'unknown'})`, errors);
             }
+            if (event.effects) {
+                validateEffects(event.effects, `${eventPath} (${event.id || 'unknown'})`, assetIds, errors);
+            }
+            if (event.autoEffects) {
+                validateEffects(event.autoEffects, `${eventPath} (${event.id || 'unknown'}).autoEffects`, assetIds, errors);
+            }
             if (event.decisions && !Array.isArray(event.decisions)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'decisions' must be an array`);
             } else if (event.decisions) {
@@ -255,6 +321,9 @@ function validateEventTemplates(scenario, errors) {
                             }
                             if (opt.conditions) {
                                 validateConditions(opt.conditions, `${decPath}.options[${optIndex}]`, errors);
+                            }
+                            if (opt.effects) {
+                                validateEffects(opt.effects, `${decPath}.options[${optIndex}]`, assetIds, errors);
                             }
                         });
                         if (dec.timeLimitMs !== undefined && !hasDefaultOption) {
@@ -372,18 +441,29 @@ function validateScenarioGraph(scenario, errors) {
         if (u && v && u !== v && adj.has(u) && adj.has(v)) adj.get(u).add(v);
     };
 
+    const addEffectEdges = (sourceId, effects) => {
+        if (!effects || typeof effects !== 'object') return;
+        (effects.triggerEvents || []).forEach(tr => addEdge(sourceId, typeof tr === 'string' ? tr : (tr?.id || tr?.event)));
+        (effects.randomEvents || []).forEach(rn => addEdge(sourceId, typeof rn === 'string' ? rn : (rn?.id || rn?.event)));
+        (effects.unlockEvents || []).forEach(u => addEdge(sourceId, u));
+        (effects.conditionalEffects || []).forEach(ce => {
+            if (ce && ce.effects) addEffectEdges(sourceId, ce.effects);
+        });
+    };
+
     events.forEach(ev => {
         if (!ev || !ev.id) return;
         (ev.triggerEvents || []).forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
         (ev.decisions || []).forEach(dec => {
             (dec.options || []).forEach(opt => {
-                const trs = Array.isArray(opt.triggerEvents) ? opt.triggerEvents : (Array.isArray(opt.effects?.triggerEvents) ? opt.effects.triggerEvents : []);
-                trs.forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
-                (opt.effects?.randomEvents || []).forEach(rn => addEdge(ev.id, typeof rn === 'string' ? rn : (rn?.id || rn?.event)));
-                (opt.effects?.unlockEvents || []).forEach(u => addEdge(ev.id, u));
+                if (Array.isArray(opt.triggerEvents)) {
+                    opt.triggerEvents.forEach(tr => addEdge(ev.id, typeof tr === 'string' ? tr : tr?.id));
+                }
+                addEffectEdges(ev.id, opt.effects);
             });
         });
-        [...(ev.effects?.unlockEvents || []), ...(ev.autoEffects?.unlockEvents || [])].forEach(u => addEdge(ev.id, u));
+        addEffectEdges(ev.id, ev.effects);
+        addEffectEdges(ev.id, ev.autoEffects);
         [...(Array.isArray(ev.prerequisites) ? ev.prerequisites : []), ..._extractConditionRefs(ev.conditions)].forEach(p => addEdge(p, ev.id));
         if (ev.autoTriggerOnConditions && ev.conditions && (ev.conditions.minScores || ev.conditions.maxScores || ev.conditions.assetStates || ev.conditions.assets || ev.conditions.visibleAssets || ev.conditions.hiddenAssets)) {
             addEdge(startEvent.id, ev.id);
@@ -393,9 +473,7 @@ function validateScenarioGraph(scenario, errors) {
     actions.forEach(act => {
         if (!act || !act.id) return;
         [...(Array.isArray(act.events) ? act.events : []), ..._extractConditionRefs(act.conditions)].forEach(p => addEdge(p, act.id));
-        (act.effects?.triggerEvents || []).forEach(tr => addEdge(act.id, typeof tr === 'string' ? tr : (tr?.id || tr?.event)));
-        (act.effects?.randomEvents || []).forEach(rn => addEdge(act.id, typeof rn === 'string' ? rn : (rn?.id || rn?.event)));
-        (act.effects?.unlockEvents || []).forEach(u => addEdge(act.id, u));
+        addEffectEdges(act.id, act.effects);
     });
 
     const visited = new Set([startEvent.id]);

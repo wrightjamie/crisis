@@ -1031,8 +1031,11 @@ function updateUI() {
 
     // Check for new manual actions
     if (localState.scenarioConfig && localState.scenarioConfig.manualActions) {
+        const triggeredIds = localState.events.map(e => e.templateId);
         const currentAvailableActions = localState.scenarioConfig.manualActions
-            .filter(a => a.initiator.includes(role) && window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, localState.events.map(e => e.templateId), activeRolesList))
+            .filter(a => a.initiator.includes(role) &&
+                (a.repeatable || !triggeredIds.includes(a.id)) &&
+                window.checkConditions(a, localState.scores, localState.assets, localState.unlockedEvents, triggeredIds, activeRolesList))
             .map(a => a.id);
 
         if (previousAvailableActions !== null) {
@@ -1504,9 +1507,22 @@ function buildEventPanelHtml(p) {
 
             if (!isResolved) {
                 if (role !== 'display') {
+                    const triggeredIds = localState.events.map(e => e.templateId);
                     html += `<div class="task-options">`;
                     task.options.forEach(opt => {
-                        html += `<button class="btn btn-secondary" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
+                        const optAvailable = !opt.conditions || window.checkConditions(
+                            opt,
+                            localState.scores,
+                            localState.assets,
+                            localState.unlockedEvents,
+                            triggeredIds,
+                            activeRolesList
+                        );
+                        if (optAvailable) {
+                            html += `<button class="btn btn-secondary" onclick="submitDecision('${task.id}', '${opt.id}')">${p(opt.text)}</button>`;
+                        } else {
+                            html += `<button class="btn btn-secondary opacity-50 cursor-not-allowed" disabled title="Required asset or condition is currently unavailable">${p(opt.text)} (Unavailable)</button>`;
+                        }
                     });
                     html += `</div>`;
                 } else {
@@ -1536,10 +1552,23 @@ function buildAssetPanelHtml(p) {
         html += `<img src="${asset.image}" alt="${altText}" title="${titleText}" class="wiki-img">`;
     }
 
+    let deployTimerHtml = '';
+    if (asset.deployedUntil) {
+        if (asset.deployPaused || localState.isPaused) {
+            const remSec = Math.ceil((asset.deployRemainingMs ?? Math.max(0, asset.deployedUntil - Date.now())) / 1000);
+            deployTimerHtml = `<div class="mt-1 text-status-4 text-sm font-mono">DEPLOYED — PAUSED (${remSec}s remaining)</div>`;
+        } else {
+            const remainingMs = Math.max(0, asset.deployedUntil - Date.now());
+            const secondsLeft = Math.ceil(remainingMs / 1000);
+            deployTimerHtml = `<div class="mt-1 text-status-4 text-sm font-mono countdown-timer" data-endtime="${asset.deployedUntil}" data-prefix="DEPLOYED — RETURNING IN: ">DEPLOYED — RETURNING IN: ${secondsLeft}s</div>`;
+        }
+    }
+
     html += `
             <div class="card-title wiki-title-blue">${asset.name}</div>
             <div class="card-desc">
-                <strong>Status:</strong> <span class="uppercase">${asset.state}</span>
+                <strong>Status:</strong> <span class="uppercase${asset.deployedUntil ? ' text-status-4 font-bold' : ''}">${asset.state}</span>
+                ${deployTimerHtml}
             </div>
     `;
 
@@ -1566,68 +1595,91 @@ function buildActionsPanelHtml(p) {
         return '<p class="text-muted">No manual actions available.</p>';
     }
 
-    let html = '<div class="actions-list">';
-    let actionsShown = 0;
-    
+    const triggeredIds = localState.events.map(e => e.templateId);
+    const availableActions = [];
+    const usedActions = [];
+
     localState.scenarioConfig.manualActions.forEach(action => {
         if (!action.initiator.includes(role)) return;
 
-        const triggeredIds = localState.events.map(e => e.templateId);
-        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, triggeredIds, activeRolesList);
+        const isUsed = !action.repeatable && triggeredIds.includes(action.id);
         const isClosed = Boolean(
             action.conditions &&
             Array.isArray(action.conditions.notTriggeredEvents) &&
             action.conditions.notTriggeredEvents.some(id => triggeredIds.includes(id))
         );
 
-        actionsShown++;
-        
-        if (isMet) {
-            html += `<div class="card wiki-card-blue mb-2">`;
-        } else {
-            html += `<div class="card wiki-card-blue mb-2 opacity-60 grayscale">`;
+        if (isUsed || isClosed) {
+            usedActions.push(action);
+            return;
         }
-        
+
+        const isMet = window.checkConditions(action, localState.scores, localState.assets, localState.unlockedEvents, triggeredIds, activeRolesList);
+        if (isMet) {
+            availableActions.push(action);
+        }
+    });
+
+    function renderActionCard(action, isActionable) {
+        let cardHtml = `<div class="card wiki-card-blue mb-2${isActionable ? '' : ' opacity-60 grayscale'}">`;
         if (action.image) {
             const altText = action.imageMeta?.title || action.name;
             const titleText = action.imageMeta?.description || altText;
-            html += `<img src="${action.image}" alt="${altText}" title="${titleText}" class="wiki-img mb-sm">`;
+            cardHtml += `<img src="${action.image}" alt="${altText}" title="${titleText}" class="wiki-img mb-sm">`;
         }
-        html += `<div class="card-title wiki-title-blue">${action.name}</div>
-                 <div class="card-desc">${p(action.description)}</div>`;
-        
-        let approvers = null;
-        if (action.requiresApprovalFrom) {
-            if (Array.isArray(action.requiresApprovalFrom)) {
-                approvers = action.requiresApprovalFrom.filter(r => r !== role).join(' or ');
-            } else if (action.requiresApprovalFrom !== role) {
-                approvers = action.requiresApprovalFrom;
+        cardHtml += `<div class="card-title wiki-title-blue">${action.name}</div>
+                     <div class="card-desc">${p(action.description)}</div>`;
+
+        if (isActionable) {
+            let approvers = null;
+            if (action.requiresApprovalFrom) {
+                if (Array.isArray(action.requiresApprovalFrom)) {
+                    approvers = action.requiresApprovalFrom.filter(r => r !== role).join(' or ');
+                } else if (action.requiresApprovalFrom !== role) {
+                    approvers = action.requiresApprovalFrom;
+                }
             }
+
+            if (approvers) {
+                cardHtml += `<div class="card-meta mt-1 text-status-4 text-bold">Requires approval from: ${approvers.toUpperCase()}</div>`;
+            } else {
+                cardHtml += `<div class="card-meta mt-1 text-status-1 font-bold">Immediate Execution</div>`;
+            }
+            cardHtml += `<button class="btn btn-primary mt-sm w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
+        } else {
+            cardHtml += `<div class="mt-2 text-muted text-xs font-mono">✅ USED / COMPLETED</div>`;
         }
 
-        if (approvers) {
-            html += `<div class="card-meta mt-1 text-status-4" class="text-bold">Requires approval from: ${approvers.toUpperCase()}</div>`;
-        } else {
-            html += `<div class="card-meta mt-1 text-status-1 font-bold">Immediate Execution</div>`;
-        }
-
-        if (isMet) {
-            html += `<button class="btn btn-primary mt-sm w-100" onclick="window.triggerManualAction('${action.id}')">Initiate Action</button>`;
-        } else if (isClosed) {
-            html += `<div class="mt-2 text-muted text-xs font-mono">✅ COMPLETED / WINDOW CLOSED</div>`;
-            html += `<button class="btn btn-primary mt-sm w-100 opacity-50 cursor-not-allowed" disabled>Action Closed</button>`;
-        } else {
-            html += `<div class="mt-2 text-status-4 text-xs font-mono">🔒 REQUIREMENTS NOT MET</div>`;
-            html += `<button class="btn btn-primary mt-sm w-100 opacity-50 cursor-not-allowed" disabled>Initiate Action</button>`;
-        }
-        html += `</div>`;
-    });
-    
-    if (actionsShown === 0) {
-        html += '<p class="text-muted">No actions currently assigned to your station.</p>';
+        cardHtml += `</div>`;
+        return cardHtml;
     }
+
+    let html = '<div class="actions-list">';
+
+    if (availableActions.length > 0) {
+        availableActions.forEach(action => {
+            html += renderActionCard(action, true);
+        });
+    } else {
+        html += '<p class="text-muted">No actions currently available for your station.</p>';
+    }
+
+    if (usedActions.length > 0) {
+        html += `
+            <details class="resolved-events-details mt-2">
+                <summary>Used Actions (${usedActions.length})</summary>
+                <div class="mt-2">
+        `;
+        usedActions.forEach(action => {
+            html += renderActionCard(action, false);
+        });
+        html += `
+                </div>
+            </details>
+        `;
+    }
+
     html += '</div>';
-    
     return html;
 }
 
@@ -1724,9 +1776,10 @@ setInterval(() => {
         if (endTime) {
             const remainingMs = Math.max(0, endTime - Date.now());
             const secondsLeft = Math.ceil(remainingMs / 1000);
-            timer.textContent = `TIME REMAINING: ${secondsLeft}s`;
+            const prefix = timer.getAttribute('data-prefix') || 'TIME REMAINING: ';
+            timer.textContent = `${prefix}${secondsLeft}s`;
             if (secondsLeft <= 0) {
-                timer.style.color = 'red';
+                timer.classList.add('text-status-5');
             }
         }
     });

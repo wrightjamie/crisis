@@ -20,6 +20,8 @@
 - [x] Create living UI component library (`public/elements.html`) and add strict design system rules in `AGENT.md` to prevent AI agents from generating redundant styles
 - [x] Refactor and DRY header styles across all pages (player, facilitator, admin) into unified `.top-bar` design system
 - [x] Re-architect Op Sovereign Sky into 3 concurrent parallel tracks with branching consequences, cross-track visibility unlocks, timed injects, full RAFAC Air Power syllabus coverage (LO1–LO3 / P1–P10), and event-linked / phase-bounded Manual Actions (`notTriggeredEvents` + asset states)
+- [x] Resolve GitHub bugs #88–#92 (facilitator network diagram height collapse, pause/resume `socket.data.role` bug, hide unavailable manual actions with collapsed Used Actions section, data-driven `conditionalEffects` for reduced UK diplomatic impact when attacking forces are active, and pause-aware timed `deployAssets` state with optional `returnState` and concurrent option checks)
+- [ ] Add scenario-specific repeatable "repair this asset" triggered events when assets become damaged
 
 ## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
 

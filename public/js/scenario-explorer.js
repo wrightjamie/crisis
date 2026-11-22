@@ -183,12 +183,16 @@
     }
 
     function getActionStatus(act) {
+        const triggeredIds = (currentState.events || []).map(e => e.templateId);
+        if (!act.repeatable && triggeredIds.includes(act.id)) {
+            return { key: 'complete', text: 'USED', icon: '✅' };
+        }
         const conditionsMet = checkConditions(
             act,
             currentState.scores,
             currentState.assets,
             currentState.unlockedEvents,
-            (currentState.events || []).map(e => e.templateId),
+            triggeredIds,
             typeof currentActiveRoles !== 'undefined' ? currentActiveRoles : []
         );
         return conditionsMet
@@ -466,11 +470,17 @@
             });
         });
 
-        // Auto-fit once when a new scenario loads
+        // Auto-fit once when a new scenario loads with measurable nodes & viewport
         const scenarioId = currentState.scenarioId || currentState.scenarioConfig?.id || 'default';
-        if (lastFittedScenarioId !== scenarioId && panZoomController) {
-            lastFittedScenarioId = scenarioId;
-            requestAnimationFrame(() => panZoomController?.fitToView(posMap));
+        if (posMap.size > 0 && lastFittedScenarioId !== scenarioId && panZoomController) {
+            requestAnimationFrame(() => {
+                const wrapperEl = document.getElementById('fac-canvas-wrapper');
+                const rect = wrapperEl ? wrapperEl.getBoundingClientRect() : null;
+                if (rect && rect.width >= 40 && rect.height >= 40) {
+                    lastFittedScenarioId = scenarioId;
+                    panZoomController?.fitToView(posMap);
+                }
+            });
         }
     }
 
