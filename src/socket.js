@@ -220,6 +220,10 @@ module.exports = function setupSockets(io, gameManager) {
             socket.emit('role_registered', role);
             io.to(gameId).emit('active_roles', engine.getActiveRoles());
 
+            if (role === 'facilitator' && engine.gameState.status === 'active') {
+                socket.emit('templates', engine.getScenarioTemplates());
+            }
+
             // Resume game if a facilitator joins a game paused due to disconnect
             if (role === 'facilitator' && engine.gameState.isPaused && !engine.isManualPause) {
                 engine.resumeGame();
@@ -439,24 +443,31 @@ module.exports = function setupSockets(io, gameManager) {
             io.to(gameId).emit('generate_ai_briefing_all', { context: "The facilitator manually adjusted the operational scores." });
         });
 
-        // Facilitator resets the game
-        socket.on('reset_game', () => {
-            const gameId = socket.data.gameId;
-            const engine = gameId ? gameManager.getGame(gameId) : null;
-            if (!engine) return;
-            engine.updateActivity();
-            if (engine.gameState.status !== 'active') return;
-            console.log('Game reset by facilitator');
-            engine.createLobby(engine.gameState.scenarioId);
-            io.to(gameId).emit('state_update', engine.gameState);
-        });
-
         const getFacilitatorContext = (fallbackGameId = null) => {
             const gameId = socket.data.gameId || fallbackGameId;
             const engine = gameId ? gameManager.getGame(gameId) : null;
             const isFacilitator = Boolean(engine && (socket.data.role === 'facilitator' || engine.connectedClients[socket.id] === 'facilitator'));
             return isFacilitator ? { gameId, engine } : null;
         };
+
+        // Facilitator resets the game back to lobby, preserving connected clients
+        socket.on('reset_game', () => {
+            const ctx = getFacilitatorContext();
+            if (!ctx) return;
+            const { gameId, engine } = ctx;
+            engine.updateActivity();
+            if (engine.gameState.status !== 'active' && engine.gameState.status !== 'ended') return;
+            console.log('Game reset by facilitator');
+            engine.stopSchedulerLoop();
+            const prevClients = { ...engine.connectedClients };
+            const prevAiEnabled = engine.gameState.aiEnabled !== false;
+            const prevVariants = engine.selectedVariants || null;
+            engine.createLobby(engine.gameState.scenarioId, prevVariants, prevAiEnabled);
+            engine.connectedClients = prevClients;
+            io.to(gameId).emit('state_update', engine.gameState);
+            io.to(gameId).emit('active_roles', engine.getActiveRoles());
+            io.to(gameId).emit('pending_players', engine.pendingPlayers);
+        });
 
         // Facilitator pauses/resumes all clocks
         socket.on('toggle_pause_game', () => {

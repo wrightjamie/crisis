@@ -470,14 +470,15 @@
             });
         });
 
-        // Auto-fit once when a new scenario loads with measurable nodes & viewport
+        // Auto-fit when a new scenario loads or when event templates arrive for the first time
         const scenarioId = currentState.scenarioId || currentState.scenarioConfig?.id || 'default';
-        if (posMap.size > 0 && lastFittedScenarioId !== scenarioId && panZoomController) {
+        const fitKey = `${scenarioId}:${activeStageEvents.length > 0 ? 'full' : 'partial'}`;
+        if (posMap.size > 0 && lastFittedScenarioId !== fitKey && panZoomController) {
             requestAnimationFrame(() => {
                 const wrapperEl = document.getElementById('fac-canvas-wrapper');
                 const rect = wrapperEl ? wrapperEl.getBoundingClientRect() : null;
                 if (rect && rect.width >= 40 && rect.height >= 40) {
-                    lastFittedScenarioId = scenarioId;
+                    lastFittedScenarioId = fitKey;
                     panZoomController?.fitToView(posMap);
                 }
             });

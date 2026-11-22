@@ -317,7 +317,9 @@ class GameEngine {
 
         this.connectedClients = {}; // reset roles
         this.pendingPlayers = {};
-        const isRestart = this.gameState.scenarioId === scenarioId;
+        this.selectedVariants = selectedVariants || null;
+        this.isPaused = false;
+        this.isManualPause = false;
         return this.gameState;
     }
 
