@@ -8,9 +8,14 @@
     let showManualActions = true;
 
     // Persistent canvas state across live state_update broadcasts
+    const DEFAULT_NETWORK_SCALE = 0.7;
     let panZoomController = null;
     let lastFittedScenarioId = null;
     let lastPositionsMap = new Map();
+
+    function resetToDefaultZoom() {
+        panZoomController?.setState({ scale: DEFAULT_NETWORK_SCALE, panX: 40, panY: 40 });
+    }
 
     const escapeHtml = (str) => {
         if (window.common && typeof window.common.escapeHtml === 'function') {
@@ -241,13 +246,13 @@
                     </div>
                     <div id="fac-network-float-bar" class="floating-bar fac-canvas-floating-bar" role="toolbar" aria-label="Network Zoom Controls">
                         <button type="button" id="fac-btn-zoom-out" class="floating-bar-btn" title="Zoom Out" aria-label="Zoom Out">−</button>
-                        <button type="button" id="fac-btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom to 100%" aria-label="Reset Zoom to 100%">
-                            <span id="fac-canvas-zoom-label">100%</span>
+                        <button type="button" id="fac-btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom to 70%" aria-label="Reset Zoom to 70%">
+                            <span id="fac-canvas-zoom-label">70%</span>
                         </button>
                         <button type="button" id="fac-btn-zoom-in" class="floating-bar-btn" title="Zoom In" aria-label="Zoom In">+</button>
                         <span class="floating-bar-divider" aria-hidden="true"></span>
                         <button type="button" id="fac-btn-zoom-fit" class="floating-bar-btn" title="Fit diagram to viewport">Fit</button>
-                        <button type="button" id="fac-btn-zoom-reset-view" class="floating-bar-btn" title="Reset pan and zoom">Reset</button>
+                        <button type="button" id="fac-btn-zoom-reset-view" class="floating-bar-btn" title="Reset pan and zoom to 70%">Reset</button>
                     </div>
                 </div>
             </div>
@@ -264,12 +269,13 @@
                 zoomLabelEl,
                 canStartPan: (e) => !e.target.closest('.canvas-node') && !e.target.closest('.floating-bar')
             });
+            resetToDefaultZoom();
         }
 
         document.getElementById('fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
         document.getElementById('fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
-        document.getElementById('fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
-        document.getElementById('fac-btn-zoom-reset-view')?.addEventListener('click', () => panZoomController?.reset());
+        document.getElementById('fac-btn-zoom-reset')?.addEventListener('click', () => resetToDefaultZoom());
+        document.getElementById('fac-btn-zoom-reset-view')?.addEventListener('click', () => resetToDefaultZoom());
         document.getElementById('fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
 
         return document.getElementById('fac-canvas-shell');
@@ -435,18 +441,12 @@
             });
         });
 
-        // Auto-fit when a new scenario loads or when event templates arrive for the first time
+        // Apply default 70% zoom when a new scenario loads
         const scenarioId = currentState.scenarioId || currentState.scenarioConfig?.id || 'default';
         const fitKey = `${scenarioId}:${activeStageEvents.length > 0 ? 'full' : 'partial'}`;
         if (posMap.size > 0 && lastFittedScenarioId !== fitKey && panZoomController) {
-            requestAnimationFrame(() => {
-                const wrapperEl = document.getElementById('fac-canvas-wrapper');
-                const rect = wrapperEl ? wrapperEl.getBoundingClientRect() : null;
-                if (rect && rect.width >= 40 && rect.height >= 40) {
-                    lastFittedScenarioId = fitKey;
-                    panZoomController?.fitToView(posMap);
-                }
-            });
+            lastFittedScenarioId = fitKey;
+            resetToDefaultZoom();
         }
     }
 

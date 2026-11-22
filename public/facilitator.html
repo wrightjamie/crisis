@@ -326,9 +326,18 @@
                 </div>
             </div>
 
+            <!-- Score Override (Top of Side Column) -->
+            <div class="admin-card">
+                <details open>
+                    <summary><h2>Adjust Scores (1-5)</h2></summary>
+                    <div id="score-adjust-container">
+                        <!-- Injected via JS -->
+                    </div>
+                    <button class="btn btn-primary mt-1 w-100" onclick="submitScores()">Update Scores</button>
+                </details>
+            </div>
 
-
-            <!-- State View (Moved Up) -->
+            <!-- State View -->
             <div class="admin-card">
                 <details open>
                     <summary><h2>Active Events List</h2></summary>
@@ -344,8 +353,6 @@
             </div>
 
             <!-- New Panels -->
-
-
             <div class="admin-card">
                 <details open>
                     <summary><h2>Scheduled Events</h2></summary>
@@ -353,17 +360,6 @@
                     <div id="scheduled-events-list" class="action-list">
                         <!-- Injected via JS -->
                     </div>
-                </details>
-            </div>
-
-            <!-- Score Override -->
-            <div class="admin-card">
-                <details open>
-                    <summary><h2>Adjust Scores (1-5)</h2></summary>
-                    <div id="score-adjust-container">
-                        <!-- Injected via JS -->
-                    </div>
-                    <button class="btn btn-primary mt-1 w-100" onclick="submitScores()">Update Scores</button>
                 </details>
             </div>
             
