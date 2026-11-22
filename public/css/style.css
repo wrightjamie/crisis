@@ -1759,6 +1759,59 @@ body:has(dialog[open]) {
   z-index: 20;
 }
 
+/* Facilitator Customizable Card Controls (Width Cycle & Drag Reorder) */
+.fac-card-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.fac-card-width-btn,
+.fac-card-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 var(--space-xs);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.fac-card-drag-handle {
+  min-width: 24px;
+  cursor: grab;
+  letter-spacing: -1px;
+  color: var(--text-muted);
+}
+
+.fac-card-drag-handle:active {
+  cursor: grabbing;
+}
+
+.fac-card-width-btn:hover,
+.fac-card-drag-handle:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent-blue);
+  color: var(--text-primary);
+}
+
+.admin-card.fac-card-dragging {
+  opacity: 0.45;
+}
+
+.admin-card.fac-card-drop-target {
+  outline: 2px dashed var(--accent-blue);
+  outline-offset: 2px;
+}
+
 .fac-event-list.fac-network-mode {
   max-height: none;
   overflow: visible;

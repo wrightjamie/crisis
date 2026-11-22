@@ -14,8 +14,15 @@
             max-width: 1920px;
             margin: 0 auto;
         }
+        .grid .span-2 {
+            grid-column: span 2;
+        }
         .grid .span-3 {
             grid-column: span 3;
+        }
+        .grid .span-full {
+            grid-column: 1 / -1;
+            width: 100%;
         }
         /* Native Grid Lanes for supporting browsers */
         @supports (display: grid-lanes) {
@@ -208,6 +215,7 @@
                         </div>
                     </div>
                     <button class="dropdown-item" onclick="window.copyBugReportsForAi()">📋 Copy Reports for AI</button>
+                    <button class="dropdown-item" onclick="window.resetFacilitatorLayout()">↺ Reset Layout</button>
                     <a href="/admin" class="dropdown-item top-bar-border text-decoration-none">🛡️ Admin Console</a>
                     <button class="dropdown-item text-danger top-bar-border" onclick="resetGame()">Reset Scenario</button>
                     <button class="dropdown-item text-danger top-bar-border" onclick="endScenario()">End Scenario</button>
@@ -278,7 +286,7 @@
             
             <!-- Controls -->
             <!-- Interactive Event Explorer -->
-            <div id="event-explorer-card" class="admin-card span-3 flex-col">
+            <div id="event-explorer-card" class="admin-card span-3 flex-col" data-card-id="event-explorer" data-default-width="3" data-allowed-widths="2,3,full">
                 <div class="fac-list-item-header">
                     <h2>Event Explorer</h2>
                     <div class="flex-row items-center gap-xs">
@@ -327,7 +335,7 @@
             </div>
 
             <!-- Score Override (Top of Side Column) -->
-            <div class="admin-card">
+            <div class="admin-card" data-card-id="scores" data-default-width="1" data-allowed-widths="1">
                 <details open>
                     <summary><h2>Adjust Scores (1-5)</h2></summary>
                     <div id="score-adjust-container">
@@ -338,14 +346,14 @@
             </div>
 
             <!-- State View -->
-            <div class="admin-card">
+            <div class="admin-card" data-card-id="active-events" data-default-width="1" data-allowed-widths="1,2">
                 <details open>
                     <summary><h2>Active Events List</h2></summary>
                     <div id="facilitator-events-list"></div>
                 </details>
             </div>
 
-            <div class="admin-card">
+            <div class="admin-card" data-card-id="decisions" data-default-width="1" data-allowed-widths="1,2">
                 <details open>
                     <summary><h2>Decisions Overview</h2></summary>
                     <div id="facilitator-tasks-list"></div>
@@ -353,7 +361,7 @@
             </div>
 
             <!-- New Panels -->
-            <div class="admin-card">
+            <div class="admin-card" data-card-id="scheduled-events" data-default-width="1" data-allowed-widths="1,2">
                 <details open>
                     <summary><h2>Scheduled Events</h2></summary>
                     <p class="text-sm text-secondary mb-1">Events automatically triggering from player decisions.</p>
@@ -363,7 +371,7 @@
                 </details>
             </div>
             
-            <div class="admin-card">
+            <div class="admin-card" data-card-id="used-events" data-default-width="1" data-allowed-widths="1,2">
                 <details>
                     <summary><h2>Used / Disabled Events</h2></summary>
                     <div id="used-events" class="action-list opacity-60">
@@ -398,6 +406,7 @@
     <script src="js/acronyms.js"></script>
     <script src="js/flow-graph.js"></script>
     <script src="js/scenario-explorer.js"></script>
+    <script src="js/facilitator-layout.js"></script>
     <script src="js/facilitator.js"></script>
     <script src="js/bug-reporter.js"></script>
 
@@ -416,7 +425,9 @@
                 const updateCardWidths = () => {
                     const colWidth = sizer.offsetWidth;
                     document.querySelectorAll('.grid .admin-card').forEach(card => {
-                        if (card.classList.contains('span-3')) {
+                        if (card.classList.contains('span-full')) {
+                            card.style.width = '100%';
+                        } else if (card.classList.contains('span-3')) {
                             card.style.width = `min(calc(${colWidth * 3}px + 4rem), 100%)`;
                         } else if (card.classList.contains('span-2')) {
                             // Don't expand beyond 100% of the grid container width
@@ -436,6 +447,14 @@
                     gutter: 32, // roughly 2rem
                     percentPosition: false
                 });
+
+                window.relayoutFacilitatorGrid = () => {
+                    updateCardWidths();
+                    if (window.msnry) {
+                        window.msnry.reloadItems();
+                        window.msnry.layout();
+                    }
+                };
 
                 // Periodically relayout to handle dynamically injected content heights
                 setInterval(() => {
