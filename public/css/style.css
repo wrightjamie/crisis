@@ -1420,16 +1420,48 @@ body:has(dialog[open]) {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-xs) var(--space-sm);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.fac-toolbar-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-right: var(--space-sm);
+  border-right: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.fac-toolbar-tab {
+  position: relative;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 var(--space-xs);
+  justify-content: center;
+}
+
+.fac-toolbar-tab.has-active-criteria::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
 }
 
 .fac-filter-btn-group {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-xs);
+  flex: 1;
 }
 
 .btn-filter {
@@ -1748,7 +1780,7 @@ body:has(dialog[open]) {
 
 .fac-canvas-stage-wrapper {
   flex: none;
-  height: clamp(320px, calc(100vh - var(--top-bar-height) - 18rem), 960px);
+  height: clamp(320px, calc(100vh - var(--top-bar-height) - 14.5rem), 960px);
   max-height: 960px;
 }
 
