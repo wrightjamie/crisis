@@ -1748,8 +1748,8 @@ body:has(dialog[open]) {
 
 .fac-canvas-stage-wrapper {
   flex: none;
-  height: clamp(620px, 78vh, 960px);
-  min-height: 580px;
+  height: clamp(320px, calc(100vh - var(--top-bar-height) - 18rem), 960px);
+  max-height: 960px;
 }
 
 .fac-canvas-floating-bar {
