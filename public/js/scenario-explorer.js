@@ -6,7 +6,6 @@
     let currentEventSearch = '';
     let currentExplorerView = 'network'; // 'network' or 'list'
     let showManualActions = true;
-    let activeToolbarTab = 'filter'; // 'search' | 'filter' | null (collapsed)
 
     // Persistent canvas state across live state_update broadcasts
     const DEFAULT_NETWORK_SCALE = 0.7;
@@ -53,33 +52,13 @@
     function syncToolbarTabUI() {
         const tabSearch = document.getElementById('fac-tab-search');
         const tabFilter = document.getElementById('fac-tab-filter');
-        const panelSearch = document.getElementById('fac-toolbar-panel-search');
-        const panelFilter = document.getElementById('fac-toolbar-panel-filter');
-
-        const isSearchOpen = activeToolbarTab === 'search';
-        const isFilterOpen = activeToolbarTab === 'filter';
-
         if (tabSearch) {
-            tabSearch.classList.toggle('active', isSearchOpen);
             tabSearch.classList.toggle('has-active-criteria', currentEventSearch.length > 0);
-            tabSearch.setAttribute('aria-selected', String(isSearchOpen));
         }
         if (tabFilter) {
-            tabFilter.classList.toggle('active', isFilterOpen);
             tabFilter.classList.toggle('has-active-criteria', currentEventFilter !== 'all' || !showManualActions);
-            tabFilter.setAttribute('aria-selected', String(isFilterOpen));
         }
-        if (panelSearch) panelSearch.classList.toggle('d-none', !isSearchOpen);
-        if (panelFilter) panelFilter.classList.toggle('d-none', !isFilterOpen);
     }
-
-    window.toggleExplorerToolbarTab = function(tab) {
-        activeToolbarTab = activeToolbarTab === tab ? null : tab;
-        syncToolbarTabUI();
-        if (activeToolbarTab === 'search') {
-            document.getElementById('fac-event-search')?.focus();
-        }
-    };
 
     window.toggleManualActionsFilter = function() {
         showManualActions = !showManualActions;

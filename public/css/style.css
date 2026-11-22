@@ -1437,12 +1437,40 @@ body:has(dialog[open]) {
   flex-shrink: 0;
 }
 
+.fac-tab-radio {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.fac-event-toolbar .fac-toolbar-panel {
+  display: none;
+}
+
+#fac-tab-radio-search:checked ~ #fac-toolbar-panel-search {
+  display: block;
+}
+
+#fac-tab-radio-filter:checked ~ #fac-toolbar-panel-filter {
+  display: flex;
+}
+
+#fac-tab-radio-search:checked ~ .fac-toolbar-tabs label[for="fac-tab-radio-search"],
+#fac-tab-radio-filter:checked ~ .fac-toolbar-tabs label[for="fac-tab-radio-filter"] {
+  background: var(--accent-blue);
+  color: var(--bg-primary);
+  border-color: var(--accent-blue);
+}
+
 .fac-toolbar-tab {
   position: relative;
   min-width: 30px;
   height: 28px;
   padding: 0 var(--space-xs);
   justify-content: center;
+  cursor: pointer;
 }
 
 .fac-toolbar-tab.has-active-criteria::after {

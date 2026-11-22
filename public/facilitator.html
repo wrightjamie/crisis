@@ -295,21 +295,23 @@
                     </div>
                 </div>
                 
-                <!-- Compact Single-Row Tabbed Search / Filter Toolbar -->
+                <!-- Compact Single-Row CSS Radio-Tabbed Search / Filter Toolbar -->
                 <div class="fac-event-toolbar mb-2">
+                    <input type="radio" name="fac-explorer-tab" id="fac-tab-radio-search" class="fac-tab-radio" onchange="document.getElementById('fac-event-search')?.focus()">
+                    <input type="radio" name="fac-explorer-tab" id="fac-tab-radio-filter" class="fac-tab-radio" checked>
                     <div class="fac-toolbar-tabs" role="tablist" aria-label="Explorer Search and Filters">
-                        <button type="button" class="btn-filter fac-toolbar-tab" id="fac-tab-search" role="tab" aria-selected="false" aria-controls="fac-toolbar-panel-search" onclick="window.toggleExplorerToolbarTab('search')" title="Search events">
+                        <label for="fac-tab-radio-search" class="btn-filter fac-toolbar-tab" id="fac-tab-search" title="Search events">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        </button>
-                        <button type="button" class="btn-filter fac-toolbar-tab active" id="fac-tab-filter" role="tab" aria-selected="true" aria-controls="fac-toolbar-panel-filter" onclick="window.toggleExplorerToolbarTab('filter')" title="Filter events by status">
+                        </label>
+                        <label for="fac-tab-radio-filter" class="btn-filter fac-toolbar-tab" id="fac-tab-filter" title="Filter events by status">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                        </button>
+                        </label>
                     </div>
-                    <div id="fac-toolbar-panel-search" class="fac-search-box d-none">
+                    <div id="fac-toolbar-panel-search" class="fac-search-box fac-toolbar-panel">
                         <input type="text" id="fac-event-search" placeholder="Filter events by name, notes, or description..." class="form-control text-sm w-100" oninput="window.setEventSearch(this.value)">
                         <button id="fac-event-search-clear" class="btn-search-clear" onclick="window.clearEventSearch()" style="display: none;" title="Clear search">&times;</button>
                     </div>
-                    <div id="fac-toolbar-panel-filter" class="fac-filter-btn-group">
+                    <div id="fac-toolbar-panel-filter" class="fac-filter-btn-group fac-toolbar-panel">
                         <button class="btn-filter active" id="filter-btn-all" onclick="window.setEventFilter('all')" title="Show all events">
                             <span>🌐 All</span> <span class="badge" id="count-all">0</span>
                         </button>
