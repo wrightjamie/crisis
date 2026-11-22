@@ -696,6 +696,39 @@ module.exports = {
                                     "ev_maritime_shadowing",
                                     "ev_disinfo_campaign",
                                     "ev_bomber_intercept"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Joint UK–European Declaration Issued",
+                                        "message": "London, Paris, Berlin, and Warsaw issue a united statement rejecting Kremlin intimidation and reaffirming support for Ukraine, strengthening European cohesion as diplomatic ties with Moscow freeze.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Allied Force Posture Hardened",
+                                        "messages": [
+                                            "RAF Quick Reaction Alert squadrons and Royal Navy North Atlantic patrols step up readiness alongside European NATO partners.",
+                                            "Joint European air and maritime alert levels rise as Russian fleet units deploy in the Northern and Baltic Seas."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK–EUROPE DECLARATION — KREMLIN ULTIMATUM REJECTED",
+                                        "message": "Britain and European allies stand firm on Ukraine support; military alert levels rising.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -712,6 +745,30 @@ module.exports = {
                                     "ev_maritime_shadowing",
                                     "ev_dissident_discovery",
                                     "ev_gps_jamming"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Washington Statement Coordinated",
+                                        "message": "Downing Street and the White House release a tightly aligned response that reinforces the UK–US Special Relationship, though European capitals express concern over being sidelined.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "cyber"
+                                        ],
+                                        "title": "Five Eyes Threat Watch Elevated",
+                                        "messages": [
+                                            "GCHQ and US intelligence partners synchronise early-warning telemetry as Moscow shifts attention toward UK diplomatic and digital targets.",
+                                            "Transatlantic cyber watch desks tighten joint monitoring of Russian state networks following the UK–US statement."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -728,6 +785,39 @@ module.exports = {
                                     "ev_uk_casualty_leak",
                                     "ev_protest_manchester",
                                     "ev_disinfo_campaign"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Urgent Diplomatic Talks Proposed",
+                                        "message": "Britain calls for emergency dialogue and stresses its strictly defensive posture; immediate military tension eases, but Washington and European allies question UK resolve.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "media"
+                                        ],
+                                        "title": "Conciliatory Line Splits Commentators",
+                                        "messages": [
+                                            "Westminster correspondents highlight the government's push for talks while opposition critics warn against appearing hesitant.",
+                                            "Evening news panels debate Britain's call for talks, with hawkish pundits arguing Moscow may exploit restraint."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "LONDON URGES TALKS — ALLIED CONCERN OVER RESOLVE",
+                                        "message": "UK calls for emergency diplomatic dialogue; military tension dips as NATO partners urge firmness.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -749,12 +839,77 @@ module.exports = {
                                     {
                                         "id": "ev_uk_casualty_leak",
                                         "delayMs": 65000,
-                                        "probability": 0.7
+                                        "probability": 0.7,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "defence",
+                                                    "media"
+                                                ],
+                                                "title": "Unconfirmed Baltic Incident Traffic",
+                                                "messages": [
+                                                    "Encrypted liaison traffic flags a sharp firefight near an allied Baltic border post, with unverified casualty rumours reaching London newsdesks.",
+                                                    "MOD duty officers receive urgent signals of a clash involving British advisers in the Baltics as reporters begin pressing for comment."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_deepfake_pm",
                                         "delayMs": 70000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "media",
+                                                    "cyber"
+                                                ],
+                                                "title": "Suspicious Synthetic Media Surge",
+                                                "messages": [
+                                                    "NCSC monitors detect coordinated bot clusters preparing synthetic broadcast clips targeting Downing Street.",
+                                                    "GCHQ alerts press officers to unusual dark-web chatter and automated video uploads mimicking official UK broadcasts."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Military & NCSC Alert Levels Raised",
+                                        "messages": [
+                                            "UK Armed Forces and NCSC incident teams move onto heightened readiness, placing QRA fighter crews and national cyber shields on 24-hour watch.",
+                                            "Readiness orders take effect across MOD commands and GCHQ defence centres, sharpening British response times."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Commons Statement Sparks Public Unease",
+                                        "message": "An emergency Parliamentary briefing reassures MPs of defensive preparedness, though live coverage of heightened alert levels unsettles commuters and markets.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "COBRA RAISES UK ALERT — FORCES & NCSC ON STANDBY",
+                                        "message": "Prime Minister briefs Parliament as military and cyber readiness levels step up.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -771,12 +926,68 @@ module.exports = {
                                     {
                                         "id": "ev_uk_casualty_leak",
                                         "delayMs": 80000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "defence",
+                                                    "media"
+                                                ],
+                                                "title": "Encrypted Baltic Casualty Rumours",
+                                                "messages": [
+                                                    "Whitehall duty officers pick up urgent reports of a border skirmish involving British troops in the Baltic states.",
+                                                    "Unconfirmed press enquiries begin circulating in Westminster over secret UK military casualties in Eastern Europe."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_heathrow_gps_spoof",
                                         "delayMs": 85000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "cyber",
+                                                    "defence"
+                                                ],
+                                                "title": "Anomalous GNSS Interference South-East",
+                                                "messages": [
+                                                    "NATS air-traffic sensors and NCSC monitors log early GPS signal drift along commercial approaches to Heathrow and Gatwick.",
+                                                    "Electronic warfare sensors detect hostile radio-frequency interference probing civilian aviation navigation corridors south of London."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Calm Maintained Across the UK",
+                                        "message": "Quiet preparations keep crisis headlines off evening bulletins, preserving public calm and steady financial markets.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Discreet Posture Slows Mobilisation",
+                                        "messages": [
+                                            "Without formal mobilisation orders, reserve recalls and full NCSC infrastructure sweeps proceed slowly behind closed doors.",
+                                            "Commanders warn that quiet preparations keep force readiness below optimum levels if threats accelerate."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -821,6 +1032,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_protest_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Conciliatory Statement Emboldens Protest Organisers",
+                                        "messages": [
+                                            "Respecting the marchers' peaceful rights avoids an immediate flashpoint in Manchester, yet critics accuse Whitehall of weakness as organisers announce larger rallies in London.",
+                                            "Local disorder is avoided in Manchester, though campaigners swiftly call for a mass march outside Downing Street."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "European Allies Question British Resolve",
+                                        "message": "NATO diplomats express concern that Downing Street's cautious tone signals wavering domestic support for deterrence.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -834,6 +1069,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_protest_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Firm Security Message Steadies Public Confidence",
+                                        "messages": [
+                                            "Emphasising national security and lawful order reassures the wider public in Manchester, even as protest leaders vow to march on Westminster next.",
+                                            "Downing Street's firm stance on street order steadies public sentiment while anti-war organisers shift focus toward London."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "European Partners Welcome Firm Leadership",
+                                        "message": "Allied capitals note Downing Street's decisive messaging positively, reinforcing confidence in UK commitment.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -884,12 +1143,67 @@ module.exports = {
                                     {
                                         "id": "ev_north_sea_pipeline",
                                         "delayMs": 85000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "home",
+                                                    "foreign"
+                                                ],
+                                                "title": "St Fergus Pipeline Telemetry Dip",
+                                                "messages": [
+                                                    "North Sea terminal sensors register an abrupt pressure dip on the Langeled gas interconnector near an unlit vessel.",
+                                                    "Energy monitors flag abnormal flow readings on a vital North Sea gas pipeline as surface radar tracks a suspicious trawler."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_spy_trawler_anchor",
                                         "delayMs": 90000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "cyber"
+                                                ],
+                                                "title": "Unflagged Trawler Lingering Over Seabed Trunk",
+                                                "messages": [
+                                                    "Coastguard radar spots an unflagged trawler slowing suspiciously over a primary North Sea communications cable.",
+                                                    "Maritime surveillance detects an AIS-dark trawler dropping speed directly above UK–European subsea fibre routes."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Shadowing Operation Logs Russian Capabilities",
+                                        "messages": [
+                                            "Royal Navy frigates and Wildcat helicopters maintain safe standoff distance, capturing high-resolution imagery of Russian deck gear and boosting maritime readiness.",
+                                            "Escorts continuously track the flotilla's course and speed without provoking a collision, building valuable intelligence."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "foreign"
+                                        ],
+                                        "title": "Subsea Cable Traffic Monitored",
+                                        "message": "NCSC continues tracking transatlantic bandwidth dips while diplomats log the Russian task force's movements for NATO partners.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -911,12 +1225,76 @@ module.exports = {
                                     {
                                         "id": "ev_giuk_tanker_collision",
                                         "delayMs": 80000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "foreign"
+                                                ],
+                                                "title": "Fogbound Manoeuvring Alert in GIUK Gap",
+                                                "messages": [
+                                                    "Flash traffic from North Atlantic patrols warns of dangerous close-quarters manoeuvring near an RFA tanker in thick fog.",
+                                                    "Royal Navy escorts report a Russian destroyer closing aggressively across an allied supply tanker's bow in the GIUK Gap."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_north_sea_pipeline",
                                         "delayMs": 85000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "home",
+                                                    "foreign"
+                                                ],
+                                                "title": "North Sea Interconnector Pressure Anomaly",
+                                                "messages": [
+                                                    "Automated alarms at St Fergus gas terminal flag a sudden drop in pipeline pressure near a shadow-fleet vessel.",
+                                                    "Energy grid operators detect unexpected pressure loss along the Langeled North Sea gas link."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Destroyers Force Russian Flotilla Off Cable Lane",
+                                        "messages": [
+                                            "Type 45 destroyers cross the Russian task group's bow at speed, driving the warships clear of the subsea corridor at high escalation risk.",
+                                            "Royal Navy warships shoulder the Russian flotilla off the Atlantic cable route, sharpening readiness while raising maritime tension."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Moscow Condemns Naval Intercept",
+                                        "message": "Russian diplomats lodge an angry protest accusing the Royal Navy of reckless brinkmanship in international waters.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL NAVY INTERCEPTS RUSSIAN FLOTILLA OVER CABLES",
+                                        "message": "Extra destroyers drive Russian warships off Atlantic cable lanes; tensions spike.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -935,7 +1313,22 @@ module.exports = {
                                     "uk_europe": 1,
                                     "uk_us": 1,
                                     "uk_russia": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "defence"
+                                        ],
+                                        "title": "NATO Allies Pledge Maritime Patrol Support",
+                                        "messages": [
+                                            "Washington and European allies back Britain's subsea cable warning and pledge maritime patrol aircraft, though Moscow condemns the allied mobilisation.",
+                                            "NATO partners commit extra patrol aircraft to guard Atlantic seabed cables as diplomatic friction with Russia rises."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -945,7 +1338,29 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "uk_us": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "City Markets Stay Calm",
+                                        "message": "Withholding public comment prevents panic selling in the City of London and keeps retail banking confidence steady.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "Washington Frustrated by Public Silence",
+                                        "message": "US officials privately criticise Whitehall for withholding attribution while shared transatlantic data links remain degraded.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -985,12 +1400,73 @@ module.exports = {
                                     {
                                         "id": "ev_deepfake_pm",
                                         "delayMs": 85000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "media",
+                                                    "cyber"
+                                                ],
+                                                "title": "Synthetic Broadcast Chatter Detected",
+                                                "messages": [
+                                                    "NCSC threat hunters spot adversarial bot clusters preparing manipulated video clips of the Prime Minister.",
+                                                    "GCHQ flags automated disinformation networks priming fake emergency statements across major social platforms."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_mi5_sleeper_cell",
                                         "delayMs": 90000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "home",
+                                                    "cyber"
+                                                ],
+                                                "title": "EYES ONLY: Midlands Comms Intercept",
+                                                "messages": [
+                                                    "MI5 surveillance flags encrypted radio bursts from suspected foreign operatives moving near Midlands National Grid sites.",
+                                                    "GCHQ and MI5 trace burst communications from a suspected hostile cell scouting electricity infrastructure in the Midlands."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "PM"
+                                        ],
+                                        "title": "Downing Street Tribute Steadies Public Mood",
+                                        "message": "A dignified press conference honouring the fallen soldiers and explaining Britain's NATO mission rallies public backing and reassures European allies.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Baltic Capitals Praise UK Steadfastness",
+                                        "message": "Allied governments in Tallinn, Riga, and Vilnius welcome Britain's public commitment to collective defence.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "DOWNING STREET HONOURS FALLEN — NATO MISSION DEFENDED",
+                                        "message": "Government confirms Baltic deployment; public and European allies rally behind UK forces.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1006,12 +1482,57 @@ module.exports = {
                                     {
                                         "id": "ev_deepfake_pm",
                                         "delayMs": 75000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "media",
+                                                    "cyber"
+                                                ],
+                                                "title": "Botnets Exploit Official Silence",
+                                                "messages": [
+                                                    "Foreign troll farms flood social feeds to fill the information vacuum, priming fake emergency video content.",
+                                                    "NCSC detects rapid amplification of fabricated Downing Street rumours across X, TikTok, and WhatsApp."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_commons_no_confidence",
                                         "delayMs": 95000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "home",
+                                                    "foreign",
+                                                    "media",
+                                                    "cyber"
+                                                ],
+                                                "title": "Westminster Backbench Restlessness",
+                                                "messages": [
+                                                    "Parliamentary whips warn that anger over secret deployments is fuelling backbench calls for an emergency Commons confidence vote.",
+                                                    "Westminster correspondents report growing murmurs among MPs demanding accountability over undisclosed military casualties."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "PM"
+                                        ],
+                                        "title": "Terse Briefing Fuels Press Scrutiny",
+                                        "message": "Withholding operational details sparks front-page accusations of secrecy in Whitehall, eroding domestic trust during the crisis.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1038,12 +1559,74 @@ module.exports = {
                                     {
                                         "id": "ev_baltic_drone_ambush",
                                         "delayMs": 110000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "media"
+                                                ],
+                                                "title": "Hostile Drone Telemetry Near Estonian Border",
+                                                "messages": [
+                                                    "Forward ISR units detect loitering munition launch signatures tracking British reinforcement convoys moving toward Estonia.",
+                                                    "Electronic sensors along the Baltic frontier flag enemy reconnaissance drones shadowing UK armoured columns."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_heathrow_gps_spoof",
                                         "delayMs": 95000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "cyber",
+                                                    "defence"
+                                                ],
+                                                "title": "South-East Aviation GPS Signal Drift",
+                                                "messages": [
+                                                    "NCSC receives urgent NATS alerts of erratic GPS readings affecting commercial approaches around London.",
+                                                    "Aviation beacons south-east of London report anomalous navigation interference from high-power jammers."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Armoured Reinforcements Pushed to Baltic Front",
+                                        "messages": [
+                                            "Challenger 2 armoured squadrons and artillery batteries deploy forward to shield British troops, boosting combat readiness while sharpening border escalation.",
+                                            "Heavy armour and mobile artillery reinforce UK positions in Estonia, hardening deterrence as Russian forces go on high alert."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Moscow Condemns British Armour Surge",
+                                        "message": "Russian officials warn that deploying heavy British tanks and artillery near the frontier crosses a dangerous line.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK ARMOUR REINFORCES BALTIC BORDER",
+                                        "message": "Tanks and artillery ordered forward to protect British troops; military escalation rises.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1064,12 +1647,64 @@ module.exports = {
                                     {
                                         "id": "ev_heathrow_gps_spoof",
                                         "delayMs": 95000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "cyber",
+                                                    "defence"
+                                                ],
+                                                "title": "Electronic Interference Near London Airports",
+                                                "messages": [
+                                                    "Air-traffic sensors around Heathrow and Gatwick detect early signs of hostile GNSS spoofing.",
+                                                    "NCSC logs suspicious electronic-warfare jamming sweeps probing South-East England flight corridors."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_mi5_sleeper_cell",
                                         "delayMs": 100000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "home",
+                                                    "cyber"
+                                                ],
+                                                "title": "EYES ONLY: Covert Cell Activity Logged",
+                                                "messages": [
+                                                    "MI5 counter-espionage teams intercept suspicious short-range radio traffic near a Midlands power substation.",
+                                                    "Domestic intelligence flags covert reconnaissance activity close to critical National Grid infrastructure in the Midlands."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Troops Repositioned Behind Main Border",
+                                        "message": "Pulling British units back lowers immediate flashpoint risk, but Washington and European allies voice sharp concern over allied deterrence.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK FORCES REDEPLOYED TO REAR POSITIONS",
+                                        "message": "Troops pulled back to reduce border friction; NATO allies express concern.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1122,6 +1757,39 @@ module.exports = {
                                         "delayMs": 15000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Riot Police Advance Along Whitehall",
+                                        "messages": [
+                                            "Public order officers push forward with shields to clear Whitehall; live television captures heated clashes outside Downing Street gates.",
+                                            "Baton charges disperse front-row demonstrators in central London, triggering furious anger across crowds and breaking news alerts."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "PM"
+                                        ],
+                                        "title": "Whitehall Disorder Escalates Rapidly",
+                                        "message": "Heavy-handed clearance outside Downing Street inflicts a sharp drop in domestic stability and risks full-scale rioting.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "CLASHES IN WHITEHALL — RIOT POLICE DEPLOYED",
+                                        "message": "Police move to clear anti-war crowds outside Downing Street; unrest spreading.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1135,6 +1803,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_cyber_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Peaceful Containment Holds Downing Street",
+                                        "messages": [
+                                            "Police maintain firm perimeter barriers without confrontation, allowing the rally to disperse peacefully and reinforcing domestic stability.",
+                                            "Officers hold Downing Street gates calmly while protesters disperse, preserving street order across Whitehall."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "European Allies Note Democratic Resilience",
+                                        "message": "Allied governments commend Whitehall's calm handling of mass dissent without losing strategic composure.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1171,7 +1863,31 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Mass Arrests Restore Fragile Street Order",
+                                        "messages": [
+                                            "Full riot squads regain control of Parliament Square after dozens of arrests, though violent footage damages public confidence.",
+                                            "Public order teams clear violent pockets around Westminster with mass detentions, leaving domestic stability bruised."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Reserve Security Units Tied Down",
+                                        "message": "Diverting emergency support personnel to back up London policing reduces immediate military readiness.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1182,7 +1898,41 @@ module.exports = {
                                     "civilian_stability": 1,
                                     "uk_russia": 1,
                                     "uk_us": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "PM"
+                                        ],
+                                        "title": "Undercover Teams Detain Foreign Provocateurs",
+                                        "messages": [
+                                            "Specialist police teams cleanly extract masked foreign agitators from Parliament Square, defusing the riot without wider clashes.",
+                                            "Targeted arrests remove external instigators from central London crowds, rapidly restoring street calm."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Evidence of Russian Agitation Shared",
+                                        "message": "Washington welcomes intelligence linking detained provocateurs to Moscow, while bilateral tension with Russia intensifies.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "FOREIGN PROVOCATEURS ARRESTED IN LONDON RIOTS",
+                                        "message": "Undercover police detain foreign agitators; Parliament Square unrest subsides.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1191,7 +1941,29 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -2
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "PM",
+                                            "media"
+                                        ],
+                                        "title": "Police Cordons Breached in Whitehall",
+                                        "message": "Delayed command orders leave officers overwhelmed as rioters break through barriers and smash government windows, severely shaking public order.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "WHITEHALL SECURITY BREACHED — RIOTERS BREAK LINES",
+                                        "message": "Delayed police response allows crowds to damage government buildings in central London.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1218,7 +1990,41 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "home",
+                            "foreign"
+                        ],
+                        "title": "Salisbury Park Cordoned for Hazmat Sweep",
+                        "messages": [
+                            "Counter-terrorism police and specialist hazmat teams seal off Salisbury park while Porton Down begins testing samples from the unconscious defector.",
+                            "Emergency responders establish a chemical exclusion zone in Salisbury as doctors treat the critically ill Russian dissident."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "media",
+                            "PM"
+                        ],
+                        "title": "Public Alarm Over Suspected Poisoning",
+                        "message": "Breaking news from Wiltshire revives fears of chemical attacks on British soil, unsettling public confidence while laboratory results are awaited.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SALISBURY INCIDENT — RUSSIAN DEFECTOR HOSPITALISED",
+                        "message": "Hazmat cordon established in Wiltshire; Porton Down testing suspected toxin.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "triggerEvents": [
                 {
@@ -1257,6 +2063,39 @@ module.exports = {
                 },
                 "unlockEvents": [
                     "ev_protest_london"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "media"
+                        ],
+                        "title": "GCHQ Traces Bot Swarm to St Petersburg",
+                        "messages": [
+                            "Automated Russian troll farms flood UK social feeds with fabricated crisis claims, forcing urgent fact-checking as false rumours reach live news.",
+                            "NCSC analysts trace millions of hostile bot posts to St Petersburg networks attempting to polarise British audiences."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Disinformation Campaign Strains Public Cohesion",
+                        "message": "Viral falsehoods deepen domestic divisions and sharpen confrontation with Moscow as protest groups mobilise toward Downing Street.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "HOSTILE DISINFORMATION SURGE DETECTED",
+                        "message": "GCHQ traces millions of fake news bots to Russia; public cohesion under strain.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -1289,6 +2128,42 @@ module.exports = {
                 },
                 "unlockEvents": [
                     "ev_black_sea_intercept"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence"
+                        ],
+                        "title": "RAF QRA Typhoons Escort Tu-95 Bears Clear",
+                        "messages": [
+                            "Quick Reaction Alert Typhoons from RAF Lossiemouth and Coningsby intercept Russian Bear bombers off Scotland, protecting UK airspace amid growing crew fatigue.",
+                            "RAF fighters shadow unannounced Russian long-range bombers clear of the UK Air Policing area as military friction rises."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "foreign",
+                            "PM"
+                        ],
+                        "title": "Airspace Probing Heightens UK–Russia Friction",
+                        "messages": [
+                            "Repeated dark-transponder bomber flights signal Kremlin intimidation and escalate military tension across Northern Europe.",
+                            "Persistent long-range bomber patrols near Scotland sharpen diplomatic confrontation between London and Moscow."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RAF SCRAMBLES RECORD INTERCEPTS OFF SCOTLAND",
+                        "message": "Typhoon QRA crews turn back Russian Tu-95 bombers; air escalation rises.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -1333,6 +2208,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_cyber_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Russian Ambassador Summoned to Whitehall",
+                                        "message": "The Foreign Office delivers an angry rebuke over electronic warfare interference against a British ministerial aircraft, hardening diplomatic and military friction with Moscow.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Baltic Flight Routing Hardened",
+                                        "messages": [
+                                            "RAF transport crews adopt hardened inertial navigation protocols along Kaliningrad air corridors.",
+                                            "Air Mobility Force crews switch to backup non-GPS navigation procedures across Baltic transit routes."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -1346,6 +2245,28 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_cyber_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Commercial Aviation Confidence Held Steady",
+                                        "message": "Playing down the Baltic jamming keeps airline travellers calm and avoids airport disruption across Britain.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "defence"
+                                        ],
+                                        "title": "Baltic Partners Concerned by Quiet Response",
+                                        "message": "European allies along the Baltic rim worry that Whitehall left hostile Kaliningrad jamming unchallenged.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1384,6 +2305,18 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_airspace_intercept"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Black Sea Rivet Joint Sorties Suspended",
+                                        "message": "Pausing reconnaissance patrols reduces the immediate risk of a mid-air clash, though real-time intelligence coverage over the Black Sea drops.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1397,6 +2330,39 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_airspace_intercept"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Armed Typhoons Escort Rivet Joint Patrols",
+                                        "messages": [
+                                            "Armed Typhoon FGR4 fighters take station alongside RAF Rivet Joint sorties, protecting intelligence collection while sharply increasing air-to-air escalation.",
+                                            "Escort Typhoons maintain continuous weapons-ready cover over the Black Sea, holding operational readiness high at acute escalation risk."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Armed Escorts Trigger Acute Airspace Friction",
+                                        "message": "Moscow denounces armed British fighter patrols near Crimea, narrowing diplomatic margin against an accidental shootdown.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ARMED TYPHOONS ESCORT BLACK SEA SPY FLIGHTS",
+                                        "message": "RAF fighters assigned to protect Rivet Joint patrols; air escalation jumps sharply.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1443,12 +2409,67 @@ module.exports = {
                                     {
                                         "id": "ev_nhs_ransomware",
                                         "delayMs": 85000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "cyber",
+                                                    "home"
+                                                ],
+                                                "title": "Wiper Signatures Probing NHS Gateways",
+                                                "messages": [
+                                                    "NCSC threat sensors spot destructive malware probing regional NHS trust firewalls in a spill-over from the banking assault.",
+                                                    "Hospital IT watchdogs report aggressive ransomware scans hitting UK healthcare gateways."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_gchq_war_cabinet",
                                         "delayMs": 90000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "foreign",
+                                                    "cyber"
+                                                ],
+                                                "title": "EYES ONLY: GCHQ Bude Priority Decrypt",
+                                                "messages": [
+                                                    "GCHQ Bude analysts isolate high-grade Moscow military traffic suggesting senior war-cabinet friction.",
+                                                    "Top-secret signals intelligence from Bude captures Kremlin defence briefings warning of Northern Fleet overstretch."
+                                                ],
+                                                "severity": "info",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber"
+                                        ],
+                                        "title": "National Firewall Absorbs Banking Attack",
+                                        "messages": [
+                                            "NCSC traffic scrubbing blocks further wiper intrusion into London clearing banks, though heavy packet filtering slows card payments nationwide.",
+                                            "Defensive routing protects core City of London ledgers while leaving retail transaction queues sluggish."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Payment Slowdowns Frustrate High Streets",
+                                        "message": "Delays at shop tills and online banking apps test public patience even though accounts remain secure.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1468,12 +2489,76 @@ module.exports = {
                                     {
                                         "id": "ev_nhs_ransomware",
                                         "delayMs": 80000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "cyber",
+                                                    "home"
+                                                ],
+                                                "title": "Retaliatory Malware Targeting NHS Trusts",
+                                                "messages": [
+                                                    "Adversary operators retaliate immediately after the UK hack-back, pushing wiper payloads toward hospital networks.",
+                                                    "NCSC detects intense retaliatory traffic aimed at regional NHS patient systems."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_mi5_sleeper_cell",
                                         "delayMs": 90000,
-                                        "probability": 0.25
+                                        "probability": 0.25,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "PM",
+                                                    "home",
+                                                    "cyber"
+                                                ],
+                                                "title": "EYES ONLY: Sabotage Cell Comms Triggered",
+                                                "messages": [
+                                                    "MI5 intercepts urgent activation traffic from suspected GRU operatives near Midlands National Grid infrastructure.",
+                                                    "Covert surveillance logs sudden encrypted bursts from a suspected sabotage cell operating in the Midlands."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "PM"
+                                        ],
+                                        "title": "Offensive Cyber Strike Hits Command Servers",
+                                        "messages": [
+                                            "GCHQ offensive units disrupt Russian attack servers, halting the immediate banking assault while raising escalation and retaliation risk.",
+                                            "Counter-cyber operators knock hostile relay infrastructure offline, sharpening confrontation with Moscow."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Digital Counter-Strike Escalates Conflict",
+                                        "message": "Diplomats warn that hitting Russian command infrastructure raises the danger of broader retaliation against UK services.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK LAUNCHES CYBER COUNTER-STRIKE ON HOSTILE SERVERS",
+                                        "message": "GCHQ disrupts Russian command nodes after City banking attack; escalation rises.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1492,7 +2577,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Riot Cordons Outside Banks Alarm Shoppers",
+                                        "messages": [
+                                            "Police prevent looting at high-street branches, yet images of riot shields outside shopping centres deepen public anxiety.",
+                                            "Visible public-order units secure retail districts across London, though heavy policing unsettles ordinary shoppers."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1501,7 +2601,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Televised Reassurance Calms ATM Queues",
+                                        "messages": [
+                                            "Clear ministerial assurance that savings remain protected eases street tension and restores orderly queues across London.",
+                                            "Broadcast assurances from Downing Street calm anxious savers, easing pressure outside high-street bank branches."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1537,7 +2652,40 @@ module.exports = {
                                     "civilian_stability": -2,
                                     "military_readiness": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Army Tankers Trigger Nationwide Panic Buying",
+                                        "message": "Deploying soldiers to petrol forecourts and supermarkets convinces households the crisis is worsening, sparking severe hoarding and falling stability.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Strategic Logistics Mobilisation Tested",
+                                        "messages": [
+                                            "Activating military tanker crews exercises defence logistics chains, boosting readiness while raising visible escalation.",
+                                            "Army transport regiments deploy across fuel depots, increasing operational tempo."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ARMY DEPLOYED TO FUEL & SUPERMARKET LOGISTICS",
+                                        "message": "Troops drive tankers and guard supply hubs amid blackouts; public alarm rises.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1547,7 +2695,28 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Civilian Supply Chains Recover Quietly",
+                                        "message": "Commercial hauliers gradually clear freight backlogs without troops on the streets, calming household panic.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Allies Query Pace of UK Resilience",
+                                        "message": "European partners note that Whitehall held back emergency mobilisation despite severe infrastructure disruption.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1563,7 +2732,28 @@ module.exports = {
                                 "scores": {
                                     "uk_russia": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Britain Blames Moscow for Blackout Attacks",
+                                        "message": "Formal public attribution places direct pressure on the Kremlin, deepening bilateral confrontation and raising military tension.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK PUBLICLY ACCUSES RUSSIA OF INFRASTRUCTURE ATTACK",
+                                        "message": "Foreign Office blames Moscow for power and transport blackouts; tensions escalate.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1574,7 +2764,19 @@ module.exports = {
                                     "uk_russia": 1,
                                     "uk_europe": 1,
                                     "civilian_stability": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "International Forensic Inquiry Gains Backing",
+                                        "message": "Calling for an impartial technical investigation builds European solidarity and reassures the public, though friction with Moscow continues.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1601,6 +2803,30 @@ module.exports = {
                                 ],
                                 "unlockEvents": [
                                     "ev_power_grid_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "PM"
+                                        ],
+                                        "title": "Covert Cyber Strike Hits Supply Networks",
+                                        "messages": [
+                                            "British offensive cyber operators breach adversary logistics servers, sharply escalating confrontation while risking allied disapproval from Washington.",
+                                            "GCHQ launches retaliatory intrusions against foreign hacker infrastructure, driving military escalation up."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Washington Uneasy Over Unilateral Cyber Strike",
+                                        "message": "US officials express concern that Britain carried out offensive cyber strikes without prior allied coordination.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1613,6 +2839,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_power_grid_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "home"
+                                        ],
+                                        "title": "NCSC Hardens National Infrastructure Firewalls",
+                                        "messages": [
+                                            "Focusing strictly on defensive network isolation avoids further cyber escalation while teams patch transport and energy gateways.",
+                                            "NCSC containment teams reinforce power and rail network firewalls without triggering counter-strikes."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -1657,6 +2898,36 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_us_neutrality"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Public Defence of Cyber Strike Strains Alliances",
+                                        "message": "Defending covert strikes as self-defence wins domestic backing, yet severely damages UK–US trust, unsettles European partners, and heightens friction with Moscow.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "media"
+                                        ],
+                                        "title": "Robust Stance Rallies Domestic Press",
+                                        "message": "British newspapers praise the refusal to apologise under pressure, lifting domestic morale despite allied criticism.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK DEFENDS CYBER STRIKE — US & EU ALLIES ALARMED",
+                                        "message": "London stands by covert cyber action; sharp rift opens with Washington.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1667,7 +2938,19 @@ module.exports = {
                                 "scores": {
                                     "uk_us": 1,
                                     "uk_russia": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Official Denial Eases Allied Fallout",
+                                        "message": "Denying government authorisation gives Washington room to steady UK–US cooperation, though Moscow rejects the denial fiercely.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1678,7 +2961,19 @@ module.exports = {
                                     "uk_us": 1,
                                     "uk_europe": 1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Emergency NATO Consultations Rebuild Trust",
+                                        "message": "Candid briefings at NATO headquarters reassure Washington and European capitals, easing alliance friction and dialling back escalation.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1696,7 +2991,22 @@ module.exports = {
                                     "uk_us": 1,
                                     "uk_europe": 1,
                                     "uk_russia": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "foreign"
+                                        ],
+                                        "title": "Offensive Cyber Operations Suspended",
+                                        "messages": [
+                                            "Standing down offensive cyber teams cools escalation immediately and repairs relations with Washington, Europe, and Moscow.",
+                                            "GCHQ halts active intrusion operations, easing allied diplomatic pressure across Brussels and Washington."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1711,6 +3021,39 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_us_neutrality"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "PM"
+                                        ],
+                                        "title": "Covert Cyber Campaign Continues Under Pressure",
+                                        "messages": [
+                                            "Pressing ahead with offensive strikes despite the leak sharply escalates confrontation with Russia and alienates US and European allies.",
+                                            "Sustained GCHQ cyber operations draw fierce Kremlin anger while pushing UK–US trust toward breaking point."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Special Relationship Reaches Breaking Point",
+                                        "message": "Washington warns that continued unilateral British cyber strikes could force the US to distance itself from the crisis.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK CONTINUES CYBER OPS — ALLIED RIFT DEEPENS",
+                                        "message": "Offensive cyber campaign persists despite leak; Washington and Moscow warn of fallout.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1748,7 +3091,22 @@ module.exports = {
                                     "uk_russia": 1,
                                     "uk_us": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Whitehall Demands Proof From Moscow",
+                                        "messages": [
+                                            "Britain's firm denial rallies Washington and European partners behind London, while diplomatic friction with Moscow continues to climb.",
+                                            "Allies back Whitehall's demand for evidence over the rail hub blast as Kremlin rhetoric sharpens."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1760,7 +3118,19 @@ module.exports = {
                                     "uk_europe": 1,
                                     "uk_us": 1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Independent Inquiry Wins Allied Backing",
+                                        "message": "Proposing an impartial investigation eases immediate military tension and unites US and European allies, even as Kremlin hostility lingers.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1771,7 +3141,28 @@ module.exports = {
                                     "uk_russia": 2,
                                     "military_escalation": 1,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Defiant Rebuke Hardens Stand-Off With Moscow",
+                                        "message": "Bluntly rejecting Russian threats spikes bilateral hostility and escalation while unsettling European allies pushing for restraint.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "LONDON DEFIES MOSCOW OVER RAIL HUB BLAST",
+                                        "message": "Britain rejects Kremlin threats; bilateral tension and escalation intensify.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1781,7 +3172,19 @@ module.exports = {
                                 "scores": {
                                     "uk_russia": -1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Backchannel Outreach Eases Tension",
+                                        "message": "Confidential diplomatic contact lowers the temperature in Moscow and reduces immediate pressure for Russian retaliation.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1803,6 +3206,30 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_akrotiri_strike",
                                     "ev_kinetic_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "UK Bases Placed on Maximum Threat Alert",
+                                        "messages": [
+                                            "Armed patrols and air-defence crews lock down all UK bases at home and abroad; Washington backs the posture, though public unease and escalation jump.",
+                                            "Maximum security lockdown takes effect across British garrisons and airfields, reassuring US allies while alarming local communities."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ALL UK BASES AT MAXIMUM THREAT ALERT",
+                                        "message": "Armed forces lock down domestic and overseas bases amid fears of Russian retaliation.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1817,6 +3244,21 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_akrotiri_strike",
                                     "ev_kinetic_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "Baseline Garrison Security Retained",
+                                        "messages": [
+                                            "Maintaining existing base alert levels prevents domestic alarm and satisfies Washington's call for steady nerves, though military tension stays elevated.",
+                                            "British bases hold standard security posture to calm the home front while intelligence watches for retaliatory threats."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -1862,6 +3304,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_logistics_failure"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "home"
+                                        ],
+                                        "title": "Banking Data Rerouted via Military Satellites",
+                                        "messages": [
+                                            "NCSC shifts urgent Treasury and clearing-bank traffic onto Skynet military satellites, restoring retail payments while reducing defence bandwidth.",
+                                            "Military satellite links restore essential financial networks nationwide, steadying public order at a cost to armed forces comms capacity."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Skynet Capacity Shared With Civilian Grid",
+                                        "message": "Diverting defence satellite channels to rescue civilian banking trims military communications readiness.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1877,6 +3343,27 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_logistics_failure"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "Seabed Sabotage Attributed to Russia",
+                                        "message": "Publicly naming Russian sabotage brings US and European survey ships to inspect the cut cables, though markets wobble and confrontation with Moscow deepens.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "TRANSATLANTIC CABLES CUT — UK BLAMES SABOTAGE",
+                                        "message": "Britain calls on NATO allies to inspect seabed damage; banking disruptions persist.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1919,6 +3406,40 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_oligarch_sanctions",
                                     "ev_chemical_attempt"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "23 Russian Diplomats Expelled From London",
+                                        "message": "Britain orders the largest diplomatic expulsion in decades and formally blames Moscow for the Salisbury nerve-agent attack, rallying European solidarity amid severe rupture with Russia.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Decisive Attribution Reassures Public",
+                                        "messages": [
+                                            "Swift action against suspected Russian intelligence officers boosts domestic confidence in national security.",
+                                            "Public backing rises sharply as Whitehall takes visible measures against suspected Kremlin operatives in London."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "SALISBURY NERVE AGENT — 23 RUSSIAN DIPLOMATS EXPELLED",
+                                        "message": "UK blames Russian state intelligence; European allies back decisive British response.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -1933,6 +3454,18 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_oligarch_sanctions",
                                     "ev_chemical_attempt"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "home"
+                                        ],
+                                        "title": "Delayed Response Draws Allied & Domestic Criticism",
+                                        "message": "Waiting for international inspectors frustrates European partners and leaves British citizens uneasy after a chemical weapon attack on UK soil.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1955,6 +3488,39 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_rus_sub_faslane"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence"
+                        ],
+                        "title": "Acoustic Contact: Russian Attack Sub Off Faslane",
+                        "messages": [
+                            "Clyde sonar arrays plot a Russian Severodvinsk-class submarine on the tactical map just outside territorial waters near HMNB Clyde.",
+                            "Undersea listening posts confirm a hostile Russian attack submarine probing approaches to Britain's nuclear deterrent base."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "PM",
+                            "foreign"
+                        ],
+                        "title": "Hostile Submarine Probing Trident Approaches",
+                        "message": "Naval intelligence warns the intrusion directly tests Royal Navy anti-submarine defences guarding HMNB Clyde.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SUBMARINE CONTACT — RUSSIAN BOAT OFF HMNB CLYDE",
+                        "message": "Sonar reveals hostile attack submarine near Faslane deterrent approaches.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "description": "Sonar listening posts detect a Russian attack submarine creeping close to HMNB Clyde, where our Trident nuclear submarines operate.",
@@ -1982,12 +3548,74 @@ module.exports = {
                                     {
                                         "id": "ev_sub_breaks_contact",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence"
+                                                ],
+                                                "title": "Contact Fading in North Channel Thermocline",
+                                                "messages": [
+                                                    "Heavy acoustic layering off the Clyde is scattering active sonar returns; ASW crews warn the submarine may slip the net.",
+                                                    "Merlin operators report erratic sonar echoes as the Russian boat dives beneath a deep thermal layer."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_giuk_tanker_collision",
                                         "delayMs": 85000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "foreign"
+                                                ],
+                                                "title": "Fogbound Surface Alert in GIUK Gap",
+                                                "messages": [
+                                                    "Urgent radio traffic from North Atlantic escorts reports Russian destroyers closing dangerously on an RFA tanker in poor visibility.",
+                                                    "Surface patrols in the GIUK Gap flag risky close-quarters Russian warship manoeuvres around a British supply tanker."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Active ASW Hunt Launched Off Faslane",
+                                        "messages": [
+                                            "Merlin helicopters dip active sonar alongside Type 23 frigates, driving up ASW readiness while sharply escalating underwater confrontation near the Clyde.",
+                                            "Aggressive active pinging boxes in the intruder off Faslane, boosting readiness at steep escalation cost."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "foreign"
+                                        ],
+                                        "title": "Aggressive Pursuit Raises Underwater Flashpoint Risk",
+                                        "message": "Active sonar prosecution forces the Russian submarine into evasive manoeuvres, raising the danger of an undersea incident.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ACTIVE SUBMARINE HUNT OFF FASLANE",
+                                        "message": "Merlin helicopters and Royal Navy frigates ping Russian sub; escalation jumps.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2007,7 +3635,44 @@ module.exports = {
                                     {
                                         "id": "ev_sub_breaks_contact",
                                         "delayMs": 70000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence"
+                                                ],
+                                                "title": "Passive Contact Weakening Near Clyde Sill",
+                                                "messages": [
+                                                    "Passive towed-array operators report the submarine's quiet acoustic trail fading into North Channel background noise.",
+                                                    "Submarine watch logs weakening passive bearings as the intruder creeps toward deeper Atlantic waters."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Acoustic Signature Logged via Passive Sonar",
+                                        "messages": [
+                                            "Astute-class and Type 26 passive arrays capture vital propeller and reactor acoustic fingerprints without alerting the intruder, boosting readiness and easing escalation.",
+                                            "Silent tracking builds a valuable acoustic library on the Russian boat while avoiding an aggressive maritime confrontation."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "PM"
+                                        ],
+                                        "title": "Silent Tracking Avoids Underwater Flashpoint",
+                                        "message": "Measured restraint preserves intelligence advantage while keeping the Clyde approaches calm.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2049,6 +3714,40 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_cyber_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Oligarch Mansions & Accounts Frozen Across London",
+                                        "messages": [
+                                            "National Crime Agency officers freeze billions in Russian billionaire assets and seal Belgravia mansions, winning strong public approval while infuriating Moscow.",
+                                            "Sweeping asset seizures against Kremlin-linked billionaires boost public confidence in the government's resolve."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "Kremlin Threatens Retaliation Over Asset Seizures",
+                                        "message": "Moscow denounces the seizures as state theft, and NCSC warns Russian state hackers are preparing financial retaliation against the City of London.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK SEIZES OLIGARCH MANSIONS & FREEZES BILLIONS",
+                                        "message": "Government cracks down on Kremlin wealth in London; Moscow vows retaliation.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2062,6 +3761,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_cyber_london"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Cautious Financial Audits Spark Public Backlash",
+                                        "messages": [
+                                            "MPs and newspapers accuse Whitehall of going soft on dirty money as Russian billionaires move funds offshore ahead of slow financial audits.",
+                                            "Holding back from immediate property seizures frustrates voters and weakens domestic confidence."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "European Allies Question Soft London Sanctions",
+                                        "message": "EU capitals express disappointment that Britain stopped short of freezing Kremlin-linked holdings in the City.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -2101,6 +3824,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_undersea_cables"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Royal Navy Frigate Blocks Russian Cable Ship",
+                                        "messages": [
+                                            "A Type 23 frigate manoeuvres directly across the Russian research vessel's stern off Cornwall, forcing her away from the transatlantic cables while raising maritime tension.",
+                                            "Royal Navy bridge warnings compel the Russian spy ship to haul in her submersibles, increasing bilateral friction."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL NAVY INTERCEPTS RUSSIAN SPY SHIP OFF CORNWALL",
+                                        "message": "British frigate forces Russian research vessel away from transatlantic sea cables.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2120,6 +3867,30 @@ module.exports = {
                                         "id": "ev_undersea_cables",
                                         "delayMs": 45000,
                                         "probability": 0.7
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Distant Surveillance Leaves Sea Cables Exposed",
+                                        "messages": [
+                                            "Watching from over the horizon avoids a naval clash, but leaves the Russian ship free to lower deep-sea submersibles onto the transatlantic cables.",
+                                            "Royal Navy lookouts record imagery of submersible recovery gear from afar while NCSC warns the cables remain vulnerable."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Washington Frustrated by Passive Cable Patrol",
+                                        "message": "US officials complain that failing to challenge the spy ship puts shared UK–US communications trunks at acute risk.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2143,7 +3914,41 @@ module.exports = {
                                     "military_readiness": 1,
                                     "uk_europe": 1,
                                     "uk_russia": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Royal Marines Board & Detain Shadow Spy Trawler",
+                                        "messages": [
+                                            "Royal Marines fast-rope onto the Russian spy trawler, detaining the vessel and seizing intact seabed mapping servers.",
+                                            "Commando boarding teams secure the shadow-fleet trawler off Cornwall, neutralising the threat to underwater cables."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Seizure Applauded by European Maritime Allies",
+                                        "message": "European partners welcome the decisive seizure of the cable-cutting vessel, while Moscow quietly pulls back other auxiliary ships.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL MARINES SEIZE SUSPECTED RUSSIAN SPY TRAWLER",
+                                        "message": "Shadow-fleet vessel detained off UK coast with deep-sea sabotage equipment aboard.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2187,6 +3992,40 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_akrotiri_strike",
                                     "ev_raf_bases_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Aggressive Typhoon Patrols Box In Russian Aircraft",
+                                        "messages": [
+                                            "Additional Quick Reaction Alert Typhoons crowd approaching Russian aircraft far out over the Atlantic, winning US backing while sharply escalating air tensions.",
+                                            "Hard-edged RAF air intercepts demonstrate resolve to Washington, though Moscow warns of a mid-air clash."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Transatlantic Flights Rerouted Amid Air Stand-Off",
+                                        "message": "Civilian airlines divert passenger routes away from the North Atlantic intercept zone, unsettling travellers.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF EXPANDS AGGRESSIVE NORTH ATLANTIC INTERCEPTS",
+                                        "message": "Extra Typhoon patrols ordered to confront Russian aircraft; air escalation rises.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2200,6 +4039,21 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_akrotiri_strike",
                                     "ev_raf_bases_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "RAF Maintains Standard Safe Escort Separation",
+                                        "messages": [
+                                            "Typhoon pilots shadow Russian aircraft at disciplined international safety distances, avoiding an accidental mid-air collision.",
+                                            "Standard NATO intercept separation keeps UK airspace monitored without adding fuel to the confrontation."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -2217,7 +4071,22 @@ module.exports = {
                                     "uk_russia": -1,
                                     "uk_us": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "defence"
+                                        ],
+                                        "title": "Air Safety Deconfliction Protocol Agreed",
+                                        "messages": [
+                                            "Quiet diplomatic outreach establishes emergency radio frequencies with Russian air command, cooling bilateral friction and earning praise from US and European allies.",
+                                            "Allies welcome Whitehall's air-safety deconfliction channel as near-miss risks around commercial airliners ease."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2228,7 +4097,31 @@ module.exports = {
                                     "uk_russia": 1,
                                     "military_escalation": 1,
                                     "uk_us": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Cockpit Video Exposes Reckless Russian Jet Manoeuvre",
+                                        "messages": [
+                                            "Declassified Typhoon HUD footage dominates global broadcasts and wins US support, while angering Moscow and sharpening military tension.",
+                                            "Releasing the gun-camera video rebuts Russian propaganda conclusively, though bilateral hostility rises."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "MOD RELEASES COCKPIT VIDEO OF ATLANTIC NEAR-MISS",
+                                        "message": "Typhoon footage proves Russian jet cut across civilian airliner path.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2273,6 +4166,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_portsmouth_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "media"
+                                        ],
+                                        "title": "Royal Navy Box-Escort Forces Russian Sub Down-Channel",
+                                        "messages": [
+                                            "Royal Navy frigates and Wildcat helicopters box in the surfaced Russian submarine off Dover, demonstrating high readiness while intensifying confrontation with Moscow.",
+                                            "Close naval escort herds the Russian boat through the Dover Strait under visible British guns, lifting readiness as tension climbs."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL NAVY WARSHIPS SURROUND RUSSIAN SUB OFF DOVER",
+                                        "message": "British frigates and helicopters escort surfaced nuclear submarine out of the Channel.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2286,6 +4203,22 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_portsmouth_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Distant Shadowing Calms Sea Lane But Rattles Public",
+                                        "messages": [
+                                            "Keeping Royal Navy ships over the horizon reduces immediate clash risk, but ferry passengers filming the unchallenged Russian submarine trigger public alarm.",
+                                            "Avoiding a close naval showdown lowers military tension while viral clips of the unescorted submarine erode public confidence."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -2301,7 +4234,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Live Downing Street Briefing Calms Coastal Panic",
+                                        "messages": [
+                                            "Clear live television assurances that the Royal Navy has tracked every mile of the submarine's transit steady public nerves across Kent and the South East.",
+                                            "Authoritative broadcast updates counter tabloid alarm and restore calm along the Channel coast."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2310,7 +4258,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Dry Legal Statement Fails to Quell Viral Panic",
+                                        "messages": [
+                                            "Quoting maritime transit law in a short press release looks out of touch as terrifying videos of the Russian submarine flood social media.",
+                                            "Voters dismiss Whitehall's low-key written statement as evasive, deepening anxiety across southern coastal towns."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2361,12 +4324,75 @@ module.exports = {
                                     {
                                         "id": "ev_iskander_mobile",
                                         "delayMs": 75000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "foreign"
+                                                ],
+                                                "title": "Kaliningrad Iskander Launchers Leaving Garrison",
+                                                "messages": [
+                                                    "NATO radar satellites spot road-mobile Iskander-M missile launchers dispersing from Kaliningrad bunkers after the British counter-strike.",
+                                                    "Allied reconnaissance flags Russian ballistic missile batteries moving into forward forest firing positions."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_channel_tunnel_alert",
                                         "delayMs": 80000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "home",
+                                                    "cyber"
+                                                ],
+                                                "title": "Sabotage Chatter Targets Folkestone Rail Terminal",
+                                                "messages": [
+                                                    "Anglo-French counter-terror analysts intercept urgent coded traffic pointing to a retaliatory plot against the Channel Tunnel.",
+                                                    "Border security sensors flag suspicious reconnaissance activity near Eurotunnel freight approaches in Kent."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "RAF Storm Shadows Destroy Russian Launch Batteries",
+                                        "messages": [
+                                            "Surviving RAF strike jets fire Storm Shadow cruise missiles that obliterate the Russian coastal batteries, restoring combat momentum while sending escalation soaring.",
+                                            "Immediate counter-strikes smash the Russian missile launchers responsible for Akrotiri, pushing Britain and Russia into direct armed clash."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "Direct Kinetic Exchange With Russian Forces",
+                                        "message": "Moscow vows homeland retaliation after British missiles destroy Russian launchers in the Eastern Mediterranean.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK LAUNCHES RETALIATORY AIRSTRIKES AFTER AKROTIRI ATTACK",
+                                        "message": "RAF jets strike Russian missile batteries in response to Cyprus base bombing.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2386,12 +4412,57 @@ module.exports = {
                                     {
                                         "id": "ev_secret_moscow_offer",
                                         "delayMs": 80000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "foreign",
+                                                    "PM"
+                                                ],
+                                                "title": "Swiss Intermediaries Signal Urgent Moscow Message",
+                                                "messages": [
+                                                    "Diplomatic couriers in Geneva report Russian officials seeking a confidential channel following Britain's restraint over Akrotiri.",
+                                                    "Neutral Swiss diplomats relay word of a potential Kremlin pause proposal on the backchannel."
+                                                ],
+                                                "severity": "info",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_iskander_mobile",
                                         "delayMs": 85000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "defence",
+                                                    "foreign"
+                                                ],
+                                                "title": "Satellite Warning: Iskander Movement in Kaliningrad",
+                                                "messages": [
+                                                    "Overhead imagery detects Russian mobile ballistic missile units deploying out of Kaliningrad depots.",
+                                                    "NATO intelligence warns that Russian Iskander-M launchers are dispersing into field hides near the Polish border."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "Akrotiri Families Evacuated as Engineers Repair Runway",
+                                        "messages": [
+                                            "Royal Engineers patch the cratered Cyprus runway under Sky Sabre missile cover while families evacuate safely, reassuring the public at a temporary cost to air readiness.",
+                                            "Focusing on base recovery and casualty evacuation steadies domestic nerves, though Mediterranean strike readiness drops during repairs."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -2414,6 +4485,30 @@ module.exports = {
                                         "id": "ev_article5_ambiguity",
                                         "delayMs": 25000,
                                         "probability": 1
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Britain Formally Requests NATO Article 5 Activation",
+                                        "messages": [
+                                            "Emergency North Atlantic Council sessions convene in Brussels after Britain calls for collective defence over the Akrotiri strike, rallying US and European attention as tension rises.",
+                                            "Invoking Article 5 draws immediate solidarity from Washington and key European capitals while elevating alliance war readiness."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "BRITAIN CALLS FOR NATO ARTICLE 5 AFTER CYPRUS STRIKE",
+                                        "message": "Emergency session convenes in Brussels following deadly missile attack on RAF Akrotiri.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2464,6 +4559,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_article5_ambiguity"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "NATO Article 4 Consultations Rally Allied Backing",
+                                        "messages": [
+                                            "Allied ambassadors convene under Article 4 to condemn the sabotage of British supply lines, strengthening US and European unity while military tension edges higher.",
+                                            "Emergency NATO consultations secure joint intelligence support from Washington and Brussels as confrontation deepens."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -2475,7 +4585,22 @@ module.exports = {
                                     "uk_russia": -1,
                                     "military_escalation": -1,
                                     "uk_us": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Secret Ceasefire Outreach Cools Tempo",
+                                        "messages": [
+                                            "Quiet diplomatic contact with Moscow lowers immediate escalation and bilateral friction, though Washington objects to Britain negotiating unilaterally after a base attack.",
+                                            "Backchannel dialogue tempers Kremlin rhetoric at the cost of friction with the White House."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2494,6 +4619,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_raf_bases_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "British Air Strike Destroys Russian Supply Depot",
+                                        "messages": [
+                                            "Precision munitions flatten a Russian military logistics hub in direct tit-for-tat retaliation, sharply escalating the conflict and infuriating Moscow.",
+                                            "RAF strike aircraft hit Russian supply infrastructure, driving bilateral hostility and war risk to critical levels."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF BOMBS RUSSIAN LOGISTICS DEPOT IN RETALIATION",
+                                        "message": "Direct tit-for-tat air strike hits Russian military supply hub; escalation surges.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2507,6 +4656,40 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_raf_bases_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "Vanguard Deterrent Placed on High Combat Alert",
+                                        "messages": [
+                                            "Signalling heightened nuclear readiness sends a stark deterrent message, but spikes global military escalation and triggers severe domestic panic.",
+                                            "Raising the alert state of Britain's Trident fleet escalates strategic tension and rattles the public across the UK."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Nuclear Alert Rumours Spark Nationwide Panic",
+                                        "message": "Reports that Britain's nuclear submarines are moving to combat readiness cause widespread fear and supermarket hoarding.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK NUCLEAR DETERRENT PLACED ON HIGH COMBAT ALERT",
+                                        "message": "Vanguard submarine readiness raised following base explosion; public fear surges.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2519,6 +4702,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_raf_bases_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "Base Perimeter Defences Reinforced Without Counter-Strike",
+                                        "messages": [
+                                            "Extra armed guards, bomb dogs, and counter-drone jammers lock down British supply depots while holding the escalation line steady.",
+                                            "Tightened garrison security hardens logistics hubs against further sabotage without provoking an immediate kinetic exchange."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -2564,6 +4762,39 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_airspace_incursion",
                                     "ev_power_grid_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Typhoon Squadrons Dispersed to Emergency Strips",
+                                        "messages": [
+                                            "RAF ground crews scatter surviving Typhoon fighters across regional airports and prepared motorway strips, preserving combat air power from follow-up missile salvos.",
+                                            "Agile combat dispersal keeps British fighter squadrons operational despite the destruction at Coningsby and Waddington."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Armed Fighters on Motorways Terrify Civilians",
+                                        "message": "Seeing armed fighter jets operating from closed motorways and regional passenger airports convinces the public that full-scale homeland war has arrived.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF DISPERSES FIGHTER JETS TO CIVILIAN AIRPORTS & MOTORWAYS",
+                                        "message": "Typhoons relocate after Lincolnshire airbases hit; public panic deepens.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2578,6 +4809,30 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_airspace_incursion",
                                     "ev_power_grid_strike"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "All Surviving Fighters Scrambled Against Russian Fleet",
+                                        "messages": [
+                                            "Every airworthy RAF jet launches with anti-ship missiles to hunt the Russian surface group, driving escalation and bilateral confrontation toward all-out war.",
+                                            "Massed RAF strike packages surge into the North Sea after the Russian firing ships, sharply escalating the air-sea battle."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF SCRAMBLES STRIKE WINGS TO HUNT RUSSIAN WARSHIPS",
+                                        "message": "British jets launch all-out pursuit after cruise missiles hit Lincolnshire bases.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -2620,6 +4875,29 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_faslane_strike_1"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Surface Fleet Sorties From Portsmouth & Deployed to Sea",
+                                        "messages": [
+                                            "Type 45 Air Defence Destroyers and surviving escorts slip harbour through the smoke into the Channel, boosting fleet readiness while raising maritime escalation.",
+                                            "Emergency fleet sortie clears Portsmouth harbour before a second salvo arrives, putting Type 45 destroyers on deployed war patrol."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL NAVY FLEET SORTIES FROM PORTSMOUTH UNDER FIRE",
+                                        "message": "Type 45 destroyers deploy to open sea after missile strike on dockyard.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2636,6 +4914,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_faslane_strike_1"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Type 23 Frigate Damaged Guarding Solent Airspace",
+                                        "messages": [
+                                            "Holding warships along the jetty shields Portsmouth residents with Sea Viper radar cover, but secondary dockyard blasts leave a Type 23 ASW Frigate damaged and reduce fleet readiness.",
+                                            "Stationary ships in Portsmouth absorb follow-on shrapnel damage to a Type 23 frigate while providing air-defence cover over the city."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Naval Air-Defence Shield Reassures South Coast",
+                                        "message": "Seeing Royal Navy destroyers remain on station to intercept incoming missiles calms evacuating families around the Solent.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -2677,6 +4979,29 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_faslane_strike_2"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Gareloch Sealed; Intruding Russian Submarine Damaged",
+                                        "messages": [
+                                            "Royal Marines and anti-submarine barriers lock down Gare Loch while depth-charge countermeasures damage the lurking Russian attack submarine off Faslane.",
+                                            "Heavy boom defences and ASW patrols secure HMNB Clyde approaches, damaging the hostile Russian submarine and raising readiness."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL MARINES SEAL FASLANE LOCH — HOSTILE SUB DAMAGED",
+                                        "message": "Anti-submarine barriers and patrols secure HMNB Clyde after sea-drone attack.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2690,6 +5015,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_faslane_strike_2"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "Vanguard Deterrent Boats Slip Deep Into North Atlantic",
+                                        "messages": [
+                                            "Britain's remaining Vanguard-class submarines depart Faslane under night cover and vanish into deep Atlantic patrol zones, maximising deterrent survivability.",
+                                            "Dispersing the Trident fleet into open ocean guarantees second-strike readiness while signalling unmistakable resolve to Moscow."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -2736,6 +5076,41 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_nuclear_readiness"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Downing Street Issues Nuclear Deterrent Ultimatum",
+                                        "messages": [
+                                            "Threatening nuclear retaliation over the Faslane strike pushes strategic escalation to the brink, rattles European capitals, and sparks acute fear across Britain.",
+                                            "Moscow places strategic forces on alert after London warns that further attacks on HMNB Clyde risk nuclear response."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Nuclear Ultimatum Triggers Mass Public Panic",
+                                        "message": "Families pack train stations and highways out of major cities after Downing Street publicly warns of potential nuclear retaliation.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "PM ISSUES NUCLEAR ULTIMATUM TO MOSCOW AFTER FASLANE STRIKE",
+                                        "message": "Downing Street warns further attacks risk nuclear retaliation; global tension peaks.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2750,6 +5125,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_nuclear_readiness"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "Conventional Strike Hits Northern Fleet Facilities",
+                                        "messages": [
+                                            "Long-range conventional cruise missiles strike Russian submarine support piers on the Kola Peninsula, answering the Faslane attack without crossing the nuclear threshold.",
+                                            "Precision conventional strikes degrade Northern Fleet submarine logistics, lifting UK readiness while raising escalation."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK LAUNCHES CONVENTIONAL STRIKES ON ARCTIC SUB BASES",
+                                        "message": "British missiles hit Northern Fleet docks in direct response to Faslane attack.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -2798,6 +5197,40 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Night Curfews & Army Patrols Imposed Across Darkened Cities",
+                                        "messages": [
+                                            "Armed troops enforce blacked-out city curfews as Substation Alpha remains damaged, deepening public dread and straining military resources.",
+                                            "Emergency martial regulations and darkened grid sectors unsettle households while pulling soldiers away from frontline duties."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Substation Alpha Damaged & Troops Diverted to Civil Order",
+                                        "message": "Transformer damage at Substation Alpha and heavy domestic troop commitments reduce national defence readiness.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "STATE OF EMERGENCY: NIGHT CURFEWS & ARMY DEPLOYED IN BLACKOUT",
+                                        "message": "Troops patrol darkened UK cities as Substation Alpha suffers severe damage.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2811,6 +5244,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Community Resilience & Generator Priority Steady Blackout",
+                                        "messages": [
+                                            "Prioritising mobile generators for hospitals and water pumping while rallying local volunteers keeps communities calm and leaves armed forces free for defence.",
+                                            "Civic mutual-aid networks and disciplined power rationing sustain public morale through the blackout without tying down combat troops."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -2872,6 +5320,30 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_nuclear_readiness",
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Joint RAF–USAF Fighter Wall Turns Back Russian Bombers",
+                                        "messages": [
+                                            "RAF Typhoons and USAF 48th Fighter Wing F-35As from Lakenheath form an overwhelming air-defence wall over the North Sea, forcing the Russian bomber wave to abort before launch range.",
+                                            "Combined Anglo-American stealth and fighter squadrons lock radar onto the approaching bombers, boosting readiness and cementing UK–US solidarity."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "JOINT RAF & USAF FIGHTER FORCE INTERCEPTS BOMBER FLEET",
+                                        "message": "Typhoons and Lakenheath F-35As confront twenty Russian bombers over the North Sea.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2887,6 +5359,30 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_nuclear_readiness",
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "Mass RAF North Sea Intercept Shields British Cities",
+                                        "messages": [
+                                            "Throwing every airworthy RAF fighter into a forward North Sea battle breaks up the Russian bomber formation before missile release, reassuring citizens while exhausting airframes and munitions.",
+                                            "Maximum-effort forward interception protects eastern England from cruise missile salvoes at a heavy cost to remaining fighter readiness."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF LAUNCHES MASS INTERCEPTION OVER NORTH SEA",
+                                        "message": "British fighters engage approaching bomber fleet before weapons release.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2901,6 +5397,30 @@ module.exports = {
                                 "unlockEvents": [
                                     "ev_nuclear_readiness",
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "Inner Fighter Screen Protects London & Thames Estuary",
+                                        "messages": [
+                                            "Holding half the Typhoon force over southern England creates a dense cruise-missile shield around London, reassuring the public.",
+                                            "Layered fighter patrols over the capital calm domestic fears even as outer North Sea sectors remain contested."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "foreign"
+                                        ],
+                                        "title": "North Sea Allies Criticise Pullback of RAF Patrols",
+                                        "message": "European neighbours complain that pulling British fighters back to London leaves shared North Sea airspace exposed.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -2947,6 +5467,40 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "defence"
+                                        ],
+                                        "title": "Trident Submarines Ordered to Launch-on-Warning Posture",
+                                        "messages": [
+                                            "Emergency VLF transmissions place Britain's patrolling Vanguard submarines at launch-on-warning readiness, driving strategic escalation and bilateral tension to the absolute precipice.",
+                                            "Preparing Trident missile tubes for rapid retaliation signals maximum nuclear resolve while pushing nuclear war risk to critical."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Emergency Broadcast Warnings Spark Nationwide Terror",
+                                        "message": "Rumours of imminent nuclear exchange cause widespread panic across British cities.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "TRIDENT DETERRENT ORDERED TO LAUNCH-ON-WARNING POSTURE",
+                                        "message": "UK strategic nuclear forces move to highest alert as Russian launchers deploy.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2960,6 +5514,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "defence"
+                                        ],
+                                        "title": "Vanguard Patrol Runs Ultra-Quiet in Deep Atlantic",
+                                        "messages": [
+                                            "Keeping the patrolling Trident submarine completely silent and undetectable guarantees Britain's second-strike survivability while avoiding a hair-trigger nuclear miscalculation.",
+                                            "Disciplined silent running preserves the invulnerability of the nuclear deterrent and edges strategic tension back from the brink."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -3003,7 +5572,31 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -2,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Troops at Water Plants Trigger Bottled-Water Stampede",
+                                        "messages": [
+                                            "Deploying soldiers and hazmat teams to reservoirs nationwide convinces households that tap water is poisoned, emptying supermarket shelves and eroding stability.",
+                                            "Visible military guards outside water treatment works spark nationwide panic buying of bottled water."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "defence"
+                                        ],
+                                        "title": "Infantry Battalions Tied Down Guarding Reservoirs",
+                                        "message": "Diverting regular troops to guard hundreds of domestic water utilities reduces combat readiness.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -3012,7 +5605,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "cyber"
+                                        ],
+                                        "title": "Discreet Utility Protection Limits Public Alarm",
+                                        "messages": [
+                                            "Plain-clothes police and automated chemical sensors secure water facilities quietly, though leaked rumours of the Salisbury arrest still cause mild public unease.",
+                                            "Covert infrastructure monitoring avoids a nationwide tap-water panic while keeping reservoirs protected."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ],
@@ -3034,6 +5642,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Russian Embassy Closed After Water Sabotage Plot",
+                                        "messages": [
+                                            "Britain expels the remaining Russian diplomatic mission from Kensington, winning strong European solidarity while severing formal ties with Moscow and raising escalation.",
+                                            "Shutting down Russian diplomatic presence in London draws backing from European capitals as Kremlin fury peaks."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK EXPELS ALL RUSSIAN DIPLOMATS OVER WATER POISONING PLOT",
+                                        "message": "Foreign Office shuts diplomatic ties after nerve-agent suspects arrested near Salisbury.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3047,6 +5679,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "home"
+                                        ],
+                                        "title": "Porton Down Dossier Sent to UN Security Council",
+                                        "messages": [
+                                            "Presenting forensic nerve-agent samples at the UN avoids an immediate diplomatic rupture, though domestic critics call the legal route too slow after a threat to drinking water.",
+                                            "Filing charges and briefing the UN keeps diplomatic channels alive while leaving anxious voters demanding tougher action."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -3092,6 +5739,30 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "London & Paris Spearhead Joint European Defence Command",
+                                        "messages": [
+                                            "Britain rallies European powers into an emergency continental defence pact, dramatically boosting European cohesion even as Washington cools further.",
+                                            "European leaders unite behind British leadership to form an autonomous defence council following the US pullback."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UK LEADS EMERGENCY SUMMIT FOR EUROPEAN DEFENCE COMMAND",
+                                        "message": "Britain and European allies forge joint command after Washington declares neutrality.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3105,6 +5776,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_final_authorization"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Emergency Washington Mission Wins Partial US Assurances",
+                                        "messages": [
+                                            "Urgent face-to-face talks in the Oval Office salvage limited US intelligence cooperation, though European capitals resent London pleading with Washington instead of leading Europe.",
+                                            "Last-ditch diplomacy in Washington steadies UK–US ties slightly while leaving European partners feeling sidelined."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -3121,7 +5807,22 @@ module.exports = {
                                 "scores": {
                                     "military_escalation": 1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "home"
+                                        ],
+                                        "title": "UK Forces Consolidate Around Homeland Air & Sea Shield",
+                                        "messages": [
+                                            "Concentrating ships, radars, and fighter squadrons around the British Isles strengthens national defence readiness while raising wartime alert posture.",
+                                            "Homeland defence mobilisation locks down UK skies and territorial waters after the American pullback."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -3131,7 +5832,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "uk_europe": -2
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Forward Baltic Surge Strains European Logistics",
+                                        "messages": [
+                                            "Rushing extra British brigades to the Baltic frontier boosts forward combat readiness, but triggers fierce arguments with European capitals over command authority and supply lines.",
+                                            "Unilateral British reinforcement in the Baltics sharpens frontline readiness while exposing deep command friction among European allies."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3171,6 +5887,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_us_neutrality"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Blunt Warning Brings Wavering NATO Capitals Into Line",
+                                        "messages": [
+                                            "Warning that NATO's credibility dies if Britain is abandoned convinces Washington and reluctant European capitals to back collective deterrence, though alliance war posture escalates.",
+                                            "Forceful British diplomacy in Brussels secures US and European endorsement of mutual defence commitments."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -3184,6 +5915,21 @@ module.exports = {
                                 },
                                 "unlockEvents": [
                                     "ev_us_neutrality"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "defence"
+                                        ],
+                                        "title": "Northern & Eastern European Coalition Formed",
+                                        "messages": [
+                                            "Forging a fast-moving coalition with France, Poland, and the Baltic states creates a tight European front, though bypassing full NATO consensus distances Washington.",
+                                            "Frontline European states rally tightly around British command while US planners step back from the regional pact."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -3230,6 +5976,20 @@ module.exports = {
                                     "ev_endgame_eu_defense",
                                     "ev_endgame_domestic",
                                     "ev_endgame_diplomatic"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "COBRA Authorises Full-Scale Allied Counter-Offensive",
+                                        "messages": [
+                                            "British and allied air and naval forces launch a coordinated theatre-wide counter-offensive to drive back Russian forces, uniting European command at maximum wartime intensity.",
+                                            "Cabinet authorises full allied combat operations across the North Atlantic and Baltic theatres."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -3246,6 +6006,20 @@ module.exports = {
                                     "ev_endgame_diplomatic",
                                     "ev_endgame_eu_defense",
                                     "ev_endgame_domestic"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Emergency Geneva Ceasefire Halts Combats",
+                                        "messages": [
+                                            "Downing Street and Moscow order an immediate standstill across air and sea theatres as emergency peace delegations convene in Geneva, sharply lowering war escalation and relieving the public.",
+                                            "Bilateral ceasefire orders take effect along the North Sea and Baltic fronts as Swiss-mediated peace talks open."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         },
@@ -3264,6 +6038,20 @@ module.exports = {
                                     "ev_endgame_domestic",
                                     "ev_endgame_eu_defense",
                                     "ev_endgame_diplomatic"
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Arctic Nuclear Warning Shot Shatters Global Order",
+                                        "messages": [
+                                            "Detonating a nuclear warning warhead over the high Arctic triggers worldwide diplomatic condemnation from Washington and Europe, sends Moscow to full nuclear launch status, and sparks domestic collapse at home.",
+                                            "Breaking the nuclear taboo over Arctic waters isolates Britain from US and European allies while plunging British cities into mass panic."
+                                        ],
+                                        "severity": "danger",
+                                        "aiRandomize": true
+                                    }
                                 ]
                             }
                         }
@@ -3364,7 +6152,22 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "defence"
+                        ],
+                        "title": "GCHQ Payload Blinds Russian Air-Defence Radar",
+                        "messages": [
+                            "Covert British malware blacks out Russian early-warning radar screens along the western sector for twelve hours, giving RAF aircraft a major readiness advantage.",
+                            "National Cyber Force operators successfully disable hostile surface-to-air radar networks, opening safe corridors for allied patrols."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "sound": "teletype"
         },
@@ -3389,7 +6192,23 @@ module.exports = {
                 "scores": {
                     "uk_europe": -1,
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "media",
+                            "foreign"
+                        ],
+                        "title": "Failed UK Cyber Intrusion Exposed by Moscow",
+                        "messages": [
+                            "Russian cyber defenders block the British payload and broadcast forensic proof of the intrusion, unnerving European partners and rattling domestic confidence.",
+                            "Kremlin media publishes traced UK server signatures from the blocked cyber operation, sparking European criticism and public unease."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "sound": "alert"
         },
@@ -3414,7 +6233,23 @@ module.exports = {
                 "scores": {
                     "military_readiness": 1,
                     "uk_us": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "foreign",
+                            "PM"
+                        ],
+                        "title": "SAS Reconnaissance Team Extracts Russian Missile Plans",
+                        "messages": [
+                            "UKSF operators recover encrypted missile deployment schedules and extract cleanly without losses, boosting UK combat readiness and earning high praise from the Pentagon.",
+                            "Captured Russian targeting maps from the special forces raid give British and US commanders complete visibility over forward missile units."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "sound": "alert"
         },
@@ -3439,7 +6274,32 @@ module.exports = {
                 "scores": {
                     "civilian_stability": -1,
                     "military_escalation": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "media",
+                            "home"
+                        ],
+                        "title": "Captured UK Commandos Paraded on Russian State TV",
+                        "messages": [
+                            "Footage of four captured British special forces soldiers triggers domestic shock and sharply escalates military confrontation.",
+                            "Russian networks broadcast interrogations of the ambushed UK reconnaissance patrol, shaking public morale and heightening war tension."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "UK SPECIAL FORCES PATROL CAPTURED BEHIND LINES",
+                        "message": "Russian television broadcasts images of four captured British commandos.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "sound": "explosion"
         },
@@ -3463,7 +6323,22 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "foreign"
+                        ],
+                        "title": "USAF C-17 Airlift Delivers Munitions to Brize Norton",
+                        "messages": [
+                            "Heavy American transport aircraft land continuously at RAF Brize Norton with air-defence interceptors and spares, lifting British military readiness.",
+                            "Transatlantic US resupply flights replenish depleted RAF and Royal Navy war stocks."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3486,7 +6361,22 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "uk_europe": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "defence"
+                        ],
+                        "title": "Pentagon Denies Airlift Request Over Pacific Priorities",
+                        "messages": [
+                            "Washington refuses to release strategic C-17 airlift or munitions reserves, leaving European allies nervous over Western supply depth.",
+                            "White House rejection of Britain's resupply appeal highlights allied logistics strain across Europe."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3510,7 +6400,32 @@ module.exports = {
                 "scores": {
                     "military_escalation": -2,
                     "uk_russia": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "PM",
+                            "foreign"
+                        ],
+                        "title": "F-35B Precision Strike Neutralises Russian Bomber Base",
+                        "messages": [
+                            "RAF F-35B Lightning stealth jets crater the forward Russian bomber runway and munitions bunkers without loss, forcing Moscow to pull surviving bombers out of range and reducing air-raid pressure.",
+                            "Direct stealth strikes smash Russia's forward cruise-missile launch airfield, curbing immediate strike threats against the UK."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RAF F-35 STEALTH STRIKE CRATERS RUSSIAN BOMBER BASE",
+                        "message": "Precision raid disables forward airfield used to launch missiles at Britain.",
+                        "severity": "info",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "sound": "explosion"
         },
@@ -3535,7 +6450,32 @@ module.exports = {
                 "scores": {
                     "military_escalation": 2,
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "media",
+                            "PM"
+                        ],
+                        "title": "RAF F-35B Downed by S-400 Battery During Deep Raid",
+                        "messages": [
+                            "Russian long-range surface-to-air missiles shoot down a British F-35B and force the strike package to abort, spiking military escalation and shocking the British public.",
+                            "Loss of an RAF stealth jet during the aborted air raid dominates Russian broadcasts and shakes domestic morale."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RAF F-35 STEALTH FIGHTER SHOT DOWN IN ABORTED RAID",
+                        "message": "Russian air defences intercept British strike package; escalation surges.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "sound": "klaxon"
         },
@@ -3560,7 +6500,23 @@ module.exports = {
                 "scores": {
                     "uk_europe": 2,
                     "military_escalation": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "defence",
+                            "PM"
+                        ],
+                        "title": "Emergency European Defence Pact Integrates Air Shield",
+                        "messages": [
+                            "Britain, France, Germany, and Poland lock in a joint air-and-naval defence treaty, boosting European cohesion and deterring further Russian escalation.",
+                            "Allied European missile batteries deploy to reinforce UK skies under the new four-nation defence pact."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3583,7 +6539,23 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "uk_europe": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "defence",
+                            "PM"
+                        ],
+                        "title": "Brussels Emergency Defence Talks Break Down",
+                        "messages": [
+                            "European capitals hold back national air-defence units to guard their own borders, leaving European cohesion fractured and Britain reliant on sovereign forces.",
+                            "Disagreements over command and border priorities sink the proposed European defence coalition."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3607,7 +6579,23 @@ module.exports = {
                 "scores": {
                     "military_escalation": 1,
                     "uk_europe": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "media",
+                            "foreign",
+                            "defence"
+                        ],
+                        "title": "Leaked MoD Deep-Strike Dossier Sparks Allied Alarm",
+                        "messages": [
+                            "Newspaper revelations of British targeting plans inside Russia trigger furious Kremlin warnings and rattle European capitals.",
+                            "Unauthorized disclosure of RAF deep-strike options inflames military tension and strains trust with European partners."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3666,7 +6654,23 @@ module.exports = {
                 "scores": {
                     "military_escalation": -1,
                     "uk_russia": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "PM",
+                            "defence"
+                        ],
+                        "title": "48-Hour Infrastructure Ceasefire Takes Hold",
+                        "messages": [
+                            "Backchannel diplomacy secures a 48-hour mutual pause on infrastructure strikes and a North Sea naval pullback, easing immediate war tension.",
+                            "Russian and British forces stand down from infrastructure strikes for 48 hours as confidential de-escalation talks gain traction."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3690,7 +6694,23 @@ module.exports = {
                 "scores": {
                     "uk_europe": -1,
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "media",
+                            "PM"
+                        ],
+                        "title": "Kremlin Broadcasts Leaked Backchannel Recordings",
+                        "messages": [
+                            "Russian state TV airs edited audio of British diplomatic approaches, provoking outrage in European capitals and shaking public trust at home.",
+                            "Moscow's deliberate leak of confidential ceasefire feelers angers Baltic allies and sparks domestic political uproar."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
+                ]
             }
         },
         {
@@ -3731,7 +6751,21 @@ module.exports = {
                 "scores": {
                     "military_escalation": 5,
                     "civilian_stability": -5
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "TRIDENT NUCLEAR LAUNCH AUTHORISED",
+                        "messages": [
+                            "Emergency Action Messages transmit to Britain's Vanguard-class submarine on patrol; Trident II D5 ballistic missiles breach the North Atlantic surface, triggering strategic nuclear exchange and total domestic collapse.",
+                            "Strategic nuclear release orders are executed by HM Submarine Vanguard, sending global escalation to maximum and plunging the country into catastrophe."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "image": "ev_nuclear_alert",
             "isManualAction": true
@@ -3774,16 +6808,61 @@ module.exports = {
                 "randomEvents": [
                     {
                         "id": "ev_russia_deescalate",
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "foreign",
+                                    "PM"
+                                ],
+                                "title": "Moscow Backchannel Signals Interest in Mutual Pause",
+                                "messages": [
+                                    "Senior Russian Foreign Ministry intermediaries respond constructively on the private line, exploring a temporary pause in strikes.",
+                                    "Confidential diplomatic traffic from Moscow indicates readiness to test a 48-hour de-escalation window."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_russia_leak",
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "foreign",
+                                    "media"
+                                ],
+                                "title": "Russian State Media Prepares Leak of Secret Talks",
+                                "messages": [
+                                    "Embassy press monitors warn that Kremlin broadcasters are preparing to air recordings of Britain's private diplomatic outreach.",
+                                    "Foreign Office analysts detect Moscow priming state media to spin the secret British approach as capitulation."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
                     }
                 ],
                 "scores": {
                     "uk_russia": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "PM"
+                        ],
+                        "title": "Covert Diplomatic Channel Opened With Moscow",
+                        "messages": [
+                            "Senior British diplomats establish an unacknowledged communication line with the Russian Foreign Ministry to probe for an off-ramp.",
+                            "Quiet diplomatic feelers reach Moscow intermediaries, slightly easing bilateral temperature while awaiting the Kremlin's response."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "image": "act_backchannel_russia",
             "isManualAction": true
@@ -3834,18 +6913,93 @@ module.exports = {
                         "effects": {
                             "scores": {
                                 "military_readiness": 1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "foreign"
+                                    ],
+                                    "title": "Pentagon Clears Emergency C-17 Airlift to UK",
+                                    "messages": [
+                                        "US European Command approves priority airlift of interceptors and spares into RAF Brize Norton, boosting UK military readiness.",
+                                        "American military cargo flights begin loading munitions for urgent delivery to British bases."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.6
+                        "probability": 0.6,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "foreign"
+                                ],
+                                "title": "Pentagon Clears Emergency C-17 Airlift to UK",
+                                "messages": [
+                                    "US European Command approves priority airlift of interceptors and spares into RAF Brize Norton, boosting UK military readiness.",
+                                    "American military cargo flights begin loading munitions for urgent delivery to British bases."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_us_support_fail",
                         "effects": {
                             "scores": {
                                 "uk_europe": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "foreign",
+                                        "defence"
+                                    ],
+                                    "title": "White House Holds Back Strategic Airlift Reserves",
+                                    "messages": [
+                                        "Washington declines the British transport request to preserve Indo-Pacific stocks, unsettling European defence planners.",
+                                        "Pentagon logistics chiefs turn down the UK airlift request, citing competing global commitments."
+                                    ],
+                                    "severity": "warning",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.4
+                        "probability": 0.4,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "foreign",
+                                    "defence"
+                                ],
+                                "title": "White House Holds Back Strategic Airlift Reserves",
+                                "messages": [
+                                    "Washington declines the British transport request to preserve Indo-Pacific stocks, unsettling European defence planners.",
+                                    "Pentagon logistics chiefs turn down the UK airlift request, citing competing global commitments."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "defence"
+                        ],
+                        "title": "Urgent Military Airlift Request Sent to Washington",
+                        "messages": [
+                            "MoD and Foreign Office channels transmit a formal request to the Pentagon and USAF Lakenheath for heavy C-17 transport and missile resupply.",
+                            "British defence attachés in Washington press the Joint Chiefs for immediate munitions airlift support."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -3894,9 +7048,39 @@ module.exports = {
                         "effects": {
                             "scores": {
                                 "military_readiness": 1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "cyber",
+                                        "defence"
+                                    ],
+                                    "title": "Offensive Payload Penetrates Russian Radar Grid",
+                                    "messages": [
+                                        "GCHQ implants propagate across Russian air-defence command nodes, blinding border radar sectors and raising UK readiness.",
+                                        "National Cyber Force operators confirm successful disruption of Russian air-defence links."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "cyber",
+                                    "defence"
+                                ],
+                                "title": "Offensive Payload Penetrates Russian Radar Grid",
+                                "messages": [
+                                    "GCHQ implants propagate across Russian air-defence command nodes, blinding border radar sectors and raising UK readiness.",
+                                    "National Cyber Force operators confirm successful disruption of Russian air-defence links."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_cyber_fail",
@@ -3904,9 +7088,55 @@ module.exports = {
                             "scores": {
                                 "uk_europe": -1,
                                 "civilian_stability": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "cyber",
+                                        "foreign"
+                                    ],
+                                    "title": "Russian Firewalls Quarantine & Trace UK Payload",
+                                    "messages": [
+                                        "Adversary cyber defenders isolate the British intrusion and trace its routing, triggering European discomfort and domestic concern.",
+                                        "Russian military network monitors block the GCHQ exploit and publish attribution data."
+                                    ],
+                                    "severity": "warning",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "cyber",
+                                    "foreign"
+                                ],
+                                "title": "Russian Firewalls Quarantine & Trace UK Payload",
+                                "messages": [
+                                    "Adversary cyber defenders isolate the British intrusion and trace its routing, triggering European discomfort and domestic concern.",
+                                    "Russian military network monitors block the GCHQ exploit and publish attribution data."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "home",
+                            "PM"
+                        ],
+                        "title": "National Cyber Force Launches Covert Radar Intrusion",
+                        "messages": [
+                            "With Home Office warrant approval, GCHQ and National Cyber Force teams deploy zero-day exploits against Russian military command servers, nudging escalation higher.",
+                            "Offensive cyber packages begin probing Russian air-defence networks as operators await battle-damage telemetry."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -3949,7 +7179,32 @@ module.exports = {
                 "scores": {
                     "civilian_stability": 1,
                     "uk_europe": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "media",
+                            "home",
+                            "PM"
+                        ],
+                        "title": "Prime Minister's Televised Address Steadies Public Mood",
+                        "messages": [
+                            "A prime-time Downing Street broadcast reassures households that food, banking, and energy supplies are secure, lifting domestic stability while European capitals note Britain's inward focus.",
+                            "Live national television appeals calm supermarket queues across Britain, though Brussels diplomats worry London is prioritising domestic politics."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "DOWNING STREET BROADCASTS LIVE ADDRESS TO THE NATION",
+                        "message": "Government urges calm and unity across Britain; public confidence improves.",
+                        "severity": "info",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "image": "act_national_address",
             "isManualAction": true
@@ -3991,9 +7246,39 @@ module.exports = {
                             "scores": {
                                 "military_readiness": 1,
                                 "uk_us": 1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "foreign"
+                                    ],
+                                    "title": "UKSF Patrol Transmits High-Value Targeting Data",
+                                    "messages": [
+                                        "Covert SAS observation posts relay encrypted coordinates of Russian missile units before exfiltrating safely, boosting readiness and UK–US intelligence standing.",
+                                        "Special Forces reconnaissance teams extract vital enemy order-of-battle data behind the lines."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "foreign"
+                                ],
+                                "title": "UKSF Patrol Transmits High-Value Targeting Data",
+                                "messages": [
+                                    "Covert SAS observation posts relay encrypted coordinates of Russian missile units before exfiltrating safely, boosting readiness and UK–US intelligence standing.",
+                                    "Special Forces reconnaissance teams extract vital enemy order-of-battle data behind the lines."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_sf_fail",
@@ -4001,9 +7286,54 @@ module.exports = {
                             "scores": {
                                 "civilian_stability": -1,
                                 "military_escalation": 1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "PM"
+                                    ],
+                                    "title": "Emergency Beacon: UKSF Patrol Compromised",
+                                    "messages": [
+                                        "Encrypted burst transmissions report the British reconnaissance team surrounded by Russian counter-spetsnaz units, raising escalation and domestic fallout.",
+                                        "Hereford operations room loses contact with the inserted patrol after a firefight behind enemy lines."
+                                    ],
+                                    "severity": "danger",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.5
+                        "probability": 0.5,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "Emergency Beacon: UKSF Patrol Compromised",
+                                "messages": [
+                                    "Encrypted burst transmissions report the British reconnaissance team surrounded by Russian counter-spetsnaz units, raising escalation and domestic fallout.",
+                                    "Hereford operations room loses contact with the inserted patrol after a firefight behind enemy lines."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "PM"
+                        ],
+                        "title": "SAS & SBS Reconnaissance Teams Inserted Covertly",
+                        "messages": [
+                            "UKSF patrols slip across the frontier under low-level night helicopter and submarine insertion to reconnoitre Russian missile deployments.",
+                            "Special Forces reconnaissance teams go dark inside the operational zone on high-risk intelligence collection."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -4054,19 +7384,81 @@ module.exports = {
                             "scores": {
                                 "military_escalation": 1,
                                 "uk_europe": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "media",
+                                        "foreign"
+                                    ],
+                                    "title": "Press Inquiry Hints at Leaked Deep-Strike Dossier",
+                                    "messages": [
+                                        "Journalists contact the MoD with details of classified Russian airbase target folders, heightening escalation and European concern.",
+                                        "Security breach inside Whitehall exposes RAF deep-strike planning to the press."
+                                    ],
+                                    "severity": "danger",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.2
+                        "probability": 0.2,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "media",
+                                    "foreign"
+                                ],
+                                "title": "Press Inquiry Hints at Leaked Deep-Strike Dossier",
+                                "messages": [
+                                    "Journalists contact the MoD with details of classified Russian airbase target folders, heightening escalation and European concern.",
+                                    "Security breach inside Whitehall exposes RAF deep-strike planning to the press."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_strike_options_secured",
-                        "probability": 0.8
+                        "probability": 0.8,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "Target Folders Sealed Under Tight Operational Security",
+                                "messages": [
+                                    "PJHQ targeteers complete F-35B and Storm Shadow mission routing inside a secure vault with zero leaks.",
+                                    "Operational security holds firm as RAF strike planners lock in radar-evasion corridors."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     }
                 ],
                 "triggerEvents": [
                     {
                         "id": "ev_strike_options_ready",
                         "delayMs": 60000
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "PM",
+                            "defence"
+                        ],
+                        "title": "PJHQ Tasked to Prepare Deep-Strike Target Packages",
+                        "messages": [
+                            "Permanent Joint Headquarters begins calculating F-35B stealth corridors and Storm Shadow aimpoints against forward Russian airbases and command bunkers.",
+                            "RAF strike planners convene in the Northwood bunker to build precision target folders for the Prime Minister."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -4101,9 +7493,39 @@ module.exports = {
                             "scores": {
                                 "military_escalation": -2,
                                 "uk_russia": 1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "PM"
+                                    ],
+                                    "title": "Strike Telemetry Confirms Russian Bomber Runway Cratered",
+                                    "messages": [
+                                        "F-35B weapons release goes clean; satellite assessment shows the forward Russian bomber base knocked out of action, reducing incoming air-raid pressure.",
+                                        "All British stealth jets clear the target zone after destroying the Russian bomber dispersal aprons."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.6
+                        "probability": 0.6,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "Strike Telemetry Confirms Russian Bomber Runway Cratered",
+                                "messages": [
+                                    "F-35B weapons release goes clean; satellite assessment shows the forward Russian bomber base knocked out of action, reducing incoming air-raid pressure.",
+                                    "All British stealth jets clear the target zone after destroying the Russian bomber dispersal aprons."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_f35_fail",
@@ -4111,9 +7533,55 @@ module.exports = {
                             "scores": {
                                 "military_escalation": 2,
                                 "civilian_stability": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "PM"
+                                    ],
+                                    "title": "SAM Launch Warning: F-35B Package Under Heavy Fire",
+                                    "messages": [
+                                        "Dense S-400 air-defence fire intercepts the approaching RAF stealth flight, downing one jet and driving escalation up sharply.",
+                                        "AWACS reports an RAF F-35B lost over the target area as the remaining strike flight aborts."
+                                    ],
+                                    "severity": "danger",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.4
+                        "probability": 0.4,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "SAM Launch Warning: F-35B Package Under Heavy Fire",
+                                "messages": [
+                                    "Dense S-400 air-defence fire intercepts the approaching RAF stealth flight, downing one jet and driving escalation up sharply.",
+                                    "AWACS reports an RAF F-35B lost over the target area as the remaining strike flight aborts."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "PM",
+                            "defence",
+                            "home"
+                        ],
+                        "title": "RAF F-35B Stealth Flight Launches for Russian Airbase",
+                        "messages": [
+                            "617 Squadron F-35B Lightning jets refuel from Voyager tankers and go radar-silent en route to the forward Russian bomber airfield.",
+                            "Cabinet strike authorisation is transmitted; British stealth fighters cross into hostile airspace toward the bomber base."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -4148,9 +7616,39 @@ module.exports = {
                             "scores": {
                                 "military_escalation": -3,
                                 "uk_russia": 2
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "PM"
+                                    ],
+                                    "title": "Direct Hit Paralyses Russian Theatre Command Bunker",
+                                    "messages": [
+                                        "Deep-penetration munitions sever communications at the Russian Western Military District command bunker, paralysing frontline offensive coordination.",
+                                        "Stealth strike package scores a direct hit on the Russian C2 bunker, halting coordinated enemy strikes."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.3
+                        "probability": 0.3,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "Direct Hit Paralyses Russian Theatre Command Bunker",
+                                "messages": [
+                                    "Deep-penetration munitions sever communications at the Russian Western Military District command bunker, paralysing frontline offensive coordination.",
+                                    "Stealth strike package scores a direct hit on the Russian C2 bunker, halting coordinated enemy strikes."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_f35_fail",
@@ -4158,9 +7656,55 @@ module.exports = {
                             "scores": {
                                 "military_escalation": 3,
                                 "civilian_stability": -2
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "defence",
+                                        "PM"
+                                    ],
+                                    "title": "Heavy Air-Defence Ring Repels C2 Bunker Raid",
+                                    "messages": [
+                                        "Layered Russian SAM batteries around the command bunker shoot down a British stealth fighter, sending escalation soaring and shaking the home front.",
+                                        "High-risk decapitation raid runs into an intact S-400 screen; one F-35B is lost and war tension spikes critically."
+                                    ],
+                                    "severity": "danger",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.7
+                        "probability": 0.7,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "defence",
+                                    "PM"
+                                ],
+                                "title": "Heavy Air-Defence Ring Repels C2 Bunker Raid",
+                                "messages": [
+                                    "Layered Russian SAM batteries around the command bunker shoot down a British stealth fighter, sending escalation soaring and shaking the home front.",
+                                    "High-risk decapitation raid runs into an intact S-400 screen; one F-35B is lost and war tension spikes critically."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "PM",
+                            "defence",
+                            "home"
+                        ],
+                        "title": "High-Risk Deep Strike Launched Against Russian C2 Bunker",
+                        "messages": [
+                            "British F-35B stealth fighters armed with bunker-buster munitions penetrate deep into heavily defended airspace targeting Russia's military command headquarters.",
+                            "COBRA authorises the high-risk decapitation strike against Russia's theatre command node."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -4205,18 +7749,93 @@ module.exports = {
                             "scores": {
                                 "uk_europe": 2,
                                 "military_escalation": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "foreign",
+                                        "PM"
+                                    ],
+                                    "title": "Paris, Berlin & Warsaw Sign Joint Defence Pact",
+                                    "messages": [
+                                        "European leaders endorse Britain's coalition proposal, pooling air-defence and naval patrols to stabilise the theatre.",
+                                        "Major European powers sign onto the UK-led mutual defence framework, strengthening European cohesion."
+                                    ],
+                                    "severity": "success",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.7
+                        "probability": 0.7,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "foreign",
+                                    "PM"
+                                ],
+                                "title": "Paris, Berlin & Warsaw Sign Joint Defence Pact",
+                                "messages": [
+                                    "European leaders endorse Britain's coalition proposal, pooling air-defence and naval patrols to stabilise the theatre.",
+                                    "Major European powers sign onto the UK-led mutual defence framework, strengthening European cohesion."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_eu_fail",
                         "effects": {
                             "scores": {
                                 "uk_europe": -1
-                            }
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "foreign",
+                                        "PM"
+                                    ],
+                                    "title": "European Capitals Deadlock Over Joint Command Terms",
+                                    "messages": [
+                                        "Disputes over national parliamentary vetoes stall the Brussels defence summit, weakening European cohesion.",
+                                        "Reluctant European governments decline binding troop commitments at the emergency summit."
+                                    ],
+                                    "severity": "warning",
+                                    "aiRandomize": true
+                                }
+                            ]
                         },
-                        "probability": 0.3
+                        "probability": 0.3,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "foreign",
+                                    "PM"
+                                ],
+                                "title": "European Capitals Deadlock Over Joint Command Terms",
+                                "messages": [
+                                    "Disputes over national parliamentary vetoes stall the Brussels defence summit, weakening European cohesion.",
+                                    "Reluctant European governments decline binding troop commitments at the emergency summit."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "PM"
+                        ],
+                        "title": "Britain Convenes Emergency European Defence Summit",
+                        "messages": [
+                            "British envoys meet counterparts from France, Germany, and Poland in Brussels to negotiate an integrated European defence coalition.",
+                            "Downing Street and the Foreign Office launch an urgent diplomatic push to unite European air and naval commands."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             },
@@ -4254,7 +7873,31 @@ module.exports = {
                 ],
                 "scores": {
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "home"
+                        ],
+                        "title": "Shadow Spy Trawler Plotted Over Langeled Gas Pipeline",
+                        "messages": [
+                            "Type 26 sonar plots the unflagged Russian spy trawler directly over the damaged North Sea gas pipeline as UK wholesale energy prices spike and public anxiety rises.",
+                            "St Fergus gas pressure drops sharply while naval sensors reveal a suspect Russian shadow-fleet trawler loitering above the interconnector."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "NORTH SEA GAS PIPELINE PRESSURE DROP — SUSPECT SHIP PLOTTED",
+                        "message": "Shadow-fleet trawler revealed near Langeled interconnector; UK gas prices surge.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "defence": "Type 26 frigate sonar has plotted the shadow-fleet trawler on our tactical map—she is still inside the North Sea sector.",
@@ -4277,7 +7920,31 @@ module.exports = {
                                     "military_readiness": 1,
                                     "uk_europe": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Royal Marines Detain Shadow Trawler Over Pipeline",
+                                        "messages": [
+                                            "Wildcat helicopters insert Royal Marines onto the suspect trawler, detaining her crew and uncovering seabed demolition charges, earning Norwegian praise while raising maritime tension.",
+                                            "Boarding teams detain the shadow-fleet spy vessel in the North Sea, boosting allied confidence and UK readiness."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL MARINES BOARD & DETAIN NORTH SEA SPY TRAWLER",
+                                        "message": "Suspect vessel seized near Langeled gas pipeline after pressure drop.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4290,7 +7957,23 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": 1,
                                     "civilian_stability": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign",
+                                            "home"
+                                        ],
+                                        "title": "Joint UK–Norwegian Patrol Secures Pipeline Corridor",
+                                        "messages": [
+                                            "British and Norwegian frigates establish a protective screen over the Langeled pipeline, calming energy markets and strengthening European cooperation as the unboarded spy trawler slips away into fog.",
+                                            "Visible allied pipeline patrols reassure energy markets and households, though the suspect trawler escapes into international waters."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4326,6 +8009,21 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_rus_spy_trawler"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "cyber"
+                        ],
+                        "title": "Coastguard Radar Plots Trawler Dragging Anchor on Cable",
+                        "messages": [
+                            "Maritime surveillance reveals the shadow-fleet spy trawler dragging a heavy anchor across a North Sea data trunk as European packet loss spikes.",
+                            "Tactical plots lock onto the Russian-crewed trawler directly above critical North Sea fibre cables."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -4347,7 +8045,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "cyber"
+                                        ],
+                                        "title": "Warning Shots Stop & Detain Cable-Sabotage Trawler",
+                                        "messages": [
+                                            "Gunfire across the trawler's bow forces her engines to stop; Royal Navy boarding parties detain the vessel and halt further cable damage, lifting readiness as tension rises.",
+                                            "Type 23 boarding teams seize the anchor-dragging spy trawler, protecting remaining North Sea fibre trunks."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4360,7 +8073,23 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": 1,
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber",
+                                            "home"
+                                        ],
+                                        "title": "Evidence Shared With NATO as Trawler Slips Away",
+                                        "messages": [
+                                            "Photographic proof of the dragged anchor strengthens European sanctions coordination, but the unstopped vessel disappears into shipping lanes after slowing UK internet traffic.",
+                                            "NATO partners welcome the forensic dossier even as lingering broadband outages frustrate British businesses."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4397,7 +8126,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "home",
+                                            "media"
+                                        ],
+                                        "title": "Ground Radio Beacons Keep Heathrow & Gatwick Flying",
+                                        "messages": [
+                                            "NATS controllers shift approaching jets onto legacy ILS and VOR radio beams, keeping London airports safely open and reassuring passengers while freeing RAF EW assets.",
+                                            "Seamless fallback to ground-based radar and radio navigation defeats the GPS spoofing without closing UK skies."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4407,7 +8152,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "cyber",
+                                            "defence",
+                                            "media"
+                                        ],
+                                        "title": "London Airspace Ground-Stop Allows Jammer Triangulation",
+                                        "messages": [
+                                            "Clearing civilian flights over south-east England lets RAF Rivet Joint and NCSC teams pinpoint the electronic warfare emitters, though stranded passengers pack Heathrow terminals.",
+                                            "Halting London departures gives military EW analysts clean spectrum data while images of grounded airliners unsettle the public."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4446,7 +8207,31 @@ module.exports = {
                 ],
                 "scores": {
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "home"
+                        ],
+                        "title": "Compromised Telecoms Node Pinpointed Behind NHS Outage",
+                        "messages": [
+                            "NCSC forensic probes reveal the Compromised UK Telecoms Core Node driving the hospital ransomware cascade as ambulance diversions rattle the public.",
+                            "Twelve NHS trusts drop to paper records while NCSC plots the infected fibre exchange on the tactical map."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "CYBER ATTACK HITS 12 NHS HOSPITAL TRUSTS",
+                        "message": "Emergency departments divert ambulances as NCSC traces malware to telecoms hub.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "cyber": "NCSC has traced the command-and-control beacon to a compromised UK Telecoms Core Node—it is now visible on the map for a manual NCSC Purge!",
@@ -4464,7 +8249,22 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "defence"
+                                        ],
+                                        "title": "Army Medical & Signal Teams Stabilise A&E Triage",
+                                        "messages": [
+                                            "Royal Army Medical Corps personnel and military field radios keep affected A&E departments functioning safely, reassuring patients while drawing down military medical reserves.",
+                                            "MACA deployment restores orderly emergency care at hit NHS hospitals at a modest cost to military readiness."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4474,7 +8274,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "cyber",
+                                            "defence"
+                                        ],
+                                        "title": "NHS Trusts Cut Off From Spine Network to Contain Malware",
+                                        "messages": [
+                                            "Hard-disconnecting hospital IT stops the wiper spreading and keeps armed forces focused on combat readiness, though cancelled operations and ambulance queues distress families.",
+                                            "Severing regional NHS links preserves military medical readiness while leaving civilian wards struggling offline."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4511,7 +8327,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "PM",
+                                            "cyber"
+                                        ],
+                                        "title": "Instant Live Downing Street Appearance Crushes Deepfake",
+                                        "messages": [
+                                            "Putting the Prime Minister live outside No. 10 alongside NCSC forensic watermarks exposes the Russian fake within minutes, stopping ATM queues and earning praise from European disinformation monitors.",
+                                            "Rapid live broadcast proof debunks the conscription hoax before panic can take hold."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4520,7 +8352,22 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Written Denial Outpaced by Viral Conscription Rumours",
+                                        "messages": [
+                                            "By the time social platforms remove the fake video, millions have shared screenshots and anxious savers are queuing outside high-street banks.",
+                                            "A dry text press release fails to catch up with the viral deepfake, denting public calm."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4561,6 +8408,22 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_gru_sabotage_cell"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "PM",
+                            "home",
+                            "cyber"
+                        ],
+                        "title": "EYES ONLY: GRU Sabotage Cell Pinpointed on Tactical Map",
+                        "messages": [
+                            "MI5 watcher teams plot the suspected GRU Unit 29155 safe house near the Midlands 400kV substation, unlocking the MI5 raid option.",
+                            "Thames House counter-espionage cells fix the coordinates of the covert Russian sabotage team."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -4579,7 +8442,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "home",
+                                            "cyber"
+                                        ],
+                                        "title": "EYES ONLY: Covert Armed Ring Protects Midlands Substation",
+                                        "messages": [
+                                            "Unmarked counter-terror firearms teams seal off the 400kV transformer perimeter and prime a dawn strike team, safeguarding grid stability and defence power feeds.",
+                                            "Discrete armed containment locks down the Midlands substation approaches ahead of an arrest operation."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4589,7 +8468,23 @@ module.exports = {
                                 "scores": {
                                     "uk_us": 1,
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "home",
+                                            "cyber"
+                                        ],
+                                        "title": "EYES ONLY: Deep Surveillance Logs GRU Handler Links",
+                                        "messages": [
+                                            "Holding off arrest allows GCHQ and MI5 to map foreign handler relays shared with US intelligence, though leaving the armed cell at large near the grid carries domestic risk.",
+                                            "Signals traces from the unwary GRU operatives yield valuable counter-intelligence for Five Eyes partners while the substation remains at risk."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4629,7 +8524,23 @@ module.exports = {
                                 "scores": {
                                     "uk_us": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "EYES ONLY: Sanitized GCHQ Decrypt Hardens Allied Spine",
+                                        "messages": [
+                                            "Sharing sanitized proof of Northern Fleet overstretch stiffens resolve in Washington and key European capitals without compromising GCHQ Bude's collection method.",
+                                            "Five Eyes and senior NATO partners rally behind Britain after reviewing the high-grade Kremlin assessment."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4639,7 +8550,23 @@ module.exports = {
                                 "scores": {
                                     "uk_russia": 1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "foreign",
+                                            "cyber"
+                                        ],
+                                        "title": "EYES ONLY: Targeted Backchannel Pressure Cools Naval Tempo",
+                                        "messages": [
+                                            "Subtly signalling awareness of Northern Fleet logistics limits persuades Russian commanders to dial back risky naval deployments, though Moscow suspects a deep leak.",
+                                            "Precision diplomatic leverage derived from the Bude decrypt prompts a quiet reduction in Russian operational tempo."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4688,7 +8615,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Armed Frigate & P-8A Screen Escorts Damaged RFA Tanker",
+                                        "messages": [
+                                            "A Type 26 frigate and armed P-8A Poseidon aircraft break through the Russian surface screen to shepherd the damaged RFA tanker safely toward the Clyde, lifting readiness as sea tension rises.",
+                                            "Firm Royal Navy escort operations recover the auxiliary tanker intact despite close-quarters Russian harassment."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4698,7 +8640,22 @@ module.exports = {
                                 "scores": {
                                     "military_escalation": -1,
                                     "uk_russia": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Incidents-at-Sea Hotline Separates Warships in GIUK Fog",
+                                        "messages": [
+                                            "Direct admiralty-to-admiralty communication separates the ships and lets salvage tugs assist the damaged RFA tanker, lowering immediate clash risk despite mutual diplomatic protests.",
+                                            "Maritime hotline protocols defuse a potential gunfight in the GIUK Gap while Moscow and London trade blame."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4736,7 +8693,22 @@ module.exports = {
                                     "military_readiness": 1,
                                     "military_escalation": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "British Artillery & EW Silence Drone Launch Sites",
+                                        "messages": [
+                                            "AS90 artillery fire and RAF electronic jamming crush the drone control teams, protecting the British battlegroup and reassuring Estonian allies while raising frontline escalation.",
+                                            "Decisive counter-battery suppression saves the Baltic convoy and wins strong praise from Eastern European allies."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4746,7 +8718,23 @@ module.exports = {
                                 "scores": {
                                     "military_escalation": -1,
                                     "civilian_stability": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Restrained Convoy Extraction Avoids Cross-Border Duel",
+                                        "messages": [
+                                            "Holding back cross-border artillery fire prevents a wider border battle, but viral Telegram videos of burning British trucks spark public frustration at home.",
+                                            "Chinook medevac teams extract the convoy under short-range air-defence cover while domestic critics question strict rules of engagement."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4784,7 +8772,24 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "media",
+                                            "home",
+                                            "foreign"
+                                        ],
+                                        "title": "Cross-Party Privy Council Briefing Unites Westminster",
+                                        "messages": [
+                                            "Opposition leaders emerge from Downing Street pledging full national unity during the emergency, quelling backbench rebellion and reassuring European allies.",
+                                            "Bipartisan consensus in the House of Commons steadies public confidence and signals British political cohesion abroad."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4794,7 +8799,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "media",
+                                            "home"
+                                        ],
+                                        "title": "Hardline Whip Crushes Revolt Amid Westminster Row",
+                                        "messages": [
+                                            "Party whips force rebel MPs to withdraw their letters and pass emergency defence funding, though bitter partisan clashes on live TV unsettle the public.",
+                                            "Enforcing strict parliamentary discipline secures rapid military budget votes while fueling noisy Westminster drama."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4819,7 +8840,22 @@ module.exports = {
                 ],
                 "scores": {
                     "military_readiness": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "PM"
+                        ],
+                        "title": "Sonar Contact Lost: Russian Sub Vanishes Near Clyde",
+                        "messages": [
+                            "The Russian attack submarine slips beneath a deep North Channel thermal layer and disappears from tactical sonar plots, forcing Faslane submarine movements onto defensive hold.",
+                            "ASW frigates lose acoustic lock on the Russian boat off HMNB Clyde, lowering naval readiness while she lurks unseen."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "roleDescriptions": {
                 "defence": "Contact lost! Because she was not neutralised or driven off, she remains hidden and operational near the Clyde approaches."
@@ -4871,7 +8907,22 @@ module.exports = {
                 ],
                 "scores": {
                     "military_escalation": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "PM"
+                        ],
+                        "title": "Urgent Sonar Contact: Russian Sub Back in Clyde Channel",
+                        "messages": [
+                            "Sonobuoys re-acquire the Russian Yasen-class submarine directly across the HMNB Clyde transit lane, pinging outbound Royal Navy units and spiking escalation.",
+                            "The elusive Russian attack submarine re-emerges on the tactical map off Faslane in an aggressive close-quarters challenge."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "roleDescriptions": {
                 "defence": "She came back right on our deterrent transit lane! P-8A Poseidon and HMS Ambush have a firing solution."
@@ -4893,7 +8944,31 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "Warning Depth Charges Drive Russian Sub From Clyde",
+                                        "messages": [
+                                            "Signalling depth-charge detonations from Royal Navy ASW units force the Russian submarine to abort her patrol and withdraw into open Atlantic waters, clearing the deterrent lane.",
+                                            "Aggressive ASW prosecution compels the intruding submarine to turn away from HMNB Clyde, restoring naval readiness while raising tension."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "ROYAL NAVY DRIVES OFF RUSSIAN SUBMARINE NEAR FASLANE",
+                                        "message": "Warning depth charges force intruding submarine to withdraw from Clyde approaches.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4903,7 +8978,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": -1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "Clyde Submarine Sail-Out Delayed to Avoid Underwater Clash",
+                                        "messages": [
+                                            "Holding Royal Navy movements inside Gare Loch while tracking the intruder avoids a live firing engagement, though delayed deployments reduce fleet readiness.",
+                                            "Cautious sonar containment prevents an undersea torpedo exchange at the cost of temporary operational delay."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -4939,6 +9029,21 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_kaliningrad_iskander"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "defence",
+                            "foreign"
+                        ],
+                        "title": "Kaliningrad Iskander-M Battery Plotted in Field Position",
+                        "messages": [
+                            "Allied overhead imagery reveals a mobile Russian Iskander-M ballistic missile battery deployed in forested launch sites inside Kaliningrad.",
+                            "Tactical maps update with the coordinates of a road-mobile Iskander missile unit threatening NATO eastern flank airbases."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -4957,7 +9062,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Continuous Rivet Joint Lock & Sky Sabre Shield Reassure Allies",
+                                        "messages": [
+                                            "RAF Rivet Joint aircraft maintain unbroken electronic lock on the Kaliningrad launchers while Sky Sabre batteries move to instant intercept status, boosting readiness and Polish-Lithuanian confidence.",
+                                            "Continuous allied ISR tracking keeps the mobile Iskander battery pinned on the map and strengthens European defence cohesion."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4970,7 +9090,22 @@ module.exports = {
                                 "scores": {
                                     "military_escalation": -1,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Iskander Battery Slips Into Forest Cover as Patrols Pull Back",
+                                        "messages": [
+                                            "Drawing back reconnaissance flights lowers air-defence friction, but the mobile Iskander launchers vanish beneath forest camouflage and frontline European allies protest.",
+                                            "Losing radar track on the Kaliningrad missile battery calms immediate airspace tension while rattling Poland and Lithuania."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5006,7 +9141,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "foreign",
+                                            "media"
+                                        ],
+                                        "title": "Eurotunnel Shut for 12-Hour Joint Bomb Sweep",
+                                        "messages": [
+                                            "Anglo-French EOD teams sweep every Folkestone and Calais rail tunnel while lorry queues back up across Kent, earning Paris's gratitude at a cost to domestic supply calm.",
+                                            "Halting Channel Tunnel trains guarantees infrastructure safety and pleases French security chiefs, though M20 freight tailbacks rattle shoppers."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5016,7 +9167,22 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "defence"
+                                        ],
+                                        "title": "Military Search Teams Keep Channel Freight Rolling",
+                                        "messages": [
+                                            "Royal Engineers search dogs and armed police screen every wagon at Folkestone without stopping medical and food trains, steadying domestic supply chains while tying down specialist military units.",
+                                            "Continuous mobile screening keeps vital cross-Channel freight moving and reassures households at a modest cost to military readiness."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5054,7 +9220,23 @@ module.exports = {
                                     "military_escalation": -1,
                                     "uk_russia": 1,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM",
+                                            "defence"
+                                        ],
+                                        "title": "Quiet 72-Hour Tactical Pause Tested via Geneva",
+                                        "messages": [
+                                            "Slowing Baltic transport flights in exchange for a 72-hour Russian cyber and naval pause lowers immediate war tension, though Eastern European capitals suspect a side-deal.",
+                                            "Geneva intermediaries confirm a temporary operational pause, cooling battlefield tempo while straining trust with Baltic allies."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5064,7 +9246,23 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": 1,
                                     "military_escalation": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM",
+                                            "defence"
+                                        ],
+                                        "title": "Britain Rejects Kremlin Side-Deal & Briefs NATO Allies",
+                                        "messages": [
+                                            "Sharing Moscow's divide-and-rule offer openly with European capitals cements alliance solidarity as Baltic reinforcements continue at heightened tension.",
+                                            "Refusing to freeze Baltic deployments wins strong European gratitude while keeping military confrontation elevated."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5110,7 +9308,32 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": 2,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "PM",
+                                            "media"
+                                        ],
+                                        "title": "Civil Contingencies Act Restores Fuel & Food Order",
+                                        "messages": [
+                                            "Emergency rationing orders and Royal Logistic Corps tanker convoys replenish dry forecourts and supermarkets, sharply restoring public order at a cost to military transport readiness.",
+                                            "Statutory purchase limits and Army supply escorts halt forecourt scuffles and stabilise the home front."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "CIVIL CONTINGENCIES ACT INVOKED — ARMY RESTORES FUEL SUPPLY",
+                                        "message": "Emergency rationing and military tanker convoys stabilise UK supermarkets and forecourts.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5120,7 +9343,23 @@ module.exports = {
                                 "scores": {
                                     "civilian_stability": -1,
                                     "uk_europe": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "home",
+                                            "media",
+                                            "foreign"
+                                        ],
+                                        "title": "Voluntary Limits Fail to Stop Forecourt Queues",
+                                        "messages": [
+                                            "Holding off statutory emergency powers projects calm to European markets, but retail hoarding and empty shelves continue to erode domestic stability.",
+                                            "Supermarket rationing requests prove too weak to stop panic buying across British towns."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5164,7 +9403,32 @@ module.exports = {
                                     "uk_europe": 2,
                                     "uk_us": 1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "UK Forces Integrated Into SACEUR NATO War Command",
+                                        "messages": [
+                                            "Placing Royal Navy and RAF strike wings under NATO Allied Command Operations locks in full US and European collective defence and boosts combined combat readiness.",
+                                            "SACEUR integrates British air and naval groups into the NATO Response Force shield, surging alliance unity."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "BRITAIN COMMITS ARMED FORCES TO NATO JOINT WAR COMMAND",
+                                        "message": "RAF and Royal Navy units integrate with SACEUR Rapid Response Force.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5174,7 +9438,23 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": -1,
                                     "military_escalation": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "PM",
+                                            "defence",
+                                            "foreign"
+                                        ],
+                                        "title": "Sovereign UK Command Retained Over British Forces",
+                                        "messages": [
+                                            "Keeping RAF and Royal Navy tasking under exclusive Whitehall control preserves de-escalation flexibility, though Brussels complains of fragmented command.",
+                                            "Retaining strict national command authority lowers hair-trigger alliance escalation at the cost of friction with European allies."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5205,6 +9485,22 @@ module.exports = {
             "autoEffects": {
                 "hideAssets": [
                     "a_kaliningrad_iskander"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "foreign",
+                            "cyber",
+                            "defence"
+                        ],
+                        "title": "US Satellite Feeds Throttled — Kaliningrad Track Lost",
+                        "messages": [
+                            "Washington restricts live NRO satellite downlinks to GCHQ, causing the mobile Kaliningrad Iskander battery to drop off the tactical map.",
+                            "Strained UK–US relations trigger a freeze on real-time American overhead targeting feeds, blinding live track on Kaliningrad launchers."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -5222,7 +9518,23 @@ module.exports = {
                                 "scores": {
                                     "uk_us": 2,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM",
+                                            "cyber"
+                                        ],
+                                        "title": "Direct PM–President Call Restores Five Eyes Downlinks",
+                                        "messages": [
+                                            "Personal assurances from Downing Street persuade the White House to reopen Five Eyes satellite feeds, repairing UK–US ties while European partners feel sidelined.",
+                                            "Emergency Oval Office diplomacy restores full NSA and NRO intelligence sharing with GCHQ."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5232,7 +9544,23 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": 1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "cyber",
+                                            "defence"
+                                        ],
+                                        "title": "French CSO Satellites & RAF ISR Fill Intelligence Gap",
+                                        "messages": [
+                                            "Switching to French military reconnaissance satellites and extra RAF Rivet Joint sorties deepens European cooperation, though slower pass times trim targeting readiness.",
+                                            "Anglo-French satellite sharing restores baseline imagery coverage without conceding to Washington."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -5258,7 +9586,23 @@ module.exports = {
                 "scores": {
                     "civilian_stability": 1,
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "home",
+                            "PM",
+                            "cyber"
+                        ],
+                        "title": "GRU Unit 29155 Sabotage Cell Neutralised in Dawn Raid",
+                        "messages": [
+                            "Counter-Terrorism firearms officers arrest all four GRU operatives and seize thermite charges aimed at the Midlands 400kV grid, securing domestic stability and defence power supplies.",
+                            "MI5 and armed police roll up the Russian sabotage cell intact, neutralising the threat to the National Grid."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -5280,7 +9624,23 @@ module.exports = {
                 ],
                 "scores": {
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "home",
+                            "PM",
+                            "cyber"
+                        ],
+                        "title": "GRU Sabotage Cell Slips Police Cordon & Goes Dark",
+                        "messages": [
+                            "Breaching teams find burned laptops and an empty safe house; the GRU operatives vanish from the tactical map, heightening domestic security fears.",
+                            "The Russian sabotage cell evades capture minutes before the raid and goes underground across the Midlands."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -5303,7 +9663,23 @@ module.exports = {
                 "scores": {
                     "civilian_stability": 1,
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "home",
+                            "defence"
+                        ],
+                        "title": "UK Telecoms Core Node Secured — NHS Backdoor Closed",
+                        "messages": [
+                            "NCSC engineers cleanly flash clean firmware across the core fibre exchange, marking the node secured, restoring NHS links, and hardening defence communications.",
+                            "Live firmware remediation purges Russian malware from the UK telecoms backbone without dropping national traffic."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -5325,7 +9701,23 @@ module.exports = {
                 },
                 "scores": {
                     "civilian_stability": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "home",
+                            "media"
+                        ],
+                        "title": "Telecoms Node Secured After 90-Minute Mobile Blackout",
+                        "messages": [
+                            "The emergency firmware purge eliminates the Russian implant and secures the node, but a 90-minute mobile and card-payment outage across southern England rattles shoppers.",
+                            "BGP routing resets during the NCSC purge briefly knock out southern mobile coverage before the secured core node stabilises."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -5361,12 +9753,60 @@ module.exports = {
                     {
                         "id": "ev_gru_raid_success",
                         "delayMs": 25000,
-                        "probability": 0.7
+                        "probability": 0.7,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "home",
+                                    "PM",
+                                    "cyber"
+                                ],
+                                "title": "CTSFO Strike Teams Breach Safe House With Suspects Inside",
+                                "messages": [
+                                    "Tactical radio reports all four GRU suspects pinned inside the Midlands safe house as armed officers move in.",
+                                    "MI5 surveillance confirms the targets remained inside as police entry charges detonate."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_gru_raid_escaped",
                         "delayMs": 25000,
-                        "probability": 0.3
+                        "probability": 0.3,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "home",
+                                    "PM",
+                                    "cyber"
+                                ],
+                                "title": "Lookout Alert: Suspects Fleeing Safe House Perimeter",
+                                "messages": [
+                                    "MI5 watchers report counter-surveillance tripwires triggered at the safe house moments before the tactical team arrives.",
+                                    "Entry teams report the rear exit blown and suspects scattering into dense urban traffic."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "home",
+                            "PM",
+                            "cyber"
+                        ],
+                        "title": "MI5 & Counter-Terror Firearms Teams Launch Raid",
+                        "messages": [
+                            "With Prime Ministerial warrant signed, Counter-Terrorism Specialist Firearms Officers move to breach the pinpointed GRU safe house in the Midlands.",
+                            "Unmarked armed police vehicles converge on the GRU cell's location to execute an immediate arrest warrant."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             }
@@ -5403,12 +9843,57 @@ module.exports = {
                     {
                         "id": "ev_telecom_purged",
                         "delayMs": 25000,
-                        "probability": 0.75
+                        "probability": 0.75,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "cyber",
+                                    "home"
+                                ],
+                                "title": "Core Routers Accepting Clean Firmware Image",
+                                "messages": [
+                                    "NCSC telemetry shows redundant fibre switches failing over smoothly as the Russian command beacon is severed.",
+                                    "Live router rebuild progresses cleanly with zero packet drop on emergency services channels."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_telecom_blackout_blip",
                         "delayMs": 25000,
-                        "probability": 0.25
+                        "probability": 0.25,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "cyber",
+                                    "home"
+                                ],
+                                "title": "Fallback BGP Tables Flapping During Core Purge",
+                                "messages": [
+                                    "NCSC engineers report secondary mobile routing tables oscillating as the infected core node reboots.",
+                                    "Emergency purge triggers a temporary regional mobile switchover glitch across southern exchanges."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "cyber",
+                            "home"
+                        ],
+                        "title": "NCSC Initiates Live Firmware Purge on Telecoms Core",
+                        "messages": [
+                            "NCSC incident response engineers isolate the compromised national fibre exchange and begin flashing clean routing firmware.",
+                            "With Home Office clearance, cyber defenders execute an emergency purge on the infected UK telecoms backbone node."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             }
@@ -5446,7 +9931,32 @@ module.exports = {
                 "scores": {
                     "military_readiness": -1,
                     "uk_europe": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "PM",
+                            "foreign",
+                            "defence"
+                        ],
+                        "title": "USAF Lakenheath & US 6th Fleet Withdrawn From Theatre",
+                        "messages": [
+                            "The White House stands down USAF 48th Fighter Wing at Lakenheath and orders the US 6th Fleet Carrier Group out of the North Atlantic, removing both assets from the tactical map and cutting allied readiness.",
+                            "American air and naval assets withdraw from UK and North Atlantic tasking amid strained UK–US relations, shaking European confidence."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "WHITE HOUSE STANDS DOWN US FORCES FROM UK SUPPORT",
+                        "message": "USAF Lakenheath stood down and US Carrier Group departs North Atlantic.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "PM": "US assets have been pulled from our tactical map. Until Washington reverses course, Britain cannot call in US military transport or USAF air cover.",
@@ -5465,7 +9975,22 @@ module.exports = {
                                 "scores": {
                                     "uk_us": 1,
                                     "uk_europe": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "PM"
+                                        ],
+                                        "title": "Emergency Transatlantic Talks Begin to Repair US Rift",
+                                        "messages": [
+                                            "Direct Prime Minister–President crisis talks begin rebuilding bridges with Washington, though European capitals lament Britain's hesitation to commit to an EU-led shield.",
+                                            "Urgent diplomatic concessions warm the White House channel slightly while slowing European defence integration."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -5475,7 +10000,32 @@ module.exports = {
                                 "scores": {
                                     "uk_europe": 2,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "foreign",
+                                            "defence",
+                                            "PM"
+                                        ],
+                                        "title": "UK Forges Northern & European Air-Sea Shield",
+                                        "messages": [
+                                            "Pivoting decisively to France, Germany, and Joint Expeditionary Force Nordic allies locks in shared air-defence and GIUK naval patrols, boosting European cohesion and readiness.",
+                                            "European and Nordic air and naval units surge into the North Sea and GIUK Gap alongside British forces to replace withdrawn US assets."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "BRITAIN RALLIES EUROPEAN & NORDIC DEFENCE SHIELD",
+                                        "message": "UK, French, German, and Nordic forces combine air and naval patrols after US pullback.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]

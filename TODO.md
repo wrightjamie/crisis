@@ -22,6 +22,8 @@
 - [x] Re-architect Op Sovereign Sky into 3 concurrent parallel tracks with branching consequences, cross-track visibility unlocks, timed injects, full RAFAC Air Power syllabus coverage (LO1–LO3 / P1–P10), and event-linked / phase-bounded Manual Actions (`notTriggeredEvents` + asset states)
 - [x] Resolve GitHub bugs #88–#92 (facilitator network diagram height collapse, pause/resume `socket.data.role` bug, hide unavailable manual actions with collapsed Used Actions section, data-driven `conditionalEffects` for reduced UK diplomatic impact when attacking forces are active, and pause-aware timed `deployAssets` state with optional `returnState` and concurrent option checks)
 - [x] Add per-player event outcome messages (`effects.outcomeMessages` supporting targeted role arrays, `messages[]` random variants, `randomEvents` branch outcomes, and `aiRandomize` hook) delivered via unified persistent acknowledgeable toasts, Outcomes history panel, schema validation, and Scenario Editor authoring UI
+- [x] Enact `effects.outcomeMessages` across all three flagship scenarios (`falklands_2`: 196/196 sites, `op_sovereign_sky`: 175/175 sites, `uk_crisis`: 225/225 sites — 596/596 sites, 816 entries total), export portable ZIPs, and migrate into SQLite (`npm run db:migrate`)
+- [x] Audit all three flagship scenarios (`falklands_2`, `op_sovereign_sky`, `uk_crisis`) for missing or broken image references — verified 100% (`267/267`) valid image assignments resolving in `data/image-library.json` and `public/images/library/`
 - [ ] Add scenario-specific repeatable "repair this asset" triggered events when assets become damaged
 
 ## Image Audit: Shoehorned Images To Replace With Bespoke Artwork
@@ -55,12 +57,19 @@ While all 13 scenarios now have functional image mappings in place so no UI card
 - [ ] Event: "Earth Protests" (ev_thread3_earth_protests, ev_thread3_rebels_emboldened) — Currently uses rainy contemporary London Whitehall and Manchester streets. Needs futuristic 2084 mega-city Earth protests with holographic displays.
 - [ ] Event: "Surface-to-Orbit Missiles" (ev_thread2_martian_retaliation) — Currently uses F-35 air strike (ev_f35_fail). Needs Martian surface missile silo battery launching kinetic interceptors into space.
 
-### 4. Falklands II (falklands_2) — Setting Mismatches
+### 4. Falklands II (falklands_2) — Setting Mismatches (0 Missing/Broken References; 5 Optional Bespoke Replacements Pending AI Credits)
 - [ ] Asset: "Port Stanley" (port_stanley) — Currently uses Caribbean Government House in Tortola with palm trees (bvi_gov_house). Needs the windswept, treeless, sub-Antarctic coastal town of Stanley with colorful tin roofs and harbor jetties.
 - [ ] Asset: "RAF Mount Pleasant" (mount_pleasant) — Currently uses generic European NATO base. Needs the stark, treeless East Falkland peat-bog military complex under cold grey skies.
 - [ ] Asset: "Argentine Air Bases" (rio_gallegos, rio_grande) — rio_grande updated with bespoke Argentine naval airbase image (arg_rio_grande_base); rio_gallegos pending bespoke Patagonian airbase artwork.
 - [ ] Event: "Naval Defeat in South Atlantic" (ev_naval_defeat) — Currently uses Portsmouth naval dockyard missile strike (ev_portsmouth_strike). Needs burning UK frigate in rough South Atlantic seas.
 - [ ] Event: "Air Raid on Mount Pleasant" (ev_air_raid) — Currently uses Cyprus Akrotiri strike (ev_akrotiri_strike). Needs Argentine air-launched cruise missile strikes on Mount Pleasant runway.
+
+### 4b. Op Sovereign Sky (`op_sovereign_sky`) & UK Crisis (`uk_crisis`) — Optional Bespoke Replacements for Shared Images (0 Missing/Broken References; Pending AI Credits)
+- [ ] Op Sovereign Sky: "Runway Cratering at RAF Akrotiri" (ev_shock_runway_cratered) — Currently reuses `ev_akrotiri_strike`. Optional bespoke daytime runway crater & rapid airfield repair engineering image.
+- [ ] Op Sovereign Sky: "Neutral Airliner in Engagement Zone" (ev_wc_neutral_airliner) — Currently reuses `ev_airspace_intercept`. Optional bespoke civilian airliner cockpit/radar IFF identification image.
+- [ ] UK Crisis: "GRU Sabotage Cell (UK Energy Grid)" (a_gru_sabotage_cell, ev_mi5_sleeper_cell) — Currently reuses `substation_alpha`. Optional bespoke covert surveillance / substation perimeter infiltration image.
+- [ ] UK Crisis: "Deepfake PM Emergency Broadcast" (ev_deepfake_pm) — Currently reuses `ev_disinfo_campaign`. Optional bespoke AI deepfake television broadcast distortion image.
+- [ ] UK Crisis: "GPS Spoofing Disrupts Heathrow & Gatwick" (ev_heathrow_gps_spoof) — Currently reuses `ev_gps_jamming`. Optional bespoke commercial airport air-traffic control radar spoofing image.
 
 ### 5. Caribbean Hurricane (caribbean_crisis) — Specific Scene Refinements
 - [ ] Event: "US Coast Guard Cutter" (ev_us_coastguard) — Currently uses Royal Navy Type 23 frigate with White Ensign. Needs white USCG Legend/Famous-class cutter with red-and-blue hull racing stripe.

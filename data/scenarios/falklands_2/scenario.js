@@ -540,6 +540,29 @@ module.exports = {
                                         "delayMs": 90000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Force Protection Posture Raised",
+                                        "messages": [
+                                            "BFSAI garrisons at RAF Mount Pleasant and Port Stanley have assumed heightened perimeter lockdown; QRA readiness is elevated.",
+                                            "Security cordons are established around key Stanley infrastructure and MPA installations, though local civic friction is rising."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Domestic Reaction to Stanley Lockdown",
+                                        "message": "UK media outlets report visible military checkpoints in Stanley, prompting early opposition queries in Westminster.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -558,6 +581,35 @@ module.exports = {
                                         "delayMs": 55000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Whitehall Denunciation Issued",
+                                        "message": "HMG has formally rejected the Stanley poll and detained the Mayor-elect; OAS and UN delegations have lodged urgent protests.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "TEZ Alert Status Escalated",
+                                        "message": "Detention of the pro-Argentine candidate has triggered heightened Argentine radio traffic along the Patagonian coast; QRA-5 crews are strapped in.",
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "STANLEY ELECTION DISPUTED — DETENTION ORDERED",
+                                        "message": "HMG denounces election interference; Argentine forces accelerating movement toward TEZ.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -574,6 +626,26 @@ module.exports = {
                                         "id": "ev_military_incursion",
                                         "delayMs": 120000,
                                         "probability": 1
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "MI6 Covert Inquiry Authorised",
+                                        "message": "Whitehall retains diplomatic latitude while MI6 and GCHQ trace illicit funding channels behind the Stanley vote.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Standing Posture Maintained",
+                                        "message": "BFSAI units hold routine patrol patterns to avoid provocation; tactical readiness remains unreinforced pending MI6 findings.",
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -606,9 +678,6 @@ module.exports = {
                             "id": "opt_scramble",
                             "text": "Scramble 1435 Flight Typhoons to intercept and establish CAP.",
                             "effects": {
-                                "assetStateChanges": {
-                                    "falklands_typhoons": "intercepting"
-                                },
                                 "scores": {
                                     "military_readiness": 1,
                                     "argentina_aggression": 1
@@ -629,14 +698,74 @@ module.exports = {
                                     {
                                         "id": "ev_sub_detected",
                                         "delayMs": 110000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Unconfirmed Acoustic Transient",
+                                                "messages": [
+                                                    "HMS Defender passive sonar registers a faint low-frequency diesel transient inside the northern TEZ; ASW team is correlating bearings.",
+                                                    "Sonar watch reports intermittent propeller cavitation consistent with a Type 209 hull north of East Falkland."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_merchant_seized",
                                         "delayMs": 110000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Merchant AIS Anomaly Reported",
+                                                "messages": [
+                                                    "Maritime surveillance flags a British-flagged tanker halting abruptly 40 miles north of Falkland Sound near an unlit surface track.",
+                                                    "VHF distress squelch detected from a UK-registered RFA-chartered tanker north of the Sound; A400M radar diverting to investigate."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "deployAssets": {
+                                    "falklands_typhoons": 120000
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "1435 Flight Scrambled to CAP",
+                                        "messages": [
+                                            "Four Typhoon FGR4 aircraft from 1435 Flight are airborne from MPA on active intercept vectors inside the TEZ.",
+                                            "1435 Flight Typhoons have cleared Mount Pleasant runway and established forward CAP, challenging inbound Argentine tracks."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "1435 FLIGHT SCRAMBLED — TEZ INTERCEPT ACTIVE",
+                                        "message": "Typhoon FGR4 CAP airborne; HMS Defender Sea Viper batteries at red readiness.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
+                            },
+                            "conditions": {
+                                "assets": {
+                                    "falklands_typhoons": "operational"
+                                }
                             }
                         },
                         {
@@ -663,12 +792,64 @@ module.exports = {
                                     {
                                         "id": "ev_sub_detected",
                                         "delayMs": 115000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Passive Sonar Cue — Northern Approaches",
+                                                "messages": [
+                                                    "With outer CAP held back, HMS Defender detects a suspected submerged contact closing the eastern approaches.",
+                                                    "Acoustic array logs a brief snort-mast radar emission 35 miles northeast of Stanley before fading."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_merchant_seized",
                                         "delayMs": 115000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Surface Interference on Tanker Lane",
+                                                "messages": [
+                                                    "Coastguard relay indicates an unescorted British tanker being shadowed by an Argentine corvette north of Falkland Sound.",
+                                                    "AIS transponder on a UK-flagged fuel carrier went dark 40 miles north of the Sound."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Defensive CAP Over MPA",
+                                        "messages": [
+                                            "1435 Flight maintains tight defensive orbit over RAF Mount Pleasant, conceding outer TEZ airspace to inbound Argentine patrols.",
+                                            "Typhoons remain inside MPA radar umbrella under restrictive ROE; HMS Defender holds fire pending hostile intent."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Restrained ROE Logged",
+                                        "message": "Restraint inside the TEZ lowers immediate diplomatic friction, though domestic commentators question why Argentine aircraft were not challenged.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -710,7 +891,22 @@ module.exports = {
                                 ],
                                 "scores": {
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "EYES ONLY: Coastal Exocet Plot Pinpointed",
+                                        "messages": [
+                                            "Source remains strictly compartmentalised. Vectoring FIDF/A400M ISR onto the Santiago coordinates confirmed the West Falkland Exocet battery position.",
+                                            "Compartmentalised tasking succeeded without burning Santiago channels; the mobile coastal Exocet battery is now plotted for strike clearance."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -723,7 +919,36 @@ module.exports = {
                                 "scores": {
                                     "international_pressure": -1,
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Radar Plots Released at UN",
+                                        "message": "UN delegations acknowledge proof of covert Argentine deployments, boosting UK standing; Santiago backchannel has been permanently severed.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "West Falkland Exocet Site Confirmed",
+                                        "message": "Declassified intelligence plots reveal a mobile Argentine coastal Exocet battery on West Falkland.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "WEST FALKLAND EXOCET BATTERY EXPOSED",
+                                        "message": "Declassified radar evidence confirms coastal launcher; UN briefed.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -758,6 +983,30 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_shadow_oiler"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Covert Fleet Oiler Tracked",
+                        "messages": [
+                            "A400M ISR accompanying the tanker intercept identified an unflagged Argentine fleet oiler sustaining corvette operations north of the TEZ.",
+                            "Radar and EO imagery confirm a clandestine commercial tanker refuelling the boarding corvette; asset plotted on tactical display."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "UK TANKER BOARDED — COVERT OILER LOCATED",
+                        "message": "Argentine corvette boarding reported 40nm north of Falkland Sound.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -777,12 +1026,86 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "supply_lines": 1,
-                                    "uk_public_support": 1,
-                                    "international_pressure": 1
+                                    "uk_public_support": 1
                                 },
                                 "assetStateChanges": {
                                     "a_shadow_oiler": "damaged"
-                                }
+                                },
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "Diplomatic Criticism Over Early Boarding Action",
+                                                    "message": "Because major fleet combat had not yet been internationally verified, regional capitals criticised UK boarding force as premature escalation (+1 International Pressure).",
+                                                    "severity": "warning",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Wildcat Boarding Team Recovers Tanker",
+                                        "messages": [
+                                            "Royal Marines fast-roped from HMS Defender's Wildcat, securing the bridge and disabling the supporting Argentine oiler's steering gear.",
+                                            "Boarding party regained control of the British tanker without crew casualties; the covert fleet oiler took cannon fire and is damaged."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Fuel Tanker & Supply Integrity Secured",
+                                        "message": "Recovery of the tanker preserves South Atlantic fuel stocks and reinforces domestic resolve.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -792,7 +1115,21 @@ module.exports = {
                                 "scores": {
                                     "supply_lines": 1,
                                     "argentina_aggression": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Typhoon Low-Pass Breaks Off Boarding",
+                                        "messages": [
+                                            "Two 1435 Flight Typhoons executed supersonic passes across the Argentine corvette's bow, forcing it to abort the seizure and clear the tanker.",
+                                            "Show of force deterred the boarding party; the British tanker has resumed course toward East Falkland."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -803,7 +1140,27 @@ module.exports = {
                                     "supply_lines": -1,
                                     "international_pressure": -1,
                                     "uk_public_support": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Formal Piracy Dossier Lodged at UN",
+                                        "message": "HMG avoided a maritime firefight and lodged legal protests in New York, moderating diplomatic pressure.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Tanker Lost to Ushuaia Diversion",
+                                        "message": "Yielding the tanker costs vital fuel reserves and draws sharp domestic criticism over unanswered coercion.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -838,21 +1195,131 @@ module.exports = {
                             "text": "Weapons free. Sink the fast attack craft.",
                             "effects": {
                                 "scores": {
-                                    "argentina_aggression": -1,
-                                    "international_pressure": 1
+                                    "argentina_aggression": -1
                                 },
                                 "randomEvents": [
                                     {
                                         "id": "ev_air_raid",
                                         "delayMs": 75000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Inbound Raid Signature Detected",
+                                                "messages": [
+                                                    "S1850M surveillance radar detects low-level strike tracks accelerating east from Patagonia toward Mount Pleasant.",
+                                                    "J2 flash: FAA strike aircraft lifting off coastal radar horizon—prepare MPA Sky Sabre batteries for inbound raid."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_pebble_bvr",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "High-Altitude Fighter Sweep Inbound",
+                                                "messages": [
+                                                    "Long-range radar plots a four-ship Argentine fighter sweep crossing West Falkland toward Pebble Island.",
+                                                    "1435 Flight intercepts high-fast radar contacts manoeuvring over Pebble Island to draw off CAP."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "UN Scrutiny on First Kinetic Engagement",
+                                                    "message": "Diplomatic observers note UK units opened full weapons-free fire ahead of corroborated large-scale attrition (+1 International Pressure).",
+                                                    "severity": "warning",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "deployAssets": {
+                                    "hms_defender": 120000
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "HMS Defender Weapons Free",
+                                        "messages": [
+                                            "Sea Viper and 4.5-inch naval gunfire engaged incoming fast attack craft and sea-skimmers; multiple hostile surface contacts neutralised.",
+                                            "HMS Defender cleared the immediate surface threat off East Falkland with heavy expenditure of Aster missiles."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "HMS DEFENDER ENGAGES HOSTILE SURFACE GROUP",
+                                        "message": "Sea Viper active off East Falkland; hostile fast attack craft repulsed.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
+                            },
+                            "conditions": {
+                                "assets": {
+                                    "hms_defender": "operational"
+                                }
                             }
                         },
                         {
@@ -878,12 +1345,64 @@ module.exports = {
                                     {
                                         "id": "ev_pebble_bvr",
                                         "delayMs": 75000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Enemy Escort Fighters Closing Pebble Island",
+                                                "messages": [
+                                                    "Following the West Falkland strike, radar picks up four Argentine fighters climbing over Pebble Island to contest airspace.",
+                                                    "Fast-air contacts inbound from the northwest; 1435 Flight transitioning to BVR intercept."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_air_raid",
                                         "delayMs": 75000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Low-Level Strike Package Inbound",
+                                                "messages": [
+                                                    "Argentine strike aircraft are exploiting terrain masking east of West Falkland, heading toward RAF Mount Pleasant.",
+                                                    "Early-warning radar registers fast low-altitude tracks piercing the western sector."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "West Falkland Exocet Battery Destroyed",
+                                        "messages": [
+                                            "Guided onto the plotted coordinates, 1435 Flight Typhoons delivered Paveway IV munitions directly onto the coastal Exocet launcher—secondary explosions confirmed.",
+                                            "Precision Typhoon strike eliminated the West Falkland Exocet battery while HMS Defender held the seaward approaches."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "COASTAL EXOCET BATTERY DESTROYED",
+                                        "message": "1435 Flight precision strike neutralises West Falkland missile threat.",
+                                        "severity": "success",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -899,12 +1418,56 @@ module.exports = {
                                     {
                                         "id": "ev_ship_damaged",
                                         "delayMs": 70000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Sea-Skimming Missile Seeker Lock Warning",
+                                                "messages": [
+                                                    "HMS Defender ESM warns of active Exocet seeker emissions closing rapidly through chaff decoys—bracing for impact.",
+                                                    "Multiple sea-skimmers have penetrated the outer point-defence envelope on Defender's port quarter."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_air_raid",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Strike Wave Bypassing Naval Screen",
+                                                "messages": [
+                                                    "With Defender disengaging eastward, enemy strike jets are routing past the northern flank toward MPA.",
+                                                    "Mount Pleasant radar plots low-flying strike aircraft bypassing maritime air defence."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "HMS Defender Breaks Contact Eastward",
+                                        "messages": [
+                                            "HMS Defender deploys chaff and manoeuvres evasively under restrictive fire; hostile surface craft retain initiative near the coast.",
+                                            "Holding defensive posture surrenders sea-lane tempo while inbound threats continue tracking Defender."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -961,12 +1524,55 @@ module.exports = {
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 75000,
-                                        "probability": 0.75
+                                        "probability": 0.75,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Enemy Air Cover Collapsing",
+                                                "messages": [
+                                                    "Surviving Argentine aircraft are jettisoning external tanks and retreating west across Falkland Sound; surface units are exposed.",
+                                                    "GCHQ intercepts indicate Argentine air controllers ordering a general withdrawal from East Falkland airspace."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_radar_damaged",
                                         "delayMs": 70000,
-                                        "probability": 0.25
+                                        "probability": 0.25,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "ARM Leaker Toward Mount Alice",
+                                                "messages": [
+                                                    "With all four Typhoons committed forward over Pebble Island, ESM detects an anti-radiation missile launch streaking toward Mount Alice radar.",
+                                                    "One low-flying Argentine jet slipped south of the BVR engagement and lofted an anti-radiation weapon toward MPA sensors."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Meteor BVR Salvo Released",
+                                        "messages": [
+                                            "1435 Flight launched long-range Meteor missiles at maximum range, forcing Argentine fighters to abort and defend before reaching MPA.",
+                                            "Four-ship Typhoon formation prosecuted the Pebble Island package at BVR, scoring multiple radar-track kills."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -982,12 +1588,55 @@ module.exports = {
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Argentine Raid Breaking Off",
+                                                "messages": [
+                                                    "Forward pair forced the Pebble Island decoy flight to turn back; MPA defences remained unchallenged.",
+                                                    "Air picture clearing over East Falkland as hostile tracks withdraw west."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_air_raid",
                                         "delayMs": 70000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Low-Level Strikers Slipping Past Split CAP",
+                                                "messages": [
+                                                    "The forward Typhoon pair is tied down over Pebble Island while a trailing strike element dives beneath radar toward MPA.",
+                                                    "Ground controllers warn of fast low-level contacts closing Mount Pleasant from the southwest."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Split CAP Engagement",
+                                        "messages": [
+                                            "Two Typhoons engage over Pebble Island at reduced salvo weight while the second pair orbits Mount Pleasant's fuel farm.",
+                                            "Split formation preserves MPA close air cover while contesting the northern approach with two FGR4s."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1030,12 +1679,55 @@ module.exports = {
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.7
+                                        "probability": 0.7,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "FAA Strike Wave Repulsed",
+                                                "messages": [
+                                                    "Heavy Sky Sabre attrition forced surviving Argentine strike aircraft to abort bomb runs and exit the TEZ.",
+                                                    "Air raid broken up over MPA; remaining hostile maritime units lack air cover."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_radar_damaged",
                                         "delayMs": 75000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Outer Radar Head Targeted",
+                                                "messages": [
+                                                    "While Sky Sabre protected the runway, an anti-radiation missile tracked onto the exposed Mount Alice early-warning array.",
+                                                    "Radar watch reports sudden sidelobe interference on Mount Alice as enemy strikers break off."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "Sky Sabre Point Defence Engaged",
+                                        "messages": [
+                                            "Sky Sabre batteries around Mount Pleasant ripple-fired Land Ceptor missiles, shielding the main runway and hardened shelters.",
+                                            "MPA air-defence umbrella held the runway intact and protected the Ascension airbridge terminal."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1051,14 +1743,66 @@ module.exports = {
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Wave 1 Air Threat Neutralised",
+                                                "messages": [
+                                                    "1435 Flight downed lead strike aircraft and scattered the formation, securing operational control of the TEZ.",
+                                                    "Enemy air and naval forces are withdrawing westward under heavy losses."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ship_damaged",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Split Strike Diverting Toward HMS Defender",
+                                                "messages": [
+                                                    "With Typhoons committed inland, two Super Étendards broke off seaward and locked radar onto HMS Defender.",
+                                                    "ESM alerts on HMS Defender: sea-skimming missile profiles inbound from the southern flank."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "deployAssets": {
+                                    "falklands_typhoons": 120000
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "1435 Flight Forward Intercept",
+                                        "messages": [
+                                            "Typhoons pushed west to intercept the strike package prior to weapon release, degrading Argentine strike capacity.",
+                                            "Forward fighter engagement broke up the incoming attack formation over East Falkland."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
+                            },
+                            "conditions": {
+                                "assets": {
+                                    "falklands_typhoons": "operational"
+                                }
                             }
                         }
                     ]
@@ -1082,7 +1826,28 @@ module.exports = {
                 },
                 "scores": {
                     "military_readiness": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Mount Alice Radar Degraded",
+                        "message": "Anti-radiation strike knocked Mount Alice offline, leaving a 90-degree western surveillance blind spot and degrading Mount Pleasant readiness.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "MPA EARLY-WARNING RADAR DAMAGED",
+                        "message": "Mount Alice array hit; 90-degree western gap active.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "air_maritime": "With Mount Alice offline, low-flying Argentine helicopters could slip into East Falkland undetected.",
@@ -1108,12 +1873,56 @@ module.exports = {
                                     {
                                         "id": "ev_ground_incursion",
                                         "delayMs": 80000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Low-Level Rotary Contacts Near Stanley",
+                                                "messages": [
+                                                    "Restored radar immediately picks up multiple slow, low-altitude helicopter returns skimming east toward Port Stanley.",
+                                                    "FIDF lookouts west of Stanley report heavy turbine rotor noise approaching at treetop height."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_san_carlos_landing",
                                         "delayMs": 80000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Surface Echoes Entering Falkland Sound",
+                                                "messages": [
+                                                    "Coastal radar detects slow-moving landing craft signatures slipping under mist into San Carlos Water.",
+                                                    "Acoustic and thermal watch flags amphibious engine noise near the San Carlos narrows."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "Mount Alice Radar Restored",
+                                        "messages": [
+                                            "1564 Flight Chinooks airlifted Royal Engineers and replacement waveguide assemblies to Mount Alice; full 360-degree radar sweep is back online.",
+                                            "Emergency Chinook sling-load restored MPA early-warning coverage at the cost of heavy aviation fuel expenditure."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1129,12 +1938,52 @@ module.exports = {
                                     {
                                         "id": "ev_san_carlos_landing",
                                         "delayMs": 70000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Unobserved Approach in Falkland Sound",
+                                                "messages": [
+                                                    "Terrain masking blocks HMS Defender's S1850M sweep over San Carlos; coastal watchers report diesel craft entering the bay.",
+                                                    "Ground observers near San Carlos Water report unlit landing vessels approaching the beaches."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_incursion",
                                         "delayMs": 70000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Low-Flying Helicopters Sighted Near Stanley",
+                                                "messages": [
+                                                    "Visual spotters report Argentine transport helicopters hugging ridges west of Port Stanley under the radar horizon.",
+                                                    "Stanley harbour police report troop-carrying helicopters approaching from the northwest."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "S1850M Gap-Filler Coverage Active",
+                                        "message": "HMS Defender assumed primary air-surveillance duty while 1564 Flight Chinooks remain staged for rapid infantry mobility; terrain masking persists to the west.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1179,12 +2028,63 @@ module.exports = {
                                     {
                                         "id": "ev_naval_defeat",
                                         "delayMs": 80000,
-                                        "probability": 0.85
+                                        "probability": 0.85,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Argentine Surface Units Closing Falkland Sound",
+                                                "messages": [
+                                                    "With HMS Defender clear to the east, Argentine corvettes and transports are pushing unopposed into Falkland Sound.",
+                                                    "Loss of naval radar coverage leaves coastal approaches open to imminent amphibious movement."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 85000,
-                                        "probability": 0.15
+                                        "probability": 0.15,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "1435 Flight Holding the Exclusion Zone",
+                                                "messages": [
+                                                    "Despite Defender's withdrawal, 1435 Flight Typhoons have caught and turned back the lead Argentine surface group.",
+                                                    "Argentine strike elements appear low on fuel and are breaking off despite Defender pulling east."
+                                                ],
+                                                "severity": "info",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "HMS Defender Withdrawing East",
+                                        "message": "HMS Defender has turned east out of Exocet range to stabilise turbine fires, leaving East Falkland waters uncovered.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Public Concern Over Naval Withdrawal",
+                                        "message": "Reports of HMS Defender pulling back under fire trigger immediate pressure on Whitehall and domestic media.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1204,12 +2104,66 @@ module.exports = {
                                     {
                                         "id": "ev_naval_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Sea Viper Salvo Disrupting Enemy Flotilla",
+                                                "messages": [
+                                                    "HMS Defender's continued radar lock has forced incoming Argentine strike aircraft to abort and scatter.",
+                                                    "Combined Sea Viper and Typhoon fire is breaking the momentum of the Argentine maritime push."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_naval_defeat",
                                         "delayMs": 80000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Overwhelming Surface Pressure on Damaged Destroyer",
+                                                "messages": [
+                                                    "Reduced propulsion limits HMS Defender's firing arcs as fresh Argentine surface groups press into Falkland Sound.",
+                                                    "Sea Viper magazine levels are critical while hostile escorts close from the north."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "HMS Defender Holding Station Under Damage",
+                                        "messages": [
+                                            "Damage control teams contained aft superstructure fires; HMS Defender maintains Sea Viper coverage on one turbine.",
+                                            "HMS Defender remains on station off East Falkland, bolstering task force morale and air defence."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "HMS DEFENDER DAMAGED — HOLDING STATION",
+                                        "message": "Type 45 destroyer remains in the line; Sea Viper air defence operational.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1249,12 +2203,40 @@ module.exports = {
                                     {
                                         "id": "ev_ground_incursion",
                                         "delayMs": 65000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Low-Altitude Heliborne Infiltration Tracked",
+                                                "messages": [
+                                                    "Radar plots desperate Argentine transport helicopters flying nape-of-the-earth across East Falkland toward Port Stanley.",
+                                                    "FIDF scouts report multiple heavy helicopters descending west of Stanley despite maritime losses."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_san_carlos_landing",
                                         "delayMs": 65000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Nocturnal Small-Boat Activity in Falkland Sound",
+                                                "messages": [
+                                                    "Maritime patrol detects shallow-draft landing craft slipping through sea mist into San Carlos Water.",
+                                                    "Thermal ISR registers amphibious craft disembarking troops along the San Carlos shoreline."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1267,6 +2249,26 @@ module.exports = {
                                         "id": "ev_southern_gale",
                                         "delayMs": 120000,
                                         "probability": 0.45
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Wave 1 Complete — Sea Control Secured",
+                                        "message": "Maritime exclusion around East Falkland is re-established; BFSAI ISR and ground companies are shifting to counter Wave 2 island landings.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "SEA CONTROL RE-ESTABLISHED — WAVE 2 TRANSITION",
+                                        "message": "First maritime wave repulsed; task force shifting to island defence.",
+                                        "severity": "success",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1306,12 +2308,40 @@ module.exports = {
                                     {
                                         "id": "ev_san_carlos_landing",
                                         "delayMs": 55000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Amphibious Approach Detected at San Carlos",
+                                                "messages": [
+                                                    "Uncontested in Falkland Sound, Argentine amphibious craft are moving directly toward San Carlos Water.",
+                                                    "Coastal watchers report landing craft hulls silhouetted in San Carlos Bay."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_incursion",
                                         "delayMs": 55000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Air-Assault Helicopters Approaching Stanley",
+                                                "messages": [
+                                                    "With naval air-defence pushed offshore, Argentine assault helicopters are flying straight toward Port Stanley.",
+                                                    "Multiple rotary-wing contacts inbound on Stanley's western perimeter."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1324,6 +2354,26 @@ module.exports = {
                                         "id": "ev_specops_sabotage",
                                         "delayMs": 105000,
                                         "probability": 0.55
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Wave 1 Setback — Garrison Digging In",
+                                        "message": "With sea control lost east of Falkland Sound, all ground forces are entrenching around Port Stanley and RAF Mount Pleasant.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "LOSS OF SEA CONTROL — ISLAND GARRISON ON HIGH ALERT",
+                                        "message": "Naval screen pushed east; amphibious and heliborne landings imminent.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1363,12 +2413,40 @@ module.exports = {
                                     {
                                         "id": "ev_urban_combat",
                                         "delayMs": 75000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Hostiles Falling Back Into Stanley Suburbs",
+                                                "messages": [
+                                                    "Dislodged from the western ridge, Argentine marine commandos are infiltrating harbour buildings inside Port Stanley.",
+                                                    "Forward platoons report close-range automatic fire erupting along the western edge of Stanley."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Fighting Bogging Down Along Western Ridges",
+                                                "messages": [
+                                                    "Both sides are trading mortar fire across Mount Tumbledown and Wireless Ridge as winter squalls close in.",
+                                                    "Counter-attack stalled short of the landing zone; opposing positions are hardening along the ridge line."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1381,6 +2459,20 @@ module.exports = {
                                         "id": "ev_south_georgia_distress",
                                         "delayMs": 115000,
                                         "probability": 0.45
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Infantry & 1564 Flight Counter-Attack Launched",
+                                        "messages": [
+                                            "Roulement Infantry Company and 1564 Flight helicopters have engaged the commando landing force outside Port Stanley.",
+                                            "Immediate counter-attack blunted the Argentine momentum west of Stanley, though unit exhaustion is climbing."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1396,12 +2488,40 @@ module.exports = {
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 75000,
-                                        "probability": 0.7
+                                        "probability": 0.7,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Enemy Digging In Outside Cordon",
+                                                "messages": [
+                                                    "Forward observation posts confirm Argentine commandos entrenching along Wireless Ridge facing the UK cordon.",
+                                                    "Contact along the Stanley perimeter has settled into static mortar and sniper exchanges."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_goose_green_cut_off",
                                         "delayMs": 75000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Comms Drop From Goose Green Outpost",
+                                                "messages": [
+                                                    "While forces concentrated around Stanley, Argentine patrols moved south toward Darwin and Goose Green; HF radio checks just went silent.",
+                                                    "FIDF lookout near Goose Green reports hostile reconnaissance vehicles cutting the track to MPA."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1409,6 +2529,18 @@ module.exports = {
                                         "id": "ev_resistance_contact",
                                         "delayMs": 95000,
                                         "probability": 0.65
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "Stanley Perimeter Cordon & Civilian Evacuation",
+                                        "message": "UK troops sealed key roads around Port Stanley and moved civilians to hardened shelters, earning domestic praise while giving commandos space to dig in.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1465,12 +2597,41 @@ module.exports = {
                                     {
                                         "id": "ev_goose_green_cut_off",
                                         "delayMs": 75000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Surviving Enemy Columns Pushing South",
+                                                "messages": [
+                                                    "Elements that disembarked before the dawn raid are moving south along Brenton Loch toward Goose Green.",
+                                                    "Air recon spots Argentine light armour bypassing San Carlos toward the Goose Green isthmus."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "San Carlos Beachhead Collapsing",
+                                                "messages": [
+                                                    "With landing craft burning in the bay, stranded Argentine units are surrendering or retreating in disarray across East Falkland.",
+                                                    "Ground patrols report white flags and abandoned equipment along the San Carlos ridges."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1478,6 +2639,21 @@ module.exports = {
                                         "id": "ev_resistance_contact",
                                         "delayMs": 90000,
                                         "probability": 0.65
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Dawn Paveway IV Strike on San Carlos",
+                                        "messages": [
+                                            "1435 Flight Typhoons struck amphibious landing craft in San Carlos Water at first light, wrecking enemy vehicles on the slipway.",
+                                            "Precision dawn air strikes crippled Argentine landing logistics in San Carlos Bay and boosted task force readiness."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1494,12 +2670,40 @@ module.exports = {
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 75000,
-                                        "probability": 0.6
+                                        "probability": 0.6,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Positional Deadlock Over San Carlos & Stanley Approaches",
+                                                "messages": [
+                                                    "Containment holds the bay, though enemy units are filtering east into defensive ridge positions.",
+                                                    "Ground forces are locked into a static holding action across the central peat ridges."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_urban_combat",
                                         "delayMs": 75000,
-                                        "probability": 0.4
+                                        "probability": 0.4,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Infiltrators Slipping East Toward Stanley",
+                                                "messages": [
+                                                    "Small Argentine commando detachments bypassed the San Carlos screen during darkness and are probing Port Stanley.",
+                                                    "Stanley garrison reports hostile mortar fire from the western harbour approaches."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     }
                                 ],
                                 "triggerEvents": [
@@ -1507,6 +2711,18 @@ module.exports = {
                                         "id": "ev_resistance_contact",
                                         "delayMs": 95000,
                                         "probability": 0.6
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "Chinook Air-Assault Contains San Carlos",
+                                        "message": "1564 Flight Chinooks inserted infantry onto the San Carlos heights, pinning the beachhead at heavy helicopter fuel and spares cost.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1547,12 +2763,55 @@ module.exports = {
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.7
+                                        "probability": 0.7,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Southern Flank Crumbling",
+                                                "messages": [
+                                                    "Reinforced Goose Green troops are rolling up isolated Argentine blocking positions across Lafonia.",
+                                                    "Intercepted enemy net indicates Argentine ground morale collapsing around Darwin and Stanley."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 80000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Goose Green Held — Ridge Line Still Contested",
+                                                "messages": [
+                                                    "Goose Green is secure, but surviving enemy detachments have fallen back to fortify the ridges west of Stanley.",
+                                                    "Ground offensive momentum is slowing in worsening sleet along the central ridges."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "Goose Green Relieved by Low-Level Chinook Raid",
+                                        "messages": [
+                                            "Under Typhoon top-cover, 1564 Flight Chinooks flew nap-of-the-earth into Goose Green, delivering ammunition and evacuating wounded settlers.",
+                                            "Daring rotary extraction broke the encirclement at Goose Green, though intense sortie tempo taxed supply stocks."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1569,12 +2828,52 @@ module.exports = {
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 75000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Front Stabilising in Stalemate",
+                                                "messages": [
+                                                    "The Goose Green detachment went to ground in the peat hills while main UK forces dig in outside Stanley.",
+                                                    "Neither side holds sufficient combat power to force an immediate breakthrough."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_defeat",
                                         "delayMs": 80000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Enemy Exploiting Southern Breakthrough",
+                                                "messages": [
+                                                    "Buenos Aires media is broadcasting footage from Goose Green as Argentine columns mass for a final push on Port Stanley.",
+                                                    "Forward defensive screen west of Stanley is buckling under concentrated enemy assault."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "Goose Green Detachment Ordered to Evade",
+                                        "message": "Rotary lift is conserved for Mount Pleasant, while news of settlers cut off at Goose Green damages UK public support.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1607,19 +2906,112 @@ module.exports = {
                             "text": "Yes. Use precision mortar and air fires to break them quickly.",
                             "effects": {
                                 "scores": {
-                                    "uk_public_support": -1,
-                                    "international_pressure": 1
+                                    "uk_public_support": -1
                                 },
                                 "randomEvents": [
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 80000,
-                                        "probability": 0.8
+                                        "probability": 0.8,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Harbour Strongpoints Surrendering",
+                                                "messages": [
+                                                    "Argentine marine commandos cut off inside Stanley are laying down arms after precision mortar suppression.",
+                                                    "Company commanders report Port Stanley streets nearly clear of organised resistance."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 80000,
-                                        "probability": 0.2
+                                        "probability": 0.2,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Remnants Pulling Back to Western Ridges",
+                                                "messages": [
+                                                    "Surviving enemy squads have withdrawn from the harbour into prepared positions on Wireless Ridge.",
+                                                    "Urban clearance stalled at the western outskirts under persistent sniper and mortar fire."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "International Condemnation of Urban Bombardment",
+                                                    "message": "Without prior corroborated heavy combat footage at the UN, television reports of heavy ordnance in Stanley drew swift diplomatic backlash (+1 International Pressure).",
+                                                    "severity": "warning",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Heavy Mortar & CAS Fires Employed in Stanley",
+                                        "messages": [
+                                            "81mm mortars and Typhoon close air support suppressed fortified enemy harbour strongpoints, though civilian property damage draws domestic criticism.",
+                                            "Combined heavy fires shattered Argentine pockets in Stanley at the cost of civilian collateral scrutiny."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1636,12 +3028,52 @@ module.exports = {
                                     {
                                         "id": "ev_standoff",
                                         "delayMs": 80000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Clearance Slowing Along Ridge Approaches",
+                                                "messages": [
+                                                    "Restricted fire rules slowed momentum, allowing Argentine units to consolidate along Mount Tumbledown.",
+                                                    "Fighting has ground into a static perimeter line west of Port Stanley."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 85000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Stanley Defenders Outmanoeuvred",
+                                                "messages": [
+                                                    "Close-quarter infantry assaults isolated the remaining harbour pockets; prisoners are being rounded up.",
+                                                    "Final enemy strongpoints in Stanley are collapsing without civilian casualties."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "Close Infantry Clearance Protects Civilians",
+                                        "message": "UK infantry cleared Stanley buildings room-by-room without heavy bombardment, sparing islanders at high tactical attrition.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1681,12 +3113,54 @@ module.exports = {
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 75000,
-                                        "probability": 0.7
+                                        "probability": 0.7,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Ridge Crest Breached",
+                                                "messages": [
+                                                    "Lead platoons have seized the Wireless Ridge crest; Argentine defenders are retreating down the eastern slope toward Stanley.",
+                                                    "Night-vision assault surprised forward bunkers—enemy line breaking."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_defeat",
                                         "delayMs": 80000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Night Assault Pinned by Crossfire",
+                                                "messages": [
+                                                    "Exhausted UK companies ran into interlocking machine-gun belts in sleet; enemy counter-attacks are advancing toward Stanley.",
+                                                    "Communications with the lead assault platoon have broken down under heavy defensive mortar fire."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Night Infantry Assault Underway",
+                                        "messages": [
+                                            "Equipped with night-vision optics, UK rifle companies are advancing up Mount Tumbledown and Wireless Ridge under winter squalls.",
+                                            "Coordinated night assault has engaged enemy ridge bunkers despite freezing winds and high readiness strain."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -1702,12 +3176,52 @@ module.exports = {
                                     {
                                         "id": "ev_ground_defeat",
                                         "delayMs": 85000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Enemy Probing Weakened Perimeter",
+                                                "messages": [
+                                                    "Argentine assault teams reinforced during the pause are pressing hard against the western Stanley defences.",
+                                                    "Forward observation posts report UK outer trenches pulling back under artillery pressure."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_ground_victory",
                                         "delayMs": 85000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Enemy Ridge Garrisons Freezing & Running Low",
+                                                "messages": [
+                                                    "Exposed Argentine positions on Tumbledown are suffering cold-weather attrition and supply exhaustion; patrols report withdrawals.",
+                                                    "SIGINT indicates Argentine ridge commanders requesting permission to pull back into Stanley."
+                                                ],
+                                                "severity": "info",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "Perimeter Held Pending Reinforcements",
+                                        "message": "Forces dig in along the freezing Stanley approaches awaiting relief; prolonged deadlock erodes domestic confidence.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -1754,6 +3268,26 @@ module.exports = {
                                         "delayMs": 85000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Port Stanley Secured — Wave 3 Transition",
+                                        "message": "Port Stanley is back under British control and civilians are safe. Attention now shifts to logistics sustainability and Whitehall/UN endgame diplomacy.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "PORT STANLEY SECURED — WAVE 3 LOGISTICS & DIPLOMACY",
+                                        "message": "UK ground forces clear capital; transition to final diplomatic phase.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1775,7 +3309,27 @@ module.exports = {
             "autoEffects": {
                 "assetStateChanges": {
                     "port_stanley": "occupied"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Port Stanley Occupied",
+                        "message": "Argentine forces have overrun Port Stanley defences and hoisted their flag over Government House; remaining UK units are falling back toward Mount Pleasant.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "PORT STANLEY OCCUPIED — GARRISON FALLING BACK TO MPA",
+                        "message": "Government House lost; UK perimeter contracting around RAF Mount Pleasant.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "We have been pushed back toward Mount Pleasant. Downing Street is in crisis mode."
@@ -1804,6 +3358,18 @@ module.exports = {
                                         "delayMs": 75000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "MPA Defensive Perimeter Consolidated",
+                                        "message": "Surviving units are regrouping around RAF Mount Pleasant while London faces severe public shock and rising UN intervention calls.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         }
@@ -1825,7 +3391,28 @@ module.exports = {
             "autoEffects": {
                 "assetStateChanges": {
                     "falklands_helis": "grounded"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "65-Knot Antarctic Gale Grounds 1564 Flight",
+                        "message": "Zero-visibility blizzard conditions at RAF Mount Pleasant have forced immediate grounding of all Chinook and Puma rotary sorties.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SEVERE SOUTHERN OCEAN GALE — ROTARY OPS GROUNDED",
+                        "message": "65-knot storm front over East Falkland suspends helicopter lift.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "air_maritime": "Helicopters cannot fly in this crosswind, though Typhoons can still launch on instrument flight rules if necessary."
@@ -1844,7 +3431,22 @@ module.exports = {
                                 },
                                 "scores": {
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Rotary Airframes Preserved Through Squall",
+                                        "messages": [
+                                            "Holding 1564 Flight until squall passage prevented weather losses; helicopters are back operational though forward supply stockpiles dipped.",
+                                            "Storm front cleared without airframe damage; forward resupply backlog now requires catch-up sorties."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1857,7 +3459,22 @@ module.exports = {
                                 "scores": {
                                     "supply_lines": 1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "IFR Storm Resupply Delivered Under Extreme Risk",
+                                        "messages": [
+                                            "1564 Flight crews forced emergency instrument flights through severe icing, keeping forward supply lines open while sustaining heavy maintenance wear.",
+                                            "Storm resupply succeeded, though airframe stress and minor runway incidents degraded task force readiness."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1892,6 +3509,30 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_arg_specops_west"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "uk_commander",
+                            "air_maritime"
+                        ],
+                        "title": "Saboteurs Detected on MPA Perimeter",
+                        "messages": [
+                            "Thermal cameras along RAF Mount Pleasant's southern wire detected Buzos Tácticos operators probing toward the Avtur fuel farm.",
+                            "Perimeter intrusion alarm triggered near MPA aviation fuel bladders; hostile spec-ops cell plotted on map."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "MPA PERIMETER ALERT — SABOTAGE CELL DETECTED",
+                        "message": "Argentine naval commandos spotted approaching Mount Pleasant fuel farm.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -1914,7 +3555,21 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Buzos Tácticos Cell Neutralised",
+                                        "messages": [
+                                            "RAF Regiment and FIDF trackers intercepted and captured the Argentine sabotage team intact before explosives could be armed.",
+                                            "MPA fuel farm secured; elimination of the Buzos Tácticos cell boosts readiness and domestic morale."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1926,7 +3581,21 @@ module.exports = {
                                 ],
                                 "scores": {
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Fuel Farm Bunkered — Saboteurs Slip Away",
+                                        "messages": [
+                                            "Mortar illumination drove the raiders back into the dark peat hills; the fuel farm held, though lockdown slowed sortie turnaround.",
+                                            "Sabotage cell evaded capture and remains unaccounted for in West Falkland."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -1959,7 +3628,31 @@ module.exports = {
                                 "scores": {
                                     "uk_public_support": 1,
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "A400M Deterrence Overflight Reaches King Edward Point",
+                                        "messages": [
+                                            "A400M Atlas dropped emergency rations and flared over Cumberland Bay, forcing the Argentine launch seaward at high fuel burn.",
+                                            "Long-range A400M overflight reassured British scientists at South Georgia while stretching Falklands airlift reserves."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "South Georgia Presence Upheld",
+                                        "message": "Prompt British relief over South Georgia draws strong domestic support across Westminster and the press.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -1969,7 +3662,27 @@ module.exports = {
                                 "scores": {
                                     "uk_public_support": -1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Economy of Force Prioritised for East Falkland",
+                                        "message": "Royal Marine detachment and BAS personnel dispersed into South Georgia's interior, keeping every airframe concentrated on the Falklands.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Media Backlash Over South Georgia Withdrawal",
+                                        "message": "News of King Edward Point being abandoned to an Argentine icebreaker draws sharp criticism from London commentators.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2033,12 +3746,61 @@ module.exports = {
                                     {
                                         "id": "ev_casualty_leak",
                                         "delayMs": 50000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "downing_street",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Fleet Street Media Rumours Circulating",
+                                                "messages": [
+                                                    "Cabinet Office press desk flags unverified Whitehall leaks regarding early South Atlantic casualty figures reaching Sunday editors.",
+                                                    "MOD press office warns of an impending tabloid story citing leaked situation reports."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_regional_airspace_ban",
                                         "delayMs": 55000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "downing_street"
+                                                ],
+                                                "title": "Foreign Office Notes South American Demarches",
+                                                "messages": [
+                                                    "British embassies in South America report rising diplomatic pressure from Buenos Aires to restrict UK diversion airfields.",
+                                                    "FCO cables warn neighbouring aviation ministries are reviewing overflight clearances for UK charters."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "COBRA Assured of TEZ Containment",
+                                        "message": "Cabinet accepted continued Exclusion Zone containment for now, though opposition MPs press for faster decisive results.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Whitehall Retains Current ROE",
+                                        "message": "Downing Street held off mainland escalation, keeping focus inside the TEZ ahead of UNSC debate.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2061,12 +3823,62 @@ module.exports = {
                                     {
                                         "id": "ev_regional_airspace_ban",
                                         "delayMs": 50000,
-                                        "probability": 0.5
+                                        "probability": 0.5,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "downing_street"
+                                                ],
+                                                "title": "Regional Capitals Alarmed by Escalation Signals",
+                                                "messages": [
+                                                    "Word of mainland strike planning has prompted South American aviation authorities to convene emergency overflight reviews.",
+                                                    "Regional diplomats warn diversion airfield access for Ascension flights is under immediate threat."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_casualty_leak",
                                         "delayMs": 55000,
-                                        "probability": 0.3
+                                        "probability": 0.3,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "downing_street",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Parliamentary Leak Alert",
+                                                "messages": [
+                                                    "Heated Commons exchanges have coincided with a suspected leak of MOD casualty figures to London newspapers.",
+                                                    "Whitehall whips report sensitive South Atlantic casualty numbers circulating among lobby correspondents."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Mainland Strike Contingency Tabled at COBRA",
+                                        "message": "Recommending direct strikes on Patagonian airbases triggers urgent calls from Washington and European capitals.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Mainland Strike Planning Initiated",
+                                        "message": "PJHQ instructed to prepare Storm Shadow target folders for Río Gallegos pending final Cabinet sign-off.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2103,7 +3915,36 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "PM Delivers Candid National Statement",
+                                        "message": "Addressing the nation openly steadies public opinion and honours deployed personnel without eroding parliamentary trust.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Whitehall Confirms Operational Losses Publicly",
+                                        "message": "Downing Street issued a transparent briefing affirming full government backing for British Forces South Atlantic Islands.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "PM ADDRESS — PUBLIC SUPPORT STEADIED",
+                                        "message": "Candid Whitehall briefing rallies domestic backing for task force.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2113,7 +3954,19 @@ module.exports = {
                                 "scores": {
                                     "uk_public_support": -1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street",
+                                            "uk_commander"
+                                        ],
+                                        "title": "EYES ONLY: DSMA-Notice Media Clampdown Enforced",
+                                        "message": "DSMA-Notice suppressed publication of operational vulnerabilities and safeguarded readiness, though opposition press accuses Whitehall of censorship.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2146,7 +3999,27 @@ module.exports = {
                                 "scores": {
                                     "international_pressure": -1,
                                     "supply_lines": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Quiet Diplomatic Guarantees Reopen Diversions",
+                                        "message": "FCO trade and humanitarian corridor assurances persuaded regional capitals to maintain emergency diversion access.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "South Atlantic Diversion Fields Cleared",
+                                        "message": "Ascension-to-Falklands logistics flights retain coastal diversion options, preserving fuel reserves.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2156,7 +4029,28 @@ module.exports = {
                                 "scores": {
                                     "supply_lines": -1,
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Pure Oceanic Airbridge Routing Ordered",
+                                        "message": "All A400M and Voyager flights now route strictly over international Atlantic waters, adding heavy fuel burn per sortie.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Sovereign Resolve Welcomed Domestically",
+                                        "message": "Refusal to bow to diplomatic coercion plays well with UK domestic audiences despite logistics strain.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2196,6 +4090,26 @@ module.exports = {
                                         "delayMs": 90000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "UK Threatens Security Council Veto",
+                                        "message": "British Ambassador stalled the ceasefire draft pending Argentine withdrawal, drawing sharp diplomatic friction across the UNSC.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Operational Freedom Preserved at UN",
+                                        "message": "Diplomatic stall buys BFSAI time to complete island clearance without an imposed ceasefire freeze.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2212,6 +4126,26 @@ module.exports = {
                                         "id": "ev_endgame_trigger",
                                         "delayMs": 90000,
                                         "probability": 1
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Conditional Ceasefire Framework Endorsed",
+                                        "message": "Signalling openness to monitored ceasefire terms eases international pressure but provokes domestic protests over concessions.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UNSC CEASEFIRE FRAMEWORK SIGNALLED",
+                                        "message": "HMG signals conditional truce; final strategic assessment approaching.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2254,6 +4188,27 @@ module.exports = {
                                         "delayMs": 85000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Mainland Strikes Ruled Out",
+                                        "message": "Restricting combat to the TEZ reassures Washington and Brussels, easing international diplomatic pressure.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Patagonian Airbases Remain Sanctuary",
+                                        "message": "With mainland strikes stood down, FAA squadrons at Río Gallegos continue operating unmolested; task force readiness dips.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -2265,7 +4220,7 @@ module.exports = {
                                     "rio_gallegos": "damaged"
                                 },
                                 "scores": {
-                                    "international_pressure": 2,
+                                    "international_pressure": 1,
                                     "argentina_aggression": -2
                                 },
                                 "triggerEvents": [
@@ -2273,6 +4228,91 @@ module.exports = {
                                         "id": "ev_endgame_trigger",
                                         "delayMs": 85000,
                                         "probability": 1
+                                    }
+                                ],
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "Allies Condemn Unprovoked Mainland Strike",
+                                                    "message": "Lacking documented major TEZ engagements to justify mainland retaliation, allies imposed an extra diplomatic penalty (+1 International Pressure).",
+                                                    "severity": "danger",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Storm Shadow Strikes Hit Río Gallegos",
+                                        "messages": [
+                                            "RAF Typhoons released Storm Shadow cruise missiles onto Río Gallegos Air Base, cratering runways and degrading FAA strike capacity.",
+                                            "Long-range precision strike damaged Río Gallegos infrastructure, sharply blunting Argentine air offensive potential."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Mainland Red Line Crossed",
+                                        "message": "Striking mainland Patagonia triggers intense condemnation in Washington, Brussels, and the UN.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "STRIKE ON RÍO GALLEGOS AIR BASE CONFIRMED",
+                                        "message": "Storm Shadow hits mainland base; international diplomatic fallout escalating.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2312,12 +4352,55 @@ module.exports = {
                                     {
                                         "id": "ev_resistance_success",
                                         "delayMs": 85000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander"
+                                                ],
+                                                "title": "FIDF Cell Moving Into Ambush Position",
+                                                "messages": [
+                                                    "Encrypted burst transmission confirms FIDF fighters tracking an unescorted Argentine munitions convoy east of Darwin.",
+                                                    "Local scouts report enemy fuel bowsers moving along an isolated Camp track without infantry cover."
+                                                ],
+                                                "severity": "info",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_resistance_reprisal",
                                         "delayMs": 85000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "downing_street"
+                                                ],
+                                                "title": "Enemy Counter-Insurgency Sweeps Reported",
+                                                "messages": [
+                                                    "Radio intercepts indicate Argentine occupation patrols reacting aggressively to partisan sightings near Stanley settlements.",
+                                                    "Civilians report armoured patrols cordoning farms following early resistance skirmishes."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "FIDF Resistance Armed for Direct Action",
+                                        "messages": [
+                                            "Night parachute drop delivered anti-armour weapons and encrypted radios to FIDF cells across the Camp.",
+                                            "FIDF resistance teams are cleared for ambush operations against Argentine forward logistics."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -2334,6 +4417,18 @@ module.exports = {
                                         "id": "ev_resistance_intel",
                                         "delayMs": 75000,
                                         "probability": 1
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "FIDF Tasked as Covert ISR Scouts",
+                                        "message": "Keeping FIDF personnel in concealed observation roles protects civilians and prepares high-grade targeting intelligence.",
+                                        "severity": "info",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2357,7 +4452,30 @@ module.exports = {
                 "scores": {
                     "argentina_aggression": -1,
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "uk_commander"
+                        ],
+                        "title": "FIDF Ambush Destroys Enemy Munitions Convoy",
+                        "messages": [
+                            "FIDF resistance fighters knocked out Argentine fuel and mortar trucks in the Camp, severely disrupting enemy ground tempo.",
+                            "Sabotage strike burned forward Argentine ammunition reserves without friendly losses."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "FIDF SABOTAGE DESTROYS HOSTILE MUNITIONS CONVOY",
+                        "message": "Resistance ambush disrupts Argentine forward ground logistics.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "The FIDF cell hit them hard. Enemy ground logistics are severely disrupted."
@@ -2382,7 +4500,28 @@ module.exports = {
                 "scores": {
                     "uk_public_support": -2,
                     "international_pressure": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "downing_street",
+                            "uk_commander"
+                        ],
+                        "title": "Civilian Curfews & Detentions in Stanley",
+                        "message": "Argentine forces imposed harsh curfews and detained Falkland Islanders in reprisal for partisan ambushes; domestic and UN criticism mounts.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "CIVILIAN REPRISALS REPORTED IN STANLEY",
+                        "message": "Occupation patrols impose curfews and detentions after partisan ambush.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2407,7 +4546,31 @@ module.exports = {
                 ],
                 "scores": {
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "uk_commander",
+                            "air_maritime"
+                        ],
+                        "title": "FIDF Scouts Pinpoint Exocet & Sabotage Targets",
+                        "messages": [
+                            "Covert FIDF observers transmitted exact GPS coordinates for both the West Falkland coastal Exocet battery and the Buzos Tácticos cell.",
+                            "High-value FIDF reconnaissance updated the tactical map with exact locations of hidden Argentine coastal missile and spec-ops units."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "FIDF RECON REVEALS HIDDEN HOSTILE ASSETS",
+                        "message": "Coastal Exocet battery and spec-ops sabotage cell plotted on map.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2439,7 +4602,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "Skynet C2 Links Isolated & Hardened",
+                                        "messages": [
+                                            "GCHQ and Royal Signals purged malicious traffic and restored secure PJHQ Northwood C2; isolating logistics servers temporarily delayed manifest routing.",
+                                            "Skynet satellite links hardened against intrusion; air-defence C2 remains intact despite brief logistics friction."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2447,19 +4625,114 @@ module.exports = {
                             "text": "Launch an offensive counter-hack against Argentine mainland air-traffic and radar nodes.",
                             "effects": {
                                 "scores": {
-                                    "international_pressure": 1,
                                     "argentina_aggression": -1
                                 },
                                 "randomEvents": [
                                     {
                                         "id": "ev_cyber_blowback",
                                         "delayMs": 70000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "downing_street",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Anomalous Telecom Spillover Detected in Patagonia",
+                                                "messages": [
+                                                    "GCHQ telemetry warns the counter-cyber payload is propagating beyond military routers into Patagonian civilian telecom switches.",
+                                                    "Signal monitors flag unintended collateral disruption across southern Argentine civil infrastructure."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_cyber_disrupt_arg",
                                         "delayMs": 70000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Argentine Radar Telemetry Degrading",
+                                                "messages": [
+                                                    "SIGINT confirms packet loss and erratic radar sweeps across Río Grande air-control frequencies.",
+                                                    "GCHQ sensors observe Patagonian air-defence datalink dropouts as payload activates."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "International Alarm Over Early UK Cyber Strike",
+                                                    "message": "Offensive cyber operations launched prior to corroborated kinetic clashes drew swift diplomatic concern (+1 International Pressure).",
+                                                    "severity": "warning",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Offensive Cyber Retaliation Launched",
+                                        "messages": [
+                                            "UK cyber teams injected disruption payloads toward Patagonian military radar and air-traffic nodes, degrading Argentine sortie coordination.",
+                                            "Offensive counter-hack targeting Río Grande radar networks underway; diplomatic attribution risk remains."
+                                        ],
+                                        "severity": "warning",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -2483,7 +4756,28 @@ module.exports = {
                 "scores": {
                     "uk_public_support": -1,
                     "international_pressure": 2
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "downing_street",
+                            "uk_commander"
+                        ],
+                        "title": "Civilian Telecom Spillover Traced to UK",
+                        "message": "Forensic attribution linked Patagonian telecom outages to British cyber assets, triggering sharp international censure and domestic unease.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "CYBER BLOWBACK — CIVILIAN TELECOM OUTAGES TRACED",
+                        "message": "Collateral spillover in Patagonia triggers international condemnation.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2502,7 +4796,31 @@ module.exports = {
                 "scores": {
                     "military_readiness": 1,
                     "argentina_aggression": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Río Grande Radar Feeds Scrambled",
+                        "messages": [
+                            "GCHQ intrusion blinded Argentine coastal radar coordination at Río Grande for six hours, blunting FAA strike tempo.",
+                            "Argentine air-control network disrupted; enemy strike sorties face severe command degradation."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "ARGENTINE AIR-CONTROL NETWORK DISRUPTED",
+                        "message": "Río Grande radar feeds scrambled for 6 hours; FAA strike tempo degraded.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2534,6 +4852,30 @@ module.exports = {
             "autoEffects": {
                 "revealAssets": [
                     "a_arg_sub_san_juan"
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "ARA Salta Plotted Inside TEZ",
+                        "messages": [
+                            "HMS Defender sonar classified a Type 209 diesel-electric signature inside the TEZ; ARA Salta is now plotted on the tactical display.",
+                            "Hostile submarine ARA Salta detected on acoustic array; immediate prosecution decision required before she slips thermal layers."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SUBMARINE CONTACT — ARA SALTA PLOTTED",
+                        "message": "Argentine Type 209 submarine detected inside Total Exclusion Zone.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
                 ]
             },
             "roleDescriptions": {
@@ -2552,21 +4894,124 @@ module.exports = {
                             "text": "Declare hostile. Prosecute with ASW Wildcat and Sting Ray torpedoes.",
                             "effects": {
                                 "scores": {
-                                    "argentina_aggression": -1,
-                                    "international_pressure": 1
+                                    "argentina_aggression": -1
                                 },
                                 "randomEvents": [
                                     {
                                         "id": "ev_sub_sunk",
                                         "delayMs": 75000,
-                                        "probability": 0.65
+                                        "probability": 0.65,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Sting Ray Homing Transient Confirmed",
+                                                "messages": [
+                                                    "Wildcat sonobuoys register active Sting Ray seeker lock followed by underwater acoustic detonation signatures.",
+                                                    "ASW aircrew report active torpedo run closing on ARA Salta's last bearing."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_sub_evades",
                                         "delayMs": 75000,
-                                        "probability": 0.35
+                                        "probability": 0.35,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Submarine Diving Toward Thermal Layer",
+                                                "messages": [
+                                                    "ARA Salta deployed acoustic countermeasures and is diving steeply into a cold-water thermocline.",
+                                                    "Wildcat dipping sonar reports fading contact strength as the submarine exploits shallow seabed clutter."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "conditionalEffects": [
+                                    {
+                                        "conditions": {
+                                            "not": {
+                                                "any": [
+                                                    {
+                                                        "minScores": {
+                                                            "argentina_aggression": 4
+                                                        }
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_naval_skirmish"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_air_raid"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_ground_incursion"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "triggeredEvents": [
+                                                            "ev_sub_detected"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "effects": {
+                                            "scores": {
+                                                "international_pressure": 1
+                                            },
+                                            "outcomeMessages": [
+                                                {
+                                                    "roles": [
+                                                        "downing_street",
+                                                        "uk_commander"
+                                                    ],
+                                                    "title": "Diplomatic Protest Over Subsurface ROE",
+                                                    "message": "Regional observers questioned lethal ASW engagement before overt surface clashes were recorded (+1 International Pressure).",
+                                                    "severity": "warning",
+                                                    "aiRandomize": false
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "deployAssets": {
+                                    "hms_defender": 120000
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime"
+                                        ],
+                                        "title": "ASW Wildcat Prosecuting ARA Salta",
+                                        "messages": [
+                                            "HMS Defender cleared Wildcat ASW launch with Sting Ray torpedoes to prosecute the submerged contact inside the TEZ.",
+                                            "Weapons-free ASW prosecution underway; dipping sonar buoys dropped across the submarine's escape bearing."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
+                            },
+                            "conditions": {
+                                "assets": {
+                                    "hms_defender": "operational"
+                                }
                             }
                         },
                         {
@@ -2580,12 +5025,53 @@ module.exports = {
                                     {
                                         "id": "ev_sub_attacks",
                                         "delayMs": 80000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime",
+                                                    "uk_commander"
+                                                ],
+                                                "title": "Torpedo Tube Flood & Launch Transients!",
+                                                "messages": [
+                                                    "Sonar watch calls emergency torpedo-in-the-water alert—high-speed screws bearing directly on HMS Defender!",
+                                                    "Shadowed submarine opened outer doors and fired wire-guided torpedoes at close range!"
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_sub_evades",
                                         "delayMs": 80000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Acoustic Track Degrading Under Thermocline",
+                                                "messages": [
+                                                    "Passive track on ARA Salta is breaking up beneath a strong salinity layer; risk of losing contact entirely.",
+                                                    "Submarine has cut snort speed and is slipping quietly out of Defender's passive sonar cone."
+                                                ],
+                                                "severity": "warning",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Passive Shadowing ROE Ordered",
+                                        "message": "HMS Defender holds fire to avoid escalation, trailing ARA Salta passively in challenging shallow-water acoustics.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -2612,7 +5098,27 @@ module.exports = {
                 "scores": {
                     "uk_public_support": 1,
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "ARA Salta Neutralised",
+                        "message": "HMS Defender's Wildcat scored a Sting Ray torpedo hit, forcing ARA Salta to surface and eliminating the subsurface threat.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "HOSTILE SUBMARINE ARA SALTA NEUTRALISED",
+                        "message": "Sting Ray hit forces surface abandonment; sea lanes secured.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2633,7 +5139,22 @@ module.exports = {
                 ],
                 "scores": {
                     "military_readiness": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "ARA Salta Escapes Sonar Net",
+                        "messages": [
+                            "ARA Salta slipped beneath the thermocline and vanished from tracking; she remains operational and threatens eastern supply lanes.",
+                            "Contact lost on ARA Salta; submarine remains un-neutralised inside South Atlantic waters."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2661,7 +5182,27 @@ module.exports = {
                 },
                 "assetStateChanges": {
                     "hms_defender": "damaged"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "HMS Defender Struck by Submarine Torpedo",
+                        "message": "ARA Salta struck HMS Defender with wire-guided torpedoes before diving clear, degrading task force readiness and UK public morale.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "HMS DEFENDER DAMAGED BY SUBMARINE TORPEDO",
+                        "message": "ARA Salta escapes after ambush; destroyer readiness degraded.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2709,7 +5250,31 @@ module.exports = {
                 ],
                 "scores": {
                     "supply_lines": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "ARA Salta Resurfaces on Eastern Supply Lane",
+                        "messages": [
+                            "The escaped Argentine submarine re-emerged east of Stanley and fired on an inbound RFA resupply vessel; firing window is brief.",
+                            "Logistics lane ambush: ARA Salta spotted on surface radar attacking RFA shipping before diving."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "ARA SALTA RE-EMERGES — RFA SUPPLY LANE UNDER ATTACK",
+                        "message": "Escaped submarine firing on inbound logistics ship.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "The escaped sub came back to haunt our logistics lane! We have a brief firing window before she dives again."
@@ -2731,7 +5296,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "supply_lines": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "ARA Salta Destroyed by ASW Counter-Attack",
+                                        "messages": [
+                                            "ASW helicopters prosecuted the resurfaced submarine immediately, sinking ARA Salta and reopening the eastern RFA convoy lane.",
+                                            "Rapid Sting Ray strike eliminated ARA Salta before she could dive clear."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2744,7 +5324,19 @@ module.exports = {
                                 "scores": {
                                     "supply_lines": -1,
                                     "uk_public_support": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "RFA Convoy Scattered East — Sub Escapes Again",
+                                        "message": "Emergency evasive scatter saved the supply ship from a second torpedo salvo, but ARA Salta slipped away again and logistics flow stalled.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2780,7 +5372,31 @@ module.exports = {
                 ],
                 "scores": {
                     "military_readiness": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Coastal Exocet Launch Detected on West Falkland",
+                        "messages": [
+                            "Infrared plume telemetry exposed the concealed coastal Exocet launcher on West Falkland after firing across Falkland Sound.",
+                            "Mobile Exocet battery revealed by launch signature; immediate Typhoon scramble needed before shoot-and-scoot relocation."
+                        ],
+                        "severity": "danger",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "COASTAL EXOCET AMBUSH — WEST FALKLAND LAUNCH",
+                        "message": "Unprosecuted missile battery fires across Falkland Sound.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "air_maritime": "Their launch plume just exposed the battery's position on West Falkland—scramble Typhoons now before they relocate!"
@@ -2802,7 +5418,22 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 1,
                                     "argentina_aggression": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Coastal Exocet Battery Destroyed",
+                                        "messages": [
+                                            "1435 Flight Typhoons struck the firing point before the launcher vehicle could displace, destroying the West Falkland Exocet battery.",
+                                            "Counter-battery Typhoon strike obliterated the mobile coastal launcher, restoring maritime safety in Falkland Sound."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2814,7 +5445,19 @@ module.exports = {
                                 ],
                                 "scores": {
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Ships Pull Out of Coastal Missile Arc",
+                                        "message": "UK vessels deployed chaff and withdrew out of coastal Exocet range; the launcher displaced under cover and logistics tempo slipped.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2870,12 +5513,56 @@ module.exports = {
                                     {
                                         "id": "ev_convoy_hit",
                                         "delayMs": 75000,
-                                        "probability": 0.45
+                                        "probability": 0.45,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "Convoy Radar Warning — Inbound Missile Tracks",
+                                                "messages": [
+                                                    "Escort ESM detects hostile fire-control radar painting the inbound RFA merchant hull 30 miles east of Stanley.",
+                                                    "Flash warning from the RFA convoy: sea-skimming radar contacts detected closing the port quarter."
+                                                ],
+                                                "severity": "danger",
+                                                "aiRandomize": true
+                                            }
+                                        ]
                                     },
                                     {
                                         "id": "ev_convoy_safe",
                                         "delayMs": 75000,
-                                        "probability": 0.55
+                                        "probability": 0.55,
+                                        "outcomeMessages": [
+                                            {
+                                                "roles": [
+                                                    "uk_commander",
+                                                    "air_maritime"
+                                                ],
+                                                "title": "RFA Convoy Entering Port Stanley Channel",
+                                                "messages": [
+                                                    "Using low-cloud squall cover and tight escort screening, the RFA logistics vessel has cleared outer approaches unmolested.",
+                                                    "Port Stanley harbour pilot reports the RFA supply ship crossing the Narrows intact."
+                                                ],
+                                                "severity": "success",
+                                                "aiRandomize": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "RFA Surface Convoy Dispatched to Stanley",
+                                        "messages": [
+                                            "An escorted RFA supply ship is steaming into Stanley harbour carrying Sea Viper reloads, ammunition, and medical kit.",
+                                            "Sea resupply convoy has entered the eastern TEZ approach under naval escort."
+                                        ],
+                                        "severity": "info",
+                                        "aiRandomize": true
                                     }
                                 ]
                             }
@@ -2885,7 +5572,8 @@ module.exports = {
                             "text": "Execute a heavy A400M Atlas airbridge surge from RAF Ascension Island.",
                             "conditions": {
                                 "assets": {
-                                    "ascension_island": "operational"
+                                    "ascension_island": "operational",
+                                    "falklands_a400m": "operational"
                                 }
                             },
                             "effects": {
@@ -2893,9 +5581,24 @@ module.exports = {
                                     "supply_lines": 1,
                                     "military_readiness": 1
                                 },
-                                "assetStateChanges": {
-                                    "falklands_a400m": "deployed"
-                                }
+                                "deployAssets": {
+                                    "falklands_a400m": 120000
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "A400M Atlas Airbridge Surge Underway",
+                                        "messages": [
+                                            "A400M Atlas is flying continuous high-priority shuttles from RAF Ascension Island, restoring MPA munition and medical stockpiles.",
+                                            "Ascension airbridge surge delivered critical Sea Viper reloads and infantry ammunition directly to Mount Pleasant."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -2917,7 +5620,27 @@ module.exports = {
                 "scores": {
                     "uk_public_support": -2,
                     "supply_lines": -2
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "RFA Supply Convoy Struck East of Stanley",
+                        "message": "Anti-ship missiles hit the surface convoy 30 miles east of Stanley, inflicting severe materiel losses and eroding public support.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RFA SUPPLY CONVOY AMBUSHED — HEAVY MATERIEL LOSS",
+                        "message": "Missile strike hits logistics ship east of Port Stanley.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2936,7 +5659,27 @@ module.exports = {
                 "scores": {
                     "supply_lines": 1,
                     "uk_public_support": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "RFA Convoy Unloads Safely at Stanley",
+                        "message": "Escorted RFA vessel reached Port Stanley intact, replenishing ammunition, fuel, and medical stocks for the garrison.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RFA CONVOY DOCKS INTACT — STOCKS REPLENISHED",
+                        "message": "Munitions and fuel safely landed at Port Stanley.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -2963,7 +5706,27 @@ module.exports = {
             "autoEffects": {
                 "assetStateChanges": {
                     "ascension_voyager": "grounded"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Wideawake Fuel Crisis — Voyager KC2 Grounded",
+                        "message": "Harassment of chartered tankers and Atlantic storms have exhausted Ascension Avtur reserves, grounding Voyager KC2 AAR tankers.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "ASCENSION FUEL CRISIS — VOYAGER KC2 GROUNDED",
+                        "message": "Wideawake Avtur depleted; long-range AAR sorties suspended.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "With Voyager grounded at Ascension, long-range AAR strikes and reinforcements are locked out until we authorise an Emergency Ascension Fuel Sealift or secure allied refuelling."
@@ -2980,7 +5743,19 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": -1,
                                     "supply_lines": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "air_maritime"
+                                        ],
+                                        "title": "MPA Sorties Restricted to Defensive QRA",
+                                        "message": "Strict fuel rationing stabilises remaining reserves while awaiting sealift replenishment, curtailing offensive air patrols.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -2993,7 +5768,28 @@ module.exports = {
                                 "scores": {
                                     "supply_lines": 1,
                                     "international_pressure": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "US Wideawake Fuel Drawdown Restores Voyager KC2",
+                                        "message": "Emergency USAF aviation fuel transfer at Ascension Island returns Voyager KC2 tankers to operational status immediately.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Diplomatic Cost of US Ascension Drawdown",
+                                        "message": "Visible reliance on US Wideawake reserves draws regional diplomatic scrutiny over Washington's logistical role.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3037,7 +5833,31 @@ module.exports = {
                                 "scores": {
                                     "argentina_aggression": -2,
                                     "supply_lines": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "All-Out Typhoon & Sky Sabre Defence Repels Raid",
+                                        "messages": [
+                                            "Every serviceable 1435 Flight Typhoon scrambled alongside Sky Sabre batteries, breaking up the Super Étendard saturation raid at heavy missile and fuel cost.",
+                                            "Full-scale air defence blunted Argentine strike aggression and preserved Mount Pleasant's runway intact."
+                                        ],
+                                        "severity": "success",
+                                        "aiRandomize": true
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "SATURATION RAID REPULSED — MPA RUNWAY INTACT",
+                                        "message": "1435 Flight and Sky Sabre defeat massed Super Étendard attack.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -3050,7 +5870,28 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": -1,
                                     "uk_public_support": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "air_maritime",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Mount Pleasant Struck While Jets Sheltered",
+                                        "message": "Aircraft survived inside hardened shelters, but Argentine ordnance cratered Mount Pleasant facilities and degraded task force readiness.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "RAF MOUNT PLEASANT DAMAGED IN SATURATION RAID",
+                                        "message": "Runway and base infrastructure hit; jets preserved in shelters.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3099,6 +5940,35 @@ module.exports = {
                                         "delayMs": 60000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "24-Hour Operational Pause Agreed at UN",
+                                        "message": "Accepting the Security Council pause relieves intense allied pressure and moves the crisis straight into final strategic assessment.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Offensive Operations Frozen",
+                                        "message": "All BFSAI offensive manoeuvres halted for mediated withdrawal talks; readiness dips under static freeze.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "UN CEASEFIRE PAUSE ACCEPTED — ENDGAME INITIATED",
+                                        "message": "24-hour operational halt ordered; strategic assessment pending.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3109,7 +5979,27 @@ module.exports = {
                                 "scores": {
                                     "uk_public_support": 1,
                                     "military_readiness": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "UK Rejects UN Ceasefire Ultimatum",
+                                        "message": "HMG refused any operational pause while Argentine forces threaten British sovereign territory, rallying domestic support amid diplomatic isolation.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "uk_commander"
+                                        ],
+                                        "title": "Full Operational Authority Retained",
+                                        "message": "Theatre forces remain cleared to press military operations without a ceasefire freeze.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3154,6 +6044,26 @@ module.exports = {
                                         "delayMs": 5000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Task Force Commander Resigns Command",
+                                        "message": "Following sustained setbacks and collapse of domestic confidence, the Task Force Commander has tendered resignation; London is moving to terminate hostilities.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "COMMAND RESIGNATION — CAMPAIGN TERMINATING",
+                                        "message": "Task Force Commander steps down; HMG suing for peace.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3165,7 +6075,19 @@ module.exports = {
                                     "military_readiness": 2,
                                     "international_pressure": 1,
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "uk_commander",
+                                            "downing_street"
+                                        ],
+                                        "title": "24-Hour All-Out Push Authorised",
+                                        "message": "Task force committed all reserves to a decisive 24-hour offensive, rallying domestic opinion and combat readiness while accepting higher diplomatic pressure.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3210,7 +6132,28 @@ module.exports = {
                                 "scores": {
                                     "military_readiness": 2,
                                     "supply_lines": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street",
+                                            "uk_commander"
+                                        ],
+                                        "title": "US Satellite ISR & Fuel Package Integrated",
+                                        "message": "Discreet Washington intelligence feeds revealed the covert Argentine fleet oiler and boosted Wideawake fuel stocks and ASRAAM/readiness.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    },
+                                    {
+                                        "roles": [
+                                            "display"
+                                        ],
+                                        "title": "US MATERIAL SUPPORT INTEGRATED — OILER REVEALED",
+                                        "message": "Allied satellite ISR plots covert fleet oiler; readiness boosted.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -3219,7 +6162,18 @@ module.exports = {
                             "effects": {
                                 "scores": {
                                     "uk_public_support": 1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "US Package Politely Declined",
+                                        "message": "Maintaining strict national self-reliance avoids regional diplomatic complications and wins approval at home.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3261,7 +6215,19 @@ module.exports = {
                                 "scores": {
                                     "international_pressure": -1,
                                     "military_readiness": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street",
+                                            "uk_commander"
+                                        ],
+                                        "title": "Strict Defensive ROE Announced",
+                                        "message": "Limiting forces to defensive TEZ posture defuses looming economic sanctions at the UN while constraining offensive readiness.",
+                                        "severity": "info",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         },
                         {
@@ -3271,7 +6237,18 @@ module.exports = {
                                 "scores": {
                                     "international_pressure": 1,
                                     "uk_public_support": -1
-                                }
+                                },
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "downing_street"
+                                        ],
+                                        "title": "Sanctions Draft Ignored — Treasury Warns of Fallout",
+                                        "message": "Pressing military operations despite UN sanctions threats deepens international isolation and alarms domestic markets.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -3296,7 +6273,27 @@ module.exports = {
                 },
                 "assetStateChanges": {
                     "rio_grande": "damaged"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "SAS Raid Damages Río Grande Air Base",
+                        "message": "SAS operators destroyed Super Étendard strike jets and aviation fuel dumps at Río Grande before extracting cleanly.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SAS RAID SUCCESSFUL — RÍO GRANDE DAMAGED",
+                        "message": "Super Étendard strike capacity degraded on the mainland.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "The lads pulled it off. Massive blow to Argentine Naval Aviation's strike capacity."
@@ -3318,7 +6315,28 @@ module.exports = {
                 "scores": {
                     "uk_public_support": -1,
                     "international_pressure": 2
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "downing_street",
+                            "uk_commander"
+                        ],
+                        "title": "SAS Team Compromised Near Río Grande",
+                        "message": "Argentine television broadcast captured British special forces kit after a mainland firefight, provoking severe UN backlash and public shock.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SAS RAID COMPROMISED — DIPLOMATIC CRISIS",
+                        "message": "Mainland special forces mission exposed; international backlash.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "Buenos Aires is broadcasting captured equipment on live television. Severe diplomatic fallout."
@@ -3344,7 +6362,27 @@ module.exports = {
                 "assetStateChanges": {
                     "hms_defender": "operational",
                     "mount_pleasant": "operational"
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "UK Task Group Reinforcements Arrive",
+                        "message": "Fresh Royal Navy escorts, Typhoon airframes, and Royal Marine commandos have arrived via Ascension, restoring HMS Defender and Mount Pleasant to operational status.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "REINFORCEMENTS ARRIVE — DEFENDER & MPA RESTORED",
+                        "message": "Fresh escorts, Typhoons, and commandos operational in theatre.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "roleDescriptions": {
                 "uk_commander": "The cavalry has arrived. Damaged units are relieved and operational readiness is restored."
@@ -3369,7 +6407,31 @@ module.exports = {
                 ],
                 "scores": {
                     "military_readiness": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "FIDF & A400M Sweep Reveals Hidden Threats",
+                        "messages": [
+                            "Combined A400M maritime radar and FIDF patrols pinpointed both the coastal Exocet battery and the Buzos Tácticos sabotage cell.",
+                            "Joint reconnaissance sweep plotted the concealed West Falkland Exocet launcher and special forces team on the tactical map."
+                        ],
+                        "severity": "success",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "RECON SWEEP SUCCESS — EXOCET & SPEC-OPS PLOTTED",
+                        "message": "FIDF and A400M locate concealed threats on West Falkland.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3390,7 +6452,22 @@ module.exports = {
                 ],
                 "scores": {
                     "supply_lines": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "A400M Recon Forced Off — Partial Imagery Recovered",
+                        "messages": [
+                            "Hostile CAP chased the A400M Atlas off station early, though synthetic aperture radar still fixed the coastal Exocet battery.",
+                            "Recon sweep broke off under enemy fighter pressure; coastal Exocet launcher revealed while fuel burn strained supply lines."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3412,7 +6489,27 @@ module.exports = {
                 "scores": {
                     "argentina_aggression": -2,
                     "uk_public_support": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Black Buck II Hits Río Gallegos Air Base",
+                        "message": "Voyager-refuelled RAF Typhoons struck Río Gallegos hardened shelters and runway with Storm Shadow missiles, slashing Argentine air aggression.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "BLACK BUCK II SUCCESS — RÍO GALLEGOS DAMAGED",
+                        "message": "Long-range AAR Storm Shadow strike craters mainland airbase.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3431,7 +6528,19 @@ module.exports = {
                 "scores": {
                     "supply_lines": -1,
                     "international_pressure": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Black Buck II Aborted Over Mid-Atlantic",
+                        "message": "Severe turbulence damaged a Voyager refuelling drogue, forcing the strike flight to divert back to MPA with wasted fuel and diplomatic scrutiny.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3454,7 +6563,27 @@ module.exports = {
                 "scores": {
                     "military_readiness": 1,
                     "supply_lines": 1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "HMS Astute Sinks ARA Salta & Drives Off Oiler",
+                        "message": "Royal Navy Astute-class SSN neutralised ARA Salta in the northern approaches and forced the covert Argentine fleet oiler out of the TEZ.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "HMS ASTUTE NEUTRALISES ARA SALTA",
+                        "message": "Subsurface threat eliminated; covert fleet oiler withdrawing.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3472,7 +6601,22 @@ module.exports = {
             "autoEffects": {
                 "scores": {
                     "argentina_aggression": -1
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "HMS Astute Patrol Clears Northern Approaches",
+                        "messages": [
+                            "HMS Astute found no sonar contact on ARA Salta in the northern sector, though SSN deterrence forced Argentine surface raiders back.",
+                            "Northern barrier sweep recorded an empty acoustic sector while pushing hostile naval patrols westward."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3494,7 +6638,27 @@ module.exports = {
                 },
                 "scores": {
                     "supply_lines": 2
-                }
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Ascension Fuel Sealift Restores Airbridge",
+                        "message": "Escorted RFA tanker refilled RAF Ascension Island Avtur tanks, returning Wideawake Airfield and Voyager KC2 tankers to full operational status.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "ASCENSION AIRBRIDGE RESTORED — SEALIFT COMPLETE",
+                        "message": "Wideawake fuel reserves replenished; Voyager KC2 operational.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
             },
             "decisions": []
         },
@@ -3562,6 +6726,17 @@ module.exports = {
                                         "delayMs": 8000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Strategic Assessment Submitted: Victory",
+                                        "message": "PJHQ assesses that UK forces have secured the Falkland Islands with sea control, air superiority, and logistics intact.",
+                                        "severity": "success",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3580,6 +6755,17 @@ module.exports = {
                                         "delayMs": 8000,
                                         "probability": 1
                                     }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Strategic Assessment Submitted: Defeat",
+                                        "message": "PJHQ assesses that depleted combat readiness prevents holding the islands; withdrawal directives are being issued.",
+                                        "severity": "danger",
+                                        "aiRandomize": false
+                                    }
                                 ]
                             }
                         },
@@ -3592,6 +6778,17 @@ module.exports = {
                                         "id": "ev_end_stalemate",
                                         "delayMs": 8000,
                                         "probability": 1
+                                    }
+                                ],
+                                "outcomeMessages": [
+                                    {
+                                        "roles": [
+                                            "all"
+                                        ],
+                                        "title": "Strategic Assessment Submitted: Stalemate",
+                                        "message": "PJHQ assesses neither side can achieve a decisive breakthrough; forces are consolidating along frozen ceasefire lines.",
+                                        "severity": "warning",
+                                        "aiRandomize": false
                                     }
                                 ]
                             }
@@ -3615,7 +6812,29 @@ module.exports = {
             "roleDescriptions": {
                 "uk_commander": "Well done, Commander. The Prime Minister and Chiefs of Staff send their commendations."
             },
-            "decisions": []
+            "decisions": [],
+            "autoEffects": {
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Campaign Concluded: UK Victory",
+                        "message": "British Forces South Atlantic Islands have defeated Argentine aggression and secured Port Stanley, RAF Mount Pleasant, and the Ascension airbridge.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SCENARIO CONCLUDED — BRITISH VICTORY",
+                        "message": "Falkland Islands secured; sea control and air superiority upheld.",
+                        "severity": "success",
+                        "aiRandomize": false
+                    }
+                ]
+            }
         },
         {
             "id": "ev_end_defeat",
@@ -3632,7 +6851,29 @@ module.exports = {
             "roleDescriptions": {
                 "uk_commander": "A dark day for British arms in the South Atlantic. Prepare for the Parliamentary inquiry."
             },
-            "decisions": []
+            "decisions": [],
+            "autoEffects": {
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Campaign Concluded: Strategic Defeat",
+                        "message": "UK forces have been overwhelmed or compelled to withdraw from the Falkland Islands; Whitehall faces a full parliamentary inquiry.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SCENARIO CONCLUDED — STRATEGIC DEFEAT",
+                        "message": "UK garrison unable to hold islands; withdrawal ordered.",
+                        "severity": "danger",
+                        "aiRandomize": false
+                    }
+                ]
+            }
         },
         {
             "id": "ev_end_stalemate",
@@ -3649,7 +6890,29 @@ module.exports = {
             "roleDescriptions": {
                 "uk_commander": "Neither a clear victory nor a defeat. The diplomatic and military burden will endure for years."
             },
-            "decisions": []
+            "decisions": [],
+            "autoEffects": {
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Campaign Concluded: Negotiated Stalemate",
+                        "message": "A bitter winter ceasefire has frozen positions across the South Atlantic, leaving sovereignty disputed and forces facing a prolonged garrison.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "SCENARIO CONCLUDED — NEGOTIATED STALEMATE",
+                        "message": "Ceasefire freezes theatre lines for the southern winter.",
+                        "severity": "warning",
+                        "aiRandomize": false
+                    }
+                ]
+            }
         },
         {
             "id": "act_sf_mainland",
@@ -3695,19 +6958,121 @@ module.exports = {
                 ]
             },
             "effects": {
-                "scores": {
-                    "international_pressure": 1
-                },
+                "scores": {},
                 "randomEvents": [
                     {
                         "id": "ev_sf_success",
                         "delayMs": 35000,
-                        "probability": 0.6
+                        "probability": 0.6,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "uk_commander"
+                                ],
+                                "title": "SAS Insertion Unobserved — Approaching Perimeter",
+                                "messages": [
+                                    "Brief encrypted burst confirms the SAS patrol inserted cleanly outside Río Grande and is moving into observation positions.",
+                                    "Special forces team reports minimal Patagonian perimeter patrols along the Super Étendard dispersal apron."
+                                ],
+                                "severity": "info",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_sf_failure",
                         "delayMs": 35000,
-                        "probability": 0.4
+                        "probability": 0.4,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "uk_commander",
+                                    "downing_street"
+                                ],
+                                "title": "Patagonian Coastal Radar Alert Spike",
+                                "messages": [
+                                    "GCHQ intercepts emergency Argentine garrison transmissions around Río Grande reporting an armed perimeter breach.",
+                                    "Encrypted SAS check-in missed at the rally point as Argentine search flares light up outside Río Grande."
+                                ],
+                                "severity": "danger",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "conditionalEffects": [
+                    {
+                        "conditions": {
+                            "not": {
+                                "any": [
+                                    {
+                                        "minScores": {
+                                            "argentina_aggression": 4
+                                        }
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_naval_skirmish"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_air_raid"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_ground_incursion"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_sub_detected"
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        "effects": {
+                            "scores": {
+                                "international_pressure": 1
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "downing_street",
+                                        "uk_commander"
+                                    ],
+                                    "title": "Diplomatic Backlash Over Unprovoked Mainland Raid",
+                                    "message": "With major TEZ combat not yet corroborated globally, intelligence leaks of UK special forces crossing to the mainland incur an added diplomatic penalty (+1 International Pressure).",
+                                    "severity": "danger",
+                                    "aiRandomize": false
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "uk_commander"
+                        ],
+                        "title": "SAS Mainland Insertion Underway",
+                        "messages": [
+                            "Cabinet approval granted. Special Forces insertion flight has departed covertly toward Tierra del Fuego targeting Río Grande.",
+                            "SAS detachment cleared for mainland insertion; operators are en route to Río Grande Air Base."
+                        ],
+                        "severity": "warning",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "downing_street"
+                        ],
+                        "title": "Covert Mainland Raid Authorised",
+                        "message": "Downing Street signed off on covert SAS deployment against Río Grande; foreign diplomatic risk is now live.",
+                        "severity": "warning",
+                        "aiRandomize": false
                     }
                 ]
             }
@@ -3764,6 +7129,26 @@ module.exports = {
                         "delayMs": 90000,
                         "probability": 1
                     }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Emergency Task Group Reinforcements Dispatched",
+                        "message": "Downing Street approved emergency dispatch of Royal Navy escorts, Typhoons, and Royal Marines via RAF Ascension Island.",
+                        "severity": "info",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "EMERGENCY REINFORCEMENTS EN ROUTE VIA ASCENSION",
+                        "message": "UK escorts, Typhoons, and Royal Marines staging south.",
+                        "severity": "info",
+                        "aiRandomize": false
+                    }
                 ]
             }
         },
@@ -3784,19 +7169,70 @@ module.exports = {
                 "notTriggeredEvents": [
                     "ev_recon_sweep_success",
                     "ev_recon_sweep_compromised"
-                ]
+                ],
+                "assets": {
+                    "falklands_a400m": "operational"
+                }
             },
             "effects": {
                 "randomEvents": [
                     {
                         "id": "ev_recon_sweep_success",
                         "delayMs": 30000,
-                        "probability": 0.75
+                        "probability": 0.75,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "Strong SAR & Ground Scout Corroboration",
+                                "messages": [
+                                    "A400M synthetic aperture radar is returning clear vehicular tracks near West Falkland coves; FIDF scouts moving to confirm.",
+                                    "Recon flight reports clean radar sweep over West Falkland with no enemy CAP interference."
+                                ],
+                                "severity": "info",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_recon_sweep_compromised",
                         "delayMs": 30000,
-                        "probability": 0.25
+                        "probability": 0.25,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "Hostile Interceptors Closing A400M Track",
+                                "messages": [
+                                    "Long-range radar warns of Argentine interceptors vectoring fast toward the A400M patrol corridor over West Falkland.",
+                                    "A400M crew reports airborne fire-control radar lock and is initiating evasive break-off."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "deployAssets": {
+                    "falklands_a400m": 120000
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "FIDF & A400M Covert Recon Sweep Launched",
+                        "messages": [
+                            "A400M Atlas is airborne from MPA on a maritime radar sweep coordinated with FIDF ground scouts across West Falkland.",
+                            "Joint covert reconnaissance tasked to locate concealed coastal Exocet launchers and spec-ops cells."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             }
@@ -3841,19 +7277,126 @@ module.exports = {
                 ]
             },
             "effects": {
-                "scores": {
-                    "international_pressure": 1
-                },
+                "scores": {},
                 "randomEvents": [
                     {
                         "id": "ev_black_buck_success",
                         "delayMs": 45000,
-                        "probability": 0.65
+                        "probability": 0.65,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "AAR Bracket Complete — Strikers Ingressing",
+                                "messages": [
+                                    "Voyager KC2 completed full fuel transfer cleanly; Typhoon package is descending to Storm Shadow release point.",
+                                    "Tanker rendezvous succeeded on schedule; strike aircraft are within mainland cruise-missile range."
+                                ],
+                                "severity": "success",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_black_buck_aborted",
                         "delayMs": 45000,
-                        "probability": 0.35
+                        "probability": 0.35,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "Severe Turbulence at AAR Rendezvous",
+                                "messages": [
+                                    "Voyager KC2 crew reports violent mid-Atlantic clear-air turbulence threatening the wing-pod refuelling drogue.",
+                                    "AAR receiver hookup failed twice in heavy storm shear; mission commander assessing abort."
+                                ],
+                                "severity": "warning",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "conditionalEffects": [
+                    {
+                        "conditions": {
+                            "not": {
+                                "any": [
+                                    {
+                                        "minScores": {
+                                            "argentina_aggression": 4
+                                        }
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_naval_skirmish"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_air_raid"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_ground_incursion"
+                                        ]
+                                    },
+                                    {
+                                        "triggeredEvents": [
+                                            "ev_sub_detected"
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        "effects": {
+                            "scores": {
+                                "international_pressure": 1
+                            },
+                            "outcomeMessages": [
+                                {
+                                    "roles": [
+                                        "downing_street",
+                                        "uk_commander"
+                                    ],
+                                    "title": "Allied Concern Over Pre-Emptive Black Buck II",
+                                    "message": "Launching a mainland airbase strike ahead of internationally verified TEZ battles incurs additional diplomatic pressure (+1 International Pressure).",
+                                    "severity": "warning",
+                                    "aiRandomize": false
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "deployAssets": {
+                    "ascension_voyager": 120000
+                },
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "Black Buck II Strike Package Airborne",
+                        "messages": [
+                            "Cabinet authorisation confirmed. Voyager KC2 has lifted off Ascension to refuel Typhoon Storm Shadow strikers bound for Río Gallegos.",
+                            "Black Buck II long-range strike launched; Voyager AAR rendezvous underway over the South Atlantic."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
+                    },
+                    {
+                        "roles": [
+                            "downing_street"
+                        ],
+                        "title": "Black Buck II Long-Range Strike Cleared",
+                        "message": "Political clearance issued for Voyager-supported Storm Shadow strike on Río Gallegos Air Base.",
+                        "severity": "warning",
+                        "aiRandomize": false
                     }
                 ]
             }
@@ -3896,12 +7439,57 @@ module.exports = {
                     {
                         "id": "ev_astute_kill",
                         "delayMs": 45000,
-                        "probability": 0.7
+                        "probability": 0.7,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "Astute Acoustic Array Acquires High-Priority Contact",
+                                "messages": [
+                                    "Subsurface flash: HMS Astute passive towed array locked onto a diesel-electric hull and nearby tanker screws.",
+                                    "HMS Astute reports positive classification on hostile submarine track; closing to weapons solution."
+                                ],
+                                "severity": "info",
+                                "aiRandomize": true
+                            }
+                        ]
                     },
                     {
                         "id": "ev_astute_dry_hole",
                         "delayMs": 45000,
-                        "probability": 0.3
+                        "probability": 0.3,
+                        "outcomeMessages": [
+                            {
+                                "roles": [
+                                    "air_maritime",
+                                    "uk_commander"
+                                ],
+                                "title": "Heavy Thermal Layer Obscuring Northern Sector",
+                                "messages": [
+                                    "Initial barrier sweep reports strong ocean-current thermal gradients masking submerged acoustics in the northern box.",
+                                    "HMS Astute reports surface raiders scattering westward, with no confirmed subsurface acoustic lock yet."
+                                ],
+                                "severity": "info",
+                                "aiRandomize": true
+                            }
+                        ]
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "air_maritime",
+                            "uk_commander"
+                        ],
+                        "title": "HMS Astute Vectored to Northern Barrier",
+                        "messages": [
+                            "VLF tasking transmitted: HMS Astute is sprinting into the northern TEZ approaches to hunt ARA Salta and hostile replenishment tankers.",
+                            "Royal Navy Astute-class SSN has entered barrier patrol sector north of East Falkland."
+                        ],
+                        "severity": "info",
+                        "aiRandomize": true
                     }
                 ]
             }
@@ -3950,6 +7538,26 @@ module.exports = {
                         "id": "ev_sealift_complete",
                         "delayMs": 45000,
                         "probability": 1
+                    }
+                ],
+                "outcomeMessages": [
+                    {
+                        "roles": [
+                            "all"
+                        ],
+                        "title": "Emergency Ascension Fuel Sealift Dispatched",
+                        "message": "An escorted RFA tanker is steaming into Wideawake anchorage to replenish RAF Ascension Island Avtur reserves; domestic commentators note supply vulnerability.",
+                        "severity": "info",
+                        "aiRandomize": false
+                    },
+                    {
+                        "roles": [
+                            "display"
+                        ],
+                        "title": "EMERGENCY ASCENSION FUEL SEALIFT EN ROUTE",
+                        "message": "Escorted RFA tanker inbound to restore Wideawake airbridge.",
+                        "severity": "info",
+                        "aiRandomize": false
                     }
                 ]
             }
