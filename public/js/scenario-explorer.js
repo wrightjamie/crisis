@@ -11,7 +11,6 @@
     let panZoomController = null;
     let lastFittedScenarioId = null;
     let lastPositionsMap = new Map();
-    let floatingBarMounted = false;
 
     const escapeHtml = (str) => {
         if (window.common && typeof window.common.escapeHtml === 'function') {
@@ -59,43 +58,6 @@
         }
         renderScenarioExplorer();
     };
-
-    function syncFloatingNetworkBar(isVisible) {
-        if (!window.common || !window.common.floatingBar) return;
-        if (!floatingBarMounted) {
-            const bar = document.createElement('div');
-            bar.id = 'fac-network-float-bar';
-            bar.className = 'floating-bar';
-            bar.setAttribute('role', 'toolbar');
-            bar.setAttribute('aria-label', 'Network Zoom Controls');
-            bar.innerHTML = `
-                <button type="button" id="fac-btn-zoom-out" class="floating-bar-btn" title="Zoom Out" aria-label="Zoom Out">−</button>
-                <button type="button" id="fac-btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom to 100%" aria-label="Reset Zoom to 100%">
-                    <span id="fac-canvas-zoom-label">100%</span>
-                </button>
-                <button type="button" id="fac-btn-zoom-in" class="floating-bar-btn" title="Zoom In" aria-label="Zoom In">+</button>
-                <span class="floating-bar-divider" aria-hidden="true"></span>
-                <button type="button" id="fac-btn-zoom-fit" class="floating-bar-btn" title="Fit diagram to viewport">Fit</button>
-                <button type="button" id="fac-btn-zoom-reset-view" class="floating-bar-btn" title="Reset pan and zoom">Reset</button>
-            `;
-            window.common.floatingBar.addGroup('fac-network-controls', {
-                slot: 'left',
-                order: 10,
-                element: bar,
-                visible: Boolean(isVisible)
-            });
-            bar.querySelector('#fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
-            bar.querySelector('#fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
-            bar.querySelector('#fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
-            bar.querySelector('#fac-btn-zoom-reset-view')?.addEventListener('click', () => panZoomController?.reset());
-            bar.querySelector('#fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
-            floatingBarMounted = true;
-        } else {
-            window.common.floatingBar.setVisible('fac-network-controls', Boolean(isVisible));
-        }
-    }
-
-    window.setNetworkControlsVisible = syncFloatingNetworkBar;
 
     function buildRuntimeMaps() {
         const triggeredIds = new Set();
@@ -257,8 +219,6 @@
     }
 
     function ensureNetworkShell(container) {
-        syncFloatingNetworkBar(true);
-
         let shell = document.getElementById('fac-canvas-shell');
         if (shell && container.contains(shell)) return shell;
 
@@ -279,6 +239,16 @@
                         </svg>
                         <div id="fac-canvas-nodes-layer" class="canvas-nodes-layer"></div>
                     </div>
+                    <div id="fac-network-float-bar" class="floating-bar fac-canvas-floating-bar" role="toolbar" aria-label="Network Zoom Controls">
+                        <button type="button" id="fac-btn-zoom-out" class="floating-bar-btn" title="Zoom Out" aria-label="Zoom Out">−</button>
+                        <button type="button" id="fac-btn-zoom-reset" class="floating-bar-btn" title="Reset Zoom to 100%" aria-label="Reset Zoom to 100%">
+                            <span id="fac-canvas-zoom-label">100%</span>
+                        </button>
+                        <button type="button" id="fac-btn-zoom-in" class="floating-bar-btn" title="Zoom In" aria-label="Zoom In">+</button>
+                        <span class="floating-bar-divider" aria-hidden="true"></span>
+                        <button type="button" id="fac-btn-zoom-fit" class="floating-bar-btn" title="Fit diagram to viewport">Fit</button>
+                        <button type="button" id="fac-btn-zoom-reset-view" class="floating-bar-btn" title="Reset pan and zoom">Reset</button>
+                    </div>
                 </div>
             </div>
         `;
@@ -295,6 +265,12 @@
                 canStartPan: (e) => !e.target.closest('.canvas-node') && !e.target.closest('.floating-bar')
             });
         }
+
+        document.getElementById('fac-btn-zoom-in')?.addEventListener('click', () => panZoomController?.zoomIn());
+        document.getElementById('fac-btn-zoom-out')?.addEventListener('click', () => panZoomController?.zoomOut());
+        document.getElementById('fac-btn-zoom-reset')?.addEventListener('click', () => panZoomController?.reset());
+        document.getElementById('fac-btn-zoom-reset-view')?.addEventListener('click', () => panZoomController?.reset());
+        document.getElementById('fac-btn-zoom-fit')?.addEventListener('click', () => panZoomController?.fitToView(lastPositionsMap));
 
         return document.getElementById('fac-canvas-shell');
     }
@@ -598,7 +574,6 @@
         // 4. Render selected view
         container.classList.toggle('fac-network-mode', currentExplorerView === 'network');
         if (currentExplorerView === 'list') {
-            syncFloatingNetworkBar(false);
             renderCardListView(container, activeStageEvents, stages, maps, p);
         } else {
             renderNetworkView(container, activeStageEvents, stages, maps, p);

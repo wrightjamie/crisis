@@ -566,7 +566,6 @@ function handleState(state) {
 
     if (state.status === 'holding') {
         dashboardEl.style.display = 'none';
-        if (window.setNetworkControlsVisible) window.setNetworkControlsVisible(false);
         if (lobbyEl.open) lobbyEl.close();
         if (!holdingEl.open) holdingEl.showModal();
         availableScenarios = state.availableScenarios;
@@ -576,7 +575,6 @@ function handleState(state) {
         updateAiStatusUI();
     } else if (state.status === 'lobby') {
         dashboardEl.style.display = 'none';
-        if (window.setNetworkControlsVisible) window.setNetworkControlsVisible(false);
         if (holdingEl.open) holdingEl.close();
         if (!lobbyEl.open) lobbyEl.showModal();
         currentState = state;

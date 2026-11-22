@@ -1752,6 +1752,13 @@ body:has(dialog[open]) {
   min-height: 580px;
 }
 
+.fac-canvas-floating-bar {
+  position: absolute;
+  bottom: var(--space-md);
+  left: var(--space-md);
+  z-index: 20;
+}
+
 .fac-event-list.fac-network-mode {
   max-height: none;
   overflow: visible;

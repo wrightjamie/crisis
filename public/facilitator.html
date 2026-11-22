@@ -14,9 +14,8 @@
             max-width: 1920px;
             margin: 0 auto;
         }
-        .grid .span-full {
-            grid-column: 1 / -1;
-            width: 100%;
+        .grid .span-3 {
+            grid-column: span 3;
         }
         /* Native Grid Lanes for supporting browsers */
         @supports (display: grid-lanes) {
@@ -279,7 +278,7 @@
             
             <!-- Controls -->
             <!-- Interactive Event Explorer -->
-            <div id="event-explorer-card" class="admin-card span-full flex-col">
+            <div id="event-explorer-card" class="admin-card span-3 flex-col">
                 <div class="fac-list-item-header">
                     <h2>Event Explorer</h2>
                     <div class="flex-row items-center gap-xs">
@@ -421,8 +420,8 @@
                 const updateCardWidths = () => {
                     const colWidth = sizer.offsetWidth;
                     document.querySelectorAll('.grid .admin-card').forEach(card => {
-                        if (card.classList.contains('span-full')) {
-                            card.style.width = '100%';
+                        if (card.classList.contains('span-3')) {
+                            card.style.width = `min(calc(${colWidth * 3}px + 4rem), 100%)`;
                         } else if (card.classList.contains('span-2')) {
                             // Don't expand beyond 100% of the grid container width
                             card.style.width = `min(calc(${colWidth * 2}px + 2rem), 100%)`;
