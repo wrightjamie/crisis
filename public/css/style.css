@@ -1835,13 +1835,24 @@ body:has(dialog[open]) {
   z-index: 20;
 }
 
-/* Facilitator Customizable Card Controls (Width Cycle & Drag Reorder) */
+/* Facilitator Customizable Card Controls (Corner Ghost Buttons) */
+.admin-card[data-card-id] {
+  position: relative;
+}
+
+.admin-card[data-card-id] > .fac-list-item-header,
+.admin-card[data-card-id] > details > summary {
+  padding-right: 3.75rem;
+}
+
 .fac-card-controls {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 5;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  margin-left: auto;
-  flex-shrink: 0;
+  gap: 2px;
 }
 
 .fac-card-width-btn,
@@ -1851,21 +1862,20 @@ body:has(dialog[open]) {
   justify-content: center;
   height: 26px;
   padding: 0 var(--space-xs);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-size: var(--text-xs);
   font-weight: var(--font-semibold);
   cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
 .fac-card-drag-handle {
   min-width: 24px;
   cursor: grab;
   letter-spacing: -1px;
-  color: var(--text-muted);
 }
 
 .fac-card-drag-handle:active {
@@ -1874,8 +1884,7 @@ body:has(dialog[open]) {
 
 .fac-card-width-btn:hover,
 .fac-card-drag-handle:hover {
-  background: var(--bg-primary);
-  border-color: var(--accent-blue);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 

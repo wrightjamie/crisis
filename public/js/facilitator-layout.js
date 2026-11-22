@@ -135,8 +135,9 @@
             else if (validWidth === 'full') entry.card.classList.add('span-full');
 
             if (entry.widthBtn) {
-                entry.widthBtn.textContent = `↔ ${formatWidthLabel(validWidth)}`;
+                entry.widthBtn.textContent = '↔';
                 entry.widthBtn.title = `Card width: ${formatWidthLabel(validWidth)} (click to cycle: ${entry.desc.allowedWidths.map(formatWidthLabel).join(' → ')})`;
+                entry.widthBtn.setAttribute('aria-label', `Cycle card width (currently ${formatWidthLabel(validWidth)})`);
             }
         }
 
@@ -209,19 +210,8 @@
             });
             controls.appendChild(dragHandle);
 
-            // Mount controls in header (.fac-list-item-header right group or <summary>)
-            const headerEl = card.querySelector(':scope > .fac-list-item-header');
-            const summaryEl = detailsEl ? detailsEl.querySelector(':scope > summary') : null;
-            if (headerEl) {
-                const rightActions = headerEl.querySelector(':scope > .flex-row');
-                if (rightActions) {
-                    rightActions.appendChild(controls);
-                } else {
-                    headerEl.appendChild(controls);
-                }
-            } else if (summaryEl) {
-                summaryEl.appendChild(controls);
-            }
+            // Mount controls in the top-right corner of the card
+            card.appendChild(controls);
 
             // Persist <details> toggle
             if (detailsEl) {
