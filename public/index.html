@@ -75,6 +75,7 @@
             <div class="top-bar-right flex-center gap-sm">
                 <button id="btn-sound-toggle" class="btn btn-secondary text-sm" style="display: none;" title="Toggle Sound">🔊 Sound</button>
                 <button id="btn-events" class="btn btn-secondary text-sm relative">Events<span id="events-badge" class="nav-badge" style="display: none;">0</span></button>
+                <button id="btn-outcomes" class="btn btn-secondary text-sm relative">Outcomes<span id="outcomes-badge" class="nav-badge" style="display: none;">0</span></button>
                 <button id="btn-actions" class="btn btn-secondary text-sm relative">Actions<span id="actions-badge" class="nav-badge" style="display: none;">!</span></button>
                 <button id="btn-wiki" class="btn btn-secondary text-sm">Wiki</button>
                 <button id="btn-ai-briefing" class="btn btn-primary text-sm client-scenario-btn">
@@ -113,8 +114,10 @@
             <p class="text-muted mt-3">Awaiting facilitator reset...</p>
         </div>
     </dialog>
-    <!-- Toast Container -->
-    <div id="toast-container" class="toast-container"></div>
+    <!-- Shared Toast Container (Transient & Persistent Acknowledgeable Variants) -->
+    <div id="toast-container" class="toast-container" role="region" aria-label="Notifications" popover="manual"></div>
+    <p class="sr-only">Screen reader announcements</p>
+    <div id="sr-announcements" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>

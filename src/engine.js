@@ -68,6 +68,7 @@ class GameEngine {
             players: [],
             unlockedEvents: [],
             scheduledEvents: [],
+            outcomeMessages: [],
             aiBriefings: {},
             aiScenarioSummaries: {},
             debugAi: process.env.DEBUG_AI === 'true',
@@ -308,6 +309,7 @@ class GameEngine {
             players: [],
             unlockedEvents: [],
             scheduledEvents: [],
+            outcomeMessages: [],
             aiBriefings: {},
             aiScenarioSummaries: {},
             debugAi: process.env.DEBUG_AI === 'true',
@@ -407,11 +409,17 @@ class GameEngine {
         }
 
         if (template.autoEffects) {
-            this.applyEffects(template.autoEffects);
+            this.applyEffects(template.autoEffects, false, {
+                eventId: newEvent.id,
+                sourceName: template.name
+            });
         }
 
         if (template.triggerEvents) {
-            this.applyEffects({ triggerEvents: template.triggerEvents });
+            this.applyEffects({ triggerEvents: template.triggerEvents }, false, {
+                eventId: newEvent.id,
+                sourceName: template.name
+            });
         }
 
         if (template.decisions) {
@@ -554,9 +562,24 @@ class GameEngine {
         task.selectedOption = optionId;
 
         if (option.effects) {
-            this.applyEffects(option.effects);
+            const parentEvent = this.gameState.events.find(e => e.id === task.eventId);
+            this.applyEffects(option.effects, false, {
+                eventId: task.eventId || null,
+                sourceName: parentEvent?.name || option.text || 'Decision Outcome'
+            });
         }
         return option;
+    }
+
+    acknowledgeOutcome(outcomeId, role) {
+        if (!outcomeId || !role || !Array.isArray(this.gameState.outcomeMessages)) return false;
+        const outcome = this.gameState.outcomeMessages.find(o => o.id === outcomeId);
+        if (!outcome) return false;
+        if (!Array.isArray(outcome.acknowledgedBy)) outcome.acknowledgedBy = [];
+        if (!outcome.acknowledgedBy.includes(role)) {
+            outcome.acknowledgedBy.push(role);
+        }
+        return true;
     }
 
     _applyScoreEffects(scores) {
@@ -679,7 +702,7 @@ class GameEngine {
         });
     }
 
-    _scheduleRandomEvents(randomEvents) {
+    _scheduleRandomEvents(randomEvents, sourceContext = null) {
         if (!Array.isArray(randomEvents) || randomEvents.length === 0) return;
         const scenario = this.getScenario();
 
@@ -690,8 +713,11 @@ class GameEngine {
             const p = Math.max(0, Number(re?.probability) || 0);
             if (roll < p) {
                 const targetId = re.id || re.event;
-                if (this._canScheduleEventTemplate(targetId, scenario)) {
+                if (targetId && this._canScheduleEventTemplate(targetId, scenario)) {
                     this._enqueueScheduledEvent(targetId, re.delayMs);
+                }
+                if (Array.isArray(re.outcomeMessages) && re.outcomeMessages.length > 0) {
+                    this._applyOutcomeMessages(re.outcomeMessages, sourceContext);
                 }
                 break;
             }
@@ -699,7 +725,71 @@ class GameEngine {
         }
     }
 
-    applyEffects(effects, _skipAutoEval = false) {
+    _resolveOutcomeText(entry) {
+        if (!entry || typeof entry !== 'object') return '';
+        if (Array.isArray(entry.messages) && entry.messages.length > 0) {
+            const validVariants = entry.messages.filter(m => typeof m === 'string' && m.trim().length > 0);
+            if (validVariants.length > 0) {
+                return validVariants[Math.floor(Math.random() * validVariants.length)];
+            }
+        }
+        return typeof entry.message === 'string' ? entry.message : '';
+    }
+
+    _resolveOutcomeRoles(rawRoles, scenario) {
+        if (!Array.isArray(rawRoles) || rawRoles.length === 0) return [];
+        if (rawRoles.includes('all')) return ['all'];
+
+        const activeRoles = this.getActiveRoles().filter(r => r !== 'facilitator');
+        const resolved = new Set();
+
+        for (const targetRole of rawRoles) {
+            if (!targetRole || typeof targetRole !== 'string') continue;
+            if (activeRoles.length === 0 || targetRole === 'display') {
+                resolved.add(targetRole);
+            } else {
+                const mapped = this.resolveRoleFallback(targetRole, activeRoles, scenario?.roleFallbacks);
+                resolved.add(mapped || targetRole);
+            }
+        }
+        return [...resolved];
+    }
+
+    _applyOutcomeMessages(outcomeMessages, sourceContext = null) {
+        if (!Array.isArray(outcomeMessages) || outcomeMessages.length === 0) return;
+        if (!Array.isArray(this.gameState.outcomeMessages)) {
+            this.gameState.outcomeMessages = [];
+        }
+        const scenario = this.getScenario();
+        const validSeverities = new Set(['info', 'success', 'warning', 'danger']);
+
+        outcomeMessages.forEach(entry => {
+            if (!entry || typeof entry !== 'object') return;
+            const text = this._resolveOutcomeText(entry);
+            if (!text) return;
+            const roles = this._resolveOutcomeRoles(entry.roles, scenario);
+            if (roles.length === 0) return;
+
+            const severity = validSeverities.has(entry.severity) ? entry.severity : 'info';
+            const sourceName = sourceContext?.sourceName || 'Operational Update';
+
+            this.gameState.outcomeMessages.push({
+                id: `out_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                eventId: sourceContext?.eventId || null,
+                sourceName,
+                title: (typeof entry.title === 'string' && entry.title.trim()) ? entry.title.trim() : sourceName,
+                message: text,
+                baseMessage: text,
+                severity,
+                roles,
+                acknowledgedBy: [],
+                aiRandomize: Boolean(entry.aiRandomize),
+                timestamp: Date.now()
+            });
+        });
+    }
+
+    applyEffects(effects, _skipAutoEval = false, sourceContext = null) {
         if (!effects) return;
 
         // Evaluate conditionalEffects against pre-effect state so base effects
@@ -736,10 +826,11 @@ class GameEngine {
 
         this._applyAssetEffects(effects);
         this._scheduleTriggeredEvents(effects.triggerEvents);
-        this._scheduleRandomEvents(effects.randomEvents);
+        this._scheduleRandomEvents(effects.randomEvents, sourceContext);
+        this._applyOutcomeMessages(effects.outcomeMessages, sourceContext);
 
         matchedConditionalEffects.forEach(ce => {
-            this.applyEffects(ce, true);
+            this.applyEffects(ce, true, sourceContext);
         });
 
         if (!_skipAutoEval) {
@@ -874,7 +965,10 @@ class GameEngine {
                 timestamp: Date.now()
             };
             this.gameState.events.push(actionEvent);
-            this.applyEffects(action.effects);
+            this.applyEffects(action.effects, false, {
+                eventId: actionEvent.id,
+                sourceName: action.name
+            });
         }
 
         return true;

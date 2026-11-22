@@ -210,6 +210,48 @@ assert.ok(badEffectsErrors.some(e => e.includes('durationMs must be a positive n
 assert.ok(badEffectsErrors.some(e => e.includes("missing or invalid 'effects' object")), 'Should reject conditionalEffects entry missing effects');
 console.log("✅ deployAssets and conditionalEffects validation tests passed.");
 
+// Validate outcomeMessages schema rules
+console.log("Testing outcomeMessages validation...");
+const validOutcomeErrors = [];
+validateEventTemplates({
+    roles: ['home', 'defence', 'display'],
+    assets: [],
+    eventTemplates: [{
+        id: 'ev_valid_outcomes',
+        name: 'Valid Outcomes Event',
+        autoEffects: {
+            outcomeMessages: [
+                { roles: ['home', 'defence'], title: 'Intel', message: 'Clear outcome.', severity: 'info' },
+                { roles: ['all'], messages: ['Opt 1', 'Opt 2'], severity: 'success', aiRandomize: true }
+            ]
+        }
+    }]
+}, validOutcomeErrors);
+assert.strictEqual(validOutcomeErrors.length, 0, `Valid outcomeMessages should pass validation, got: ${validOutcomeErrors.join('; ')}`);
+
+const badOutcomeErrors = [];
+validateEventTemplates({
+    roles: ['home', 'defence'],
+    assets: [],
+    eventTemplates: [{
+        id: 'ev_bad_outcomes',
+        name: 'Bad Outcomes Event',
+        effects: {
+            outcomeMessages: [
+                { roles: [], message: 'Missing roles' },
+                { roles: ['ghost_role', 'facilitator'], severity: 'critical', aiRandomize: 'yes' }
+            ]
+        }
+    }]
+}, badOutcomeErrors);
+assert.ok(badOutcomeErrors.some(e => e.includes("'roles' must be a non-empty array")), 'Should reject empty roles');
+assert.ok(badOutcomeErrors.some(e => e.includes("unknown role 'ghost_role'")), 'Should reject unknown role');
+assert.ok(badOutcomeErrors.some(e => e.includes("cannot target 'facilitator'")), 'Should reject facilitator target');
+assert.ok(badOutcomeErrors.some(e => e.includes("must provide a non-empty 'message' string or 'messages' array")), 'Should reject missing message');
+assert.ok(badOutcomeErrors.some(e => e.includes("'severity' must be one of")), 'Should reject invalid severity');
+assert.ok(badOutcomeErrors.some(e => e.includes("'aiRandomize' must be a boolean")), 'Should reject non-boolean aiRandomize');
+console.log("✅ outcomeMessages validation tests passed.");
+
 if (allValid) {
     console.log("All scenarios are valid and unit tests passed.");
     process.exit(0);

@@ -635,6 +635,171 @@
         return parts.join(' · ');
     }
 
+    function renderOutcomeMessagesEditorHtml(outcomeMessages, dataAttrs, clsPrefix) {
+        const list = Array.isArray(outcomeMessages) ? outcomeMessages : [];
+        const scenarioRoles = (scenarioRef?.roles || []).filter(r => r !== 'facilitator');
+        const roleNames = scenarioRef?.roleNames || {};
+
+        return `
+            <div class="insp-sublist-header">
+                <span class="text-xs text-muted">Sent as persistent acknowledgeable toasts to selected roles.</span>
+                <button type="button" class="btn btn-secondary text-xs ${clsPrefix}-btn-add-outcome" ${dataAttrs}>+ Add Outcome</button>
+            </div>
+            <div class="insp-sublist">
+                ${list.length === 0 ? '<div class="text-xs text-muted">No outcome messages configured.</div>' : list.map((om, mIdx) => {
+                    const roles = Array.isArray(om.roles) ? om.roles : [];
+                    const isAll = roles.includes('all');
+                    const sev = om.severity || 'info';
+                    const variantsText = Array.isArray(om.messages) && om.messages.length > 0
+                        ? om.messages.join('\n')
+                        : (om.message || '');
+                    return `
+                        <div class="insp-outcome-card" data-midx="${mIdx}">
+                            <div class="insp-outcome-header">
+                                <input type="text" class="form-control text-xs ${clsPrefix}-outcome-title" ${dataAttrs} data-midx="${mIdx}" value="${escapeHtml(om.title || '')}" placeholder="Outcome title (optional)...">
+                                <select class="form-control text-xs insp-outcome-severity ${clsPrefix}-outcome-sev" ${dataAttrs} data-midx="${mIdx}" aria-label="Outcome severity">
+                                    <option value="info" ${sev === 'info' ? 'selected' : ''}>Info</option>
+                                    <option value="success" ${sev === 'success' ? 'selected' : ''}>Success</option>
+                                    <option value="warning" ${sev === 'warning' ? 'selected' : ''}>Warning</option>
+                                    <option value="danger" ${sev === 'danger' ? 'selected' : ''}>Danger</option>
+                                </select>
+                                <button type="button" class="btn btn-danger text-xs insp-sublist-del ${clsPrefix}-btn-del-outcome" ${dataAttrs} data-midx="${mIdx}" title="Remove outcome message" aria-label="Remove outcome message">&times;</button>
+                            </div>
+                            <div class="inspector-check-grid">
+                                <label class="insp-check">
+                                    <input type="checkbox" class="${clsPrefix}-outcome-role-cb" ${dataAttrs} data-midx="${mIdx}" value="all" ${isAll ? 'checked' : ''}>
+                                    <span>All Players</span>
+                                </label>
+                                ${scenarioRoles.map(r => `
+                                    <label class="insp-check">
+                                        <input type="checkbox" class="${clsPrefix}-outcome-role-cb" ${dataAttrs} data-midx="${mIdx}" value="${escapeHtml(r)}" ${roles.includes(r) ? 'checked' : ''}>
+                                        <span>${escapeHtml(roleNames[r] || r)}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                            <textarea class="form-control text-xs ${clsPrefix}-outcome-msg" ${dataAttrs} data-midx="${mIdx}" rows="2" placeholder="Outcome message text (one line per random variant if multiple)...">${escapeHtml(variantsText)}</textarea>
+                            <label class="insp-check" title="Reserve this outcome for AI variation/randomness when AI is enabled">
+                                <input type="checkbox" class="${clsPrefix}-outcome-ai-cb" ${dataAttrs} data-midx="${mIdx}" ${om.aiRandomize ? 'checked' : ''}>
+                                <span class="text-xs text-muted">Allow AI randomness / variation</span>
+                            </label>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+    function bindOutcomeMessagesGroup(body, clsPrefix, getEffectsTarget, onReRender) {
+        const ensureList = (el) => {
+            const target = getEffectsTarget(el);
+            if (!target) return null;
+            if (!Array.isArray(target.outcomeMessages)) target.outcomeMessages = [];
+            return target;
+        };
+
+        const cleanupIfEmpty = (target) => {
+            if (target && Array.isArray(target.outcomeMessages) && target.outcomeMessages.length === 0) {
+                delete target.outcomeMessages;
+            }
+        };
+
+        body.querySelectorAll(`.${clsPrefix}-btn-add-outcome`).forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = ensureList(btn);
+                if (!target) return;
+                target.outcomeMessages.push({
+                    roles: ['all'],
+                    title: '',
+                    message: '',
+                    severity: 'info',
+                    aiRandomize: false
+                });
+                markDirty();
+                onReRender();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-btn-del-outcome`).forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = getEffectsTarget(btn);
+                if (!target || !Array.isArray(target.outcomeMessages)) return;
+                const mIdx = Number(btn.getAttribute('data-midx'));
+                target.outcomeMessages.splice(mIdx, 1);
+                cleanupIfEmpty(target);
+                markDirty();
+                onReRender();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-outcome-title`).forEach(inp => {
+            inp.addEventListener('input', () => {
+                const target = getEffectsTarget(inp);
+                const mIdx = Number(inp.getAttribute('data-midx'));
+                const entry = target?.outcomeMessages?.[mIdx];
+                if (!entry) return;
+                if (inp.value.trim()) entry.title = inp.value;
+                else delete entry.title;
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-outcome-sev`).forEach(sel => {
+            sel.addEventListener('change', () => {
+                const target = getEffectsTarget(sel);
+                const mIdx = Number(sel.getAttribute('data-midx'));
+                const entry = target?.outcomeMessages?.[mIdx];
+                if (!entry) return;
+                entry.severity = sel.value;
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-outcome-role-cb`).forEach(cb => {
+            cb.addEventListener('change', () => {
+                const target = getEffectsTarget(cb);
+                const mIdx = Number(cb.getAttribute('data-midx'));
+                const entry = target?.outcomeMessages?.[mIdx];
+                if (!entry) return;
+                const dAttr = cb.getAttribute('data-didx');
+                const oAttr = cb.getAttribute('data-oidx');
+                const scopeSel = (dAttr !== null && oAttr !== null) ? `[data-didx="${dAttr}"][data-oidx="${oAttr}"]` : '';
+                const checked = Array.from(body.querySelectorAll(`.${clsPrefix}-outcome-role-cb${scopeSel}[data-midx="${mIdx}"]:checked`)).map(x => x.value);
+                entry.roles = checked;
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-outcome-msg`).forEach(ta => {
+            ta.addEventListener('input', () => {
+                const target = getEffectsTarget(ta);
+                const mIdx = Number(ta.getAttribute('data-midx'));
+                const entry = target?.outcomeMessages?.[mIdx];
+                if (!entry) return;
+                const lines = ta.value.split('\n').map(l => l.trim()).filter(Boolean);
+                if (lines.length > 1) {
+                    entry.messages = lines;
+                    delete entry.message;
+                } else {
+                    entry.message = ta.value;
+                    delete entry.messages;
+                }
+                markDirty();
+            });
+        });
+
+        body.querySelectorAll(`.${clsPrefix}-outcome-ai-cb`).forEach(cb => {
+            cb.addEventListener('change', () => {
+                const target = getEffectsTarget(cb);
+                const mIdx = Number(cb.getAttribute('data-midx'));
+                const entry = target?.outcomeMessages?.[mIdx];
+                if (!entry) return;
+                if (cb.checked) entry.aiRandomize = true;
+                else delete entry.aiRandomize;
+                markDirty();
+            });
+        });
+    }
+
     function renderEventRootView(ev, preservedOpenIds = new Set()) {
         const allEvents = getAllEvents();
         const allNodes = (scenarioRef.eventTemplates || []).filter(x => x && x.id !== ev.id);
@@ -829,6 +994,19 @@
                         </label>
                     </div>
                     ${renderConditionsEditorHtml(ev.conditions, '', 'insp-ev')}
+                </div>
+            </details>
+
+            <details class="inspector-collapsible" id="insp-details-ev-outcomes" ${preservedOpenIds.has('insp-details-ev-outcomes') || (Array.isArray(ev.autoEffects?.outcomeMessages) && ev.autoEffects.outcomeMessages.length > 0) ? 'open' : ''}>
+                <summary>
+                    <span class="inline-flex items-center gap-xs text-xs">
+                        <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
+                        <span>Outcome Messages</span>
+                    </span>
+                    <span class="insp-summary-pill ${Array.isArray(ev.autoEffects?.outcomeMessages) && ev.autoEffects.outcomeMessages.length > 0 ? 'active' : ''}">${Array.isArray(ev.autoEffects?.outcomeMessages) ? ev.autoEffects.outcomeMessages.length : 0}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    ${renderOutcomeMessagesEditorHtml(ev.autoEffects?.outcomeMessages, '', 'insp-ev')}
                 </div>
             </details>
 
@@ -1135,6 +1313,16 @@
                     <span class="text-xs text-muted">${optCondCount > 0 ? 'Restricted' : 'Always available'}</span>
                 </summary>
                 ${renderConditionsEditorHtml(opt.conditions, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
+            </details>
+
+            <details class="insp-opt-cond-details" ${(Array.isArray(opt.effects?.outcomeMessages) && opt.effects.outcomeMessages.length > 0) ? 'open' : ''}>
+                <summary>
+                    <span>Outcome Messages (${Array.isArray(opt.effects?.outcomeMessages) ? opt.effects.outcomeMessages.length : 0})</span>
+                    <span class="text-xs text-muted">${(Array.isArray(opt.effects?.outcomeMessages) && opt.effects.outcomeMessages.length > 0) ? 'Configured' : 'None'}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    ${renderOutcomeMessagesEditorHtml(opt.effects?.outcomeMessages, `data-didx="${dIdx}" data-oidx="${oIdx}"`, 'insp-opt')}
+                </div>
             </details>
         `;
     }
@@ -2083,6 +2271,20 @@
             const oIdx = Number(el.getAttribute('data-oidx'));
             return ev.decisions?.[dIdx]?.options?.[oIdx] || null;
         });
+
+        bindOutcomeMessagesGroup(body, 'insp-ev', () => {
+            if (!ev.autoEffects || typeof ev.autoEffects !== 'object') ev.autoEffects = {};
+            return ev.autoEffects;
+        }, () => openInspector(ev.id));
+
+        bindOutcomeMessagesGroup(body, 'insp-opt', (el) => {
+            const dIdx = Number(el.getAttribute('data-didx'));
+            const oIdx = Number(el.getAttribute('data-oidx'));
+            const opt = ev.decisions?.[dIdx]?.options?.[oIdx];
+            if (!opt) return null;
+            if (!opt.effects || typeof opt.effects !== 'object') opt.effects = {};
+            return opt.effects;
+        }, () => openInspector(ev.id));
     }
 
     function closeInspector() {
@@ -2331,6 +2533,20 @@
                     ${renderScoreEffectRows(effScores, '', 'insp-act')}
                 </div>
             </div>
+
+            <!-- Outcome Messages -->
+            <details class="inspector-collapsible" ${(Array.isArray(act.effects?.outcomeMessages) && act.effects.outcomeMessages.length > 0) ? 'open' : ''}>
+                <summary>
+                    <span class="inline-flex items-center gap-xs text-xs">
+                        <span class="collapsible-caret">${renderIcon('chevron-right', 14)}</span>
+                        <span>Outcome Messages</span>
+                    </span>
+                    <span class="insp-summary-pill ${Array.isArray(act.effects?.outcomeMessages) && act.effects.outcomeMessages.length > 0 ? 'active' : ''}">${Array.isArray(act.effects?.outcomeMessages) ? act.effects.outcomeMessages.length : 0}</span>
+                </summary>
+                <div class="inspector-collapsible-body">
+                    ${renderOutcomeMessagesEditorHtml(act.effects?.outcomeMessages, '', 'insp-act')}
+                </div>
+            </details>
         `;
 
         drawer.classList.add('open');
@@ -2417,6 +2633,11 @@
             act.effects.scores = nextScores;
             markDirty();
         };
+
+        bindOutcomeMessagesGroup(body, 'insp-act', () => {
+            if (!act.effects || typeof act.effects !== 'object') act.effects = {};
+            return act.effects;
+        }, () => openActionInspector(act.id));
 
         const addActScoreBtn = document.getElementById('insp-btn-add-act-score');
         if (addActScoreBtn) {

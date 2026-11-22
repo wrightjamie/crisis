@@ -613,6 +613,119 @@ if (tutorialScenario && tutorialScenario.eventTemplates.length >= 2) {
     console.log("✅ Timed deployAssets, pause/resume, damage safety & concurrent option tests passed.");
 }
 
+// Test 15: Per-player outcomeMessages (autoEffects, decisions, randomEvents, conditionalEffects, roleFallbacks, variants, acknowledgement)
+{
+    const engine = new GameEngine();
+    testScenario.roleFallbacks = { foreign: ['home'] };
+    testScenario.eventTemplates.push({
+        id: 'ev_outcome_test',
+        name: 'Outcome Test Incident',
+        repeatable: true,
+        autoEffects: {
+            outcomeMessages: [
+                {
+                    roles: ['home', 'foreign'],
+                    title: 'Auto Intel Flash',
+                    message: 'Initial impact detected.',
+                    severity: 'warning'
+                }
+            ]
+        },
+        decisions: [
+            {
+                role: 'home',
+                text: 'Respond to incident',
+                options: [
+                    {
+                        id: 'opt_variants',
+                        text: 'Execute Strike',
+                        effects: {
+                            outcomeMessages: [
+                                {
+                                    roles: ['all'],
+                                    messages: ['Variant Alpha succeeded.', 'Variant Beta succeeded.'],
+                                    severity: 'success',
+                                    aiRandomize: true
+                                }
+                            ],
+                            randomEvents: [
+                                {
+                                    id: 'ev_auto_escalation',
+                                    delayMs: 1000,
+                                    probability: 1.0,
+                                    outcomeMessages: [
+                                        {
+                                            roles: ['defence'],
+                                            title: 'Branch Outcome',
+                                            message: 'Random branch triggered immediately.',
+                                            severity: 'danger'
+                                        }
+                                    ]
+                                }
+                            ],
+                            conditionalEffects: [
+                                {
+                                    conditions: { minScores: { uk_us: 1 } },
+                                    effects: {
+                                        outcomeMessages: [
+                                            {
+                                                roles: ['home'],
+                                                message: 'Conditional outcome fired.'
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+
+    engine.createLobby('test_scenario');
+    engine.connectedClients['sock_home'] = 'home';
+    engine.connectedClients['sock_def'] = 'defence';
+    engine.startGame();
+
+    assert.ok(Array.isArray(engine.gameState.outcomeMessages), "outcomeMessages should initialize as array");
+    engine.triggerScenarioEvent('ev_outcome_test');
+
+    // autoEffects outcome should resolve foreign -> home via roleFallbacks and deduplicate to ['home']
+    assert.strictEqual(engine.gameState.outcomeMessages.length, 1, "autoEffects should emit 1 outcome message");
+    const autoOut = engine.gameState.outcomeMessages[0];
+    assert.deepStrictEqual(autoOut.roles, ['home'], "Absent role 'foreign' should fall back to 'home' without duplicates");
+    assert.strictEqual(autoOut.title, 'Auto Intel Flash');
+    assert.strictEqual(autoOut.severity, 'warning');
+    assert.deepStrictEqual(autoOut.acknowledgedBy, []);
+
+    // Resolve decision option with variants + randomEvents outcome + conditionalEffects outcome
+    const task = engine.gameState.decisionTasks[engine.gameState.decisionTasks.length - 1];
+    engine.resolveTask(task.id, 'opt_variants');
+
+    assert.strictEqual(engine.gameState.outcomeMessages.length, 4, "Decision should emit base variant, randomEvents branch, and conditionalEffects outcomes");
+    const branchOut = engine.gameState.outcomeMessages.find(o => o.title === 'Branch Outcome');
+    assert.ok(branchOut, "randomEvents branch outcomeMessage should fire");
+    assert.deepStrictEqual(branchOut.roles, ['defence']);
+    assert.strictEqual(branchOut.severity, 'danger');
+
+    const variantOut = engine.gameState.outcomeMessages.find(o => o.aiRandomize === true);
+    assert.ok(variantOut, "Variant outcome should preserve aiRandomize hook");
+    assert.ok(['Variant Alpha succeeded.', 'Variant Beta succeeded.'].includes(variantOut.message), "Should pick one variant from messages[]");
+    assert.deepStrictEqual(variantOut.roles, ['all']);
+
+    const condOut = engine.gameState.outcomeMessages.find(o => o.message === 'Conditional outcome fired.');
+    assert.ok(condOut, "conditionalEffects outcomeMessage should fire when condition is met");
+
+    // Acknowledge idempotency
+    assert.strictEqual(engine.acknowledgeOutcome(autoOut.id, 'home'), true);
+    assert.strictEqual(engine.acknowledgeOutcome(autoOut.id, 'home'), true);
+    assert.deepStrictEqual(autoOut.acknowledgedBy, ['home'], "Acknowledge should be idempotent per role");
+    assert.strictEqual(engine.acknowledgeOutcome('nonexistent_id', 'home'), false);
+
+    console.log("✅ Event outcomeMessages (autoEffects, decisions, randomEvents, conditionalEffects, fallbacks, variants, acknowledge) tests passed.");
+}
+
 // Cleanup
 scenarios.pop();
 console.log("All engine-actions tests passed.");

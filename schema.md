@@ -375,7 +375,24 @@ Presented to a specific role when an event is triggered.
                     {
                         id: "event_id",     // Mutually exclusive outcome
                         delayMs: number,    // (Optional) Milliseconds to wait before triggering
-                        probability: number // 0.0 to 1.0 (displayed as % in UI; remaining probability below 1.0 = no event)
+                        probability: number,// 0.0 to 1.0 (displayed as % in UI; remaining probability below 1.0 = no event)
+                        outcomeMessages: [] // (Optional) Immediate outcome messages sent when this branch is rolled
+                    }
+                ],
+
+                // 7. Targeted Per-Player Outcome Messages (Persistent Acknowledgeable Toasts)
+                // Works inside decision option effects, event autoEffects, manual action effects, conditionalEffects, and randomEvents
+                outcomeMessages: [
+                    {
+                        roles: ["defence", "PM"],  // Required: non-empty array of role IDs, or ["all"] for all player roles
+                        title: "Strike Confirmed", // (Optional) Short heading; defaults to parent event/action name
+                        message: "RAF Typhoon flight neutralized the SAM site with zero allied losses.",
+                        messages: [                // (Optional) Variant pool; engine picks one at random when provided
+                            "Variant A...",
+                            "Variant B..."
+                        ],
+                        severity: "success",       // (Optional) "info" | "success" | "warning" | "danger" (default: "info")
+                        aiRandomize: false         // (Optional) Reserved hook for future AI variation/rewording
                     }
                 ]
             }

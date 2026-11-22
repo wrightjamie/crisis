@@ -9,6 +9,7 @@ let previousScores = null;
 let previousAiBriefingTimestamp = null;
 let currentInfoView = null;
 let previousAvailableActions = null;
+let knownOutcomeIds = new Set();
 let gameId = new URLSearchParams(window.location.search).get('game');
 
 // DOM Elements
@@ -38,6 +39,7 @@ const btnAiBriefing = document.getElementById('btn-ai-briefing');
 const btnWiki = document.getElementById('btn-wiki');
 const btnActions = document.getElementById('btn-actions');
 const btnEvents = document.getElementById('btn-events');
+const btnOutcomes = document.getElementById('btn-outcomes');
 
 // Socket events for roles
 // Setup Connection
@@ -141,17 +143,10 @@ function switchView(viewName) {
         case 'map':
             appEl.style.display = 'grid';
             if (map) setTimeout(() => map.invalidateSize(), 200);
+            if (typeof syncOutcomeToasts === 'function') {
+                setTimeout(() => syncOutcomeToasts(), 50);
+            }
             break;
-    }
-
-    const toastContainer = document.getElementById('toast-container');
-    if (toastContainer) {
-        const activeModal = document.querySelector('dialog[open]');
-        if (activeModal && toastContainer.parentElement !== activeModal) {
-            activeModal.appendChild(toastContainer);
-        } else if (!activeModal && toastContainer.parentElement !== document.body) {
-            document.body.appendChild(toastContainer);
-        }
     }
 }
 
@@ -290,6 +285,18 @@ if (btnEvents) {
         const badge = document.getElementById('events-badge');
         if (badge) badge.style.display = 'none';
         window.showEventsPanel();
+    });
+}
+
+window.showOutcomesPanel = function() {
+    currentInfoView = { type: 'outcomes' };
+    openPanel('Event Outcomes');
+    refreshInfoPanel();
+};
+
+if (btnOutcomes) {
+    btnOutcomes.addEventListener('click', () => {
+        window.showOutcomesPanel();
     });
 }
 
@@ -786,50 +793,100 @@ socket.on('decision_made', (data) => {
     }
 });
 
-function showToast(message) {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-    
-    const activeModal = document.querySelector('dialog[open]');
-    if (activeModal && container.parentElement !== activeModal) {
-        activeModal.appendChild(container);
-    } else if (!activeModal && container.parentElement !== document.body) {
-        document.body.appendChild(container);
+function showToast(message, options = {}) {
+    if (window.common && typeof window.common.showToast === 'function') {
+        if (message && typeof message === 'object') {
+            return window.common.showToast(message);
+        }
+        return window.common.showToast({
+            html: message,
+            durationMs: 10000,
+            ...options
+        });
     }
-    
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.style.display = 'flex';
-    toast.style.alignItems = 'center';
-    toast.style.justifyContent = 'space-between';
-    toast.style.gap = '15px';
-    
-    const content = document.createElement('div');
-    content.innerHTML = message;
-    
-    const closeBtn = document.createElement('button');
-    closeBtn.innerHTML = '&times;';
-    closeBtn.style.cssText = 'background: none; border: none; color: inherit; font-size: 1.5rem; cursor: pointer; padding: 0; opacity: 0.6; display: flex; line-height: 1;';
-    closeBtn.onmouseover = () => closeBtn.style.opacity = '1';
-    closeBtn.onmouseout = () => closeBtn.style.opacity = '0.6';
-    closeBtn.onclick = () => {
-        if (!toast.classList.contains('fade-out')) {
-            toast.classList.add('fade-out');
-            toast.addEventListener('animationend', () => toast.remove());
+    return null;
+}
+
+function getOutcomesForRole(state, currentRole) {
+    if (!state || !Array.isArray(state.outcomeMessages) || !currentRole) return [];
+    return state.outcomeMessages.filter(out => {
+        if (!out || !Array.isArray(out.roles)) return false;
+        if (out.roles.includes(currentRole)) return true;
+        if (out.roles.includes('all') && currentRole !== 'display' && currentRole !== 'facilitator') return true;
+        return false;
+    });
+}
+
+window.acknowledgeOutcomeMessage = function(outcomeId) {
+    if (!outcomeId) return;
+    socket.emit('acknowledge_outcome', outcomeId);
+    if (window.common && typeof window.common.dismissToast === 'function') {
+        window.common.dismissToast(`outcome_${outcomeId}`);
+    }
+};
+
+function syncOutcomeToasts() {
+    if (!localState || !role) return;
+    const roleOutcomes = getOutcomesForRole(localState, role);
+    const unacknowledged = roleOutcomes.filter(out => !(Array.isArray(out.acknowledgedBy) && out.acknowledgedBy.includes(role)));
+
+    const badge = document.getElementById('outcomes-badge');
+    if (badge) {
+        if (unacknowledged.length > 0) {
+            badge.textContent = String(unacknowledged.length);
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.style.display = 'none';
         }
-    };
-    
-    toast.appendChild(content);
-    toast.appendChild(closeBtn);
-    
-    container.appendChild(toast);
-    
-    setTimeout(() => {
-        if (toast.parentElement && !toast.classList.contains('fade-out')) {
-            toast.classList.add('fade-out');
-            toast.addEventListener('animationend', () => toast.remove());
-        }
-    }, 10000);
+    }
+
+    const newlyArrived = unacknowledged.filter(out => !knownOutcomeIds.has(out.id));
+    if (newlyArrived.length > 0 && btnOutcomes) {
+        btnOutcomes.classList.remove('btn-score-changed');
+        void btnOutcomes.offsetWidth;
+        btnOutcomes.classList.add('btn-score-changed');
+        setTimeout(() => btnOutcomes.classList.remove('btn-score-changed'), 2500);
+    }
+    roleOutcomes.forEach(out => knownOutcomeIds.add(out.id));
+
+    if (window.common && typeof window.common.dismissToast === 'function') {
+        roleOutcomes.forEach(out => {
+            if (Array.isArray(out.acknowledgedBy) && out.acknowledgedBy.includes(role)) {
+                window.common.dismissToast(`outcome_${out.id}`);
+            }
+        });
+    }
+
+    // Suppress surfacing persistent outcome toasts while a modal <dialog open> is active
+    const activeModal = document.querySelector('dialog[open]');
+    if (activeModal) return;
+
+    const escape = window.common?.escapeHtml || (s => String(s ?? ''));
+    const parse = (t) => window.parseAcronyms ? window.parseAcronyms(t) : t;
+
+    unacknowledged.forEach(out => {
+        const timeStr = out.timestamp ? new Date(out.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const metaParts = [];
+        if (out.sourceName && out.sourceName !== out.title) metaParts.push(out.sourceName);
+        if (timeStr) metaParts.push(timeStr);
+
+        showToast({
+            id: `outcome_${out.id}`,
+            title: out.title || 'Event Outcome',
+            meta: metaParts.join(' · '),
+            html: parse(escape(out.message || '')),
+            severity: out.severity || 'info',
+            persistent: true,
+            acknowledgeLabel: 'Acknowledge',
+            onAcknowledge: () => {
+                socket.emit('acknowledge_outcome', out.id);
+            }
+        });
+    });
+
+    if (currentInfoView && currentInfoView.type === 'outcomes') {
+        refreshInfoPanel();
+    }
 }
 
 // Register role on connect
@@ -1074,6 +1131,8 @@ function updateUI() {
         }
         localState.events.forEach(e => knownEventIds.add(e.id));
     }
+
+    syncOutcomeToasts();
 
     const playerPausedBanner = document.getElementById('player-paused-banner');
     if (playerPausedBanner) {
@@ -1701,6 +1760,39 @@ window.cycleCluster = function(delta) {
     renderMap(localState.events, localState.assets);
 };
 
+function buildOutcomesPanelHtml(p) {
+    const outcomes = getOutcomesForRole(localState, role).slice().reverse();
+    if (outcomes.length === 0) {
+        return '<p class="text-muted">No event outcomes have been delivered to your station yet.</p>';
+    }
+
+    const escape = window.common?.escapeHtml || (s => String(s ?? ''));
+    return outcomes.map(out => {
+        const isAck = Array.isArray(out.acknowledgedBy) && out.acknowledgedBy.includes(role);
+        const sev = ['info', 'success', 'warning', 'danger'].includes(out.severity) ? out.severity : 'info';
+        const timeStr = out.timestamp ? new Date(out.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        const metaParts = [];
+        if (out.sourceName && out.sourceName !== out.title) metaParts.push(out.sourceName);
+        if (timeStr) metaParts.push(timeStr);
+
+        return `
+            <article class="outcome-card outcome-card--${sev}${isAck ? ' outcome-card--acknowledged' : ''}">
+                <div class="outcome-card-header">
+                    <span class="outcome-card-title">${escape(out.title || 'Event Outcome')}</span>
+                    <span class="outcome-card-meta">${escape(metaParts.join(' · '))}</span>
+                </div>
+                <div class="text-base">${p(escape(out.message || ''))}</div>
+                <div class="outcome-card-footer">
+                    ${isAck
+                        ? '<span class="text-xs text-muted">Acknowledged</span>'
+                        : `<span class="text-xs text-warning text-bold">Awaiting Acknowledgement</span><button type="button" class="btn btn-primary text-xs" onclick="window.acknowledgeOutcomeMessage('${escape(out.id)}')">Acknowledge</button>`
+                    }
+                </div>
+            </article>
+        `;
+    }).join('');
+}
+
 function refreshInfoPanel() {
     if (!currentInfoView || !localState) return;
 
@@ -1710,6 +1802,8 @@ function refreshInfoPanel() {
 
     if (currentInfoView.type === 'events_list') {
         contentHtml = buildEventsListHtml(p);
+    } else if (currentInfoView.type === 'outcomes') {
+        contentHtml = buildOutcomesPanelHtml(p);
     } else if (currentInfoView.type === 'ai') {
         contentHtml = buildAiPanelHtml(p);
     } else if (currentInfoView.type === 'event') {

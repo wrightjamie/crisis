@@ -393,6 +393,18 @@ module.exports = function setupSockets(io, gameManager) {
             }
         });
 
+        // Client acknowledges an outcome message
+        socket.on('acknowledge_outcome', (outcomeId) => {
+            const gameId = socket.data.gameId;
+            const engine = gameId ? gameManager.getGame(gameId) : null;
+            if (!engine) return;
+            engine.updateActivity();
+            const role = engine.connectedClients[socket.id];
+            if (role && engine.acknowledgeOutcome(outcomeId, role)) {
+                io.to(gameId).emit('state_update', engine.gameState);
+            }
+        });
+
         // Facilitator changes scenario stage
         socket.on('change_stage', (stageIndex) => {
             const gameId = socket.data.gameId;

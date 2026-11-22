@@ -216,7 +216,65 @@ function validateDeployAssetEntry(assetId, cfg, path, assetIds, errors) {
     }
 }
 
-function validateEffects(effects, path, assetIds, errors) {
+const VALID_OUTCOME_SEVERITIES = new Set(['info', 'success', 'warning', 'danger']);
+
+function validateOutcomeMessages(outcomeMessages, path, validRoles, errors) {
+    if (!Array.isArray(outcomeMessages)) {
+        errors.push(`${path} 'outcomeMessages' must be an array`);
+        return;
+    }
+    outcomeMessages.forEach((entry, idx) => {
+        const entryPath = `${path}.outcomeMessages[${idx}]`;
+        if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+            errors.push(`${entryPath} must be an object`);
+            return;
+        }
+        if (!Array.isArray(entry.roles) || entry.roles.length === 0) {
+            errors.push(`${entryPath} 'roles' must be a non-empty array`);
+        } else {
+            entry.roles.forEach((r, rIdx) => {
+                if (typeof r !== 'string' || !r.trim()) {
+                    errors.push(`${entryPath}.roles[${rIdx}] must be a non-empty string`);
+                } else if (r === 'facilitator') {
+                    errors.push(`${entryPath}.roles[${rIdx}] cannot target 'facilitator'`);
+                } else if (r !== 'all' && validRoles && validRoles.size > 0 && !validRoles.has(r)) {
+                    errors.push(`${entryPath}.roles[${rIdx}] references unknown role '${r}'`);
+                }
+            });
+        }
+
+        const hasMessage = typeof entry.message === 'string' && entry.message.trim().length > 0;
+        const hasMessagesArray = Array.isArray(entry.messages) && entry.messages.length > 0;
+        if (!hasMessage && !hasMessagesArray) {
+            errors.push(`${entryPath} must provide a non-empty 'message' string or 'messages' array`);
+        }
+        if (entry.message !== undefined && typeof entry.message !== 'string') {
+            errors.push(`${entryPath} 'message' must be a string`);
+        }
+        if (entry.messages !== undefined) {
+            if (!Array.isArray(entry.messages) || entry.messages.length === 0) {
+                errors.push(`${entryPath} 'messages' must be a non-empty array of strings`);
+            } else {
+                entry.messages.forEach((m, mIdx) => {
+                    if (typeof m !== 'string' || !m.trim()) {
+                        errors.push(`${entryPath}.messages[${mIdx}] must be a non-empty string`);
+                    }
+                });
+            }
+        }
+        if (entry.title !== undefined && typeof entry.title !== 'string') {
+            errors.push(`${entryPath} 'title' must be a string`);
+        }
+        if (entry.severity !== undefined && !VALID_OUTCOME_SEVERITIES.has(entry.severity)) {
+            errors.push(`${entryPath} 'severity' must be one of info, success, warning, danger`);
+        }
+        if (entry.aiRandomize !== undefined && typeof entry.aiRandomize !== 'boolean') {
+            errors.push(`${entryPath} 'aiRandomize' must be a boolean`);
+        }
+    });
+}
+
+function validateEffects(effects, path, assetIds, errors, validRoles = null) {
     if (!effects || typeof effects !== 'object') return;
     if (effects.deployAssets !== undefined) {
         if (!effects.deployAssets || typeof effects.deployAssets !== 'object' || Array.isArray(effects.deployAssets)) {
@@ -226,6 +284,16 @@ function validateEffects(effects, path, assetIds, errors) {
                 validateDeployAssetEntry(assetId, cfg, path, assetIds, errors);
             }
         }
+    }
+    if (effects.outcomeMessages !== undefined) {
+        validateOutcomeMessages(effects.outcomeMessages, `${path}.effects`, validRoles, errors);
+    }
+    if (Array.isArray(effects.randomEvents)) {
+        effects.randomEvents.forEach((re, rIdx) => {
+            if (re && typeof re === 'object' && re.outcomeMessages !== undefined) {
+                validateOutcomeMessages(re.outcomeMessages, `${path}.effects.randomEvents[${rIdx}]`, validRoles, errors);
+            }
+        });
     }
     if (effects.conditionalEffects !== undefined) {
         if (!Array.isArray(effects.conditionalEffects)) {
@@ -243,7 +311,7 @@ function validateEffects(effects, path, assetIds, errors) {
                 if (!entry.effects || typeof entry.effects !== 'object' || Array.isArray(entry.effects)) {
                     errors.push(`${entryPath} missing or invalid 'effects' object`);
                 } else {
-                    validateEffects(entry.effects, entryPath, assetIds, errors);
+                    validateEffects(entry.effects, entryPath, assetIds, errors, validRoles);
                 }
             });
         }
@@ -252,6 +320,7 @@ function validateEffects(effects, path, assetIds, errors) {
 
 function validateEventTemplates(scenario, errors) {
     const assetIds = new Set(Array.isArray(scenario.assets) ? scenario.assets.map(a => a && a.id).filter(Boolean) : []);
+    const validRoles = new Set(Array.isArray(scenario.roles) ? scenario.roles.filter(Boolean) : []);
     if (!scenario.eventTemplates || !Array.isArray(scenario.eventTemplates)) {
         errors.push("Missing or invalid 'eventTemplates'");
     } else {
@@ -288,10 +357,10 @@ function validateEventTemplates(scenario, errors) {
                 validateConditions(event.conditions, `${eventPath} (${event.id || 'unknown'})`, errors);
             }
             if (event.effects) {
-                validateEffects(event.effects, `${eventPath} (${event.id || 'unknown'})`, assetIds, errors);
+                validateEffects(event.effects, `${eventPath} (${event.id || 'unknown'})`, assetIds, errors, validRoles);
             }
             if (event.autoEffects) {
-                validateEffects(event.autoEffects, `${eventPath} (${event.id || 'unknown'}).autoEffects`, assetIds, errors);
+                validateEffects(event.autoEffects, `${eventPath} (${event.id || 'unknown'}).autoEffects`, assetIds, errors, validRoles);
             }
             if (event.decisions && !Array.isArray(event.decisions)) {
                 errors.push(`${eventPath} (${event.id || 'unknown'}) 'decisions' must be an array`);
@@ -323,7 +392,7 @@ function validateEventTemplates(scenario, errors) {
                                 validateConditions(opt.conditions, `${decPath}.options[${optIndex}]`, errors);
                             }
                             if (opt.effects) {
-                                validateEffects(opt.effects, `${decPath}.options[${optIndex}]`, assetIds, errors);
+                                validateEffects(opt.effects, `${decPath}.options[${optIndex}]`, assetIds, errors, validRoles);
                             }
                         });
                         if (dec.timeLimitMs !== undefined && !hasDefaultOption) {

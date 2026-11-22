@@ -900,21 +900,62 @@
       <!-- SECTION 10: Toasts & Feedback -->
       <section id="toasts" class="catalog-section">
         <div class="catalog-section-title">Toasts & Notifications</div>
-        <div class="catalog-section-desc">Transient floating toast messages and feedback notifications.</div>
+        <div class="catalog-section-desc">Shared toast system (<code>window.common.showToast</code>) supporting both transient notifications and persistent acknowledgeable event outcome messages in a single <code>popover="manual"</code> top-layer region.</div>
 
         <div class="catalog-item">
           <div class="catalog-item-header">
-            <span class="catalog-item-title">Toast Messages</span>
+            <span class="catalog-item-title">Toast Variants (Transient &amp; Persistent Acknowledgeable)</span>
           </div>
           <div class="catalog-preview d-flex flex-col gap-sm items-start">
-            <div class="toast" style="animation: none;">⚡ New Event Dispatched: Critical Infrastructure Alert</div>
-            <div class="toast text-status-1" style="animation: none;">✓ Decision registered successfully</div>
+            <div class="toast toast--info">
+              <div class="toast-main">
+                <div class="toast-content">
+                  <div class="toast-message">New Event Dispatched: Critical Infrastructure Alert</div>
+                </div>
+                <button type="button" class="toast-close-btn" aria-label="Close notification">&times;</button>
+              </div>
+            </div>
+            <div class="toast toast--success">
+              <div class="toast-main">
+                <div class="toast-content">
+                  <div class="toast-message">Decision registered successfully</div>
+                </div>
+                <button type="button" class="toast-close-btn" aria-label="Close notification">&times;</button>
+              </div>
+            </div>
+            <div class="toast toast--warning toast--persistent">
+              <div class="toast-main">
+                <div class="toast-content">
+                  <div class="toast-header">
+                    <span class="toast-title">Strike Outcome Confirmed</span>
+                    <span class="toast-meta">Air Defence Incident</span>
+                  </div>
+                  <div class="toast-message">RAF Typhoon flight neutralized the mobile SAM site; diplomatic channels report heightened Russian protests.</div>
+                </div>
+              </div>
+              <div class="toast-actions">
+                <button type="button" class="btn btn-primary text-sm toast-ack-btn">Acknowledge</button>
+              </div>
+            </div>
           </div>
           <div class="catalog-code-wrapper">
             <button class="catalog-copy-btn">Copy HTML</button>
-            <pre class="catalog-code">&lt;!-- Toast container anchored at the bottom center of viewport --&gt;
-&lt;div class="toast-container"&gt;
-  &lt;div class="toast"&gt;Notification message here&lt;/div&gt;
+            <pre class="catalog-code">&lt;!-- Shared top-layer toast container --&gt;
+&lt;div id="toast-container" class="toast-container" role="region" aria-label="Notifications" popover="manual"&gt;
+  &lt;!-- Transient toast --&gt;
+  &lt;div class="toast toast--info"&gt;...&lt;/div&gt;
+  &lt;!-- Persistent acknowledgeable outcome toast --&gt;
+  &lt;div class="toast toast--warning toast--persistent"&gt;
+    &lt;div class="toast-main"&gt;
+      &lt;div class="toast-content"&gt;
+        &lt;div class="toast-header"&gt;&lt;span class="toast-title"&gt;Title&lt;/span&gt;&lt;/div&gt;
+        &lt;div class="toast-message"&gt;Outcome narrative...&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-actions"&gt;
+      &lt;button type="button" class="btn btn-primary text-sm toast-ack-btn"&gt;Acknowledge&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</pre>
           </div>
         </div>
