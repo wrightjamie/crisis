@@ -8,6 +8,7 @@ const { getAllImages, getAllTags, getImage } = require('./src/image-library');
 const bugReports = require('./src/bug-reports');
 const accessControl = require('./src/auth/access-control');
 const scenarioService = require('./src/db/scenario-service');
+const { resetDatabase } = require('./src/db/database');
 const { validateScenario } = require('./src/validate-scenarios');
 const {
     ROLE_PRESETS,
@@ -19,11 +20,13 @@ const {
 } = require('./src/asset-presets');
 const AdmZip = require('adm-zip');
 
-// Ensure core built-in scenarios and base images are seeded into SQLite on any fresh deployment
+// Ensure persisted admin credentials, recovery code, and core built-in scenarios are synced on startup
 try {
+    accessControl.restorePersistedAdminAuth();
+    accessControl.generateRecoveryCode({ logToConsole: true });
     const seeded = scenarioService.ensureCoreScenariosSeeded();
     if (seeded > 0) {
-        console.log(`Seeded ${seeded} core scenario(s) into SQLite.`);
+        console.log(`Synced/seeded ${seeded} core scenario(s) into SQLite.`);
     }
 } catch (err) {
     console.warn('Core scenario auto-seed check warning:', err.message);
@@ -59,6 +62,11 @@ app.get('/facilitator', checkPageAuth);
 app.get('/admin', checkPageAuth);
 app.get('/editor', checkPageAuth);
 app.get('/editor.html', checkPageAuth);
+
+// Protected Server Reset & Recovery Page (accessible at /reset, /reset.php, or /reset.html)
+app.get(['/reset', '/reset.php', '/reset.html'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'reset.html'));
+});
 
 // Serve static vendor files
 app.use('/vendor/tagify', express.static(path.join(__dirname, 'node_modules/@yaireo/tagify/dist')));
@@ -109,6 +117,169 @@ app.get('/api/auth/me', (req, res) => {
         res.json({ authenticated: false });
     }
 });
+
+// Rate limiter for recovery/reset endpoints
+const resetAttemptState = new Map();
+function checkResetRateLimit(ip) {
+    const key = ip || 'unknown';
+    const now = Date.now();
+    const record = resetAttemptState.get(key) || { failures: [], lastCodeRequest: 0 };
+    record.failures = record.failures.filter(ts => now - ts < 60 * 1000);
+    resetAttemptState.set(key, record);
+    return {
+        record,
+        isBlocked: record.failures.length >= 6
+    };
+}
+
+app.get('/api/system/reset-status', (req, res) => {
+    try {
+        const session = accessControl.verifyRequest(req);
+        res.json({
+            hasAdminPassword: accessControl.hasAdminPassword(),
+            authenticated: Boolean(session && session.authenticated),
+            hasEnvSecret: Boolean(process.env.RESET_SECRET || process.env.ADMIN_RESET_KEY || process.env.ADMIN_PASSWORD),
+            recoveryCodeFile: 'data/recovery-code.txt'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/system/request-recovery-code', (req, res) => {
+    try {
+        const { record } = checkResetRateLimit(req.ip);
+        const now = Date.now();
+        if (now - record.lastCodeRequest < 3000) {
+            return res.status(429).json({ error: 'Please wait a few seconds before requesting another recovery code.' });
+        }
+        record.lastCodeRequest = now;
+        accessControl.generateRecoveryCode({ logToConsole: true });
+        res.json({
+            success: true,
+            message: 'A new recovery code has been printed to the server console logs and saved to data/recovery-code.txt.'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+function handleSystemReset(req, res) {
+    try {
+        const { record, isBlocked } = checkResetRateLimit(req.ip);
+        if (isBlocked) {
+            return res.status(429).json({
+                success: false,
+                error: 'Too many failed verification attempts. Please wait 60 seconds and try again.'
+            });
+        }
+
+        const { action = 'refresh_data', recoveryKey = '', currentPassword = '', newPassword = '' } = req.body || {};
+        const token = accessControl.extractToken(req);
+        const authCheck = accessControl.verifyResetAuthorization({
+            token,
+            currentPassword,
+            recoveryKey
+        });
+
+        if (!authCheck.authorized) {
+            record.failures.push(Date.now());
+            return res.status(401).json({
+                success: false,
+                error: authCheck.error
+            });
+        }
+
+        // Clear failure counter on valid authorization
+        record.failures = [];
+
+        const trimmedNewPassword = typeof newPassword === 'string' ? newPassword.trim() : '';
+        if (action === 'reset_password' && trimmedNewPassword.length < 4) {
+            return res.status(400).json({
+                success: false,
+                error: 'New admin password must be at least 4 characters.'
+            });
+        }
+        if (!accessControl.hasAdminPassword() && trimmedNewPassword.length < 4) {
+            return res.status(400).json({
+                success: false,
+                error: 'Please enter a new admin password (at least 4 characters) to initialize the server.'
+            });
+        }
+
+        let refreshed = { count: 0, scenarios: [] };
+        let passwordUpdated = false;
+
+        if (action === 'rebuild_db') {
+            // Stop and clear active game engines before rebuilding SQLite
+            if (gameManager && gameManager.games) {
+                for (const [id] of gameManager.games.entries()) {
+                    gameManager.deleteGame(id);
+                }
+            }
+            resetDatabase();
+            if (trimmedNewPassword.length >= 4) {
+                accessControl.setAdminPassword(trimmedNewPassword, { persistBackup: true });
+                passwordUpdated = true;
+            } else {
+                accessControl.restorePersistedAdminAuth();
+            }
+            refreshed = scenarioService.refreshAllBuiltinScenarios();
+        } else if (action === 'refresh_data') {
+            if (trimmedNewPassword.length >= 4) {
+                accessControl.setAdminPassword(trimmedNewPassword, { persistBackup: true });
+                accessControl.clearAllSessions();
+                passwordUpdated = true;
+            }
+            refreshed = scenarioService.refreshAllBuiltinScenarios();
+        } else if (action === 'reset_password') {
+            accessControl.setAdminPassword(trimmedNewPassword, { persistBackup: true });
+            accessControl.clearAllSessions();
+            passwordUpdated = true;
+        } else {
+            return res.status(400).json({
+                success: false,
+                error: `Unknown reset action '${action}'`
+            });
+        }
+
+        let sessionToken = null;
+        if (accessControl.hasAdminPassword()) {
+            sessionToken = accessControl.createAdminSession();
+            res.cookie('auth_token', sessionToken, { httpOnly: false, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000 });
+        }
+
+        const msgParts = [];
+        if (action === 'rebuild_db') {
+            msgParts.push(`Database rebuilt and ${refreshed.count} built-in scenario(s) synced from disk.`);
+        } else if (action === 'refresh_data') {
+            msgParts.push(`Refreshed ${refreshed.count} built-in scenario(s) and base images from disk.`);
+        }
+        if (passwordUpdated) {
+            msgParts.push('Admin password updated and persisted.');
+        }
+
+        res.json({
+            success: true,
+            action,
+            authMethod: authCheck.method,
+            passwordUpdated,
+            refreshedCount: refreshed.count,
+            refreshedScenarios: refreshed.scenarios,
+            token: sessionToken,
+            message: msgParts.join(' ') || 'Operation completed successfully.'
+        });
+    } catch (err) {
+        console.error('System reset error:', err);
+        res.status(500).json({
+            success: false,
+            error: 'System reset failed: ' + err.message
+        });
+    }
+}
+
+app.post('/api/system/reset', handleSystemReset);
+app.post('/reset.php', handleSystemReset);
 
 // Helper to extract uploaded zip buffer
 function extractZipBuffer(req) {
@@ -284,6 +455,18 @@ app.post('/api/scenarios/:id/clone', accessControl.requireAuth('admin'), (req, r
         const { newId, newName } = req.body || {};
         const cloned = scenarioService.cloneScenario(req.params.id, { newId, newName });
         res.status(201).json(cloned);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenarios/refresh-builtin', accessControl.requireAuth('admin'), (req, res) => {
+    try {
+        const result = scenarioService.refreshAllBuiltinScenarios();
+        res.json({
+            success: true,
+            ...result
+        });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

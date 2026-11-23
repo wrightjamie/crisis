@@ -49,6 +49,24 @@ function runTests() {
     const verifyAfterLogout = auth.verifySession(loginRes.token);
     assert.strictEqual(verifyAfterLogout.authenticated, false, "Session should no longer be valid");
 
+    // 8. Verify reset authorization via current password and one-time recovery code
+    const badReset = auth.verifyResetAuthorization({ recoveryKey: 'INVALID-CODE' });
+    assert.strictEqual(badReset.authorized, false, "Should reject invalid recovery code");
+
+    const passReset = auth.verifyResetAuthorization({ currentPassword: 'secretpassword123' });
+    assert.strictEqual(passReset.authorized, true, "Should authorize with current admin password");
+    assert.strictEqual(passReset.method, 'password');
+
+    const code = auth.generateRecoveryCode({ logToConsole: false });
+    assert.ok(code && code.length === 9 && code.includes('-'), "Should generate formatted recovery code");
+
+    const codeReset = auth.verifyResetAuthorization({ recoveryKey: code.toLowerCase().replace('-', '') });
+    assert.strictEqual(codeReset.authorized, true, "Should authorize with recovery code (case/hyphen-insensitive)");
+    assert.strictEqual(codeReset.method, 'recovery_code');
+
+    const reusedCode = auth.verifyResetAuthorization({ recoveryKey: code });
+    assert.strictEqual(reusedCode.authorized, false, "One-time recovery code should rotate after use");
+
     closeDb();
     console.log("✅ Access Control unit tests passed successfully!");
 }

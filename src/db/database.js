@@ -8,6 +8,53 @@ function getDatabasePath() {
     return process.env.DB_PATH || path.join(__dirname, '..', '..', 'data', 'crisis.db');
 }
 
+function removeWalFiles(dbPath) {
+    if (!dbPath || dbPath === ':memory:') return;
+    for (const suffix of ['-wal', '-shm']) {
+        const file = `${dbPath}${suffix}`;
+        if (fs.existsSync(file)) {
+            try {
+                fs.unlinkSync(file);
+            } catch {}
+        }
+    }
+}
+
+function openValidatedDatabase(dbPath) {
+    if (dbPath === ':memory:') {
+        return new Database(dbPath);
+    }
+
+    // If main DB file was replaced by git pull while older -wal/-shm files remained on disk,
+    // SQLite can report 'database disk image is malformed'. Detect and recover automatically.
+    const tryOpen = () => {
+        const candidate = new Database(dbPath);
+        const check = candidate.pragma('quick_check', { simple: true });
+        if (check !== 'ok') {
+            candidate.close();
+            throw new Error(`SQLite quick_check failed: ${check}`);
+        }
+        return candidate;
+    };
+
+    try {
+        return tryOpen();
+    } catch (firstErr) {
+        console.warn(`SQLite open/check warning on ${dbPath} (${firstErr.message}). Removing stale WAL/SHM journal files...`);
+        removeWalFiles(dbPath);
+        try {
+            return tryOpen();
+        } catch (secondErr) {
+            console.warn(`SQLite database file ${dbPath} is corrupted (${secondErr.message}). Recreating clean database...`);
+            try {
+                if (fs.existsSync(dbPath)) fs.unlinkSync(dbPath);
+            } catch {}
+            removeWalFiles(dbPath);
+            return new Database(dbPath);
+        }
+    }
+}
+
 function initDatabase(customPath = null) {
     const dbPath = customPath || getDatabasePath();
 
@@ -18,7 +65,7 @@ function initDatabase(customPath = null) {
         }
     }
 
-    const db = new Database(dbPath);
+    const db = openValidatedDatabase(dbPath);
     try {
         db.pragma('journal_mode = WAL');
     } catch (err) {
@@ -116,14 +163,32 @@ function getDb() {
 
 function closeDb() {
     if (dbInstance) {
-        dbInstance.close();
+        try {
+            dbInstance.close();
+        } catch {}
         dbInstance = null;
     }
+}
+
+function resetDatabase(customPath = null) {
+    const dbPath = customPath || getDatabasePath();
+    closeDb();
+    if (dbPath && dbPath !== ':memory:') {
+        removeWalFiles(dbPath);
+        if (fs.existsSync(dbPath)) {
+            try {
+                fs.unlinkSync(dbPath);
+            } catch {}
+        }
+        removeWalFiles(dbPath);
+    }
+    return initDatabase(dbPath);
 }
 
 module.exports = {
     initDatabase,
     getDb,
     closeDb,
+    resetDatabase,
     getDatabasePath
 };

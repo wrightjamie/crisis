@@ -151,6 +151,21 @@
         }
     }
 
+    // Sync All Built-in Scenarios from Disk
+    document.getElementById('btn-sync-builtin')?.addEventListener('click', async () => {
+        if (!confirm('Reload all built-in scenarios, outcomeMessages, guides, and base images from disk into SQLite?')) return;
+        try {
+            showBanner('Syncing built-in scenarios and base images from disk...', 'info');
+            const res = await apiFetch('/api/scenarios/refresh-builtin', { method: 'POST' });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to sync built-in scenarios');
+            showBanner(`Synced ${data.count} built-in scenario(s) from disk into SQLite.`, 'success');
+            await loadScenarios();
+        } catch (err) {
+            showBanner(`Sync failed: ${err.message}`, 'error');
+        }
+    });
+
     // Export All Scenarios
     document.getElementById('btn-export-all')?.addEventListener('click', async () => {
         try {

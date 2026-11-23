@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Wargame - Server Reset & Recovery</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, #1a2234 0%, #0d111a 100%);
+        }
+        .reset-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem 2.25rem;
+            width: 100%;
+            max-width: 560px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .reset-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .reset-header h1 {
+            font-size: 1.35rem;
+            margin: 0 0 0.4rem 0;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+        }
+        .reset-header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.875rem;
+            line-height: 1.45;
+        }
+        .status-box {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 1.25rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+        }
+        .status-box--ok {
+            border-color: rgba(34, 197, 94, 0.35);
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+        }
+        .status-box--warn {
+            border-color: rgba(245, 158, 11, 0.35);
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+        }
+        .form-group {
+            margin-bottom: 1.15rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        .action-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .action-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.75rem 0.9rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-primary);
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .action-option:hover {
+            border-color: var(--accent-blue);
+        }
+        .action-option input[type="radio"] {
+            margin-top: 0.2rem;
+            accent-color: var(--accent-blue);
+        }
+        .action-option-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+        .action-option-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+        .btn-submit:hover {
+            opacity: 0.92;
+        }
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .feedback-msg {
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            display: none;
+            line-height: 1.4;
+        }
+        .feedback-msg--error {
+            color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+        .feedback-msg--success {
+            color: #4ade80;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+        .reset-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.35rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.825rem;
+        }
+        .reset-footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .reset-footer a:hover {
+            text-decoration: underline;
+        }
+        .inline-key-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="reset-card">
+        <div class="reset-header">
+            <h1>Server Reset &amp; Recovery</h1>
+            <p>Refresh built-in scenarios from disk, reset the admin password, or perform a clean SQLite database rebuild.</p>
+        </div>
+
+        <div id="auth-status-banner" class="status-box">
+            Checking server authentication status...
+        </div>
+
+        <form id="reset-form">
+            <div class="form-group" id="verification-group">
+                <label for="recovery-key">Protection Key (Recovery Code or Current Admin Password)</label>
+                <div class="inline-key-row">
+                    <input type="password" id="recovery-key" class="form-control" placeholder="e.g. XXXX-XXXX or current password" autocomplete="off">
+                    <button type="button" id="btn-print-code" class="btn btn-secondary text-xs" style="white-space: nowrap;" title="Print a fresh 8-character recovery code to the server console logs and data/recovery-code.txt">Log New Code</button>
+                </div>
+                <div class="text-xs text-muted" style="margin-top: 0.35rem;">
+                    Locked out? Click <strong>Log New Code</strong> and check your container/server console logs (or <code>data/recovery-code.txt</code>) for the 8-character code.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Select Action</label>
+                <div class="action-options">
+                    <label class="action-option">
+                        <input type="radio" name="reset_action" value="refresh_data" checked>
+                        <div>
+                            <span class="action-option-title">1. Refresh All Scenarios &amp; Images from Disk</span>
+                            <span class="action-option-desc">Reloads all built-in scenarios (including latest outcomeMessages, guides, and base images) into SQLite without deleting custom scenarios.</span>
+                        </div>
+                    </label>
+                    <label class="action-option">
+                        <input type="radio" name="reset_action" value="reset_password">
+                        <div>
+                            <span class="action-option-title">2. Reset Admin Password Only</span>
+                            <span class="action-option-desc">Updates and persists the admin password so future Git pulls never overwrite it.</span>
+                        </div>
+                    </label>
+                    <label class="action-option">
+                        <input type="radio" name="reset_action" value="rebuild_db">
+                        <div>
+                            <span class="action-option-title">3. Full Database Rebuild &amp; Reset (Fixes Corrupt/Malformed DB)</span>
+                            <span class="action-option-desc">Deletes <code>crisis.db</code>, <code>crisis.db-wal</code>, and <code>crisis.db-shm</code>, creates a clean database, and re-seeds all built-in scenarios and images.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="new-password" id="new-password-label">New Admin Password (Optional for Refresh / Rebuild)</label>
+                <input type="password" id="new-password" class="form-control" placeholder="Enter new admin password (min 4 characters)" autocomplete="new-password">
+            </div>
+
+            <button type="submit" id="btn-execute-reset" class="btn-submit">Execute Server Reset / Refresh</button>
+            <div id="feedback-box" class="feedback-msg"></div>
+        </form>
+
+        <div class="reset-footer">
+            <a href="/login">&larr; Back to Login</a>
+            <a href="/admin">Admin Console</a>
+            <a href="/facilitator">Facilitator Console</a>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        const statusBanner = document.getElementById('auth-status-banner');
+        const verificationGroup = document.getElementById('verification-group');
+        const recoveryKeyInput = document.getElementById('recovery-key');
+        const newPasswordInput = document.getElementById('new-password');
+        const newPasswordLabel = document.getElementById('new-password-label');
+        const btnPrintCode = document.getElementById('btn-print-code');
+        const btnExecute = document.getElementById('btn-execute-reset');
+        const feedbackBox = document.getElementById('feedback-box');
+        const form = document.getElementById('reset-form');
+
+        let serverState = {
+            hasAdminPassword: true,
+            authenticated: false
+        };
+
+        function showFeedback(message, isError = false) {
+            feedbackBox.textContent = message;
+            feedbackBox.className = 'feedback-msg ' + (isError ? 'feedback-msg--error' : 'feedback-msg--success');
+            feedbackBox.style.display = 'block';
+        }
+
+        function updatePasswordFieldRequirement() {
+            const selected = document.querySelector('input[name="reset_action"]:checked')?.value;
+            const mustSetPassword = !serverState.hasAdminPassword || selected === 'reset_password';
+            newPasswordInput.required = mustSetPassword;
+            newPasswordLabel.textContent = mustSetPassword
+                ? 'New Admin Password (Required)'
+                : 'New Admin Password (Optional — leave blank to keep current password)';
+        }
+
+        document.querySelectorAll('input[name="reset_action"]').forEach(radio => {
+            radio.addEventListener('change', updatePasswordFieldRequirement);
+        });
+
+        async function loadResetStatus() {
+            try {
+                const token = localStorage.getItem('auth_token') || '';
+                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+                const res = await fetch('/api/system/reset-status', { headers });
+                const data = await res.json();
+                serverState = data;
+
+                if (!data.hasAdminPassword) {
+                    statusBanner.className = 'status-box status-box--warn';
+                    statusBanner.innerHTML = '<strong>Initial Setup Mode:</strong> No admin password is set in SQLite yet. Choose an action and enter a new admin password below.';
+                    verificationGroup.style.display = 'none';
+                } else if (data.authenticated) {
+                    statusBanner.className = 'status-box status-box--ok';
+                    statusBanner.innerHTML = '<strong>Authenticated Session Active:</strong> You are signed in as <code>admin</code>. You can run any refresh or reset action directly.';
+                    verificationGroup.style.display = 'none';
+                } else {
+                    statusBanner.className = 'status-box';
+                    statusBanner.innerHTML = '<strong>Protected Endpoint:</strong> Enter your current admin password, your <code>RESET_SECRET</code>, or the 8-character recovery code from your server logs / <code>data/recovery-code.txt</code>.';
+                    verificationGroup.style.display = 'block';
+                }
+                updatePasswordFieldRequirement();
+            } catch (err) {
+                statusBanner.className = 'status-box status-box--warn';
+                statusBanner.textContent = 'Could not check server status: ' + err.message;
+            }
+        }
+
+        btnPrintCode.addEventListener('click', async () => {
+            btnPrintCode.disabled = true;
+            try {
+                const res = await fetch('/api/system/request-recovery-code', { method: 'POST' });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    showFeedback(data.message, false);
+                } else {
+                    showFeedback(data.error || 'Could not generate recovery code.', true);
+                }
+            } catch (err) {
+                showFeedback('Server connection error.', true);
+            } finally {
+                setTimeout(() => { btnPrintCode.disabled = false; }, 3000);
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            feedbackBox.style.display = 'none';
+            const action = document.querySelector('input[name="reset_action"]:checked')?.value || 'refresh_data';
+
+            if (action === 'rebuild_db') {
+                if (!confirm('Are you sure you want to rebuild the SQLite database? Active games will be closed and all built-in scenarios will be freshly seeded from disk.')) {
+                    return;
+                }
+            }
+
+            btnExecute.disabled = true;
+            const origText = btnExecute.textContent;
+            btnExecute.textContent = 'Processing...';
+
+            try {
+                const token = localStorage.getItem('auth_token') || '';
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                const res = await fetch('/api/system/reset', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        action,
+                        recoveryKey: recoveryKeyInput.value.trim(),
+                        newPassword: newPasswordInput.value
+                    })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    if (data.token) {
+                        if (window.common) window.common.setToken(data.token);
+                        else localStorage.setItem('auth_token', data.token);
+                    }
+                    showFeedback(data.message + ' You are now signed in.', false);
+                    recoveryKeyInput.value = '';
+                    newPasswordInput.value = '';
+                    await loadResetStatus();
+                } else {
+                    showFeedback(data.error || 'Reset failed.', true);
+                }
+            } catch (err) {
+                showFeedback('Server connection error: ' + err.message, true);
+            } finally {
+                btnExecute.disabled = false;
+                btnExecute.textContent = origText;
+            }
+        });
+
+        loadResetStatus();
+    </script>
+</body>
+</html>

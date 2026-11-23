@@ -84,13 +84,33 @@ Once deployed, the server will be available on your local network at:
 
 ---
 
-## Setting or Resetting the Admin Password
+## Setting or Resetting the Admin Password & Refreshing Server Data
 
-The Admin panel (`/admin`) and Scenario Editor are protected by a hashed admin password stored in the SQLite database (`data/crisis.db`).
+The Admin panel (`/admin`) and Scenario Editor are protected by a hashed admin password stored in the SQLite database (`data/crisis.db`) and backed up locally in `data/.admin-auth.json` (gitignored so `git pull` never overwrites your password).
 
 > **Persistence Tip:** Make sure `./data:/usr/src/app/data` is mounted as a volume in your container configuration so your password and scenario edits survive container updates and restarts.
 
-### Using Dockhand (Recommended for Docker)
+### Method A: Web Reset & Recovery Console (`/reset` or `/reset.php`) — No Terminal Required
+
+Navigate to **`http://<your_host>:3000/reset`** (or **`/reset.php`**) in your browser to:
+1. **Refresh All Scenarios & Images from Disk:** Syncs all built-in `scenario.js` files, `outcomeMessages`, guides, and base images into SQLite without deleting custom scenarios.
+2. **Reset Admin Password:** Updates your admin password and logs you in immediately.
+3. **Full Database Rebuild & Reset:** Safely deletes `crisis.db`, `crisis.db-wal`, and `crisis.db-shm`, creates a clean SQLite database, and re-seeds all built-in scenarios and images in one click.
+
+**How `/reset` is protected:**
+* If you are already logged in (or on a fresh database with no password set yet), you can run any action directly.
+* Otherwise, enter your **current admin password**, a configured `RESET_SECRET` / `ADMIN_PASSWORD` environment variable, or the **8-character One-Time Recovery Code** (`XXXX-XXXX`).
+* Need a recovery code? Click **Log New Code** on `/reset` and check your container/server **Logs** tab (or `data/recovery-code.txt`) for the printed `🔐 CRISIS SERVER RECOVERY CODE`.
+
+### Method B: One-Step CLI Reset & Sync (`npm run reset-server`)
+
+From `/usr/src/app` in the Dockhand Terminal (or local project root):
+```sh
+node scripts/reset-server.js --rebuild --password 'YourNewPassword'
+```
+*(Omit `--rebuild` to refresh scenarios and update the password without wiping custom scenarios.)*
+
+### Method C: Using Dockhand Terminal (`set-admin-password.js`)
 
 1. Open **Dockhand** and navigate to **Containers**.
 2. Select your running Crisis container (e.g. `crisis_app`).

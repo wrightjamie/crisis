@@ -2,6 +2,8 @@ node_modules/
 .env
 .DS_Store
 data/github-token.txt
+data/.admin-auth.json
+data/recovery-code.txt
 *token.txt
 *.token
 *.db-shm

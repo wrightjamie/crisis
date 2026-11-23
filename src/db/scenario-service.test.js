@@ -205,6 +205,18 @@ function runTests() {
     assert.strictEqual(seededCount, 1);
     assert.ok(scenarioService.getScenario('core_seeded_one'));
 
+    // Updating a built-in scenario.js on disk should auto-sync when ensureCoreScenariosSeeded runs again
+    fs.writeFileSync(
+        path.join(secondDir, 'scenario.js'),
+        `module.exports = ${JSON.stringify({ ...mockScenario, id: 'core_seeded_one', name: 'Core Seeded Scenario v2' }, null, 2)};`
+    );
+    const updatedCount = scenarioService.ensureCoreScenariosSeeded({ legacyScenariosDir: tempLegacyDir });
+    assert.strictEqual(updatedCount, 1, 'Should auto-sync updated built-in scenario from disk');
+    assert.strictEqual(scenarioService.getScenario('core_seeded_one').name, 'Core Seeded Scenario v2');
+
+    const refreshRes = scenarioService.refreshAllBuiltinScenarios({ legacyScenariosDir: tempLegacyDir });
+    assert.strictEqual(refreshRes.count, 2, 'refreshAllBuiltinScenarios should reload all built-in scenarios in dir');
+
     // Test saveCanvasLayout does NOT create a draft on a published scenario
     const layoutRes = scenarioService.saveCanvasLayout('core_seeded_one', {
         version: 2,

@@ -379,10 +379,9 @@ class ScenarioService {
         });
     }
 
-    ensureCoreScenariosSeeded({ legacyScenariosDir = null } = {}) {
+    ensureCoreScenariosSeeded({ legacyScenariosDir = null, syncUpdated = true } = {}) {
         const db = this.getDb();
-        const imgCount = db.prepare(`SELECT COUNT(*) as cnt FROM images`).get().cnt;
-        if (imgCount === 0 && this.imageService && typeof this.imageService.seedBaseImages === 'function') {
+        if (this.imageService && typeof this.imageService.seedBaseImages === 'function') {
             this.imageService.seedBaseImages();
         }
 
@@ -395,9 +394,69 @@ class ScenarioService {
         for (const dirent of dirents) {
             if (!dirent.isDirectory()) continue;
             const scenarioId = dirent.name;
-            const existing = db.prepare(`SELECT id FROM scenarios WHERE id = ?`).get(scenarioId);
-            if (existing) continue;
+            const scenarioFolder = path.join(baseDir, scenarioId);
+            const scenarioJsPath = path.join(scenarioFolder, 'scenario.js');
+            if (!fs.existsSync(scenarioJsPath)) continue;
 
+            const existing = db.prepare(`SELECT id, is_builtin, has_draft, data, guide_html FROM scenarios WHERE id = ?`).get(scenarioId);
+
+            try {
+                delete require.cache[require.resolve(scenarioJsPath)];
+                const scenario = require(scenarioJsPath);
+                const guidePath = path.join(scenarioFolder, 'guide.html');
+                const guideHtml = fs.existsSync(guidePath) ? fs.readFileSync(guidePath, 'utf8') : null;
+
+                if (!existing) {
+                    this.saveScenario(scenario, {
+                        guideHtml,
+                        isBuiltin: 1,
+                        force: true,
+                        asDraft: false
+                    });
+                    seededCount++;
+                    continue;
+                }
+
+                if (!existing.is_builtin) {
+                    db.prepare(`UPDATE scenarios SET is_builtin = 1 WHERE id = ?`).run(scenarioId);
+                }
+
+                if (syncUpdated && !existing.has_draft) {
+                    const cleanFactory = this._normalizeForSave(scenario);
+                    const factoryJson = JSON.stringify(cleanFactory);
+                    const guideChanged = Boolean(guideHtml && guideHtml !== existing.guide_html);
+                    if (factoryJson !== existing.data || guideChanged) {
+                        this.saveScenario(scenario, {
+                            guideHtml,
+                            isBuiltin: 1,
+                            force: true,
+                            asDraft: false
+                        });
+                        seededCount++;
+                    }
+                }
+            } catch (err) {
+                console.error(`Failed to auto-seed core scenario '${scenarioId}':`, err.message);
+            }
+        }
+
+        return seededCount;
+    }
+
+    refreshAllBuiltinScenarios({ legacyScenariosDir = null } = {}) {
+        if (this.imageService && typeof this.imageService.seedBaseImages === 'function') {
+            this.imageService.seedBaseImages();
+        }
+
+        const baseDir = legacyScenariosDir || path.join(__dirname, '..', '..', 'data', 'scenarios');
+        if (!fs.existsSync(baseDir)) return { count: 0, scenarios: [] };
+
+        const dirents = fs.readdirSync(baseDir, { withFileTypes: true });
+        const refreshed = [];
+
+        for (const dirent of dirents) {
+            if (!dirent.isDirectory()) continue;
+            const scenarioId = dirent.name;
             const scenarioFolder = path.join(baseDir, scenarioId);
             const scenarioJsPath = path.join(scenarioFolder, 'scenario.js');
             if (!fs.existsSync(scenarioJsPath)) continue;
@@ -414,13 +473,13 @@ class ScenarioService {
                     force: true,
                     asDraft: false
                 });
-                seededCount++;
+                refreshed.push(scenarioId);
             } catch (err) {
-                console.error(`Failed to auto-seed core scenario '${scenarioId}':`, err.message);
+                console.error(`Failed to refresh built-in scenario '${scenarioId}':`, err.message);
             }
         }
 
-        return seededCount;
+        return { count: refreshed.length, scenarios: refreshed };
     }
 
     deleteScenario(id) {
